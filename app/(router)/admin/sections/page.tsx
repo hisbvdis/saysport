@@ -1,0 +1,45 @@
+import Link from "next/link";
+// -----------------------------------------------------------------------------
+import { Card } from "@/app/_components/ui/Card";
+import { DelBtn } from "@/app/_components/ui/DelBtn";
+import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
+// -----------------------------------------------------------------------------
+import { deleteSectionById, getSectionsByFilters } from "@/app/_db/section";
+
+
+export default async function SectionListPage() {
+  const sections = await getSectionsByFilters();
+
+  return (
+    <main className="container page">
+      <Breadcrumbs items={[{label: "Admin", href: "/admin"}, {label: "Sections"}]}/>
+      <Card style={{display: "flex", flexWrap: "wrap", marginBlockStart: "10px"}}>
+        <Card.Section style={{flex: "100%"}}>
+          <Link href="/admin/sections/add">Create</Link>
+        </Card.Section>
+        <Card.Section style={{flex: "50%"}}>
+          <h3>Orgs</h3>
+          <ul>
+            {sections.filter(({object_type}) => object_type === "org").map(({id, name_plural}) => (
+              <li key={id} style={{display: "flex", gap: "10px"}}>
+                <DelBtn id={id!} delFunc={deleteSectionById}/>
+                <Link href={`/admin/sections/${id}`}>{name_plural}</Link>
+              </li>
+            ))}
+          </ul>
+        </Card.Section>
+        <Card.Section style={{flex: "50%"}}>
+          <h3>Places</h3>
+          <ul>
+            {sections.filter(({object_type}) => object_type === "place").map(({id, name_plural}) => (
+              <li key={id} style={{display: "flex", gap: "10px"}}>
+                <DelBtn id={id!} delFunc={deleteSectionById}/>
+                <Link href={`/admin/sections/${id}`}>{name_plural}</Link>
+              </li>
+            ))}
+          </ul>
+        </Card.Section>
+      </Card>
+    </main>
+  )
+}
