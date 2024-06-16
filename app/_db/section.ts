@@ -46,10 +46,12 @@ export const deleteSectionById = async (id:number):Promise<void> => {
 
 export const getEmptySection = async ():Promise<UISection> => {
   return {
+    id: -1,
     object_type: "org" as $Enums.objectTypeEnum,
     name_plural: "",
     name_singular: "",
     uiID: crypto.randomUUID(),
+    specs: [],
   }
 }
 

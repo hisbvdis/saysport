@@ -14,20 +14,16 @@ export interface DBSection extends section {
 // =============================================================================
 // UI
 // =============================================================================
-export interface UIOption extends Omit<option, "id"|"spec_id"> {
-  id?: number;
-  spec_id?:number;
+export interface UIOption extends option {
   uiID: string;
 }
 
-export interface UISpec extends Omit<spec, "id"> {
-  id?: number;
+export interface UISpec extends spec {
   options?: UIOption[];
   uiID: string;
 };
 
-export interface UISection extends Omit<section, "id"> {
-  id?: number;
-  specs?: UISpec[];
+export interface UISection extends section {
+  specs: UISpec[];
   uiID: string;
 }

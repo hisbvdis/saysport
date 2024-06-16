@@ -9,6 +9,7 @@ import { specReadProcessing } from "./spec.processing";
 
 export const getEmptySpec = async ():Promise<UISpec> => {
   return {
+    id: -1,
     name_service: "",
     name_public: "",
     object_type: $Enums.objectTypeEnum.org as $Enums.objectTypeEnum,
@@ -55,7 +56,7 @@ export const upsertSpec = async (state:UISpec, init:UISpec):Promise<spec> => {
     name_service: state.name_service,
     name_public: state.name_public,
     object_type: state.object_type,
-    options_number: state.options_number
+    options_number: state.options_number,
   }
   const optionsAdded = state.options?.filter((stateOption) => !init.options?.some((initOption) => initOption.id === stateOption.id));
   const optionsChanged = state.options?.filter((stateOption) => init.options?.some((initOption) => stateOption.uiID === initOption.uiID && (stateOption.name !== initOption.name || stateOption.order !== initOption.order)));
@@ -67,13 +68,13 @@ export const upsertSpec = async (state:UISpec, init:UISpec):Promise<spec> => {
     create: {
       ...fields,
       options: {
-        create: optionsAdded?.length ? optionsAdded.map((opt) => ({...opt, uiID: undefined})) : undefined,
+        create: optionsAdded?.length ? optionsAdded.map((opt) => ({...opt, id:undefined, spec_id: undefined, uiID: undefined})) : undefined,
       }
     },
     update: {
       ...fields,
       options: {
-        create: optionsAdded?.length ? optionsAdded.map((opt) => ({...opt, uiID: undefined})) : undefined,
+        create: optionsAdded?.length ? optionsAdded.map((opt) => ({...opt, id:undefined, spec_id: undefined, uiID: undefined})) : undefined,
         update: optionsChanged?.length ? optionsChanged.map((opt) => ({where: {id: opt.id}, data: {...opt, id:undefined, uiID: undefined, spec_id: undefined}})) : undefined,
         deleteMany: optionsDeleted?.length ? optionsDeleted.map(({id}) => ({id: id})) : undefined
       }

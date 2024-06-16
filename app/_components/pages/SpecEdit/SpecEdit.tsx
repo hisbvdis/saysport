@@ -34,7 +34,7 @@ export default function SpecEdit(props:{init:UISpec}) {
     add: () => {
       setState(create(state, (draft) => {
         if (!draft?.options) draft.options = [];
-        draft.options.push({name: "", order: draft.options.length, uiID: crypto.randomUUID()});
+        draft.options.push({id: -1, spec_id: -1, name: "", order: draft.options.length, uiID: crypto.randomUUID()});
       }))
     },
     change: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
@@ -136,11 +136,11 @@ export default function SpecEdit(props:{init:UISpec}) {
         </Card.Heading>
         <Card.Section>
           <ul style={{paddingInlineStart: 0}}>
-            {state.options?.map((opt) => (
-              <li key={opt.uiID} style={{display: "flex"}}>
-                <Button onClick={() => handleOptions.delete(opt.uiID)} tabIndex={-1}>X</Button>
-                <InputAddon>{opt.id}</InputAddon>
-                <Input value={opt.name} onChange={(e) => handleOptions.change(e, opt.uiID)} required/>
+            {state.options?.map((option) => (
+              <li key={option.uiID} style={{display: "flex"}}>
+                <Button onClick={() => handleOptions.delete(option.uiID)} tabIndex={-1}>X</Button>
+                <InputAddon>{option.id}</InputAddon>
+                <Input value={option.name} onChange={(e) => handleOptions.change(e, option.uiID)} required/>
               </li>
             ))}
           </ul>
