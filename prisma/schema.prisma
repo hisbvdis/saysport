@@ -21,7 +21,7 @@ model object {
   status_comment       String?
   status_confirm       String?
   status_instead_id    Int?
-  city_id              Int?
+  city_id              Int
   parent_id            Int?
   address              String?
   address_2            String?
