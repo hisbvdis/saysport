@@ -1,0 +1,21 @@
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.choice,
+.choice__input,
+.choice__label {
+  cursor: pointer;
+}
+
+.choiceGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 0;
+
+  border: none;
+}

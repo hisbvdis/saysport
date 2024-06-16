@@ -1,0 +1,32 @@
+.card {
+  padding: var(--card-padding, 15px);
+
+  background-color: var(--color-white);
+  border: 1px solid var(--card-borderColor);
+}
+
+.card:has(.card__section),
+.card:has(.card__heading) {
+  padding: 0;
+}
+
+.card__heading {
+  min-block-size: 50px;
+  padding: var(--card-padding);
+
+  font-size: 1em;
+  font-weight: 400;
+
+  background-color: var(--color-brand-lightest);
+  border-block-end: 1px solid var(--card-borderColor);
+}
+
+.card__section {
+  padding: var(--card-padding);
+
+  border: none;
+}
+
+.card__section + .card__section {
+  border-block-start: 1px solid var(--card-borderColor);
+}

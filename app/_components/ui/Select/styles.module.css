@@ -1,0 +1,64 @@
+.select {
+  position: relative;
+}
+
+.select__inputWrapper {
+  position: relative;
+
+  display: flex;
+}
+
+.select__input {
+  font-size: inherit;
+  cursor: default;
+
+  font-size: var(--textField-fontSize, 0.8125rem);
+}
+
+.select__input--isAutocomplete {
+  cursor: text;
+}
+
+.select--disabled .select__input--isAutocomplete {
+  cursor: default;
+}
+
+.select__btn {
+  position: absolute;
+  inset-block: 2px;
+  inset-inline-end: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: calc(100% - 4px);
+  padding-inline: 5px 7px;
+  aspect-ratio: 1 / 1;
+
+  /* background: var(--color-white); */
+  background: transparent;
+  border: none;
+  border-inline-end: 1px solid var(--textField-borderColor);
+}
+
+.select__btn:disabled {
+  background: var(--control-disabled-bgColor);
+  cursor: default;
+}
+
+.select__btn--arrow {
+  pointer-events: none;
+}
+
+.select__nativeSelect {
+  position: absolute;
+
+  width: 0;
+  height: 0;
+
+  white-space: nowrap;
+
+  border: none;
+  clip-path: inset(50%);
+  overflow: hidden;
+}

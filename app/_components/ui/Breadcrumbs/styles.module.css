@@ -1,0 +1,21 @@
+.breadcrumbs {
+  --gap: 1.5em;
+}
+
+.breadcrumbs--small {
+  font-size: 0.8125rem;
+}
+
+.breadcrumbs__list {
+  display: flex;
+  padding-inline-start: 0;
+  gap: var(--gap);
+
+  list-style: none;
+}
+
+.breadcrumbs__item + .breadcrumbs__item::before {
+  content: ">";
+  display: inline-block;
+  translate: calc(var(--gap) / 2 * -1);
+}

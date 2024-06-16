@@ -1,0 +1,15 @@
+.pageHeader {
+  color: var(--color-white);
+
+  background-color: var(--color-brand);
+}
+
+.pageHeader__container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.pageHeader__link {
+  color: var(--color-white);
+}

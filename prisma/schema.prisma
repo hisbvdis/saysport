@@ -1,0 +1,212 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===========================================================================
+// OBJECT
+// ===========================================================================
+model object {
+  id                   Int                 @id @default(autoincrement())
+  type                 objectTypeEnum
+  name                 String
+  name_locative        String?
+  name_where           String?
+  status_inherit       Boolean?
+  status               objectStatusEnum?
+  status_comment       String?
+  status_confirm       String?
+  status_instead_id    Int?
+  city_id              Int?
+  parent_id            Int?
+  address              String?
+  address_2            String?
+  coord_inherit        Boolean?
+  coord_lat            Float?
+  coord_lon            Float?
+  description          String?
+  schedule_inherit     Boolean?
+  schedule_24_7        Boolean?
+  schedule_date        DateTime?
+  schedule_source      String?
+  schedule_comment     String?
+  created              DateTime            @default(now())
+  modified             DateTime            @updatedAt
+  // --------------------------
+  sections             object_on_section[] @relation("object_section")
+  options              object_on_option[]  @relation("object_option")
+  // --------------------------
+  statusInstead        object?             @relation("status_instead", fields: [status_instead_id], references: [id])
+  statusInsteadRelated object[]            @relation("status_instead")
+  // --------------------------
+  parent               object?             @relation("object_parent", fields: [parent_id], references: [id])
+  children             object[]            @relation("object_parent")
+  // --------------------------
+  city                 city?               @relation("object_city", fields: [city_id], references: [id])
+  links                object_link[]       @relation("object_link")
+  phones               object_phone[]      @relation("object_phone")
+  photos               object_photo[]      @relation("object_photo")
+  schedule             object_schedule[]   @relation("object_schedule")
+  // --------------------------
+}
+
+// ===========================================================================
+// SECTION / SPEC / OPTION
+// ===========================================================================
+model section {
+  id            Int                 @id @default(autoincrement())
+  name_plural   String
+  name_singular String
+  object_type   objectTypeEnum
+  specs         section_on_spec[]   @relation("section_on_spec-section")
+  objects       object_on_section[] @relation("object_section")
+}
+
+model spec {
+  id             Int               @id @default(autoincrement())
+  name_service   String
+  name_public    String
+  object_type    objectTypeEnum
+  options_number optionsNumberEnum
+  options        option[]          @relation("option_spec")
+  sections       section_on_spec[] @relation("section_on_spec-spec")
+}
+
+model option {
+  id      Int                @id @default(autoincrement())
+  name    String
+  order   Int
+  spec_id Int
+  spec    spec?              @relation("option_spec", fields: [spec_id], references: [id], onDelete: Cascade)
+  objects object_on_option[] @relation("object_option")
+
+  @@unique([order, spec_id])
+}
+
+model section_on_spec {
+  id         Int     @id @default(autoincrement())
+  section_id Int
+  spec_id    Int
+  section    section @relation("section_on_spec-section", fields: [section_id], references: [id], onDelete: Cascade)
+  spec       spec    @relation("section_on_spec-spec", fields: [spec_id], references: [id], onDelete: Restrict)
+}
+
+model object_on_section {
+  id         Int     @id @default(autoincrement())
+  object_id  Int
+  section_id Int
+  object     object  @relation("object_section", fields: [object_id], references: [id], onDelete: Cascade)
+  section    section @relation("object_section", fields: [section_id], references: [id], onDelete: Cascade)
+}
+
+model object_on_option {
+  id        Int    @id @default(autoincrement())
+  object_id Int
+  option_id Int
+  object    object @relation("object_option", fields: [object_id], references: [id], onDelete: Cascade)
+  option    option @relation("object_option", fields: [option_id], references: [id], onDelete: Restrict)
+}
+
+// ===========================================================================
+// CONTACTS
+// ===========================================================================
+model object_link {
+  id        Int     @id @default(autoincrement())
+  object_id Int
+  order     Int
+  value     String
+  comment   String?
+  object    object  @relation("object_link", fields: [object_id], references: [id], onDelete: Cascade)
+
+  @@unique([object_id, order])
+}
+
+model object_phone {
+  id        Int     @id @default(autoincrement())
+  object_id Int
+  order     Int
+  value     String
+  comment   String?
+  object    object  @relation("object_phone", fields: [object_id], references: [id], onDelete: Cascade)
+
+  @@unique([object_id, order])
+}
+
+// ===========================================================================
+// PHOTO
+// ===========================================================================
+model object_photo {
+  id        Int      @id @default(autoincrement())
+  object_id Int
+  name      String
+  order     Int
+  uploaded  DateTime
+  object    object   @relation("object_photo", fields: [object_id], references: [id], onDelete: Cascade)
+}
+
+// ===========================================================================
+// SCHEDULE
+// ===========================================================================
+model object_schedule {
+  id        Int    @id @default(autoincrement())
+  object_id Int
+  day_num   Int
+  time      String
+  from      Int
+  to        Int
+  object    object @relation("object_schedule", fields: [object_id], references: [id], onDelete: Cascade)
+
+  @@unique([object_id, day_num])
+}
+
+// ===========================================================================
+// CITY
+// ===========================================================================
+model city {
+  id                Int      @id
+  name              String
+  asciiname         String?
+  alternatenames    String?
+  coord_lat         Float?
+  cootd_lon         Float?
+  feature_class     String?
+  feature_code      String?
+  country_code      String
+  cc2               String?
+  admin1_code       String?
+  admin2_code       String?
+  admin3_code       String?
+  admin4_code       String?
+  population        Int?
+  elevation         Int?
+  dem               Int?
+  timezone          String?
+  modification_date String?
+  // --------------------------
+  objects           object[] @relation("object_city")
+}
+
+// ===========================================================================
+// ENUMS
+// ===========================================================================
+enum objectTypeEnum {
+  org
+  place
+}
+
+enum optionsNumberEnum {
+  one
+  many
+}
+
+enum objectStatusEnum {
+  works
+  open_soon
+  might_not_work
+  closed_temp
+  closed_forever
+}

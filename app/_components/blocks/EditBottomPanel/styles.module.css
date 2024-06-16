@@ -1,0 +1,15 @@
+.editBottomPanel {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  z-index: 1;
+
+  inline-size: 100%;
+  padding: 15px;
+
+  background-color: var(--color-brand);
+}
+
+body:has(.editBottomPanel) {
+  padding-block-end: 70px;
+}

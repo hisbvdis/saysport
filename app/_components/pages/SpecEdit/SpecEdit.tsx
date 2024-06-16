@@ -1,0 +1,158 @@
+"use client";
+import { create } from "mutative";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+// -----------------------------------------------------------------------------
+import { Form } from "@/app/_components/ui/Form";
+import { Card } from "@/app/_components/ui/Card";
+import { Input } from "@/app/_components/ui/Input";
+import { Radio } from "@/app/_components/ui/Choice";
+import { Button } from "@/app/_components/ui/Button";
+import { Control } from "@/app/_components/ui/Control";
+import { InputAddon } from "@/app/_components/ui/InputAddon";
+import { RadioGroup } from "@/app/_components/ui/Choice/ChoiceGroup";
+import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
+// -----------------------------------------------------------------------------
+import { UISpec } from "@/app/_types/types";
+import { deleteSpecById, upsertSpec } from "@/app/_db/spec";
+
+
+export default function SpecEdit(props:{init:UISpec}) {
+  const [state, setState] = useState(props.init);
+  useEffect(() => setState(props.init), [props.init]);
+  const router = useRouter();
+
+  const handleStateChange = {
+    value: (e:React.ChangeEvent<HTMLInputElement>) => {
+      setState(create(state, (draft) => {
+        (draft as any)[e.target.name] = e.target.value;
+      }))
+    }
+  }
+
+  const handleOptions = {
+    add: () => {
+      setState(create(state, (draft) => {
+        if (!draft?.options) draft.options = [];
+        draft.options.push({name: "", order: draft.options.length, uiID: crypto.randomUUID()});
+      }))
+    },
+    change: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
+      setState(create(state, (draft) => {
+        const option = draft.options?.find((option) => option.uiID === uiID);
+        if (!option) return;
+        option.name = e.target.value;
+      }))
+    },
+    delete: (uiID:string) => {
+      setState(create(state, (draft) => {
+        draft.options = draft.options?.filter((option) => option.uiID !== uiID);
+      }))
+    }
+  }
+
+  const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+    e.preventDefault();
+    const { id } = await upsertSpec(state, props.init);
+    if (e.nativeEvent.submitter?.dataset?.leavePage) {
+      router.push("/admin/specs");
+      router.refresh();
+    } else {
+      router.replace(`/admin/specs/${id}`, {scroll: false});
+      router.refresh();
+    }
+  }
+
+  return (
+    <Form style={{marginBlockStart: "10px"}} onSubmit={handleFormSubmit}>
+      <Card>
+        <Card.Heading>Name and type</Card.Heading>
+        <Card.Section>
+          <Control>
+            <Control.Label>ID</Control.Label>
+            <Control.Section>
+              <Input value={state?.id ?? ""} disabled/>
+            </Control.Section>
+          </Control>
+          <Control style={{marginBlockStart: "5px"}}>
+            <Control.Label>Name (service)</Control.Label>
+            <Control.Section>
+              <Input
+                name="name_service"
+                value={state?.name_service}
+                onChange={handleStateChange.value}
+                required
+              />
+            </Control.Section>
+          </Control>
+          <Control style={{marginBlockStart: "5px"}}>
+            <Control.Label>Name (public)</Control.Label>
+            <Control.Section>
+              <Input
+                name="name_public"
+                value={state?.name_public}
+                onChange={handleStateChange.value}
+                required
+              />
+            </Control.Section>
+          </Control>
+          <Control style={{marginBlockStart: "5px"}}>
+            <Control.Label>Object type</Control.Label>
+            <RadioGroup
+              name="object_type"
+              valueToCompareWith={state.object_type}
+              onChange={handleStateChange.value}
+            >
+              <Radio value="org">Org</Radio>
+              <Radio value="place">Place</Radio>
+            </RadioGroup>
+          </Control>
+        </Card.Section>
+      </Card>
+
+      <Card style={{marginBlockStart: "10px"}}>
+        <Card.Heading>Edit page</Card.Heading>
+        <Card.Section>
+          <Control>
+            <Control.Label>Options number</Control.Label>
+            <Control.Section>
+              <RadioGroup
+                name="options_number"
+                valueToCompareWith={state.options_number}
+                onChange={handleStateChange.value}
+              >
+                <Radio value="many">Many</Radio>
+                <Radio value="one">One</Radio>
+              </RadioGroup>
+            </Control.Section>
+          </Control>
+        </Card.Section>
+      </Card>
+
+      <Card style={{marginBlockStart: "10px"}}>
+        <Card.Heading style={{display: "flex", justifyContent: "space-between"}}>
+          <span>Options</span>
+          <Button onClick={handleOptions.add}>+</Button>
+        </Card.Heading>
+        <Card.Section>
+          <ul style={{paddingInlineStart: 0}}>
+            {state.options?.map((opt) => (
+              <li key={opt.uiID} style={{display: "flex"}}>
+                <Button onClick={() => handleOptions.delete(opt.uiID)} tabIndex={-1}>X</Button>
+                <InputAddon>{opt.id}</InputAddon>
+                <Input value={opt.name} onChange={(e) => handleOptions.change(e, opt.uiID)} required/>
+              </li>
+            ))}
+          </ul>
+        </Card.Section>
+      </Card>
+
+      <EditBottomPanel
+        id={state.id}
+        delFunc={deleteSpecById}
+        delRedirectPath="/admin/specs"
+        exitRedirectPath="./"
+      />
+    </Form>
+  )
+}
