@@ -1,11 +1,13 @@
 "use client";
 
+import clsx from "clsx";
+
 
 export default function FieldSetSection(props:Props) {
   const { children, className, style } = props;
 
   return (
-    <div className={className} style={style}>
+    <div className={clsx("fieldset__section", className)} style={style}>
       {children}
     </div>
   )

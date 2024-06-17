@@ -26,7 +26,7 @@ export default function NameOrg() {
             required
           />
         </Control>
-        <Control style={{marginBlockStart: "5px"}}>
+        <Control className="mt15">
           <Control.Label>Name locative form</Control.Label>
           <Input
             name="name_locative"
@@ -36,7 +36,7 @@ export default function NameOrg() {
             required
           />
         </Control>
-        <Status style={{marginBlockStart: "5px"}}/>
+        <Status className="mt15"/>
       </Card.Section>
     </Card>
   )

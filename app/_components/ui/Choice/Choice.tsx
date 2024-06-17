@@ -1,8 +1,12 @@
 "use client";
 import clsx from "clsx";
-import { ChangeEventHandler, ReactEventHandler, useContext, useId, useRef } from "react"
-import styles from "./styles.module.css";
+import { ChangeEventHandler, useContext, useId, useRef } from "react"
+// -----------------------------------------------------------------------------
+import { RequiredInput } from "../RequiredInput";
+// -----------------------------------------------------------------------------
 import { ChoiceGroupContext } from "./ChoiceGroup";
+// -----------------------------------------------------------------------------
+import styles from "./styles.module.css";
 
 
 export const Radio = (props:Props) => <Choice {...props} type="radio"/>
@@ -18,7 +22,8 @@ function Choice(props:Props) {
   const valueToCompareWith = props.valueToCompareWith ?? choiceGroupContext?.valueToCompareWith ?? "";
   const arrayToCompareWith = props.arrayToCompareWith ?? choiceGroupContext?.arrayToCompareWith ?? "";
   const checked = props.checked ?? (valueToCompareWith ? value === valueToCompareWith : arrayToCompareWith.includes(value));
-  const required = props.required ?? choiceGroupContext?.requiredGroup ?? false;
+  const requiredSelf = props.required ?? false;
+  const requiredGroup = choiceGroupContext?.requiredGroup ?? false;
   const { tabIndex=0 } = props;
   const { className, style, children } = props;
   const disabled = props.disabled ?? choiceGroupContext?.disabledGroup ?? false;
@@ -35,10 +40,11 @@ function Choice(props:Props) {
         value={value}
         checked={checked}
         onChange={onChange}
-        required={required}
+        required={requiredSelf}
         tabIndex={tabIndex}
         disabled={disabled}
       />
+      {requiredGroup && type === "checkbox" ? <RequiredInput name={name} checked={checked} required={requiredSelf}/> : ""}
       <span className={styles["choice__label"]}>{children}</span>
     </label>
   )

@@ -1,0 +1,9 @@
+.requiredInput {
+  position: absolute;
+
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+
+  border: 0;
+}

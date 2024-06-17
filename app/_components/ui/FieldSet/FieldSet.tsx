@@ -16,6 +16,7 @@ export default function FieldSet(props:Props) {
       <fieldset
         className={clsx(styles["fieldSet"], className)}
         style={style}
+        aria-labelledby={legendId}
       >
         { children }
       </fieldset>

@@ -16,8 +16,8 @@ export default function NamePlace() {
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Name and Status</Card.Heading>
       <Card.Section>
-        <div style={{display: "grid", gap: "10px", gridTemplateColumns:"repeat(4, 10px)"}}>
-          <Control>
+        <div style={{display: "flex", gap: "10px"}}>
+          <Control style={{flexBasis: "50%"}}>
             <Control.Label>Place type</Control.Label>
             <Control.Section>
               <Input
@@ -29,7 +29,7 @@ export default function NamePlace() {
               />
             </Control.Section>
           </Control>
-          <Control>
+          <Control style={{flexBasis: "50%"}}>
             <Control.Label>Location</Control.Label>
             <Control.Section>
               <Input
@@ -43,7 +43,7 @@ export default function NamePlace() {
             </Control.Section>
           </Control>
         </div>
-        <Status style={{marginBlockStart: "5px"}}/>
+        <Status className="mt15"/>
       </Card.Section>
     </Card>
   )

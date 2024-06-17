@@ -27,7 +27,7 @@ export default function Sections() {
     },
     delete: (section:UISection) => {
       setState(create(state, (draft) => {
-        state.sections = state.sections?.filter(({id}) => id !== section.id);
+        draft.sections = draft.sections?.filter(({id}) => id !== section.id);
         const optionsOfDeletedSection = section.specs?.flatMap((spec) => spec.options?.flatMap(({id}) => id));
         draft.options = draft.options?.filter((option) => !optionsOfDeletedSection?.includes(option.id));
       }));
@@ -57,14 +57,14 @@ export default function Sections() {
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Sections and Options</Card.Heading>
-      <Card.Section style={{display: "flex", gap: "10px"}}>
+      <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
         {state.sections?.map((section) => (
-          <FieldSet key={section.id}>
-            <FieldSet.Legend>
+          <FieldSet key={section.id} style={{display: "flex", gap: "20px"}}>
+            <FieldSet.Legend style={{inlineSize: "100px"}}>
               <Button onClick={() => handleSections.delete(section)}>X</Button>
               <span>{section.name_plural}</span>
             </FieldSet.Legend>
-            <FieldSet.Section>
+            <FieldSet.Section  style={{display: "flex", gap: "10px"}}>
               {section.specs?.map((spec) => (
                 <Control key={spec.id}>
                   <Control.Label>{spec.name_public}</Control.Label>

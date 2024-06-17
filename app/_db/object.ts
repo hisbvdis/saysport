@@ -2,16 +2,15 @@
 import { prisma } from "@/prisma/dbClient"
 import { $Enums, object as object_ } from "@prisma/client"
 // -----------------------------------------------------------------------------
-import { DBObject, UIObject } from "../_types/types";
+import { UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
 
 
-export const getEmptyObject = ():UIObject => {
+export const getEmptyObject = async ():Promise<UIObject> => {
   return {
     type: $Enums.objectTypeEnum.org as $Enums.objectTypeEnum,
     status: $Enums.objectStatusEnum.works as $Enums.objectStatusEnum,
-    schedule: Array(7).fill(null)
-      .map((_,i) => ({ id: -1, object_id: -1, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
+    schedule: Array(7).fill(null).map((_,i) => ({ id: -1, object_id: -1, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
   }
 }
 
@@ -38,7 +37,7 @@ export const getObjectsByFilters = async (filters:Filters) => {
 }
 
 interface Filters {
-  cityId?: number;
+  cityId?: number | null;
   type?: $Enums.objectTypeEnum;
   query?: string;
 }
@@ -61,7 +60,7 @@ export const getObjectById = async (id:number) => {
     }
   });
   if (dbData === null) throw new Error("getObjectById returned null");
-  const processed = objectReadProcessing(dbData);
+  const processed = await objectReadProcessing(dbData);
   return processed;
 }
 
@@ -74,7 +73,7 @@ export const deleteObjectById = async (id:number) => {
 }
 
 export const upsertObject = async (state:UIObject, init: UIObject): Promise<object_> => {
-  if (!state.city_id) throw new Error("upsertObject");
+  // if (!state.city_id) throw new Error("upsertObject");
   const fields = {
     name: state.name!,
     name_locative: state.name_locative || null,
@@ -85,7 +84,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<obje
     status_comment: state.status_comment || null,
     status_confirm: state.status_confirm || null,
     status_instead_id: state.status_instead_id || null,
-    city_id: state.city_id,
+    city_id: state.city_id || null,
     parent_id: state.parent_id || null,
     address: state.address || null,
     address_2: state.address_2 || null,
@@ -112,6 +111,9 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<obje
   const scheduleAdded = state.schedule?.filter((stateDay) => init.schedule?.some((initDay) => stateDay.day_num === initDay.day_num && !initDay.time && stateDay.time));
   const scheduleChanged = state.schedule?.filter((stateDay) => init.schedule?.some((initDay) => stateDay.day_num === initDay.day_num && initDay.id && stateDay.time && stateDay.time !== initDay.time));
   const scheduleDeleted = init.schedule?.filter((initDay) => state.schedule?.some((stateDay) => initDay.day_num === stateDay.day_num && initDay.time && !stateDay.time));
+  const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));
+  const photosDeleted = init.photos?.filter((initPhoto) => !state.photos?.some((statePhoto) => initPhoto.uiID === statePhoto.uiID));
+  // const photosMoved = state.photos?.filter((statePhoto) => init.photos?.some((initPhoto) => statePhoto.localId === initPhoto.localId && statePhoto.order !== initPhoto.order));
   const addedObject = await prisma.object.upsert({
     where: {
       id: state.id ?? -1
@@ -163,7 +165,24 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<obje
         update: scheduleChanged?.length ? scheduleChanged.map((day) => ({where: {id: day.id}, data: {...day, id: undefined, object_id: undefined, isWork: undefined}})) : undefined,
         deleteMany: scheduleDeleted?.length ? {id: {in: scheduleDeleted.map(({id}) => id!)}} : undefined,
       },
+      photos: {
+        create: photosAdded?.length ? photosAdded.map(({name, order}) => ({name, order})) : undefined,
+        // update: photosMoved?.length ? photosMoved.map((photo) => ({where: {id: photo.id}, data: {order: photo.order}})) : undefined,
+        deleteMany: photosDeleted?.length ? {id: {in: photosDeleted.map(({id}) => id)}} : undefined,
+      },
     }
   });
+   // Rename photo names of created object
+   if (!state.id && state.photos?.length) {
+    const updatedObject = await prisma.object.update({
+      where: {id: addedObject.id},
+      data: {
+        photos: {
+          create: state.photos.map(({name, order}) => ({ name: name.replace("ID", String(addedObject.id)),order})),
+        }
+      },
+    });
+    return updatedObject;
+  };
   return addedObject
 }

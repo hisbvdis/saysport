@@ -20,6 +20,7 @@ export interface DBObject extends object_ {
   sections: (object_on_section & {section: section & {specs: (section_on_spec & {spec: spec & {options: option[]}})[]}})[];
   options: (object_on_option & {option: option})[];
   schedule: object_schedule[];
+  photos: object_photo[];
 }
 
 // =============================================================================
@@ -46,6 +47,7 @@ export interface UIObject extends Partial<object_> {
   sections?: UISection[];
   options?: UIOption[];
   schedule: (object_schedule & {uiID: string, isWork: boolean})[];
+  photos?: (object_photo & {uiID: string, blob?: string})[];
   [key: string]: any;
 }
 

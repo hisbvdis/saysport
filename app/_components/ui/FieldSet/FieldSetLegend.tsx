@@ -11,13 +11,13 @@ export default function FieldSetLegend(props:Props) {
   const { legendId } = useContext(FieldSetContext);
 
   return (
-    <legend
+    <div
       id={legendId}
       className={clsx(styles["fieldSet__legend"], className, srOnly && "srOnly")}
       style={style}
     >
       {children}
-    </legend>
+    </div>
   )
 }
 

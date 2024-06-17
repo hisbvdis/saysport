@@ -60,7 +60,7 @@ async function main() {
   await prisma.object_on_section.createMany({
     data: [
       /* 1 */ { object_id: 1, section_id: 1 },
-      /* 2 */ { object_id: 1, section_id: 3 },
+      /* 2 */ { object_id: 1, section_id: 4 },
       /* 3 */ { object_id: 2, section_id: 1 },
       /* 4 */ { object_id: 3, section_id: 3 },
     ]

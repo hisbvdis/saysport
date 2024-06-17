@@ -64,7 +64,7 @@ export default function Status(props:Props) {
             name="status_instead_id"
             value={state?.status_instead_id}
             label={state?.statusInstead?.name}
-            onChange={handleStateChange?.value}
+            onChange={handleStateChange?.valueAsNumber}
             onChangeData={(data) => setState(create((draft) => {draft.statusInstead = data}))}
             isAutocomplete
             placeholder="Enter name"

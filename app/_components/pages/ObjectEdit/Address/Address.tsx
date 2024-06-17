@@ -1,7 +1,7 @@
 "use client";
 import { create } from "mutative";
 import { useContext, useEffect, useState } from "react";
-import type * as Leaflet from "leaflet";
+import * as Leaflet from "leaflet";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
@@ -100,13 +100,15 @@ export default function Address() {
               />
             </Control.Section>
           </Control>
-          <Control style={{marginBlockStart: "5px"}}>
+          <Control className="mt15">
             <Control.Label>Based on organisation</Control.Label>
             <Control.Section>
               <Select
                 name="parent_id"
                 value={state.parent_id}
                 label={state.parent?.name}
+                onChange={handleStateChange?.valueAsNumber}
+                onChangeData={(data) => setState(create((draft) => {draft.parent = data}))}
                 // onChangeData={(data) => setInheritedData(data, setState)}
                 isAutocomplete
                 placeholder="Enter name"
@@ -119,7 +121,7 @@ export default function Address() {
               />
             </Control.Section>
           </Control>
-          <Control style={{marginBlockStart: "5px"}}>
+          <Control className="mt15">
             <Control.Label>Address</Control.Label>
             <Control.Section style={{display: "flex"}}>
               <Input
@@ -147,7 +149,7 @@ export default function Address() {
             </Control.Section>
           </Control>
         </div>
-        <div className="basis-2/3 flex flex-col">
+        <div style={{flexBasis: "66%", display: "flex", flexDirection: "column"}}>
           <Checkbox
             name="coord_inherit"
             checked={Boolean(state.coord_inherit)}

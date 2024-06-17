@@ -2,13 +2,13 @@
 import { create } from "mutative";
 import { $Enums } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { type ChangeEvent, type ChangeEventHandler, type SetStateAction, type SyntheticEvent, createContext, useEffect, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, SetStateAction, SyntheticEvent, createContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 import { NameOrg, NamePlace, Address, Contacts, Sections, Description, Schedule, Photos } from "./"
 // -----------------------------------------------------------------------------
-import type { UIObject } from "@/app/_types/types";
+import { UIObject } from "@/app/_types/types";
 import { deleteObjectById, upsertObject } from "@/app/_db/object";
 
 
@@ -31,9 +31,8 @@ export default function ObjectEdit(props:{init:UIObject}) {
 
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
-    // const stateWithoutPhotoFiles = {...state, photos: state.photos?.map((photo) => ({...photo, file: undefined}))};
-    // const { id } = await upsertObject(stateWithoutPhotoFiles, props.init);
-    const { id } = await upsertObject(state, props.init);
+    const stateWithoutFiles = {...state, photos: state.photos?.map((photo) => ({...photo, file: undefined}))};
+    const { id } = await upsertObject(stateWithoutFiles, props.init);
     // await syncPhotos(id, state, props.init);
     if (e.nativeEvent.submitter?.dataset?.leavePage) {
       router.push(`/object/${id}`);

@@ -35,7 +35,6 @@ export const getSectionById = async (id:number):Promise<UISection> => {
 }
 
 export const deleteSectionById = async (id:number):Promise<void> => {
-  console.log( id )
   await prisma.section.delete({
     where: {
       id: id

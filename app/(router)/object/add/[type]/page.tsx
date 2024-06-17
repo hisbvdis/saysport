@@ -3,7 +3,7 @@ import { $Enums } from "@prisma/client";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { ObjectEdit } from "@/app/_components/pages/ObjectEdit/";
 // -----------------------------------------------------------------------------
-import { getEmptyObject, getObjectById } from "@/app/_db/object";
+import { getEmptyObject } from "@/app/_db/object";
 
 
 export default async function AddObjectPage({params}:{params:{type:string}}) {

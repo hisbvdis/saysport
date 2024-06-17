@@ -1,3 +1,4 @@
+"use client";
 import { create } from "mutative";
 import { useContext } from "react";
 import { format } from "date-fns";
@@ -75,7 +76,7 @@ export default function Schedule() {
       setState(create(state, (draft) => {
         draft.schedule_inherit = false;
         draft.schedule_24_7 = false;
-        draft.schedule = getEmptyObject().schedule;
+        draft.schedule = Array(7).fill(null).map((_,i) => ({ id: -1, object_id: -1, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
         draft.schedule_date = null;
         draft.schedule_source = "";
         draft.schedule_comment = "";
@@ -86,8 +87,8 @@ export default function Schedule() {
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Schedule</Card.Heading>
-      <Card.Section>
-        <div style={{display: "flex", gap: "10px"}}>
+      <Card.Section style={{display: "flex", flexDirection: "column", gap: "10px"}}>
+        <div style={{display: "flex", gap: "20px"}}>
           <Checkbox
             name="schedule_inherit"
             checked={Boolean(state.schedule_inherit)}
@@ -100,6 +101,7 @@ export default function Schedule() {
             checked={Boolean(state.schedule_24_7)}
             onChange={handleSchedule.change24_7}
             disabled={Boolean(state.schedule_inherit)}
+            style={{marginInlineStart: "auto"}}
           >24/7</Checkbox>
           <Button
             onClick={handleSchedule.clearAll}
@@ -108,8 +110,8 @@ export default function Schedule() {
         </div>
         <div style={{display: "flex"}}>
           {state.schedule?.map((day, i) => (
-            <p key={i} style={{display: "flex", flexDirection: "column"}}>
-              <Checkbox name={String(i)} checked={Boolean(day?.isWork)} onChange={handleSchedule.changeIsWork} tabIndex={-1} disabled={Boolean(state.schedule_24_7 || state.schedule_inherit)}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</Checkbox>
+            <p key={i} style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+              <Checkbox name={String(i)} checked={Boolean(day?.isWork)} onChange={handleSchedule.changeIsWork} tabIndex={-1} disabled={Boolean(state.schedule_24_7 || state.schedule_inherit)}>{["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"][i]}</Checkbox>
               <Input name={String(i)} value={day?.isWork ? day?.time : "Doesn't work"} onChange={handleSchedule.changeTime} onBlurIfChanged={handleSchedule.formatTime} disabled={Boolean(!day?.isWork) || Boolean(state.schedule_24_7) || Boolean(state.schedule_inherit)}  pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d"/>
               <Button onClick={() => handleSchedule.copyToAll(day)} disabled={Boolean(!day?.isWork || state.schedule_24_7 || state.schedule_inherit)}>Copy</Button>
             </p>

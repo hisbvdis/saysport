@@ -21,7 +21,7 @@ model object {
   status_comment       String?
   status_confirm       String?
   status_instead_id    Int?
-  city_id              Int
+  city_id              Int?
   parent_id            Int?
   address              String?
   address_2            String?
@@ -144,7 +144,7 @@ model object_photo {
   object_id Int
   name      String
   order     Int
-  uploaded  DateTime
+  uploaded  DateTime @default(now())
   object    object   @relation("object_photo", fields: [object_id], references: [id], onDelete: Cascade)
 }
 
