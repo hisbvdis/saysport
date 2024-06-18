@@ -43,7 +43,7 @@ export default function Photos() {
           {state.photos?.map((photo, i) => (
             <li key={photo.uiID}  style={{border: "1px solid black"}}>
               <Button onClick={() => handlePhotos.delete(photo.uiID)} style={{position: "absolute"}}>X</Button>
-              <img src={photo.blob ?? `/photos/${photo.name}`} style={{width: "160px", height: "160px", objectFit: "contain"}}/>
+              <img src={photo.blob ?? `/photos/${photo.name}`} style={{width: "100%", aspectRatio: "1/1", objectFit: "contain"}}/>
             </li>
           ))}
         </ul>

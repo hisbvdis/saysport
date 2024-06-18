@@ -11,7 +11,6 @@ import { Checkbox } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { UIObject } from "@/app/_types/types";
 import { ObjectEditContext } from "../ObjectEdit";
-import { getEmptyObject } from "@/app/_db/object";
 
 
 export default function Schedule() {
@@ -19,10 +18,10 @@ export default function Schedule() {
 
   const handleSchedule = {
     changeIsWork: (e:React.ChangeEvent<HTMLInputElement>) => {
+      const dayNum = Number(e.target.name);
       setState(create(state, (draft) => {
-        const targetName = Number(e.target.name);
-        draft.schedule[targetName].isWork = e.target.checked;
-        if (!e.target.checked) state.schedule[targetName].time = "";
+        draft.schedule[dayNum].isWork = e.target.checked;
+        if (!e.target.checked) draft.schedule[dayNum].time = "";
       }))
     },
     changeTime: (e:React.ChangeEvent<HTMLInputElement>) => {

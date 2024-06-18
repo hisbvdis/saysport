@@ -109,7 +109,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<obje
   const sectionsAdded = state.sections?.filter((stateSection) => !init?.sections?.some((initSection) => stateSection.id === initSection.id));
   const sectionsDeleted = init.sections?.filter((initSection) => !state.sections?.some((stateSection) => initSection.id === stateSection.id));
   const scheduleAdded = state.schedule?.filter((stateDay) => init.schedule?.some((initDay) => stateDay.day_num === initDay.day_num && !initDay.time && stateDay.time));
-  const scheduleChanged = state.schedule?.filter((stateDay) => init.schedule?.some((initDay) => stateDay.day_num === initDay.day_num && initDay.id && stateDay.time && stateDay.time !== initDay.time));
+  const scheduleChanged = state.schedule?.filter((stateDay) => init.schedule?.some((initDay) => stateDay.day_num === initDay.day_num && initDay.id !== -1 && stateDay.time && stateDay.time !== initDay.time));
   const scheduleDeleted = init.schedule?.filter((initDay) => state.schedule?.some((stateDay) => initDay.day_num === stateDay.day_num && initDay.time && !stateDay.time));
   const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));
   const photosDeleted = init.photos?.filter((initPhoto) => !state.photos?.some((statePhoto) => initPhoto.uiID === statePhoto.uiID));
@@ -133,7 +133,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<obje
         create: sectionsAdded?.length ? sectionsAdded.map(({id}) => ({section: {connect: {id}}})) : undefined,
       },
       schedule: {
-        create: scheduleAdded?.length ? scheduleAdded.map((day) => ({...day, isWork: undefined})) : undefined,
+        create: scheduleAdded?.length ? scheduleAdded.map((day) => ({...day, id: undefined, object_id: undefined, uiID: undefined, isWork: undefined})) : undefined,
       },
       photos: {
         // Don't: The
@@ -161,9 +161,9 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<obje
         deleteMany: sectionsDeleted?.length ? {section_id: {in: sectionsDeleted.map(({id}) => id!)}} : undefined,
       },
       schedule: {
-        create: scheduleAdded?.length ? scheduleAdded.map((day) => ({...day, id: undefined, object_id: undefined, isWork: undefined})) : undefined,
-        update: scheduleChanged?.length ? scheduleChanged.map((day) => ({where: {id: day.id}, data: {...day, id: undefined, object_id: undefined, isWork: undefined}})) : undefined,
-        deleteMany: scheduleDeleted?.length ? {id: {in: scheduleDeleted.map(({id}) => id!)}} : undefined,
+        create: scheduleAdded?.length ? scheduleAdded.map((day) => ({...day, id: undefined, object_id: undefined, uiID: undefined, isWork: undefined})) : undefined,
+        update: scheduleChanged?.length ? scheduleChanged.map((day) => ({where: {id: day.id}, data: {...day, id: undefined, object_id: undefined, uiID: undefined, isWork: undefined}})) : undefined,
+        deleteMany: scheduleDeleted?.length ? {id: {in: scheduleDeleted.map(({id}) => id)}} : undefined,
       },
       photos: {
         create: photosAdded?.length ? photosAdded.map(({name, order}) => ({name, order})) : undefined,
