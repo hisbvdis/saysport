@@ -47,7 +47,7 @@ export interface UIObject extends Partial<object_> {
   sections?: UISection[];
   options?: UIOption[];
   schedule: (object_schedule & {uiID: string, isWork: boolean})[];
-  photos?: (object_photo & {uiID: string, blob?: string})[];
+  photos?: (object_photo & {uiID: string, blob?: string, file?: File})[];
   [key: string]: any;
 }
 

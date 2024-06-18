@@ -9,6 +9,7 @@ import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 import { NameOrg, NamePlace, Address, Contacts, Sections, Description, Schedule, Photos } from "./"
 // -----------------------------------------------------------------------------
 import { UIObject } from "@/app/_types/types";
+import { syncPhotos } from "./Photos/syncPhotos";
 import { deleteObjectById, upsertObject } from "@/app/_db/object";
 
 
@@ -33,7 +34,7 @@ export default function ObjectEdit(props:{init:UIObject}) {
     e.preventDefault();
     const stateWithoutFiles = {...state, photos: state.photos?.map((photo) => ({...photo, file: undefined}))};
     const { id } = await upsertObject(stateWithoutFiles, props.init);
-    // await syncPhotos(id, state, props.init);
+    await syncPhotos(id, state, props.init);
     if (e.nativeEvent.submitter?.dataset?.leavePage) {
       router.push(`/object/${id}`);
     } else {
