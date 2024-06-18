@@ -3,7 +3,7 @@ import { sectionReadProcessing } from "./section.processing";
 // -----------------------------------------------------------------------------
 
 
-export const objectReadProcessing = async (dbData: DBObject): Promise<UIObject> => {
+export const objectReadProcessing = (dbData: DBObject): UIObject => {
   return {
     ...dbData,
     phones: dbData.phones?.map((phone) => ({ ...phone, uiID: crypto.randomUUID() })),

@@ -81,6 +81,7 @@ export default function Select(props:Props) {
     onChangeData(item?.data);
     setSuggestions(localItems ?? []);
     setIsShowMenu(false);
+    isAutocomplete ? setInputValue(props.label) : setInputValue(selectedItem?.label);
   }
 
   const handleInputKeydown = (e:React.KeyboardEvent<HTMLElement>) => {
@@ -157,7 +158,7 @@ export default function Select(props:Props) {
           </Button>
         : null}
       </p>
-      <select className={styles["select__nativeSelect"]} name={props.name} value={props.value || ""} onChange={onChange} ref={selectRef}>
+      <select className={styles["select__nativeSelect"]} name={props.name} value={props.value || ""} onChange={onChange} ref={selectRef} tabIndex={-1}>
         <option value={selectedItem?.id ?? ""}></option>
       </select>
       <Menu

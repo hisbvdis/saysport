@@ -187,6 +187,8 @@ model city {
   timezone          String?
   modification_date String?
   // --------------------------
+  name_ru           String?
+  // --------------------------
   objects           object[] @relation("object_city")
 }
 

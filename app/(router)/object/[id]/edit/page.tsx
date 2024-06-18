@@ -10,8 +10,8 @@ export default async function ObjectEditPage({params}:{params: {id:string, type:
   return (
     <div className="container page">
       <Breadcrumbs items={[
-        { label: "Catalog", href: "/catalog" },
-        { label: `${object.name}`, href: `/object/${object.id}` },
+        { label: "Каталог", href: "/catalog" },
+        { label: `${object.name} ${object.name_where ?? ""}`, href: `/object/${object.id}` },
         { label: `Edit ${params.type === "org" ? "org" : "place"}` },
       ]}/>
       <ObjectEdit init={object}/>

@@ -162,6 +162,7 @@ CREATE TABLE "city" (
     "dem" INTEGER,
     "timezone" TEXT,
     "modification_date" TEXT,
+    "name_ru" TEXT,
 
     CONSTRAINT "city_pkey" PRIMARY KEY ("id")
 );

@@ -47,7 +47,7 @@ export default function Status(props:Props) {
         </Control.Section>
       </Control>
       <Control>
-        <Control.Label>Подтверждение / Ссылка</Control.Label>
+        <Control.Label>Подтверждение</Control.Label>
         <Control.Section>
           <Input
             name="status_confirm"

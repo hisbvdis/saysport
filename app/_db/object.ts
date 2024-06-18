@@ -14,8 +14,8 @@ export const getEmptyObject = async ():Promise<UIObject> => {
   }
 }
 
-export const getObjectsByFilters = async (filters:Filters) => {
-  const { query, cityId, type } = filters;
+export const getObjectsByFilters = async (filters?:Filters) => {
+  const { query, cityId, type } = filters ?? {};
   const dbData = await prisma.object.findMany({
     where: {
       name: query ? {contains: query, mode: "insensitive"} : undefined,
@@ -31,6 +31,7 @@ export const getObjectsByFilters = async (filters:Filters) => {
       options: {include: {option: true}},
       schedule: true,
       photos: {orderBy: {order: "asc"}},
+      sections: {include: {section: {include: {specs: {include: {spec: {include: {options: true}}}}}}}},
     }
   });
   return dbData;

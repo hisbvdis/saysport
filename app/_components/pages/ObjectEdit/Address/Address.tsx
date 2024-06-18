@@ -16,6 +16,7 @@ import { getCitiesByFilters } from "@/app/_db/city";
 import { getObjectsByFilters } from "@/app/_db/object";
 import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
+import { setInheritedData } from "./setInheritedData";
 
 
 export default function Address() {
@@ -86,16 +87,16 @@ export default function Address() {
             <Control.Section>
               <Select
                 name="city_id"
-                value={state?.city_id}
-                label={state?.city?.name}
+                value={state.city_id}
+                label={state.city ? `${state.city?.name_ru}, ${state.city?.country_code}` : ""}
                 onChange={handleStateChange.valueAsNumber}
                 onChangeData={(data) => setState(create(state, (draft) => {draft.city = data}))}
                 isAutocomplete
                 disabled={Boolean(state.parent_id)}
                 placeholder="Введите название"
-                requestItemsOnInputChange={async (name) => (
-                  await getCitiesByFilters({name})).map((city) => ({
-                    id: city.id, label: city.name, data: city
+                requestItemsOnInputChange={async (value) => (
+                  await getCitiesByFilters({name: value})).map((city) => ({
+                    id: city.id, label: `${city.name_ru}, ${city.country_code}`, data: city
                 }))}
               />
             </Control.Section>
@@ -108,8 +109,7 @@ export default function Address() {
                 value={state.parent_id}
                 label={state.parent?.name}
                 onChange={handleStateChange?.valueAsNumber}
-                onChangeData={(data) => setState(create((draft) => {draft.parent = data}))}
-                // onChangeData={(data) => setInheritedData(data, setState)}
+                onChangeData={(parent) => setInheritedData(parent, state, setState)}
                 isAutocomplete
                 placeholder="Введите название"
                 disabled={!state.city_id}

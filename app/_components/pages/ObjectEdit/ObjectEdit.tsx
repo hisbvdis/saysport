@@ -42,7 +42,6 @@ export default function ObjectEdit(props:{init:UIObject}) {
       router.refresh();
     }
   }
-  console.log( state.schedule )
 
   return (
     <ObjectEditContext.Provider value={{ state, setState, handleStateChange }}>

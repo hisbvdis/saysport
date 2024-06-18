@@ -1,3 +1,4 @@
+import ObjectView from "@/app/_components/pages/ObjectView/ObjectView";
 import { getObjectById } from "@/app/_db/object"
 // -----------------------------------------------------------------------------
 
@@ -5,7 +6,7 @@ export default async function ObjectViewPage({params}:Props) {
   const object = await getObjectById(Number(params.id));
 
   return (
-    null
+    <ObjectView init={object}/>
   )
 }
 
