@@ -12,10 +12,10 @@ export default async function SpecListPage() {
 
   return (
     <main className="container  page">
-      <Breadcrumbs items={[{label: "Admin", href: "/admin"}, {label: "Specs"}]}/>
+      <Breadcrumbs items={[{label: "Админка", href: "/admin"}, {label: "Свойства"}]}/>
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Section style={{flex: "100%"}}>
-          <Link href="/admin/specs/add">Create</Link>
+          <Link href="/admin/specs/add">Создать</Link>
         </Card.Section>
         <Card.Section>
           <ul>

@@ -12,8 +12,8 @@ export default async function AddObjectPage({params}:{params:{type:string}}) {
   return (
     <main className="container  page">
       <Breadcrumbs items={[
-        { label: "Catalog", href: "/catalog" },
-        { label: `Add ${params.type === "org" ? "org" : "place"}` },
+        { label: "Каталог", href: "/catalog" },
+        { label: `Добавить ${params.type === "org" ? "организацию" : "место"}` },
       ]}/>
       <ObjectEdit init={{...emptyObject, type: params.type as $Enums.objectTypeEnum}}/>
     </main>

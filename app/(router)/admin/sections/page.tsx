@@ -12,13 +12,13 @@ export default async function SectionListPage() {
 
   return (
     <main className="container page">
-      <Breadcrumbs items={[{label: "Admin", href: "/admin"}, {label: "Sections"}]}/>
+      <Breadcrumbs items={[{label: "Админка", href: "/admin"}, {label: "Разделы"}]}/>
       <Card style={{display: "flex", flexWrap: "wrap", marginBlockStart: "10px"}}>
         <Card.Section style={{flex: "100%"}}>
-          <Link href="/admin/sections/add">Create</Link>
+          <Link href="/admin/sections/add">Создать</Link>
         </Card.Section>
         <Card.Section style={{flex: "50%"}}>
-          <h3>Orgs</h3>
+          <h3>Организации</h3>
           <ul>
             {sections.filter(({object_type}) => object_type === "org").map(({id, name_plural}) => (
               <li key={id} style={{display: "flex", gap: "10px"}}>
@@ -29,7 +29,7 @@ export default async function SectionListPage() {
           </ul>
         </Card.Section>
         <Card.Section style={{flex: "50%"}}>
-          <h3>Places</h3>
+          <h3>Места</h3>
           <ul>
             {sections.filter(({object_type}) => object_type === "place").map(({id, name_plural}) => (
               <li key={id} style={{display: "flex", gap: "10px"}}>

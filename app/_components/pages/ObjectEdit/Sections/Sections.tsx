@@ -56,7 +56,7 @@ export default function Sections() {
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Sections and Options</Card.Heading>
+      <Card.Heading>Разделы</Card.Heading>
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
         {state.sections?.map((section) => (
           <FieldSet key={section.id} style={{display: "flex", gap: "20px"}}>
@@ -95,7 +95,7 @@ export default function Sections() {
           isAutocomplete
           value=""
           onChangeData={handleSections.add}
-          placeholder="Enter name"
+          placeholder="Введите название"
           requestItemsOnFirstTouch={async () =>
             (await getSectionsByFilters({objectType: state.type}))
               .map((section) => ({id: section.id!, label: section.name_plural, data: section}))

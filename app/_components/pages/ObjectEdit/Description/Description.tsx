@@ -8,7 +8,7 @@ export default function Description() {
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Description</Card.Heading>
+      <Card.Heading>Описание</Card.Heading>
       <Card.Section>
         <Textarea name="description" value={state.description} onChange={handleStateChange.value} maxLength="1000" />
       </Card.Section>

@@ -62,7 +62,7 @@ export default function SectionEdit(props:{init:UISection}) {
   return (
     <Form onSubmit={handleFormSubmit}>
       <Card style={{marginBlockStart: "10px"}}>
-        <Card.Heading>Name and type</Card.Heading>
+        <Card.Heading>Название и тип</Card.Heading>
         <Card.Section>
           <Control>
             <Control.Label>ID</Control.Label>
@@ -70,8 +70,8 @@ export default function SectionEdit(props:{init:UISection}) {
               <Input value={state?.id} disabled/>
             </Control.Section>
           </Control>
-          <Control style={{marginBlockStart: "5px"}}>
-            <Control.Label>Name (plural)</Control.Label>
+          <Control className="mt15">
+            <Control.Label>Название (множественное число)</Control.Label>
             <Control.Section>
               <Input
                 name="name_plural"
@@ -81,8 +81,8 @@ export default function SectionEdit(props:{init:UISection}) {
               />
             </Control.Section>
           </Control>
-          <Control style={{marginBlockStart: "5px"}}>
-            <Control.Label>Name (singular)</Control.Label>
+          <Control className="mt15">
+            <Control.Label>Название (единственное число)</Control.Label>
             <Input
               name="name_singular"
               value={state?.name_singular}
@@ -90,8 +90,8 @@ export default function SectionEdit(props:{init:UISection}) {
               required
             />
           </Control>
-          <Control style={{marginBlockStart: "5px"}}>
-            <Control.Label>Object type</Control.Label>
+          <Control className="mt15">
+            <Control.Label>Тип объекта</Control.Label>
             <Control.Section>
               <RadioGroup
                 name="object_type"
@@ -99,8 +99,8 @@ export default function SectionEdit(props:{init:UISection}) {
                 onChange={handleStateChange.value}
                 disabled={Boolean(state.specs?.length)}
               >
-                <Radio value="org">Org</Radio>
-                <Radio value="place">Place</Radio>
+                <Radio value="org">Организация</Radio>
+                <Radio value="place">Место</Radio>
               </RadioGroup>
             </Control.Section>
           </Control>
@@ -108,12 +108,12 @@ export default function SectionEdit(props:{init:UISection}) {
       </Card>
 
       <Card style={{marginBlockStart: "10px"}}>
-        <Card.Heading>Specs</Card.Heading>
+        <Card.Heading>Свойства</Card.Heading>
         <Card.Section>
           <Select
             isAutocomplete
             onChangeData={handleSpecs.add}
-            placeholder="Add spec"
+            placeholder="Добавить свойство"
             requestItemsOnFirstTouch={async () =>
               (await getSpecsByFilters({objectType: state?.object_type}))
                 ?.map((spec) => ({id: spec.id, label: spec.name_service, data: spec}))

@@ -82,7 +82,7 @@ export default function Address() {
       <Card.Section style={{display: "flex", gap: "15px"}}>
         <div style={{flexBasis: "33%"}}>
           <Control>
-            <Control.Label>City</Control.Label>
+            <Control.Label>Город</Control.Label>
             <Control.Section>
               <Select
                 name="city_id"
@@ -92,7 +92,7 @@ export default function Address() {
                 onChangeData={(data) => setState(create(state, (draft) => {draft.city = data}))}
                 isAutocomplete
                 disabled={Boolean(state.parent_id)}
-                placeholder="Enter name"
+                placeholder="Введите название"
                 requestItemsOnInputChange={async (name) => (
                   await getCitiesByFilters({name})).map((city) => ({
                     id: city.id, label: city.name, data: city
@@ -101,7 +101,7 @@ export default function Address() {
             </Control.Section>
           </Control>
           <Control className="mt15">
-            <Control.Label>Based on organisation</Control.Label>
+            <Control.Label>На базе организации</Control.Label>
             <Control.Section>
               <Select
                 name="parent_id"
@@ -111,7 +111,7 @@ export default function Address() {
                 onChangeData={(data) => setState(create((draft) => {draft.parent = data}))}
                 // onChangeData={(data) => setInheritedData(data, setState)}
                 isAutocomplete
-                placeholder="Enter name"
+                placeholder="Введите название"
                 disabled={!state.city_id}
                 requestItemsOnInputChange={async (value) => (
                   await getObjectsByFilters({cityId: state.city_id, type: "org", query: value}))
@@ -122,14 +122,14 @@ export default function Address() {
             </Control.Section>
           </Control>
           <Control className="mt15">
-            <Control.Label>Address</Control.Label>
+            <Control.Label>Адрес</Control.Label>
             <Control.Section style={{display: "flex"}}>
               <Input
                 name="address"
                 value={state.address}
                 onChange={handleStateChange.value}
                 disabled={Boolean(state.parent_id)}
-                placeholder="Central street, 153A"
+                placeholder="Центральный проспект, 153A"
                 required
               />
               <Button onClick={handleMap.getCoordFromAddress} disabled={Boolean(state.parent_id)}>→</Button>
@@ -143,7 +143,7 @@ export default function Address() {
                 name="address_2"
                 value={state.address_2}
                 onChange={(e) => handleStateChange.value(handleQuotes(e))}
-                placeholder="«Central» entertainment center"
+                placeholder="ТРЦ «Центральный»"
                 disabled={Boolean(state.parent_id)}
               />
             </Control.Section>
@@ -156,7 +156,7 @@ export default function Address() {
             onChange={handleStateChange.checked}
             disabled={!state.parent_id}
           >
-            Inherit coord
+            Наследовать координату
           </Checkbox>
           <Map
             center={[state.coord_lat, state.coord_lon]}

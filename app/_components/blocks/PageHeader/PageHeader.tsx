@@ -8,10 +8,10 @@ export default function PageHeader() {
     <header className={styles["pageHeader"]}>
       <div className={clsx("container", styles["pageHeader__container"])}>
         <Logo/>
-        {/* <Link className={styles["pageHeader__link"]} href="/catalog">Catalog</Link> */}
-        <Link className={styles["pageHeader__link"]} href="/admin">Admin</Link>
-        <Link className={styles["pageHeader__link"]} href="/object/add/org">Add org</Link>
-        <Link className={styles["pageHeader__link"]} href="/object/add/place">Add place</Link>
+        <Link className={styles["pageHeader__link"]} href="/catalog">Catalog</Link>
+        <Link className={styles["pageHeader__link"]} href="/admin">Админ</Link>
+        <Link className={styles["pageHeader__link"]} href="/object/add/org">Орг</Link>
+        <Link className={styles["pageHeader__link"]} href="/object/add/place">Место</Link>
       </div>
     </header>
   )

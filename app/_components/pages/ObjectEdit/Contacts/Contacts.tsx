@@ -43,11 +43,11 @@ export default function Contacts() {
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Contacts</Card.Heading>
+      <Card.Heading>Контакты</Card.Heading>
       <Card.Section style={{display: "flex", gap: "10px"}}>
         <FieldSet style={{flexBasis: "50%"}}>
           <FieldSet.Legend style={{marginBlockEnd: "10px"}}>
-            <span>Phones</span>
+            <span>Телефоны</span>
             <Button onClick={() => handleContacts.add(UIContactTypeEnum.PHONES)} disabled={Boolean(state.parent_id)}>+</Button>
           </FieldSet.Legend>
           <FieldSet.Section style={{display: "flex", flexDirection: "column", gap: "10px"}}>
@@ -67,7 +67,7 @@ export default function Contacts() {
                 />
                 <Input
                   value={phone.comment}
-                  placeholder="Comment"
+                  placeholder="Комментарий"
                   disabled={Boolean(state.parent_id)}
                   onChange={(e) => handleContacts.changeComment(UIContactTypeEnum.PHONES, e, phone.uiID)}
                 />
@@ -77,7 +77,7 @@ export default function Contacts() {
         </FieldSet>
         <FieldSet style={{flexBasis: "50%"}}>
           <FieldSet.Legend style={{marginBlockEnd: "10px"}}>
-            <span>Links</span>
+            <span>Ссылка</span>
             <Button onClick={() => handleContacts.add(UIContactTypeEnum.LINKS)} disabled={Boolean(state.parent_id)}>+</Button>
           </FieldSet.Legend>
           <FieldSet.Section style={{display: "flex", flexDirection: "column", gap: "10px"}}>
@@ -97,7 +97,7 @@ export default function Contacts() {
                 />
                 <Input
                   value={link.comment}
-                  placeholder="Comment"
+                  placeholder="Комментарий"
                   disabled={Boolean(state.parent_id)}
                   onChange={(e) => handleContacts.changeComment(UIContactTypeEnum.LINKS, e, link.uiID)}
                 />

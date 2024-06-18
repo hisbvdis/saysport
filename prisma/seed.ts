@@ -5,19 +5,19 @@ const prisma = new PrismaClient();
 async function main() {
   await prisma.section.createMany({
     data: [
-      /* 1 */ { name_plural: "Fitness clubs", name_singular: "Fitness club", object_type: "org" },
-      /* 2 */ { name_plural: "Swimming pools", name_singular: "Swimming pool", object_type: "place" },
-      /* 3 */ { name_plural: "Gyms", name_singular: "Gym", object_type: "place" },
-      /* 4 */ { name_plural: "Sports centers", name_singular: "Sports center", object_type: "org" },
+      /* 1 */ { name_plural: "Фитнес-клубы", name_singular: "Фитнес-клуб", object_type: "org" },
+      /* 2 */ { name_plural: "Бассейны", name_singular: "Бассейн", object_type: "place" },
+      /* 3 */ { name_plural: "Тренажёрные залы", name_singular: "Трежажерный зал", object_type: "place" },
+      /* 4 */ { name_plural: "Спорткомплексы", name_singular: "Спорткомплекс", object_type: "org" },
     ]
   })
 
   await prisma.spec.createMany({
     data: [
-      /* 1 */  { name_service: "Fitness club — Type", name_public: "Type", options_number: "many", object_type: "org" },
-      /* 2 */  { name_service: "Swimming pools — Type", name_public: "Type", options_number: "one", object_type: "place" },
-      /* 3 */  { name_service: "Swimming pools — Length", name_public: "Length", options_number: "one", object_type: "place" },
-      /* 4 */  { name_service: "Construction — Places", name_public: "Construction", options_number: "many", object_type: "place" },
+      /* 1 */  { name_service: "Фитнес-клубы — Тип", name_public: "Тип", options_number: "many", object_type: "org" },
+      /* 2 */  { name_service: "Бассейны — Тип", name_public: "Тип", options_number: "one", object_type: "place" },
+      /* 3 */  { name_service: "Бассейны — Длина", name_public: "Длина", options_number: "one", object_type: "place" },
+      /* 4 */  { name_service: "Конструкция", name_public: "Конструкция", options_number: "many", object_type: "place" },
     ]
   })
 
@@ -33,27 +33,30 @@ async function main() {
 
   await prisma.option.createMany({
     data: [
-      /* 1 */  { name: "With swimming pool", order: 1, spec_id: 1 },
-      /* 2 */  { name: "With gym",           order: 2, spec_id: 1 },
-      /* 3 */  { name: "Only for women",     order: 3, spec_id: 1 },
-      /* 4 */  { name: "Other",              order: 4, spec_id: 1 },
-      /* 5 */  { name: "Sports",             order: 1, spec_id: 2 },
-      /* 6 */  { name: "Other swimming",     order: 2, spec_id: 2 },
-      /* 7 */  { name: "Child",              order: 3, spec_id: 2 },
-      /* 8 */  { name: "Children's",         order: 4, spec_id: 2 },
-      /* 9 */  { name: "50 meters",          order: 1, spec_id: 3 },
-      /* 10 */ { name: "25 meters",          order: 2, spec_id: 3 },
-      /* 11 */ { name: "up to 24 meters",    order: 3, spec_id: 3 },
-      /* 12 */ { name: "Indoor",             order: 1, spec_id: 4 },
-      /* 13 */ { name: "Outdoor",            order: 2, spec_id: 4 },
+      /* 1 */  { name: "С бассейном",         order: 1, spec_id: 1 },
+      /* 2 */  { name: "С тренажёрным залом", order: 2, spec_id: 1 },
+      /* 3 */  { name: "Только для женщин",   order: 3, spec_id: 1 },
+      /* 4 */  { name: "Другие",              order: 4, spec_id: 1 },
+      // ————————————————————————————————————————————————————————————
+      /* 5 */  { name: "Спортивные",          order: 1, spec_id: 2 },
+      /* 6 */  { name: "Плавательные",        order: 2, spec_id: 2 },
+      /* 7 */  { name: "Детские",             order: 3, spec_id: 2 },
+      /* 8 */  { name: "Грудничковые",        order: 4, spec_id: 2 },
+      // ————————————————————————————————————————————————————————————
+      /* 9 */  { name: "50 метров",           order: 1, spec_id: 3 },
+      /* 10 */ { name: "25 метров",           order: 2, spec_id: 3 },
+      /* 11 */ { name: "до 24 метров",        order: 3, spec_id: 3 },
+      // ————————————————————————————————————————————————————————————
+      /* 12 */ { name: "Крытое",              order: 1, spec_id: 4 },
+      /* 13 */ { name: "Открытое",            order: 2, spec_id: 4 },
     ]
   })
 
   await prisma.object.createMany({
     data: [
-      /* 1 */ { type: "org", name: "Sports complex «Olymp»", name_locative: "in SC «Olymp»", parent_id: null, status: "works", city_id: 7525990, address: "Olympyiska street", coord_lat: 47.82010170345875, coord_lon: 31.187607200024328 },
-      /* 2 */ { type: "org", name: "Sport club «Asgard»", name_locative: "in SC «Asgard»", parent_id: null, status: "works", city_id: 7525990, address: "Nezalezhnosti Avenue, 39", coord_lat: 47.82830017815951, coord_lon: 31.168224345045765 },
-      /* 3 */ { type: "place", name: "Gym", name_where: "in SC «Asgard»", parent_id: 2, status: "works", city_id: 7525990, address: "Nezalezhnosti Avenue, 39", coord_lat: 47.82830017815951, coord_lon: 31.168224345045765 },
+      /* 1 */ { type: "org", name: "Спорткомплекс «Олимп»", name_locative: "в СК «Олимп»", parent_id: null, status: "works", city_id: 7525990, address: "Олимпийская улица", coord_lat: 47.82010170345875, coord_lon: 31.187607200024328 },
+      /* 2 */ { type: "org", name: "Фитнес-клуб «Asgard»", name_locative: "в клубе «Asgard»", parent_id: null, status: "works", city_id: 7525990, address: "Независимости проспект, 39", coord_lat: 47.82830017815951, coord_lon: 31.168224345045765 },
+      /* 3 */ { type: "place", name: "Тренажёрный зал", name_where: "в клубе «Asgard»", parent_id: 2, status: "works", city_id: 7525990, address: "Независимости проспект, 39", coord_lat: 47.82830017815951, coord_lon: 31.168224345045765 },
     ]
   })
 

@@ -18,7 +18,7 @@ export default function Status(props:Props) {
   return (
     <div className={clsx(className)} style={{...style, display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px"}}>
       <Control>
-        <Control.Label>Status</Control.Label>
+        <Control.Label>Статус</Control.Label>
         <Control.Section>
           <Select
             name="status"
@@ -26,17 +26,17 @@ export default function Status(props:Props) {
             onChange={handleStateChange?.value}
             disabled={Boolean(state?.status_inherit)}
             items={[
-              {id: $Enums.objectStatusEnum.works, label: "Works"},
-              {id: $Enums.objectStatusEnum.open_soon, label: "Opening soon"},
-              {id: $Enums.objectStatusEnum.might_not_work, label: "Might not work"},
-              {id: $Enums.objectStatusEnum.closed_temp, label: "Closed temporarily"},
-              {id: $Enums.objectStatusEnum.closed_forever, label: "Closed forever"},
+              {id: $Enums.objectStatusEnum.works, label: "Работает"},
+              {id: $Enums.objectStatusEnum.open_soon, label: "Скоро открытие"},
+              {id: $Enums.objectStatusEnum.might_not_work, label: "Возможно, не работает"},
+              {id: $Enums.objectStatusEnum.closed_temp, label: "Временно закрыто"},
+              {id: $Enums.objectStatusEnum.closed_forever, label: "Закрыто навсегда"},
             ]}
           />
         </Control.Section>
       </Control>
       <Control>
-        <Control.Label>Comment</Control.Label>
+        <Control.Label>Комментарий</Control.Label>
         <Control.Section>
           <Input
             name="status_comment"
@@ -47,7 +47,7 @@ export default function Status(props:Props) {
         </Control.Section>
       </Control>
       <Control>
-        <Control.Label>Confirmation (link)</Control.Label>
+        <Control.Label>Подтверждение / Ссылка</Control.Label>
         <Control.Section>
           <Input
             name="status_confirm"
@@ -58,7 +58,7 @@ export default function Status(props:Props) {
         </Control.Section>
       </Control>
       <Control>
-        <Control.Label>Instead of closed</Control.Label>
+        <Control.Label>Вместо закрытого</Control.Label>
         <Control.Section>
           <Select
             name="status_instead_id"
@@ -67,7 +67,7 @@ export default function Status(props:Props) {
             onChange={handleStateChange?.valueAsNumber}
             onChangeData={(data) => setState(create((draft) => {draft.statusInstead = data}))}
             isAutocomplete
-            placeholder="Enter name"
+            placeholder="Введите название"
             disabled={state?.status_inherit || state?.status !== $Enums.objectStatusEnum.closed_forever}
             requestItemsOnInputChange={
               async (value) => (await getObjectsByFilters({cityId: state?.city_id!, type: state?.type, query: value}))

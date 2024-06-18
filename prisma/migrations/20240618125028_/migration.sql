@@ -124,7 +124,7 @@ CREATE TABLE "object_photo" (
     "object_id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "order" INTEGER NOT NULL,
-    "uploaded" TIMESTAMP(3) NOT NULL,
+    "uploaded" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "object_photo_pkey" PRIMARY KEY ("id")
 );

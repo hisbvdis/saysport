@@ -66,7 +66,7 @@ export default function SpecEdit(props:{init:UISpec}) {
   return (
     <Form style={{marginBlockStart: "10px"}} onSubmit={handleFormSubmit}>
       <Card>
-        <Card.Heading>Name and type</Card.Heading>
+        <Card.Heading>Название и тип</Card.Heading>
         <Card.Section>
           <Control>
             <Control.Label>ID</Control.Label>
@@ -74,8 +74,8 @@ export default function SpecEdit(props:{init:UISpec}) {
               <Input value={state?.id ?? ""} disabled/>
             </Control.Section>
           </Control>
-          <Control style={{marginBlockStart: "5px"}}>
-            <Control.Label>Name (service)</Control.Label>
+          <Control className="mt15">
+            <Control.Label>Название (служебное)</Control.Label>
             <Control.Section>
               <Input
                 name="name_service"
@@ -85,8 +85,8 @@ export default function SpecEdit(props:{init:UISpec}) {
               />
             </Control.Section>
           </Control>
-          <Control style={{marginBlockStart: "5px"}}>
-            <Control.Label>Name (public)</Control.Label>
+          <Control className="mt15">
+            <Control.Label>Название (публичное)</Control.Label>
             <Control.Section>
               <Input
                 name="name_public"
@@ -96,33 +96,33 @@ export default function SpecEdit(props:{init:UISpec}) {
               />
             </Control.Section>
           </Control>
-          <Control style={{marginBlockStart: "5px"}}>
-            <Control.Label>Object type</Control.Label>
+          <Control className="mt15">
+            <Control.Label>Тип объекта</Control.Label>
             <RadioGroup
               name="object_type"
               valueToCompareWith={state.object_type}
               onChange={handleStateChange.value}
             >
-              <Radio value="org">Org</Radio>
-              <Radio value="place">Place</Radio>
+              <Radio value="org">Организация</Radio>
+              <Radio value="place">Место</Radio>
             </RadioGroup>
           </Control>
         </Card.Section>
       </Card>
 
       <Card style={{marginBlockStart: "10px"}}>
-        <Card.Heading>Edit page</Card.Heading>
+        <Card.Heading>Страница "Редактировать"</Card.Heading>
         <Card.Section>
           <Control>
-            <Control.Label>Options number</Control.Label>
+            <Control.Label>Количество опций</Control.Label>
             <Control.Section>
               <RadioGroup
                 name="options_number"
                 valueToCompareWith={state.options_number}
                 onChange={handleStateChange.value}
               >
-                <Radio value="many">Many</Radio>
-                <Radio value="one">One</Radio>
+                <Radio value="many">Много</Radio>
+                <Radio value="one">Одна</Radio>
               </RadioGroup>
             </Control.Section>
           </Control>
@@ -131,7 +131,7 @@ export default function SpecEdit(props:{init:UISpec}) {
 
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading style={{display: "flex", justifyContent: "space-between"}}>
-          <span>Options</span>
+          <span>Опции</span>
           <Button onClick={handleOptions.add}>+</Button>
         </Card.Heading>
         <Card.Section>

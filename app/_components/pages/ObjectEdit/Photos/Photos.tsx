@@ -34,8 +34,8 @@ export default function Photos() {
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-        <span>Photos</span>
-        <Button onClick={handlePhotos.deleteAll}>Delete all</Button>
+        <span>Фото</span>
+        <Button onClick={handlePhotos.deleteAll}>Удалить все</Button>
       </Card.Heading>
       <Card.Section>
         <input type="file" onChange={handlePhotos.add} multiple/>

@@ -85,7 +85,7 @@ export default function Schedule() {
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Schedule</Card.Heading>
+      <Card.Heading>Расписание</Card.Heading>
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "10px"}}>
         <div style={{display: "flex", gap: "20px"}}>
           <Checkbox
@@ -94,45 +94,45 @@ export default function Schedule() {
             onChange={handleStateChange.checked}
             disabled={!state.parent_id}
             className="me-auto"
-          >Inherit</Checkbox>
+          >Наследовать расписание</Checkbox>
           <Checkbox
             name="schedule_24_7"
             checked={Boolean(state.schedule_24_7)}
             onChange={handleSchedule.change24_7}
             disabled={Boolean(state.schedule_inherit)}
             style={{marginInlineStart: "auto"}}
-          >24/7</Checkbox>
+          >Круглосуточно</Checkbox>
           <Button
             onClick={handleSchedule.clearAll}
             disabled={Boolean(state.schedule_inherit)}
-          >Clear</Button>
+          >Очистить</Button>
         </div>
         <div style={{display: "flex"}}>
           {state.schedule?.map((day, i) => (
             <p key={i} style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-              <Checkbox name={String(i)} checked={Boolean(day?.isWork)} onChange={handleSchedule.changeIsWork} tabIndex={-1} disabled={Boolean(state.schedule_24_7 || state.schedule_inherit)}>{["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"][i]}</Checkbox>
-              <Input name={String(i)} value={day?.isWork ? day?.time : "Doesn't work"} onChange={handleSchedule.changeTime} onBlurIfChanged={handleSchedule.formatTime} disabled={Boolean(!day?.isWork) || Boolean(state.schedule_24_7) || Boolean(state.schedule_inherit)}  pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d"/>
+              <Checkbox name={String(i)} checked={Boolean(day?.isWork)} onChange={handleSchedule.changeIsWork} tabIndex={-1} disabled={Boolean(state.schedule_24_7 || state.schedule_inherit)}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</Checkbox>
+              <Input name={String(i)} value={day?.isWork ? day?.time : "Не работает"} onChange={handleSchedule.changeTime} onBlurIfChanged={handleSchedule.formatTime} disabled={Boolean(!day?.isWork) || Boolean(state.schedule_24_7) || Boolean(state.schedule_inherit)}  pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d"/>
               <Button onClick={() => handleSchedule.copyToAll(day)} disabled={Boolean(!day?.isWork || state.schedule_24_7 || state.schedule_inherit)}>Copy</Button>
             </p>
           ))}
         </div>
         <div style={{display: "flex"}}>
           <Control>
-            <Control.Label>Schedule date</Control.Label>
+            <Control.Label>Дата расписания</Control.Label>
             <Control.Section>
               <input type="date" name="schedule_date" value={state.schedule_date ? format(state.schedule_date, "yyyy-MM-dd") : ""} onChange={handleStateChange.value} disabled={Boolean(state.schedule_inherit)}/>
-              <Button onClick={() => handleSchedule.setDate(new Date())} disabled={Boolean(state.schedule_inherit)}>Today</Button>
+              <Button onClick={() => handleSchedule.setDate(new Date())} disabled={Boolean(state.schedule_inherit)}>Сегодня</Button>
               <Button onClick={() => handleSchedule.setDate("")} disabled={Boolean(state.schedule_inherit)}>X</Button>
             </Control.Section>
           </Control>
           <Control>
-            <Control.Label>Schedule comment</Control.Label>
+            <Control.Label>Комментарий</Control.Label>
             <Control.Section>
               <Input name="schedule_comment" value={state.schedule_comment} onChange={handleStateChange.value} disabled={Boolean(state.schedule_inherit)}/>
             </Control.Section>
           </Control>
           <Control>
-            <Control.Label>Source (link or name)</Control.Label>
+            <Control.Label>Источник</Control.Label>
             <Control.Section>
               <Input name="schedule_source" value={state.schedule_source} onChange={handleStateChange.value} disabled={Boolean(state.schedule_inherit)}/>
             </Control.Section>

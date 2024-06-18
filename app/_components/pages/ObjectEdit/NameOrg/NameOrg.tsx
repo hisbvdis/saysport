@@ -14,25 +14,25 @@ export default function NameOrg() {
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Name and Status</Card.Heading>
+      <Card.Heading>Название и статус</Card.Heading>
       <Card.Section>
         <Control>
-          <Control.Label>Organisation name</Control.Label>
+          <Control.Label>Название организации</Control.Label>
           <Input
             name="name"
             value={state?.name}
             onChange={(e) => handleStateChange?.value(handleQuotes(e))}
-            placeholder="Fitness club «FitnessOK» Central"
+            placeholder="Фитнес-клуб «Super Fitness» Центральный"
             required
           />
         </Control>
         <Control className="mt15">
-          <Control.Label>Name locative form</Control.Label>
+          <Control.Label>Локативная форма</Control.Label>
           <Input
             name="name_locative"
             value={state?.name_locative}
             onChange={(e) => handleStateChange?.value(handleQuotes(e))}
-            placeholder="at the «FitnessOK» club Central"
+            placeholder="в клубе «Super Fitness» Центральный"
             required
           />
         </Control>
