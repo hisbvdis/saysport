@@ -17,6 +17,7 @@ import { setInheritedData } from "./setInheritedData";
 import { getObjectsByFilters } from "@/app/_db/object";
 import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
+import { objectReadProcessing } from "@/app/_db/object.processing";
 
 
 export default function Address() {
@@ -109,7 +110,7 @@ export default function Address() {
                 value={state.parent_id}
                 label={state.parent?.name}
                 onChange={handleStateChange?.valueAsNumber}
-                onChangeData={(parent) => setInheritedData(parent, state, setState)}
+                onChangeData={(parent) => setInheritedData(objectReadProcessing(parent), setState)}
                 isAutocomplete
                 placeholder="Введите название"
                 disabled={!state.city_id}

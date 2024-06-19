@@ -11,9 +11,10 @@ import { NameOrg, NamePlace, Address, Contacts, Specs, Description, Schedule, Ph
 import { UIObject } from "@/app/_types/types";
 import { syncPhotos } from "./Photos/syncPhotos";
 import { deleteObjectById, upsertObject } from "@/app/_db/object";
+import { setInheritedData } from "./Address/setInheritedData";
 
 
-export default function ObjectEdit(props:{init:UIObject}) {
+export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -29,6 +30,11 @@ export default function ObjectEdit(props:{init:UIObject}) {
       setState((prevState) => create(prevState, (draft) => {draft[e.target.name] = Number(e.target.value)}));
     },
   }
+
+  useEffect(() => {
+    if (state.id || !props.parent) return;
+    setInheritedData(props.parent, setState);
+  }, [])
 
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();

@@ -10,7 +10,10 @@ export default function Children() {
 
   return (
     <Card>
-      <Card.Heading>На базе организации</Card.Heading>
+      <Card.Heading style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+        <span>На базе организации</span>
+        <Link href={`/object/add/place?parent=${state.id}`}>Добавить</Link>
+      </Card.Heading>
       <Card.Section>
         <ul>
           {state.children?.map((child) => (

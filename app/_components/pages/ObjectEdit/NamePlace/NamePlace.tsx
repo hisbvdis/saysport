@@ -14,11 +14,11 @@ export default function NamePlace() {
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Name and Status</Card.Heading>
+      <Card.Heading>Название и Статус</Card.Heading>
       <Card.Section>
         <div style={{display: "flex", gap: "10px"}}>
           <Control style={{flexBasis: "50%"}}>
-            <Control.Label>Place type</Control.Label>
+            <Control.Label>Тип места</Control.Label>
             <Control.Section>
               <Input
                 name="name"
@@ -30,7 +30,7 @@ export default function NamePlace() {
             </Control.Section>
           </Control>
           <Control style={{flexBasis: "50%"}}>
-            <Control.Label>Location</Control.Label>
+            <Control.Label>Расположение</Control.Label>
             <Control.Section>
               <Input
                 name="name_where"

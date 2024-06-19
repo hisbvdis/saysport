@@ -44,7 +44,7 @@ function Choice(props:Props) {
         tabIndex={tabIndex}
         disabled={disabled}
       />
-      {requiredGroup && type === "checkbox" ? <RequiredInput name={name} checked={checked} required={requiredSelf}/> : ""}
+      {requiredGroup && type === "checkbox" ? <RequiredInput name={name} checked={checked} isValidIf={requiredSelf}/> : ""}
       <span className={styles["choice__label"]}>{children}</span>
     </label>
   )

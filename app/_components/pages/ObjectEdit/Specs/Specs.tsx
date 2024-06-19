@@ -61,7 +61,7 @@ export default function Specs() {
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
         {state.sections?.map((section) => (
           <FieldSet key={section.id} style={{display: "flex", gap: "20px"}}>
-            <FieldSet.Legend style={{inlineSize: "100px"}}>
+            <FieldSet.Legend style={{inlineSize: "200px"}}>
               <Button onClick={() => handleSections.delete(section)}>X</Button>
               <span>{section.name_plural}</span>
             </FieldSet.Legend>

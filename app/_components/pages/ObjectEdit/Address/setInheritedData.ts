@@ -1,36 +1,34 @@
-import { objectReadProcessing } from "@/app/_db/object.processing";
-import { DBObject, UIObject } from "@/app/_types/types";
+import { UIObject } from "@/app/_types/types";
 import { create } from "mutative";
 import { SetStateAction } from "react";
 
-export const setInheritedData = (parent:DBObject, state:UIObject, setState:React.Dispatch<SetStateAction<UIObject>>) => {
+export const setInheritedData = (parent:UIObject, setState:React.Dispatch<SetStateAction<UIObject>>) => {
   if (parent) {
-    const processedParent = objectReadProcessing(parent);
     setState((prevState) => create(prevState, (draft) => {
       draft.status_inherit = true;
       draft.coord_inherit = true;
       draft.schedule_inherit = true;
-      draft.name_where = processedParent?.name_locative;
-      draft.status = processedParent?.status;
-      draft.status_comment = processedParent?.status_comment;
-      draft.status_confirm = processedParent?.status_confirm;
-      draft.city_id = processedParent?.city_id;
-      draft.city = processedParent?.city;
-      draft.parent_id = processedParent?.id;
-      // draft.parent = processedParent;
-      draft.address = processedParent?.address;
-      draft.address_2 = processedParent?.address_2;
-      draft.coord_lat = processedParent?.coord_lat;
-      draft.coord_lon = processedParent?.coord_lon;
-      draft.phones = processedParent?.phones;
-      draft.links = processedParent?.links;
-      draft.schedule_247 = processedParent?.schedule_247;
-      draft.schedule = processedParent?.schedule;
-      draft.schedule_date = processedParent?.schedule_date;
-      draft.schedule_comment = processedParent?.schedule_comment;
-      draft.schedule_source = processedParent?.schedule_source;
-      draft.statusInstead = processedParent?.statusInstead;
-      draft.status_instead_id = processedParent?.status_instead_id;
+      draft.name_where = parent?.name_locative;
+      draft.status = parent?.status;
+      draft.status_comment = parent?.status_comment;
+      draft.status_confirm = parent?.status_confirm;
+      draft.city_id = parent?.city_id;
+      draft.city = parent?.city;
+      draft.parent_id = parent?.id;
+      draft.parent = parent;
+      draft.address = parent?.address;
+      draft.address_2 = parent?.address_2;
+      draft.coord_lat = parent?.coord_lat;
+      draft.coord_lon = parent?.coord_lon;
+      draft.phones = parent?.phones;
+      draft.links = parent?.links;
+      draft.schedule_247 = parent?.schedule_247;
+      draft.schedule = parent?.schedule;
+      draft.schedule_date = parent?.schedule_date;
+      draft.schedule_comment = parent?.schedule_comment;
+      draft.schedule_source = parent?.schedule_source;
+      draft.statusInstead = parent?.statusInstead;
+      draft.status_instead_id = parent?.status_instead_id;
     }))
   } else {
     setState((prevState) => create(prevState, (draft) => {

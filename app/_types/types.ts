@@ -43,7 +43,7 @@ export interface UISection extends section {
 
 export interface UIObject extends Partial<object_> {
   city?: city | null;
-  parent?: object_ | null;
+  parent?: object_ | UIObject | null;
   phones?: (object_phone & {uiID: string})[];
   links?: (object_link & {uiID: string})[];
   sections?: UISection[];
