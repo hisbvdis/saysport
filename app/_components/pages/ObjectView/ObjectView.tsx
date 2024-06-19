@@ -2,7 +2,7 @@
 import { UIObject } from "@/app/_types/types";
 import clsx from "clsx";
 import { createContext } from "react";
-import { Children, Description, Header, Sections } from "."
+import { Children, Contacts, Description, Header, Sections } from "."
 // -----------------------------------------------------------------------------
 
 
@@ -16,6 +16,9 @@ export default function ObjectView(props:{init:UIObject}) {
           <Children/>
           <Sections/>
         </article>
+        <aside>
+          <Contacts/>
+        </aside>
       </div>
     </ObjectViewContext.Provider>
   )

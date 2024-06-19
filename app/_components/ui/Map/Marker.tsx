@@ -1,3 +1,4 @@
+"use client";
 import * as Leaflet from "leaflet";
 import { useContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
