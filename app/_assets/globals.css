@@ -106,6 +106,10 @@ body {
   fill: var(--control-disabled-fontColor);
 }
 
+.mt10 {
+  margin-block-start: 10px;
+}
+
 .mt15 {
   margin-block-start: 15px;
 }

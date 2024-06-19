@@ -28,7 +28,7 @@ export default function Address() {
       if (!state.city) return;
       const result = await queryCoodFromAddress({
         country: state.city.country_code,
-        city: state.city.name,
+        city: state.city.name_ru!,
         street: state.address
       });
       if (!result) return;

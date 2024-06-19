@@ -58,6 +58,7 @@ export const getObjectById = async (id:number) => {
       options: {include: {option: true}},
       schedule: true,
       photos: {orderBy: {order: "asc"}},
+      children: {include: {photos: true, phones: true, links: true, schedule: true}},
     }
   });
   if (dbData === null) throw new Error("getObjectById returned null");
@@ -74,7 +75,6 @@ export const deleteObjectById = async (id:number) => {
 }
 
 export const upsertObject = async (state:UIObject, init: UIObject): Promise<object_> => {
-  // if (!state.city_id) throw new Error("upsertObject");
   const fields = {
     name: state.name!,
     name_locative: state.name_locative || null,
@@ -139,7 +139,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<obje
       photos: {
         // Don't: The
       },
-      created: new Date(),
+      // created: new Date(),
     },
     update: {
       ...fields,

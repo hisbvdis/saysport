@@ -56,7 +56,7 @@ async function main() {
     data: [
       /* 1 */ { type: "org", name: "Спорткомплекс «Олимп»", name_locative: "в СК «Олимп»", parent_id: null, status: "works", city_id: 7525990, address: "Олимпийская улица", coord_lat: 47.82010170345875, coord_lon: 31.187607200024328 },
       /* 2 */ { type: "org", name: "Фитнес-клуб «Asgard»", name_locative: "в клубе «Asgard»", parent_id: null, status: "works", city_id: 7525990, address: "Независимости проспект, 39", coord_lat: 47.82830017815951, coord_lon: 31.168224345045765 },
-      /* 3 */ { type: "place", name: "Тренажёрный зал", parent_id: 2, name_where: "в клубе «Asgard»", parent_id: 2, status: "works", city_id: 7525990, address: "Независимости проспект, 39", coord_lat: 47.82830017815951, coord_lon: 31.168224345045765 },
+      /* 3 */ { type: "place", name: "Тренажёрный зал", name_where: "в клубе «Asgard»", parent_id: 2, status: "works", city_id: 7525990, address: "Независимости проспект, 39", coord_lat: 47.82830017815951, coord_lon: 31.168224345045765 },
     ]
   })
 

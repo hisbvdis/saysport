@@ -18,9 +18,9 @@ export default function Header() {
         <div style={{display: "flex"}}>
           <Breadcrumbs items={[
             {label: "Каталог", href: "/catalog"},
-            {label: `${state.city?.name ?? ""}`, href: `/catalog?city=${state.city?.id}`},
+            {label: `${state.city?.name_ru ?? ""}`, href: `/catalog?city=${state.city?.id}`},
             {label: `${state.sections?.[0]?.name_plural ?? ""}`, href: `/catalog?city=${state.city?.id}&section=${state.sections?.[0]?.id}`}
-          ]} style={{fontSize: "0.9em"}}/>
+          ]} style={{fontSize: "0.85em"}}/>
           <Link href={`/object/${state.id}/edit`} style={{marginInlineStart: "auto"}}>Ред</Link>
           <DelBtn id={state.id!} delFunc={deleteObjectById} redirectPath="/">X</DelBtn>
         </div>

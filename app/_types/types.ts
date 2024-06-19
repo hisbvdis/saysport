@@ -12,15 +12,16 @@ export interface DBSection extends section {
 }
 
 export interface DBObject extends object_ {
-  statusInstead: object_ | null;
-  city: city | null;
-  parent: object_ | null;
-  phones: object_phone[];
-  links: object_link[];
-  sections: (object_on_section & {section: section & {specs: (section_on_spec & {spec: spec & {options: option[]}})[]}})[];
-  options: (object_on_option & {option: option})[];
-  schedule: object_schedule[];
-  photos: object_photo[];
+  statusInstead?: object_ | null;
+  city?: city | null;
+  parent?: object_ | null;
+  phones?: object_phone[];
+  links?: object_link[];
+  sections?: (object_on_section & {section: section & {specs: (section_on_spec & {spec: spec & {options: option[]}})[]}})[];
+  options?: (object_on_option & {option: option})[];
+  schedule?: object_schedule[];
+  photos?: object_photo[];
+  children?: DBObject[],
 }
 
 // =============================================================================
@@ -42,12 +43,14 @@ export interface UISection extends section {
 
 export interface UIObject extends Partial<object_> {
   city?: city | null;
+  parent?: object_ | null;
   phones?: (object_phone & {uiID: string})[];
   links?: (object_link & {uiID: string})[];
   sections?: UISection[];
   options?: UIOption[];
   schedule: (object_schedule & {uiID: string, isWork: boolean})[];
   photos?: (object_photo & {uiID: string, blob?: string, file?: File})[];
+  children?: DBObject[];
   [key: string]: any;
 }
 

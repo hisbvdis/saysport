@@ -1,0 +1,21 @@
+.description__content {
+  white-space: pre-wrap;
+}
+
+.description__content--short {
+  white-space: unset;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.description__button {
+  padding: 0;
+  font: inherit;
+  color: var(--fontColor-lighter);
+
+  border: none;
+  background: none;
+  cursor: pointer;
+}
