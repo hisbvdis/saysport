@@ -3,11 +3,12 @@ import { $Enums } from "@prisma/client";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { ObjectEdit } from "@/app/_components/pages/ObjectEdit/";
 // -----------------------------------------------------------------------------
-import { getEmptyObject } from "@/app/_db/object";
+import { getEmptyObject, getObjectById } from "@/app/_db/object";
 
 
-export default async function AddObjectPage({params}:{params:{type:string}}) {
+export default async function AddObjectPage({params, searchParams}:Props) {
   const emptyObject = await getEmptyObject();
+  const parentObject = searchParams.parent ? await getObjectById(Number(searchParams.parent)) : null;
 
   return (
     <main className="container  page">
@@ -15,7 +16,12 @@ export default async function AddObjectPage({params}:{params:{type:string}}) {
         { label: "Каталог", href: "/catalog" },
         { label: `Добавить ${params.type === "org" ? "организацию" : "место"}` },
       ]}/>
-      <ObjectEdit init={{...emptyObject, type: params.type as $Enums.objectTypeEnum}}/>
+      <ObjectEdit init={{...emptyObject, type: params.type as $Enums.objectTypeEnum}} parent={parentObject}/>
     </main>
   )
+}
+
+interface Props {
+  params:{ type:string };
+  searchParams: { parent: string };
 }

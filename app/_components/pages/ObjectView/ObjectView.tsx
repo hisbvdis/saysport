@@ -7,6 +7,7 @@ import { Children, Contacts, Description, Header, Specs } from ".";
 import { UIObject } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
+import Gallery from "./Gallery/Gallery";
 
 
 export default function ObjectView(props:{init:UIObject}) {
@@ -15,6 +16,7 @@ export default function ObjectView(props:{init:UIObject}) {
       <main className={clsx(styles["objectView"], "container", "page")}>
         <Header className={styles["objectView__header"]}/>
         <article className={styles["objectView__article"]}>
+          <Gallery/>
           <Description/>
           <Children/>
           <Specs/>

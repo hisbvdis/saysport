@@ -1,6 +1,6 @@
 .objectView {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 595px 300px;
   gap: 10px;
 }
 

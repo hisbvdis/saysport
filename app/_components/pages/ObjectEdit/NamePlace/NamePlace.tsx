@@ -24,7 +24,7 @@ export default function NamePlace() {
                 name="name"
                 value={state?.name}
                 onChange={(e) => handleStateChange?.value(handleQuotes(e))}
-                placeholder="Soccer field"
+                placeholder="Футбольное поле"
                 required
               />
             </Control.Section>
@@ -37,7 +37,7 @@ export default function NamePlace() {
                 value={state?.name_where}
                 onChange={(e) => handleStateChange?.value(handleQuotes(e))}
                 disabled={Boolean(state?.parent_id)}
-                placeholder="near School #38"
+                placeholder="у Школы №38"
                 required
               />
             </Control.Section>

@@ -161,7 +161,7 @@ export default function Address() {
           </Checkbox>
           <Map
             center={[state.coord_lat, state.coord_lon]}
-            zoom={16}
+            zoom={17}
             liftMapInstance={setMapInstance}
             onMapRightClick={handleMap.rightClick}
           >

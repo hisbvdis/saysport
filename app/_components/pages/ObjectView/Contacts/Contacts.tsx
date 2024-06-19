@@ -23,7 +23,7 @@ export default function Contacts() {
       : null}
 
       <Card.Section style={{blockSize: "300px"}}>
-        <Map center={[state.coord_lat, state.coord_lon]} zoom={16} zoomControl={false}>
+        <Map center={[state.coord_lat, state.coord_lon]} zoom={17} zoomControl={false}>
           <Marker coord={[state.coord_lat, state.coord_lon]}/>
         </Map>
       </Card.Section>

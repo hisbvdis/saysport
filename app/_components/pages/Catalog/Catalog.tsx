@@ -9,7 +9,7 @@ export default function Catalog(props:Props) {
       <ul>
         {results.map((object) => (
           <li key={object.id}>
-            <Link href={`/object/${object.id}`}>{object.name}</Link>
+            <Link href={`/object/${object.id}`}>{object.name} {object.name_where}</Link>
           </li>
         ))}
       </ul>
