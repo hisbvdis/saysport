@@ -1,25 +1,28 @@
 "use client";
-import { UIObject } from "@/app/_types/types";
 import clsx from "clsx";
 import { createContext } from "react";
-import { Children, Contacts, Description, Header, Sections } from "."
 // -----------------------------------------------------------------------------
+import { Children, Contacts, Description, Header, Specs } from ".";
+// -----------------------------------------------------------------------------
+import { UIObject } from "@/app/_types/types";
+// -----------------------------------------------------------------------------
+import styles from "./styles.module.css";
 
 
 export default function ObjectView(props:{init:UIObject}) {
   return (
     <ObjectViewContext.Provider value={{state: props.init}}>
-      <div className={clsx("container", "page")}>
-        <Header/>
-        <article>
+      <main className={clsx(styles["objectView"], "container", "page")}>
+        <Header className={styles["objectView__header"]}/>
+        <article className={styles["objectView__article"]}>
           <Description/>
           <Children/>
-          <Sections/>
+          <Specs/>
         </article>
-        <aside>
+        <aside className={styles["objectView__aside"]}>
           <Contacts/>
         </aside>
-      </div>
+      </main>
     </ObjectViewContext.Provider>
   )
 }

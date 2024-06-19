@@ -12,21 +12,22 @@ import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@/app/_components/ui
 import { ObjectEditContext } from "../ObjectEdit";
 import { getSectionsByFilters } from "@/app/_db/section";
 import { UIOption, UISection, UISpec } from "@/app/_types/types";
+import { RequiredInput } from "@/app/_components/ui/RequiredInput";
 
 
-export default function Sections() {
+export default function Specs() {
   const { state, setState } = useContext(ObjectEditContext);
 
   const handleSections = {
     add: (section:UISection) => {
       if (!section.id || state.sections?.some((stateSection) => stateSection.id === section.id)) return;
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         if (!draft.sections) draft.sections = [];
         draft.sections.push(section);
       }))
     },
     delete: (section:UISection) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.sections = draft.sections?.filter(({id}) => id !== section.id);
         const optionsOfDeletedSection = section.specs?.flatMap((spec) => spec.options?.flatMap(({id}) => id));
         draft.options = draft.options?.filter((option) => !optionsOfDeletedSection?.includes(option.id));
@@ -36,7 +37,7 @@ export default function Sections() {
 
   const handleOptions = {
     changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: UIOption) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         if (!draft.options) draft.options = [];
         if (e.target.checked) {
           draft.options = draft.options.concat(opt);
@@ -46,7 +47,7 @@ export default function Sections() {
       }))
     },
     changeRadio: (spec:UISpec, opt:UIOption) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         if (!draft.options) draft.options = [];
         draft.options = draft.options?.filter((stateOpt) => !spec.options?.map((opt) => opt.id).includes(stateOpt.id));
         draft.options = draft.options?.concat(opt);
@@ -56,7 +57,7 @@ export default function Sections() {
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Разделы</Card.Heading>
+      <Card.Heading>Характеристики</Card.Heading>
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
         {state.sections?.map((section) => (
           <FieldSet key={section.id} style={{display: "flex", gap: "20px"}}>
@@ -95,12 +96,13 @@ export default function Sections() {
           isAutocomplete
           value=""
           onChangeData={handleSections.add}
-          placeholder="Введите название"
+          placeholder="Добавить раздел"
           requestItemsOnFirstTouch={async () =>
             (await getSectionsByFilters({objectType: state.type}))
               .map((section) => ({id: section.id!, label: section.name_plural, data: section}))
           }
         />
+        <RequiredInput isValidIf={Boolean(state.sections?.length)}/>
       </Card.Section>
     </Card>
   )

@@ -15,25 +15,25 @@ export default function Contacts() {
 
   const handleContacts = {
     add: (type:UIContactTypeEnum) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         if (!draft[type]) draft[type] = [];
         draft[type] = draft[type]?.concat({id: -1, object_id: -1, value: "", order: draft[type]?.length ?? 0, uiID: crypto.randomUUID(), comment: ""})
       }))
     },
     delete: (type:UIContactTypeEnum, uiID:string) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft[type] = draft[type]?.filter((item) => item.uiID !== uiID);
       }));
     },
     changeValue: (type:UIContactTypeEnum, e:ChangeEvent<HTMLInputElement>, uiID:string) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         const item = draft[type]?.find((item) => item.uiID === uiID);
         if (!item) return;
         item.value = e.target.value;
       }));
     },
     changeComment: (type:UIContactTypeEnum, e:ChangeEvent<HTMLInputElement>, uiID:string) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         const item = draft[type]?.find((item) => item.uiID === uiID);
         if (!item) return;
         item.comment = e.target.value;

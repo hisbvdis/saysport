@@ -9,11 +9,12 @@ import { deleteObjectById } from "@/app/_db/object";
 import { DelBtn } from "@/app/_components/ui/DelBtn";
 
 
-export default function Header() {
+export default function Header(props:Props) {
+  const { className, style } = props;
   const { state } = useContext(ObjectViewContext);
 
   return (
-    <header>
+    <header className={className} style={style}>
       <Card>
         <div style={{display: "flex"}}>
           <Breadcrumbs items={[
@@ -29,4 +30,9 @@ export default function Header() {
       </Card>
     </header>
   )
+}
+
+interface Props {
+  className?: string;
+  style?: React.CSSProperties;
 }

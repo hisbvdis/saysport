@@ -6,7 +6,7 @@ import { ChangeEvent, ChangeEventHandler, SetStateAction, SyntheticEvent, create
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
-import { NameOrg, NamePlace, Address, Contacts, Sections, Description, Schedule, Photos } from "./"
+import { NameOrg, NamePlace, Address, Contacts, Specs, Description, Schedule, Photos } from "./"
 // -----------------------------------------------------------------------------
 import { UIObject } from "@/app/_types/types";
 import { syncPhotos } from "./Photos/syncPhotos";
@@ -20,13 +20,13 @@ export default function ObjectEdit(props:{init:UIObject}) {
 
   const handleStateChange = {
     value: (e:ChangeEvent<HTMLInputElement>) => {
-      setState(create(state, (draft) => {draft[e.target.name] = e.target.value}));
+      setState((prevState) => create(prevState, (draft) => {draft[e.target.name] = e.target.value}));
     },
     checked: (e:ChangeEvent<HTMLInputElement>) => {
-      setState(create(state, (draft) => {draft[e.target.name] = e.target.checked}));
+      setState((prevState) => create(prevState, (draft) => {draft[e.target.name] = e.target.checked}));
     },
     valueAsNumber: (e:ChangeEvent<HTMLInputElement>) => {
-      setState(create(state, (draft) => {draft[e.target.name] = Number(e.target.value)}));
+      setState((prevState) => create(prevState, (draft) => {draft[e.target.name] = Number(e.target.value)}));
     },
   }
 
@@ -49,7 +49,7 @@ export default function ObjectEdit(props:{init:UIObject}) {
         {state.type === $Enums.objectTypeEnum.org ? <NameOrg/> : <NamePlace/>}
         <Address/>
         <Contacts/>
-        <Sections/>
+        <Specs/>
         <Description/>
         <Schedule/>
         <Photos/>

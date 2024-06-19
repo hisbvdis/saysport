@@ -19,13 +19,13 @@ export default function Schedule() {
   const handleSchedule = {
     changeIsWork: (e:React.ChangeEvent<HTMLInputElement>) => {
       const dayNum = Number(e.target.name);
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.schedule[dayNum].isWork = e.target.checked;
         if (!e.target.checked) draft.schedule[dayNum].time = "";
       }))
     },
     changeTime: (e:React.ChangeEvent<HTMLInputElement>) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         const targetName = Number(e.target.name);
         draft.schedule[targetName].time = e.target.value;
       }));
@@ -43,19 +43,19 @@ export default function Schedule() {
         }
       });
       if (!from || !to) return;
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.schedule[targetName].time = [from.string, to.string].join(" - ");
         draft.schedule[targetName].from = from.min;
         draft.schedule[targetName].to = to.min;
       }));
     },
     copyToAll: (dayParam:UIObject["schedule"][number]) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.schedule = draft.schedule.map((day) => ({...day, isWork: dayParam.isWork, time: dayParam.time, from: dayParam.from, to: dayParam.to}));
       }));
     },
     change24_7: (e:React.ChangeEvent<HTMLInputElement>) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.schedule_24_7 = e.target.checked;
         if (e.target.checked) {
           draft.schedule = draft.schedule.map((day) => ({...day, isWork: true, time: "0:00 - 24:00", from: 0, to: 1440}));
@@ -63,7 +63,7 @@ export default function Schedule() {
       }));
     },
     setDate: (date:Date|string) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         if (typeof date === "string") {
           draft.schedule_date = null;
         } else {
@@ -72,7 +72,7 @@ export default function Schedule() {
       }));
     },
     clearAll: () => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.schedule_inherit = false;
         draft.schedule_24_7 = false;
         draft.schedule = Array(7).fill(null).map((_,i) => ({ id: -1, object_id: -1, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),

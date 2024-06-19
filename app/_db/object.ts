@@ -62,7 +62,7 @@ export const getObjectById = async (id:number) => {
     }
   });
   if (dbData === null) throw new Error("getObjectById returned null");
-  const processed = await objectReadProcessing(dbData);
+  const processed = objectReadProcessing(dbData);
   return processed;
 }
 

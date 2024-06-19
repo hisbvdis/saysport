@@ -6,7 +6,7 @@ import { SetStateAction } from "react";
 export const setInheritedData = (parent:DBObject, state:UIObject, setState:React.Dispatch<SetStateAction<UIObject>>) => {
   if (parent) {
     const processedParent = objectReadProcessing(parent);
-    setState(create(state, (draft) => {
+    setState((prevState) => create(prevState, (draft) => {
       draft.status_inherit = true;
       draft.coord_inherit = true;
       draft.schedule_inherit = true;
@@ -33,7 +33,7 @@ export const setInheritedData = (parent:DBObject, state:UIObject, setState:React
       draft.status_instead_id = processedParent?.status_instead_id;
     }))
   } else {
-    setState(create(state, (draft) => {
+    setState((prevState) => create(prevState, (draft) => {
       draft.parent_id = null;
       draft.parent = null;
       draft.status_inherit = false;

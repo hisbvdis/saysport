@@ -3,7 +3,7 @@ import { ObjectViewContext } from "../ObjectView"
 import { Card } from "@/app/_components/ui/Card";
 import Link from "next/link";
 
-export default function Sections() {
+export default function Specs() {
   const { state } = useContext(ObjectViewContext);
 
   return (
@@ -15,7 +15,7 @@ export default function Sections() {
             {section.name_singular}
           </Link>
           {section.specs.map((spec) => (
-            <div style={{display: "flex", gap: "10px"}}>
+            <div key={spec.id} style={{display: "flex", gap: "10px"}}>
               <p>{spec.name_public}</p>
               <ul>
                 {state.options?.filter((option) => option.spec_id === spec.id).map((option) => (

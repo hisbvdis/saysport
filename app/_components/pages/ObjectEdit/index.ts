@@ -4,7 +4,7 @@ import NameOrg from "./NameOrg/NameOrg";
 import NamePlace from "./NamePlace/NamePlace";
 import Address from "./Address/Address";
 import Contacts from "./Contacts/Contacts";
-import Sections from "./Sections/Sections";
+import Specs from "./Specs/Specs";
 import Description from "./Description/Description";
 import Schedule from "./Schedule/Schedule";
 import Photos from "./Photos/Photos";
@@ -16,7 +16,7 @@ export {
 	NamePlace,
 	Address,
 	Contacts,
-	Sections,
+	Specs,
 	Description,
   Schedule,
   Photos,

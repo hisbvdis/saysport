@@ -1,0 +1,21 @@
+.objectView {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 10px;
+}
+
+.objectView__header {
+  grid-column: 1 / -1;
+}
+
+.objectView__article {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.object__aside {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

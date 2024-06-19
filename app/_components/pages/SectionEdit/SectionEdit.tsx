@@ -26,7 +26,7 @@ export default function SectionEdit(props:{init:UISection}) {
 
   const handleStateChange = {
     value: (e:React.ChangeEvent<HTMLInputElement>) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         (draft as any)[e.target.name] = e.target.value;
       }))
     }
@@ -35,13 +35,13 @@ export default function SectionEdit(props:{init:UISection}) {
   const handleSpecs = {
     add: (spec:UISpec) => {
       if (!spec.id || state.specs?.some((stateSpec) => stateSpec.id === spec.id)) return;
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         if (!draft.specs) draft.specs = [];
         draft.specs.push(spec);
       }))
     },
     delete: (id:number) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.specs = draft.specs?.filter((spec) => spec.id !== id);
       }))
     },

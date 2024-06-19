@@ -19,8 +19,7 @@ export default function RequiredInput(props:Props) {
 }
 
 interface Props {
-  name: string;
+  name?: string;
   isValidIf?: boolean;
-  checked: boolean;
-  required: boolean;
+  checked?: boolean;
 }

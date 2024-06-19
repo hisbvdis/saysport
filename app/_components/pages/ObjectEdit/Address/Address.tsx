@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import * as Leaflet from "leaflet";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
+import { ObjectEditContext } from "../ObjectEdit";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
 import { Select } from "@/app/_components/ui/Select";
@@ -11,12 +12,11 @@ import { Map, Marker } from "@/app/_components/ui/Map";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
-import { ObjectEditContext } from "../ObjectEdit";
 import { getCitiesByFilters } from "@/app/_db/city";
+import { setInheritedData } from "./setInheritedData";
 import { getObjectsByFilters } from "@/app/_db/object";
 import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
-import { setInheritedData } from "./setInheritedData";
 
 
 export default function Address() {
@@ -32,7 +32,7 @@ export default function Address() {
         street: state.address
       });
       if (!result) return;
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.coord_lat = result.lat;
         draft.coord_lon = result.lon;
       }));
@@ -48,21 +48,21 @@ export default function Address() {
       if (!result) return;
       const road = result.address.road;
       const house = result.address.house_number;
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.address = `${road}${house ? `, ${house}` : ""}`;
       }));
     },
     markerDragEnd: (e:Leaflet.DragEndEvent) => {
       const { lat, lng } = e.target._latlng;
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.coord_lat = lat;
         draft.coord_lon = lng;
-      }));
+      }))
     },
     rightClick: (e:Leaflet.LeafletMouseEvent) => {
+      if (state.coord_inherit) return;
       const { lat, lng } = e.latlng;
-      setState(create(state, (draft) => {
-        if (draft.coord_inherit) return;
+      setState((prevState) => create(prevState, (draft) => {
         draft.coord_lat = lat;
         draft.coord_lon = lng;
       }));
@@ -71,7 +71,7 @@ export default function Address() {
 
   useEffect(() => {
     if (!state.coord_inherit) return;
-    setState(create(state, (draft) => {
+    setState((prevState) => create(prevState, (draft) => {
       draft.coord_lat = draft.parent?.coord_lat;
       draft.coord_lon = draft.parent?.coord_lon;
     }))
@@ -90,7 +90,7 @@ export default function Address() {
                 value={state.city_id}
                 label={state.city ? `${state.city?.name_ru}, ${state.city?.country_code}` : ""}
                 onChange={handleStateChange.valueAsNumber}
-                onChangeData={(data) => setState(create(state, (draft) => {draft.city = data}))}
+                onChangeData={(data) => setState((prevState) => create(prevState, (draft) => {draft.city = data}))}
                 isAutocomplete
                 disabled={Boolean(state.parent_id)}
                 placeholder="Введите название"

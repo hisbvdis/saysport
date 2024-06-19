@@ -19,18 +19,18 @@ export default function Photos() {
       const selectedPhotos = Array.from(e.target.files).slice(0, 10 - statePhotos.length)
         .map((file, i) => ({name: `object_${state.id ?? "ID"}_${newIndexes.shift()}.webp`, uiID: crypto.randomUUID(), blob: URL.createObjectURL(file), file, id: -1, object_id: -1, uploaded: new Date(), order: i}));
       const allPhotos = statePhotos.concat(selectedPhotos).map((photo, i) => ({...photo, order: i}));
-      setState(create(state, (draft) => {draft.photos = allPhotos}))
+      setState((prevState) => create(prevState, (draft) => {draft.photos = allPhotos}))
     },
     delete: (uiID:string) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.photos = draft.photos?.filter((photo) => photo.uiID !== uiID).map((photo, i) => ({...photo, order: i}))
       }))
     },
     deleteAll: () => {
-      setState(create(state, (draft) => {draft.photos = []}))
+      setState((prevState) => create(prevState, (draft) => {draft.photos = []}))
     }
   }
-
+  // console.log( state.photos )
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>

@@ -24,7 +24,7 @@ export default function SpecEdit(props:{init:UISpec}) {
 
   const handleStateChange = {
     value: (e:React.ChangeEvent<HTMLInputElement>) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         (draft as any)[e.target.name] = e.target.value;
       }))
     }
@@ -32,20 +32,20 @@ export default function SpecEdit(props:{init:UISpec}) {
 
   const handleOptions = {
     add: () => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         if (!draft?.options) draft.options = [];
         draft.options.push({id: -1, spec_id: -1, name: "", order: draft.options.length, uiID: crypto.randomUUID()});
       }))
     },
     change: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         const option = draft.options?.find((option) => option.uiID === uiID);
         if (!option) return;
         option.name = e.target.value;
       }))
     },
     delete: (uiID:string) => {
-      setState(create(state, (draft) => {
+      setState((prevState) => create(prevState, (draft) => {
         draft.options = draft.options?.filter((option) => option.uiID !== uiID);
       }))
     }
