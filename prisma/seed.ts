@@ -67,10 +67,10 @@ async function main() {
         "coord_lat": 47.81995433049276,
         "coord_lon": 31.18752479553223,
         "description": "Спорткомплекс предлагает широкий выбор возможностей для занятий спортом и поддержания здорового образа жизни. \n\nСовременный тренажерный зал, просторный бассейн с дорожками для плавания и аквааэробики, игровой зал для командных видов спорта – у нас каждый найдет занятие по душе. \n\nОпытные тренеры и инструкторы помогут вам достичь ваших целей и получить максимум удовольствия от тренировок. \n\nПриходите к нам и откройте для себя мир спорта и активного отдыха!",
-        "schedule_date": "2024-06-19 12:53:04.753",
+        "schedule_date": new Date("2024-06-19 12:53:04.753"),
         "schedule_source": "https://www.google.com/maps/place/Sports+Complex+Olympus/@47.8201775,31.1858632,17.75z/data=!4m6!3m5!1s0x40cfbae3ea3cac5f:0xae8fdc74b62d5b2c!8m2!3d47.8200754!4d31.1875305!16s%2Fg%2F1hf0f4sdn?entry=ttu",
-        "created": "2024-06-19 12:52:19.325",
-        "modified": "2024-06-20 08:34:23.556"
+        "created": new Date("2024-06-19 12:52:19.325"),
+        "modified": new Date("2024-06-20 08:34:23.556"),
       },
       {
         "type": "place",
@@ -87,10 +87,10 @@ async function main() {
         "coord_lon": 31.18752479553223,
         "description": "Бассейн – это оазис свежести и релакса.\n\nКристально чистая вода, комфортная температура, просторные дорожки для плавания и зона гидромассажа – у нас вы сможете полностью расслабиться и восстановить силы. Опытные инструкторы проводят занятия по аквааэробике и обучению плаванию для взрослых и детей.\n\nПодарите себе и своим близким здоровье и хорошее настроение!",
         "schedule_inherit": true,
-        "schedule_date": "2024-06-19 12:53:04.753",
+        "schedule_date": new Date("2024-06-19 12:53:04.753"),
         "schedule_source": "https://www.google.com/maps/place/Sports+Complex+Olympus/@47.8201775,31.1858632,17.75z/data=!4m6!3m5!1s0x40cfbae3ea3cac5f:0xae8fdc74b62d5b2c!8m2!3d47.8200754!4d31.1875305!16s%2Fg%2F1hf0f4sdn?entry=ttu",
-        "created": "2024-06-19 13:25:10.467",
-        "modified": "2024-06-20 08:34:03.674"
+        "created": new Date("2024-06-19 13:25:10.467"),
+        "modified": new Date("2024-06-20 08:34:03.674"),
       },
       {
         "type": "org",
@@ -102,10 +102,10 @@ async function main() {
         "coord_lat": 47.8282178082006,
         "coord_lon": 31.16828262805939,
         "description": "Наш фитнес-клуб предлагает современное оборудование, просторные залы и разнообразные групповые программы для всех уровней подготовки.\n\nОпытные тренеры помогут вам достичь ваших целей, будь то снижение веса, укрепление мышц или повышение выносливости. У нас вы найдете все необходимое для комфортных тренировок: сауну, массажный кабинет и уютное кафе.\n\nПрисоединяйтесь к нам и откройте для себя мир фитнеса!",
-        "schedule_date": "2024-06-19 16:24:12.347",
+        "schedule_date": new Date("2024-06-19 16:24:12.347"),
         "schedule_source": "https://www.instagram.com/asgard_pg",
-        "created": "2024-06-19 16:22:55.152",
-        "modified": "2024-06-20 07:59:24.668"
+        "created": new Date("2024-06-19 16:22:55.152"),
+        "modified": new Date("2024-06-20 07:59:24.668"),
       },
       {
         "type": "place",
@@ -121,10 +121,10 @@ async function main() {
         "coord_lon": 31.16828262805939,
         "description": "Наш тренажерный зал – это территория силы и выносливости.\n\nСовременные тренажеры, свободные веса, зоны для функционального тренинга и кардио – у нас есть все для эффективных тренировок. Опытные инструкторы помогут составить индивидуальную программу и научат правильной технике выполнения упражнений.\n\nПриходите и станьте лучшей версией себя!",
         "schedule_inherit": true,
-        "schedule_date": "2024-06-19 16:24:12.347",
+        "schedule_date": new Date("2024-06-19 16:24:12.347"),
         "schedule_source": "https://www.instagram.com/asgard_pg",
-        "created": "2024-06-19 16:59:43.387",
-        "modified": "2024-06-20 08:01:33.140"
+        "created": new Date("2024-06-19 16:59:43.387"),
+        "modified": new Date("2024-06-20 08:01:33.140"),
       }
     ]
   })
@@ -194,8 +194,8 @@ async function main() {
 
   await prisma.object_phone.createMany({
     data: [
-      { "object_id": 1, "order": 0, "value": "+38 (05136) 5-59-10", "comment": "" },
-      { "object_id": 2, "order": 0, "value": "+38 (05136) 5-59-10", "comment": "" },
+      { "object_id": 1, "order": 0, "value": "+380 (5136) 5-59-10", "comment": "" },
+      { "object_id": 2, "order": 0, "value": "+380 (5136) 5-59-10", "comment": "" },
       { "object_id": 3, "order": 0, "value": "+380 (97) 558-79-89", "comment": "" },
       { "object_id": 4, "order": 0, "value": "+380 (97) 558-79-89", "comment": "" }
     ]
@@ -203,12 +203,12 @@ async function main() {
 
   await prisma.object_photo.createMany({
     data: [
-      { "object_id": 1, "name": "object_1_0.webp", "order": 0, "uploaded": "2024-06-19 13:03:00.782" },
-      { "object_id": 2, "name": "object_2_0.webp", "order": 0, "uploaded": "2024-06-19 14:07:28.237" },
-      { "object_id": 3, "name": "object_3_0.webp", "order": 0, "uploaded": "2024-06-19 16:22:55.162" },
-      { "object_id": 3, "name": "object_3_1.webp", "order": 1, "uploaded": "2024-06-19 16:22:55.162" },
-      { "object_id": 4, "name": "object_4_0.webp", "order": 0, "uploaded": "2024-06-19 16:59:43.395" },
-      { "object_id": 4, "name": "object_4_1.webp", "order": 1, "uploaded": "2024-06-19 16:59:43.395" }
+      { "object_id": 1, "name": "object_1_0.webp", "order": 0, "uploaded": new Date("2024-06-19 13:03:00.782") },
+      { "object_id": 2, "name": "object_2_0.webp", "order": 0, "uploaded": new Date("2024-06-19 14:07:28.237") },
+      { "object_id": 3, "name": "object_3_0.webp", "order": 0, "uploaded": new Date("2024-06-19 16:22:55.162") },
+      { "object_id": 3, "name": "object_3_1.webp", "order": 1, "uploaded": new Date("2024-06-19 16:22:55.162") },
+      { "object_id": 4, "name": "object_4_0.webp", "order": 0, "uploaded": new Date("2024-06-19 16:59:43.395") },
+      { "object_id": 4, "name": "object_4_1.webp", "order": 1, "uploaded": new Date("2024-06-19 16:59:43.395") },
     ]
   })
 }
