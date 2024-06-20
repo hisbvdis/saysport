@@ -27,7 +27,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null})
       setState((prevState) => create(prevState, (draft) => {draft[e.target.name] = e.target.checked}));
     },
     valueAsNumber: (e:ChangeEvent<HTMLInputElement>) => {
-      setState((prevState) => create(prevState, (draft) => {draft[e.target.name] = Number(e.target.value)}));
+      setState((prevState) => create(prevState, (draft) => {draft[e.target.name] = Number(e.target.value) || null}));
     },
   }
 

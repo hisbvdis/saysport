@@ -54,16 +54,17 @@ export default function Address() {
       }));
     },
     markerDragEnd: (e:Leaflet.DragEndEvent) => {
-      const { lat, lng } = e.target._latlng;
       setState((prevState) => create(prevState, (draft) => {
+        if (draft.coord_inherit) return;
+        const { lat, lng } = e.target._latlng;
         draft.coord_lat = lat;
         draft.coord_lon = lng;
       }))
     },
     rightClick: (e:Leaflet.LeafletMouseEvent) => {
-      if (state.coord_inherit) return;
-      const { lat, lng } = e.latlng;
       setState((prevState) => create(prevState, (draft) => {
+        if (draft.coord_inherit) return;
+        const { lat, lng } = e.latlng;
         draft.coord_lat = lat;
         draft.coord_lon = lng;
       }));
@@ -89,7 +90,7 @@ export default function Address() {
               <Select
                 name="city_id"
                 value={state.city_id}
-                label={state.city ? `${state.city?.name_ru}, ${state.city?.country_code}` : ""}
+                label={state.city?.id ? `${state.city?.name_ru}, ${state.city?.country_code}` : ""}
                 onChange={handleStateChange.valueAsNumber}
                 onChangeData={(data) => setState((prevState) => create(prevState, (draft) => {draft.city = data}))}
                 isAutocomplete

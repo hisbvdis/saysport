@@ -30,7 +30,6 @@ export default function Photos() {
       setState((prevState) => create(prevState, (draft) => {draft.photos = []}))
     }
   }
-  // console.log( state.photos )
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>

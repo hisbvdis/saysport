@@ -187,11 +187,28 @@ async function main() {
 
   await prisma.object_link.createMany({
     data: [
-      /* 1 */ { name_plural: "Фитнес-клубы", name_singular: "Фитнес-клуб", object_type: "org" },
-      /* 2 */ { name_plural: "Спорткомплексы", name_singular: "Спорткомплекс", object_type: "org" },
-      /* 3 */ { name_plural: "Тренажёрные залы", name_singular: "Трежажерный зал", object_type: "place" },
-      /* 4 */ { name_plural: "Бассейны", name_singular: "Бассейн", object_type: "place" },
-      /* 5 */ { name_plural: "Общие характеристики", name_singular: "Общие характеристики", object_type: "place" },
+      { "object_id": 3, "order": 0, "value": "https://www.instagram.com/asgard_pg", "comment": "" },
+      { "object_id": 4, "order": 0, "value": "https://www.instagram.com/asgard_pg", "comment": "" }
+    ]
+  })
+
+  await prisma.object_phone.createMany({
+    data: [
+      { "object_id": 1, "order": 0, "value": "+38 (05136) 5-59-10", "comment": "" },
+      { "object_id": 2, "order": 0, "value": "+38 (05136) 5-59-10", "comment": "" },
+      { "object_id": 3, "order": 0, "value": "+380 (97) 558-79-89", "comment": "" },
+      { "object_id": 4, "order": 0, "value": "+380 (97) 558-79-89", "comment": "" }
+    ]
+  })
+
+  await prisma.object_photo.createMany({
+    data: [
+      { "object_id": 1, "name": "object_1_0.webp", "order": 0, "uploaded": "2024-06-19 13:03:00.782" },
+      { "object_id": 2, "name": "object_2_0.webp", "order": 0, "uploaded": "2024-06-19 14:07:28.237" },
+      { "object_id": 3, "name": "object_3_0.webp", "order": 0, "uploaded": "2024-06-19 16:22:55.162" },
+      { "object_id": 3, "name": "object_3_1.webp", "order": 1, "uploaded": "2024-06-19 16:22:55.162" },
+      { "object_id": 4, "name": "object_4_0.webp", "order": 0, "uploaded": "2024-06-19 16:59:43.395" },
+      { "object_id": 4, "name": "object_4_1.webp", "order": 1, "uploaded": "2024-06-19 16:59:43.395" }
     ]
   })
 }

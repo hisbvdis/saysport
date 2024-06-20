@@ -171,6 +171,39 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<obje
         // update: photosMoved?.length ? photosMoved.map((photo) => ({where: {id: photo.id}, data: {order: photo.order}})) : undefined,
         deleteMany: photosDeleted?.length ? {id: {in: photosDeleted.map(({id}) => id)}} : undefined,
       },
+      children: {
+        update: state.children?.length ? state.children.map((child) => ({where: {id: child.id}, data: {
+          name_where: child.name_where !== state.name_locative ? state.name_locative : undefined,
+          status: child.status_inherit && child.status !== state.status ? state.status : undefined,
+          status_comment: child.status_inherit && child.status_comment !== state.status_comment ? state.status_comment : undefined,
+          status_confirm: child.status_inherit && child.status_confirm !== state.status_confirm ? state.status_confirm : undefined,
+          status_instead_id: child.status_inherit && child.status_instead_id !== state.status_instead_id ? state.status_instead_id : undefined,
+          city_id: child.city_id !== state.city_id ? state.city_id : undefined,
+          address: child.address !== state.address ? state.address : undefined,
+          address_2: child.address_2 !== state.address_2 ? state.address_2 : undefined,
+          coord_lat: child.coord_inherit && child.coord_lat !== state.coord_lat ? state.coord_lat : undefined,
+          coord_lon: child.coord_inherit && child.coord_lat !== state.coord_lat ? state.coord_lon : undefined,
+          schedule_24_7: child.schedule_inherit && child.schedule_24_7 !== state.schedule_24_7 ? state.schedule_24_7 : undefined,
+          schedule_date: child.schedule_inherit && child.schedule_date !== state.schedule_date ? state.schedule_date  : null,
+          schedule_source: child.schedule_inherit && child.schedule_source !== state.schedule_source ? state.schedule_source : undefined,
+          schedule_comment: child.schedule_inherit && child.schedule_comment !== state.schedule_comment ? state.schedule_comment : undefined,
+          phones: {
+            create: phonesAdded?.length ? phonesAdded.map((item) => ({...item, id: undefined, uiID: undefined, object_id: undefined})) : undefined,
+            update: phonesChanged?.length ? phonesChanged.map((item) => ({where: {object_id_order: {object_id: child.id, order: item.order}}, data: {...item, id: undefined, uiID: undefined, object_id: undefined}})) : undefined,
+            delete: phonesDeleted?.length ? phonesDeleted.map((item) => ({object_id_order: {object_id: child.id, order: item.order}})) : undefined,
+          },
+          links: {
+            create: linksAdded?.length ? linksAdded.map((item) => ({...item, id: undefined, uiID: undefined, object_id: undefined})) : undefined,
+            update: linksChanged?.length ? linksChanged.map((item) => ({where: {object_id_order: {object_id: child.id, order: item.order}}, data: {...item, id: undefined, uiID: undefined, object_id: undefined}})) : undefined,
+            delete: linksDeleted?.length ? linksDeleted.map((item) => ({object_id_order: {object_id: child.id, order: item.order}})) : undefined,
+          },
+          schedule: {
+            create: (child.schedule_inherit && scheduleAdded?.length) ? scheduleAdded.map((day) => ({...day, isWork: undefined, id: undefined, uiID: undefined, object_id: undefined})) : undefined,
+            update: (child.schedule_inherit && scheduleChanged?.length) ? scheduleChanged.map((day) => ({where: {object_id_day_num: {object_id: child.id, day_num: day.day_num}}, data: {...day, id: undefined, object_id: undefined, uiID: undefined, isWork: undefined}})) : undefined,
+            delete: (child.schedule_inherit && scheduleDeleted?.length) ? scheduleDeleted.map((day) => ({object_id_day_num: {object_id: child.id, day_num: day.day_num}})) : undefined,
+          },
+        }})) : undefined
+      }
     }
   });
    // Rename photo names of created object
