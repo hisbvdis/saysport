@@ -40,7 +40,7 @@ function Choice(props:Props) {
         value={value}
         checked={checked}
         onChange={onChange}
-        required={requiredSelf}
+        required={type === "checkbox" ? requiredSelf : requiredSelf || requiredGroup}
         tabIndex={tabIndex}
         disabled={disabled}
       />

@@ -72,6 +72,7 @@ export default function Select(props:Props) {
   const handleClearBtnClick = () => {
     setInputValue("");
     setSelectedItem({id: "", label: ""});
+    onChangeData({});
     inputRef.current?.focus();
   }
 

@@ -80,7 +80,7 @@ export default function Address() {
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Address and Location</Card.Heading>
+      <Card.Heading>Адрес</Card.Heading>
       <Card.Section style={{display: "flex", gap: "15px"}}>
         <div style={{flexBasis: "33%"}}>
           <Control>
@@ -110,7 +110,7 @@ export default function Address() {
                 value={state.parent_id}
                 label={state.parent?.name}
                 onChange={handleStateChange?.valueAsNumber}
-                onChangeData={(parent) => setInheritedData(objectReadProcessing(parent), setState)}
+                onChangeData={(parent) => setInheritedData(parent.id ? objectReadProcessing(parent) : null, setState)}
                 isAutocomplete
                 placeholder="Введите название"
                 disabled={!state.city_id}
@@ -138,7 +138,7 @@ export default function Address() {
             </Control.Section>
           </Control>
           <Control>
-            <Control.Label srOnly>Location claritication</Control.Label>
+            <Control.Label srOnly>Уточнение местоположения</Control.Label>
             <Control.Section>
               <Input
                 name="address_2"

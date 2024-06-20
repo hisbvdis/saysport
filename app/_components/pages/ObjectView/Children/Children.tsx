@@ -15,10 +15,10 @@ export default function Children() {
         <Link href={`/object/add/place?parent=${state.id}`}>Добавить</Link>
       </Card.Heading>
       <Card.Section>
-        <ul>
+        <ul style={{display: "flex"}}>
           {state.children?.map((child) => (
             <li key={child.id}>
-              <Link href={`/object/${child.id}`}>
+              <Link href={`/object/${child.id}`} style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "5px"}}>
                 <Image src={child.photos?.length ? `/photos/${child.photos[0].name}` : "/no-photo.svg"} width="178" height="120" style={{width: "178px", height: "120px", objectFit: "cover"}} alt="Image" loading="lazy"/>
                 <span>{child.name}</span>
               </Link>

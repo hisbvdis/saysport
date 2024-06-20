@@ -2,7 +2,8 @@ import { UIObject } from "@/app/_types/types";
 import { create } from "mutative";
 import { SetStateAction } from "react";
 
-export const setInheritedData = (parent:UIObject, setState:React.Dispatch<SetStateAction<UIObject>>) => {
+export const setInheritedData = (parent:UIObject|null, setState:React.Dispatch<SetStateAction<UIObject>>) => {
+  console.log( parent )
   if (parent) {
     setState((prevState) => create(prevState, (draft) => {
       draft.status_inherit = true;

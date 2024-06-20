@@ -10,8 +10,8 @@ import { NameOrg, NamePlace, Address, Contacts, Specs, Description, Schedule, Ph
 // -----------------------------------------------------------------------------
 import { UIObject } from "@/app/_types/types";
 import { syncPhotos } from "./Photos/syncPhotos";
-import { deleteObjectById, upsertObject } from "@/app/_db/object";
 import { setInheritedData } from "./Address/setInheritedData";
+import { deleteObjectById, upsertObject } from "@/app/_db/object";
 
 
 export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null}) {

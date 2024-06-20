@@ -63,7 +63,7 @@ export default function Specs() {
           <FieldSet key={section.id} style={{display: "flex", gap: "20px"}}>
             <FieldSet.Legend style={{inlineSize: "200px"}}>
               <Button onClick={() => handleSections.delete(section)}>X</Button>
-              <span>{section.name_plural}</span>
+              <span>{section.name_singular}</span>
             </FieldSet.Legend>
             <FieldSet.Section  style={{display: "flex", gap: "10px"}}>
               {section.specs?.map((spec) => (

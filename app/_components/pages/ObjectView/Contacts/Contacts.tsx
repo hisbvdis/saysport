@@ -11,7 +11,7 @@ export default function Contacts() {
       <Card.Section>
         <p>{state.city?.name_ru}, {state.city?.country_code}</p>
         <p>{state.address}</p>
-        <p style={{color: "var(--fontColor-light)", marginBlockStart: "2px", fontSize: "0.9em"}}>{state.address_2}</p>
+        <p style={{color: "var(--fontColor-light)", marginBlockStart: "2px", fontSize: "0.8em"}}>{state.address_2}</p>
       </Card.Section>
 
       {state.phones?.length ?
@@ -19,7 +19,7 @@ export default function Contacts() {
       : null}
 
       {state.links?.length ?
-        <Card.Section>{state.links[0].value}</Card.Section>
+        <Card.Section>{state.links.map((link) => link.value.match(/^(https?:\/\/)?(www.)?(.*?(?=\/))/)?.[3])}</Card.Section>
       : null}
 
       <Card.Section style={{blockSize: "300px"}}>

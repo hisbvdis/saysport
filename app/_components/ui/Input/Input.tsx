@@ -23,13 +23,6 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, i
   const { type="text", pattern, readOnly, maxLength, disabled, placeholder, size="20" } = props;
   const { className, style } = props;
 
-  useEffect(() => {
-    if (type !== "textarea") return;
-    if (!inputRef || !("current" in inputRef) || !inputRef.current) return;
-    inputRef.current.style.height = "5px";
-    inputRef.current.style.height = inputRef.current.scrollHeight + 2 + "px";
-  }, [value, inputRef, type])
-
   return createElement(
     type === "textarea" ? "textarea" : "input",
     {
