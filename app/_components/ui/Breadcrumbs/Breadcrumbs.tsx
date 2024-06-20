@@ -28,5 +28,5 @@ interface Props {
   className?: string;
   style?: React.CSSProperties;
   id?: string;
-  items?: { label: string; href?: string }[];
+  items?: { label: string; href?: string | null }[];
 }

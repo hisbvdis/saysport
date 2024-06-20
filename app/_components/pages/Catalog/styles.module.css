@@ -1,0 +1,5 @@
+.catalog {
+  display: grid;
+  grid-template-columns: 250px 645px;
+  gap: 10px;
+}

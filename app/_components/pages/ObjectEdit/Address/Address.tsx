@@ -96,8 +96,8 @@ export default function Address() {
                 isAutocomplete
                 disabled={Boolean(state.parent_id)}
                 placeholder="Введите название"
-                requestItemsOnInputChange={async (value) => (
-                  await getCitiesByFilters({name: value})).map((city) => ({
+                requestItemsOnInputChange={async (inputValue) => (
+                  await getCitiesByFilters({name: inputValue})).map((city) => ({
                     id: city.id, label: `${city.name_ru}, ${city.country_code}`, data: city
                 }))}
               />
@@ -116,7 +116,7 @@ export default function Address() {
                 placeholder="Введите название"
                 disabled={!state.city_id}
                 requestItemsOnInputChange={async (value) => (
-                  await getObjectsByFilters({cityId: state.city_id, type: "org", query: value}))
+                  await getObjectsByFilters({cityId: String(state.city_id), type: "org", query: value}))
                     .filter((org) => org.id !== state.id)
                     .map((org) => ({id: org.id, label: org.name, data: org})
                 )}
