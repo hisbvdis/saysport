@@ -2,12 +2,12 @@
 import clsx from "clsx";
 import { createContext } from "react";
 // -----------------------------------------------------------------------------
+import Gallery from "./Gallery/Gallery";
 import { Children, Contacts, Description, Header, Specs } from ".";
 // -----------------------------------------------------------------------------
 import { UIObject } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import Gallery from "./Gallery/Gallery";
 
 
 export default function ObjectView(props:{init:UIObject}) {
