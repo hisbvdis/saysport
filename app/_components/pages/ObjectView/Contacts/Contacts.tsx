@@ -9,7 +9,7 @@ export default function Contacts() {
   return (
     <Card>
       <Card.Section>
-        <p>{state.city?.name_ru}, {state.city?.country_code}</p>
+        <p>{state.city?.name}, {state.city?.country}</p>
         <p>{state.address}</p>
         <p style={{color: "var(--fontColor-light)", marginBlockStart: "2px", fontSize: "0.8em"}}>{state.address_2}</p>
       </Card.Section>

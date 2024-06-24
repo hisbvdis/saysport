@@ -21,8 +21,8 @@ export default async function CatalogPage({searchParams}:{searchParams:SearchPar
 }
 
 export interface SearchParamsType {
-  city:string;
-  section:string;
-  options:string;
-  map:boolean;
+  city?:string;
+  section?:string;
+  options?:string;
+  map?:boolean;
 }

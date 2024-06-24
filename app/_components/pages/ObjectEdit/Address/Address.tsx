@@ -28,8 +28,8 @@ export default function Address() {
     getCoordFromAddress: async () => {
       if (!state.city) return;
       const result = await queryCoodFromAddress({
-        country: state.city.country_code,
-        city: state.city.name_ru!,
+        country: state.city.country,
+        city: state.city.name!,
         street: state.address
       });
       if (!result) return;
@@ -90,7 +90,7 @@ export default function Address() {
               <Select
                 name="city_id"
                 value={state.city_id}
-                label={state.city?.id ? `${state.city?.name_ru}, ${state.city?.country_code}` : ""}
+                label={state.city?.id ? `${state.city?.name}, ${state.city?.country}` : ""}
                 onChange={handleStateChange.valueAsNumber}
                 onChangeData={(data) => setState((prevState) => create(prevState, (draft) => {draft.city = data}))}
                 isAutocomplete
@@ -98,7 +98,7 @@ export default function Address() {
                 placeholder="Введите название"
                 requestItemsOnInputChange={async (inputValue) => (
                   await getCitiesByFilters({name: inputValue})).map((city) => ({
-                    id: city.id, label: `${city.name_ru}, ${city.country_code}`, data: city
+                    id: city.id, label: `${city.name}, ${city.country}`, data: city
                 }))}
               />
             </Control.Section>
@@ -116,7 +116,7 @@ export default function Address() {
                 placeholder="Введите название"
                 disabled={!state.city_id}
                 requestItemsOnInputChange={async (value) => (
-                  await getObjectsByFilters({cityId: String(state.city_id), type: "org", query: value}))
+                  await getObjectsByFilters({city: String(state.city_id), type: "org", query: value}))
                     .filter((org) => org.id !== state.id)
                     .map((org) => ({id: org.id, label: org.name, data: org})
                 )}

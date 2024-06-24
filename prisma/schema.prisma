@@ -163,31 +163,14 @@ model object_schedule {
   @@unique([object_id, day_num])
 }
 
-// ===========================================================================
-// CITY
-// ===========================================================================
 model city {
   id                Int      @id
   name              String
-  asciiname         String?
-  alternatenames    String?
-  coord_lat         Float?
-  cootd_lon         Float?
-  feature_class     String?
-  feature_code      String?
-  country_code      String
-  cc2               String?
-  admin1_code       String?
-  admin2_code       String?
-  admin3_code       String?
-  admin4_code       String?
-  population        Int?
-  elevation         Int?
-  dem               Int?
-  timezone          String?
-  modification_date String?
-  // --------------------------
-  name_ru           String?
+  admin1            String?
+  admin2            String?
+  country           String
+  coord_lat         Float
+  cootd_lon         Float
   // --------------------------
   objects           object[] @relation("object_city")
 }

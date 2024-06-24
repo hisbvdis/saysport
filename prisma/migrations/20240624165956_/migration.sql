@@ -145,24 +145,11 @@ CREATE TABLE "object_schedule" (
 CREATE TABLE "city" (
     "id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
-    "asciiname" TEXT,
-    "alternatenames" TEXT,
+    "admin1" TEXT,
+    "admin2" TEXT,
+    "country" TEXT,
     "coord_lat" DOUBLE PRECISION,
     "cootd_lon" DOUBLE PRECISION,
-    "feature_class" TEXT,
-    "feature_code" TEXT,
-    "country_code" TEXT NOT NULL,
-    "cc2" TEXT,
-    "admin1_code" TEXT,
-    "admin2_code" TEXT,
-    "admin3_code" TEXT,
-    "admin4_code" TEXT,
-    "population" INTEGER,
-    "elevation" INTEGER,
-    "dem" INTEGER,
-    "timezone" TEXT,
-    "modification_date" TEXT,
-    "name_ru" TEXT,
 
     CONSTRAINT "city_pkey" PRIMARY KEY ("id")
 );

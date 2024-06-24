@@ -9,7 +9,7 @@ export const getCitiesByFilters = async (filters:{name?:string}):Promise<city[]>
     FROM
       city
     WHERE
-      name_ru ilike '${filters?.name}%'
+      name ilike '${filters?.name}%'
     ORDER BY
       length(name),
       name

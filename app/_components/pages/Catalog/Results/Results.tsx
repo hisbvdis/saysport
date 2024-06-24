@@ -17,12 +17,12 @@ export default function Results() {
       <Card.Heading>
         <Breadcrumbs style={{marginBlockEnd: "5px"}} items={[
           {label: "Каталог", href: city || section ? "/catalog" : null},
-          {label: city?.name_ru ?? "", href: section?.id ? `/catalog?city=${city?.id}` : null},
+          {label: city?.name ?? "", href: section?.id ? `/catalog?city=${city?.id}` : null},
           {label: section?.name_plural ?? ""}
         ]}/>
         <h1 style={{fontWeight: "400"}}>
           {/* <span>{section?.name_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span> */}
-          <span>{section?.name_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name_ru}` : null}</span>
+          <span>{section?.name_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name}` : null}</span>
           <sup style={{fontSize: "0.5em"}}>{results?.length}</sup>
         </h1>
       </Card.Heading>
@@ -38,7 +38,7 @@ export default function Results() {
           <img src={object.photos?.length ? `/photos/${object.photos[0].name}` : "/photos/no-photo.svg"} width="250" height="210" alt="Image" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210"}}/>
           <div>
             <Link href={`object/${object.id}`}>{object.name} {object.name_where}</Link>
-            <p>{object.city?.name_ru}, {object.address}</p>
+            <p>{object.city?.name}, {object.address}</p>
             <hr/>
             <ul style={{display: "flex", gap: "10px", flexWrap: "wrap", listStyle: "none", paddingInlineStart: 0}}>
               {object.options?.map(({option}) => {

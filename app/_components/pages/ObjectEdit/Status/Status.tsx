@@ -70,7 +70,7 @@ export default function Status(props:Props) {
             placeholder="Введите название"
             disabled={state?.status_inherit || state?.status !== $Enums.objectStatusEnum.closed_forever}
             requestItemsOnInputChange={
-              async (value) => (await getObjectsByFilters({cityId: state?.city_id!, type: state?.type, query: value}))
+              async (value) => (await getObjectsByFilters({city: String(state.city_id), type: state?.type, query: value}))
               ?.filter((object) => object.id !== state?.id)
               ?.map((object) => ({id: object.id, label: object.name, data: object}))
             }
