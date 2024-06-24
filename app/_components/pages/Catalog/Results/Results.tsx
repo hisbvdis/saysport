@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { useContext } from "react";
-import { CatalogContext } from "../Catalog";
-import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+// -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
-import Image from "next/image";
+// -----------------------------------------------------------------------------
+import { CatalogContext } from "../Catalog";
+import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+
 
 export default function Results() {
   const { searchParams, city, results, section } = useContext(CatalogContext);
@@ -27,13 +29,13 @@ export default function Results() {
       <Card.Section style={{display: "flex", justifyContent: "space-between"}}>
         <p>Сортировка: По дате добавления</p>
         <Link href={manageSearchParams(searchParams?.map ? "delete" : "set", "map", "true")} style={{display: "flex", alignItems: "center", gap: "5px"}}>
-        <Image src="/icons/map-pin.svg" width={15} height={20} alt="Map Pin"/>
+        <img src="/icons/map-pin.svg" width={15} height={20} alt="Map Pin"/>
           <span>Карта</span>
         </Link>
       </Card.Section>
       {results.map((object) => (
         <Card.Section key={object.id} style={{display: "grid", gap: "15px", gridTemplateColumns: "1fr 1.5fr"}}>
-          <Image src={object.photos?.length ? `/photos/${object.photos[0].name}` : "/photos/no-photo.svg"} width="250" height="210" alt="Image" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210"}}/>
+          <img src={object.photos?.length ? `/photos/${object.photos[0].name}` : "/photos/no-photo.svg"} width="250" height="210" alt="Image" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210"}}/>
           <div>
             <Link href={`object/${object.id}`}>{object.name} {object.name_where}</Link>
             <p>{object.city?.name_ru}, {object.address}</p>
