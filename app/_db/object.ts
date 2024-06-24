@@ -4,6 +4,7 @@ import { $Enums, object as object_ } from "@prisma/client"
 // -----------------------------------------------------------------------------
 import { UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
+import { SearchParamsType } from "../(router)/catalog/page";
 
 
 export const getEmptyObject = async ():Promise<UIObject> => {
@@ -16,12 +17,14 @@ export const getEmptyObject = async ():Promise<UIObject> => {
 
 export const getObjectsByFilters = async (filters?:Filters) => {
   const { query, type } = filters ?? {};
-  const cityId = filters?.cityId ? Number(filters?.cityId) : undefined;
+  const cityId = filters?.city ? Number(filters?.city) : undefined;
+  const sectionId = filters?.section ? Number(filters.section) : undefined;
   const dbData = await prisma.object.findMany({
     where: {
       name: query ? {contains: query, mode: "insensitive"} : undefined,
       city_id: cityId,
       type: type,
+      sections: sectionId ? {some: {section_id: {equals: sectionId}}} : undefined,
     },
     include: {
       statusInstead: true,
@@ -38,8 +41,7 @@ export const getObjectsByFilters = async (filters?:Filters) => {
   return dbData;
 }
 
-interface Filters {
-  cityId?: string;
+interface Filters extends SearchParamsType {
   type?: $Enums.objectTypeEnum;
   query?: string;
 }

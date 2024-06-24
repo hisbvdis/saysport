@@ -7,7 +7,7 @@ export default async function CatalogPage({searchParams}:{searchParams:SearchPar
   const city = searchParams.city ? await getCityById(Number(searchParams.city)) : undefined;
   const section = searchParams.section ? await getSectionById(Number(searchParams.section)) : undefined;
   const sectionList = await getSectionsByFilters();
-  const results = await getObjectsByFilters({cityId: searchParams.city});
+  const results = await getObjectsByFilters(searchParams);
 
   return (
     <Catalog
@@ -24,4 +24,5 @@ export interface SearchParamsType {
   city:string;
   section:string;
   options:string;
+  map:boolean;
 }

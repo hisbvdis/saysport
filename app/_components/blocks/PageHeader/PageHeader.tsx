@@ -1,7 +1,10 @@
 import clsx from "clsx";
-import styles from "./styles.module.css";
-import { Logo } from "@/app/_components/blocks/Logo/";
 import Link from "next/link";
+// -----------------------------------------------------------------------------
+import { Logo } from "@/app/_components/blocks/Logo/";
+// -----------------------------------------------------------------------------
+import styles from "./styles.module.css";
+
 
 export default function PageHeader() {
   return (

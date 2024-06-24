@@ -1,21 +1,20 @@
 "use client";
 import clsx from "clsx";
-import Link from "next/link";
 import { createContext } from "react";
-import type { city } from "@prisma/client";
+import { city } from "@prisma/client";
 import { useRouter } from "next/navigation";
 // -----------------------------------------------------------------------------
 import { Card } from "../../ui/Card";
 import { Select } from "../../ui/Select";
 import { Control } from "../../ui/Control";
+import { Categories, Filters, Results } from ".";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
-import type { DBObject, UISection } from "@/app/_types/types"
-import type { SearchParamsType } from "@/app/(router)/catalog/page";
+import { DBObject, UISection } from "@/app/_types/types"
+import { SearchParamsType } from "@/app/(router)/catalog/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import Results from "./Results/Results";
 
 
 export default function Catalog(props:Props) {
@@ -43,6 +42,7 @@ export default function Catalog(props:Props) {
               />
             </Control>
           </Card>
+          {searchParams.section ? <Filters className="mt10"/> : <Categories className="mt10"/>}
         </aside>
         <main>
           <Results/>
