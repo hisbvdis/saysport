@@ -12,7 +12,7 @@
     "@prisma/client": "^5.15.1",
     "date-fns": "^3.6.0",
     "leaflet": "^1.9.4",
-    "mutative": "^1.0.5",
+    "mutative": "^1.0.6",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
@@ -21,13 +21,13 @@
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.12",
-    "@types/node": "^20.14.6",
+    "@types/node": "^20.14.8",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "clsx": "^2.1.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "prisma": "^5.15.1",
-    "typescript": "^5"
+    "typescript": "^5.5.2"
   }
 }

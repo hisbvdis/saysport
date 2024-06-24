@@ -10,12 +10,12 @@ export const useManageSearchParams = () => {
     let urlSearchParams = new URLSearchParams(searchParams);
     switch (action) {
       case "set": {
-        if (typeof key !== "string") return;
+        if (typeof key !== "string") return "";
         urlSearchParams.set(key, value);
         break;
       }
       case "append": {
-        if (typeof key !== "string") return;
+        if (typeof key !== "string") return "";
         const valueSet = new Set(urlSearchParams.get(key)?.split(","));
         valueSet.has(value) ? valueSet.delete(value) : valueSet.add(value);
         const valueString = [...Array.from(valueSet)].toSorted((a, b) => a > b ? 1 : -1).join(",");
@@ -31,7 +31,7 @@ export const useManageSearchParams = () => {
         break;
       }
       case "leaveOnly": {
-        if (typeof key !== "string") return;
+        if (typeof key !== "string") return "";
         const currentValue = value ? value : urlSearchParams.get(key);
         urlSearchParams = new URLSearchParams();
         urlSearchParams.set(key, currentValue ?? "null");
