@@ -14,17 +14,21 @@ export default function Filters(props:Props) {
   const { searchParams, section } = useContext(CatalogContext);
   const manageSearchParams = useManageSearchParams();
 
+  section?.specs.forEach((spec) => spec.options?.forEach((option) => {
+    manageSearchParams.appendOrClear("options", `${spec.id}:${option.id}`);
+  }))
+
   return (
     <Card className={className} style={style}>
       <Card.Heading style={{display: "flex", alignItems: "center"}}>
         <span style={{marginInlineEnd: "auto"}}>{section?.name_plural}</span>
         {searchParams.options
-          ? <Link href={manageSearchParams("delete", "options")} style={{display: "flex", alignItems: "center"}}>
+          ? <Link href={manageSearchParams.delete("options")} style={{display: "flex", alignItems: "center"}}>
               <img src="/icons/bin.svg" width={24} height={24} alt="Map Pin"/>
             </Link>
           : null
         }
-        <Link href={manageSearchParams("delete", ["section", "options"])}>
+        <Link href={manageSearchParams.delete(["section", "options"])}>
           <img src="/icons/close.svg" width={15} height={20} alt="Close Icon"/>
         </Link>
       </Card.Heading>
@@ -34,7 +38,7 @@ export default function Filters(props:Props) {
             <Control.Label>{spec.name_public}</Control.Label>
             <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
               {spec.options?.map((opt) => (
-                <Link key={opt.id} href={manageSearchParams("append", "options", `${spec.id}-${opt.id}`)}>
+                <Link key={opt.id} href={manageSearchParams.appendOrClear("options", `${spec.id}:${opt.id}`)}>
                   <Checkbox value={`${spec.id}:${opt.id}`} tabIndex={-1}>{opt.name}</Checkbox>
                 </Link>
               ))}

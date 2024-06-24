@@ -28,8 +28,8 @@ export default function Results() {
       </Card.Heading>
       <Card.Section style={{display: "flex", justifyContent: "space-between"}}>
         <p>Сортировка: По дате добавления</p>
-        <Link href={manageSearchParams(searchParams?.map ? "delete" : "set", "map", "true")} style={{display: "flex", alignItems: "center", gap: "5px"}}>
-        <img src="/icons/map-pin.svg" width={15} height={20} alt="Map Pin"/>
+        <Link href={searchParams.map ? manageSearchParams.delete("map") : manageSearchParams.set("map", "true")} style={{display: "flex", alignItems: "center", gap: "5px"}}>
+          <img src="/icons/map-pin.svg" width={15} height={20} alt="Map Pin"/>
           <span>Карта</span>
         </Link>
       </Card.Section>
