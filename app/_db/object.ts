@@ -20,21 +20,23 @@ export const getObjectsByFilters = async (filters?:Filters) => {
   const cityId = filters?.city ? Number(filters?.city) : undefined;
   const sectionId = filters?.section ? Number(filters.section) : undefined;
   const optionIds = filters?.options ?? undefined;
-  const groupedOptions = Object.values(optionIds
-    ? optionIds /* "1:1,1:2" */
-      .split(",") /* ["1:1"],["1:2"] */
-      .map((str) => str.split(":")) /* [["1":"1"],["1":"2"]] */
-      .map((arr) => arr.map((str) => Number(str))) /* [1:1],[1:2] */
-      .reduce((acc, [key, value]) => ({...acc,[key]: acc[key] ? [...acc[key], value] : [value]}), {} as {[key:string]: number[]}) /* { '1': [ 1, 2 ] } */
+  const groupedOptions = Object.entries(
+    optionIds
+    ? optionIds /* "1:1,1:2,!2:3" */
+      .split(",") /* ["1:1"],["1:2"],["!2:3"] */
+      .map((str) => str.split(":")) /* ["1":"1"],["1":"2"],["!2":"3"] */
+      .reduce((acc, [key, value]) => ({...acc,[key]: acc[key] ? [...acc[key], Number(value)] : [Number(value)]}), {} as {[key:string]: number[]}) /* { '1': [ 1, 2 ] } */
     : {}
   )
+  console.log( groupedOptions )
   const dbData = await prisma.object.findMany({
     where: {
       name: query ? {contains: query, mode: "insensitive"} : undefined,
       city_id: cityId,
       type: type,
       sections: sectionId ? {some: {section_id: {equals: sectionId}}} : undefined,
-      AND: groupedOptions?.length ? groupedOptions.map((ids) => ({options: {some: {option_id: {in: ids}}}})) : undefined,
+      // AND: optionValues?.length ? optionValues.map((ids) => ({options: {some: {option_id: {in: ids}}}})) : undefined,
+      AND: groupedOptions?.length ? groupedOptions.map(([specId, optionsArr]:[string, number[]]) => specId.startsWith("!") ? ({options: {every: {option_id: {in: optionsArr}}}}) : ({options: {some: {option_id: {in: optionsArr}}}})) : undefined,
     },
     include: {
       statusInstead: true,
@@ -46,7 +48,7 @@ export const getObjectsByFilters = async (filters?:Filters) => {
       schedule: true,
       photos: {orderBy: {order: "asc"}},
       sections: {include: {section: {include: {specs: {include: {spec: {include: {options: true}}}}}}}},
-    }
+    },
   });
   return dbData;
 }
