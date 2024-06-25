@@ -69,6 +69,23 @@ async function main() {
         "schedule_source": "https://www.google.com/maps/place/Sports+Complex+Olympus/@47.8201775,31.1858632,17.75z/data=!4m6!3m5!1s0x40cfbae3ea3cac5f:0xae8fdc74b62d5b2c!8m2!3d47.8200754!4d31.1875305!16s%2Fg%2F1hf0f4sdn?entry=ttu",
       },
       {
+        "type": "place",
+        "name": "Бассейн",
+        "name_where": "в СК «Олимп»",
+        "status_inherit": true,
+        "status": "works",
+        "city_id": 7525990,
+        "parent_id": 1,
+        "address": "Олимпийская улица",
+        "address_2": "Городской парк «Дубки»",
+        "coord_inherit": true,
+        "coord_lat": 47.81995433049276,
+        "coord_lon": 31.18752479553223,
+        "description": "Бассейн – это оазис свежести и релакса.\n\nКристально чистая вода, комфортная температура, просторные дорожки для плавания и зона гидромассажа – у нас вы сможете полностью расслабиться и восстановить силы. Опытные инструкторы проводят занятия по аквааэробике и обучению плаванию для взрослых и детей.\n\nПодарите себе и своим близким здоровье и хорошее настроение!",
+        "schedule_inherit": true,
+        "schedule_source": "https://www.google.com/maps/place/Sports+Complex+Olympus/@47.8201775,31.1858632,17.75z/data=!4m6!3m5!1s0x40cfbae3ea3cac5f:0xae8fdc74b62d5b2c!8m2!3d47.8200754!4d31.1875305!16s%2Fg%2F1hf0f4sdn?entry=ttu",
+      },
+      {
         "type": "org",
         "name": "Фитнес-клуб «Asgard»",
         "name_locative": "в клубе «Asgard»",
@@ -96,23 +113,6 @@ async function main() {
         "schedule_inherit": true,
         "schedule_source": "https://www.instagram.com/asgard_pg",
       },
-      {
-        "type": "place",
-        "name": "Бассейн",
-        "name_where": "в СК «Олимп»",
-        "status_inherit": true,
-        "status": "works",
-        "city_id": 7525990,
-        "parent_id": 1,
-        "address": "Олимпийская улица",
-        "address_2": "Городской парк «Дубки»",
-        "coord_inherit": true,
-        "coord_lat": 47.81995433049276,
-        "coord_lon": 31.18752479553223,
-        "description": "Бассейн – это оазис свежести и релакса.\n\nКристально чистая вода, комфортная температура, просторные дорожки для плавания и зона гидромассажа – у нас вы сможете полностью расслабиться и восстановить силы. Опытные инструкторы проводят занятия по аквааэробике и обучению плаванию для взрослых и детей.\n\nПодарите себе и своим близким здоровье и хорошее настроение!",
-        "schedule_inherit": true,
-        "schedule_source": "https://www.google.com/maps/place/Sports+Complex+Olympus/@47.8201775,31.1858632,17.75z/data=!4m6!3m5!1s0x40cfbae3ea3cac5f:0xae8fdc74b62d5b2c!8m2!3d47.8200754!4d31.1875305!16s%2Fg%2F1hf0f4sdn?entry=ttu",
-      }
     ]
   })
 

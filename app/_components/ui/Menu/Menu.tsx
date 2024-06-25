@@ -70,7 +70,7 @@ export default function Menu(props:Props) {
     <ul className={clsx(styles["menu"], className)} style={style} ref={itemsListRef}>
       {items?.map((item, i) => (
         <li key={i} className={clsx(styles["menu__item"], i === focusIndex && styles["menu__item--focus"])} onPointerDown={handlePointerDown} onPointerEnter={() => setFocusIndex(i)}>
-          <p>{item.label}</p>
+          <p style={{whiteSpace: "pre-wrap"}}>{item.label}</p>
         </li>
       ))}
     </ul>
