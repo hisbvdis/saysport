@@ -21,7 +21,7 @@ function Choice(props:Props) {
   const value = props.value ?? "";
   const valueToCompareWith = props.valueToCompareWith ?? choiceGroupContext?.valueToCompareWith ?? "";
   const arrayToCompareWith = props.arrayToCompareWith ?? choiceGroupContext?.arrayToCompareWith ?? "";
-  const checked = props.checked ?? (valueToCompareWith ? value === valueToCompareWith : arrayToCompareWith.includes(value));
+  const checked = props.checked ?? (valueToCompareWith ? value === valueToCompareWith : arrayToCompareWith ? arrayToCompareWith.includes(value) : false);
   const requiredSelf = props.required ?? false;
   const requiredGroup = choiceGroupContext?.requiredGroup ?? false;
   const { tabIndex=0 } = props;
@@ -53,9 +53,9 @@ function Choice(props:Props) {
 interface Props {
   type?: "radio" | "checkbox";
   name?: string;
-  value?: string;
-  valueToCompareWith?: string;
-  arrayToCompareWith?: string[];
+  value?: string | number;
+  valueToCompareWith?: string | number;
+  arrayToCompareWith?: (string | number)[];
   checked?: boolean;
   required?: boolean;
   tabIndex?: number;
