@@ -1,14 +1,30 @@
+CREATE SCHEMA IF NOT EXISTS public;
+
 CREATE TYPE objectType AS ENUM ('org', 'place');
 CREATE TYPE optionsNumber AS ENUM ('many', 'one');
 CREATE TYPE objectStatus AS ENUM ('works', 'open_soon', 'might_closed', 'closed_temp', 'closed_forever');
 
 
 -- ===========================================================================
+-- CITY
+-- ===========================================================================
+CREATE TABLE IF NOT EXISTS city
+(
+    city_id   INTEGER PRIMARY KEY,
+    name      VARCHAR,
+    admin1    VARCHAR,
+    admin2    VARCHAR,
+    country   VARCHAR,
+    coord_lat DOUBLE PRECISION NOT NULL,
+    coord_lon DOUBLE PRECISION NOT NULL
+);
+
+-- ===========================================================================
 -- OBJECT
 -- ===========================================================================
-CREATE TABLE object
+CREATE TABLE IF NOT EXISTS object
 (
-    object_id         INT PRIMARY KEY,
+    object_id         SERIAL PRIMARY KEY,
     type              objectType NOT NULL,
     name              VARCHAR    NOT NULL,
     name_locative     VARCHAR,
@@ -18,7 +34,7 @@ CREATE TABLE object
     status_comment    VARCHAR,
     status_source     VARCHAR,
     status_instead_id INTEGER,
-    city_id           INTEGER    NOT NULL,
+    city_id           INTEGER    NOT NULL REFERENCES city (city_id),
     parent_id         INTEGER,
     address           VARCHAR,
     address_2         VARCHAR,
@@ -35,20 +51,27 @@ CREATE TABLE object
     modified          TIMESTAMP DEFAULT now()
 );
 
-
 -- ===========================================================================
 -- SECTION / SPEC / OPTION
 -- ===========================================================================
-CREATE TABLE spec
+CREATE TABLE IF NOT EXISTS section
+(
+    section_id    SERIAL PRIMARY KEY,
+    name_plural   VARCHAR    NOT NULL,
+    name_singular VARCHAR    NOT NULL,
+    object_type   objectType NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS spec
 (
     spec_id        SERIAL PRIMARY KEY,
     name_service   VARCHAR       NOT NULL,
     name_public    VARCHAR       NOT NULL,
-    objecty_type   objectType    NOT NULL,
+    object_type    objectType    NOT NULL,
     options_number optionsNumber NOT NULL
 );
 
-CREATE TABLE option
+CREATE TABLE IF NOT EXISTS option
 (
     option_id SERIAL PRIMARY KEY,
     name      VARCHAR NOT NULL,
@@ -58,34 +81,30 @@ CREATE TABLE option
 
 CREATE UNIQUE INDEX option_order_spec_id_key ON option ("order", spec_id);
 
-CREATE TABLE section
-(
-    section_id    SERIAL PRIMARY KEY,
-    name_plural   VARCHAR    NOT NULL,
-    name_singular VARCHAR    NOT NULL,
-    object_type   objectType NOT NULL
-);
 
-CREATE TABLE section_on_spec
+-- ===========================================================================
+-- RELATIONS: MANY-TO-MANY
+-- ===========================================================================
+CREATE TABLE IF NOT EXISTS section_on_spec
 (
     section_id INTEGER NOT NULL REFERENCES section (section_id) ON DELETE CASCADE,
-    spec_id    INTEGER NOT NULL REFERENCES spec (spec_id) ON DELETE RESTRICT,
+    spec_id    INTEGER NOT NULL REFERENCES spec (spec_id) ON DELETE RESTRICT
 );
 
 CREATE UNIQUE INDEX section_on_spec_section_id_spec_id_key ON section_on_spec (section_id, spec_id);
 
-CREATE TABLE object_on_section
+CREATE TABLE IF NOT EXISTS object_on_section
 (
     object_id  INTEGER NOT NULL REFERENCES object (object_id) ON DELETE CASCADE,
-    section_id INTEGER NOT NULL REFERENCES section (section_id) ON DELETE CASCADE,
+    section_id INTEGER NOT NULL REFERENCES section (section_id) ON DELETE CASCADE
 );
 
 CREATE UNIQUE INDEX object_on_section_object_id_section_id_key ON object_on_section (object_id, section_id);
 
-CREATE TABLE object_on_option
+CREATE TABLE IF NOT EXISTS object_on_option
 (
     object_id INTEGER NOT NULL REFERENCES object (object_id) ON DELETE CASCADE,
-    option_id INTEGER NOT NULL REFERENCES option (option_id) ON DELETE RESTRICT,
+    option_id INTEGER NOT NULL REFERENCES option (option_id) ON DELETE RESTRICT
 );
 
 CREATE UNIQUE INDEX object_on_option_object_id_option_id_key ON object_on_option (object_id, option_id);
@@ -94,7 +113,7 @@ CREATE UNIQUE INDEX object_on_option_object_id_option_id_key ON object_on_option
 -- ===========================================================================
 -- CONTACTS
 -- ===========================================================================
-CREATE TABLE object_link
+CREATE TABLE IF NOT EXISTS object_link
 (
     object_id INTEGER NOT NULL REFERENCES object (object_id) ON DELETE CASCADE,
     "order"   INTEGER NOT NULL,
@@ -104,7 +123,7 @@ CREATE TABLE object_link
 
 CREATE UNIQUE INDEX object_link_object_id_order_key ON object_link (object_id, "order");
 
-CREATE TABLE object_phone
+CREATE TABLE IF NOT EXISTS object_phone
 (
     object_id INTEGER NOT NULL REFERENCES object (object_id) ON DELETE CASCADE,
     "order"   INTEGER NOT NULL,
@@ -112,13 +131,13 @@ CREATE TABLE object_phone
     comment   VARCHAR
 );
 
-CREATE UNIQUE INDEX object_phone_object_id_order_key ON object_phone (object_id, order);
+CREATE UNIQUE INDEX object_phone_object_id_order_key ON object_phone (object_id, "order");
 
 
 -- ===========================================================================
 -- PHOTO
 -- ===========================================================================
-CREATE TABLE object_photo
+CREATE TABLE IF NOT EXISTS object_photo
 (
     object_id INTEGER NOT NULL REFERENCES object (object_id) ON DELETE CASCADE,
     name      VARCHAR NOT NULL,
@@ -132,7 +151,7 @@ CREATE UNIQUE INDEX object_photo_object_id_name_order_key ON object_photo (objec
 -- ===========================================================================
 -- SCHEDULE
 -- ===========================================================================
-CREATE TABLE object_schedule
+CREATE TABLE IF NOT EXISTS object_schedule
 (
     object_id INTEGER NOT NULL,
     day_num   INTEGER NOT NULL,
@@ -142,18 +161,3 @@ CREATE TABLE object_schedule
 );
 
 CREATE UNIQUE INDEX object_schedule_object_id_day_num_key ON object_schedule (object_id, day_num);
-
-
--- ===========================================================================
--- CITY
--- ===========================================================================
-CREATE TABLE city
-(
-    id        INTEGER PRIMARY KEY,
-    name      VARCHAR,
-    admin1    VARCHAR,
-    admin2    VARCHAR,
-    country   VARCHAR,
-    coord_lat DOUBLE PRECISION NOT NULL,
-    coord_lon DOUBLE PRECISION NOT NULL
-)
