@@ -31,13 +31,13 @@ export default function Catalog(props:Props) {
               <Control.Label>Город</Control.Label>
               <Select
                 isAutocomplete
-                value={city?.id ? Number(city?.id) : ""}
+                value={city?.city_id ? Number(city?.city_id) : ""}
                 label={city?.name}
                 onChange={(e) => router.push(manageSearchParams.set("city", e.target.value))}
                 placeholder="Введите название"
                 requestItemsOnInputChange={async (value) => (
                   await getCitiesByFilters({name: value})).map((city) => ({
-                    id: city.id, label: `${city.name}, ${city.country}, ${city.admin1 ?? ""}, ${city.admin2 ?? ""}`, data: city
+                    id: city.city_id, label: `${city.name}, ${city.country}, ${city.admin1 ?? ""}, ${city.admin2 ?? ""}`, data: city
                 }))}
               />
             </Control>

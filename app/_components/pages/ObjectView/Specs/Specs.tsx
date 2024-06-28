@@ -10,17 +10,17 @@ export default function Specs() {
     <Card>
       <Card.Heading>Характеристики</Card.Heading>
       {state.sections?.map((section) => (
-        <Card.Section key={section.id}>
-          <Link href={`/catalog?city=${state.city_id}&section=${section.id}`}>
+        <Card.Section key={section.section_id}>
+          <Link href={`/catalog?city=${state.city_id}&section=${section.section_id}`}>
             {section.name_singular}
           </Link>
           {section.specs.map((spec) => (
-            <div key={spec.id} style={{display: "flex", gap: "10px"}}>
+            <div key={spec.spec_id} style={{display: "flex", gap: "10px"}}>
               <p>{spec.name_public}</p>
               <ul>
-                {state.options?.filter((option) => option.spec_id === spec.id).map((option) => (
-                  <li key={option.id}>
-                    <Link href={`/catalog?city=${state.city_id}&section=${section?.id}&options=${option.spec_id}:${option.id}`}>{option.name}</Link>
+                {state.options?.filter((option) => option.spec_id === spec.spec_id).map((option) => (
+                  <li key={option.option_id}>
+                    <Link href={`/catalog?city=${state.city_id}&section=${section?.section_id}&options=${option.spec_id}:${option.option_id}`}>{option.name}</Link>
                   </li>
                 ))}
               </ul>

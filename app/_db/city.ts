@@ -21,7 +21,7 @@ export const getCitiesByFilters = async (filters:{name?:string}):Promise<city[]>
 export const getCityById = async (id:number):Promise<city> => {
   const dbData = await prisma.city.findUnique({
     where: {
-      id: id
+      city_id: id
     }
   }) as city;
   return dbData;

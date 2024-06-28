@@ -34,7 +34,7 @@ export default function SectionEdit(props:{init:UISection}) {
 
   const handleSpecs = {
     add: (spec:UISpec) => {
-      if (!spec.id || state.specs?.some((stateSpec) => stateSpec.id === spec.id)) return;
+      if (!spec.spec_id || state.specs?.some((stateSpec) => stateSpec.spec_id === spec.spec_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.specs) draft.specs = [];
         draft.specs.push(spec);
@@ -42,19 +42,19 @@ export default function SectionEdit(props:{init:UISection}) {
     },
     delete: (id:number) => {
       setState((prevState) => create(prevState, (draft) => {
-        draft.specs = draft.specs?.filter((spec) => spec.id !== id);
+        draft.specs = draft.specs?.filter((spec) => spec.spec_id !== id);
       }))
     },
   }
 
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
-    const { id } = await upsertSection(state, props.init);
+    const { section_id } = await upsertSection(state, props.init);
     if (e.nativeEvent.submitter?.dataset?.leavePage) {
       router.push("/admin/sections");
       router.refresh();
     } else {
-      router.replace(`/admin/sections/${id}`, {scroll: false});
+      router.replace(`/admin/sections/${section_id}`, {scroll: false});
       router.refresh();
     }
   }
@@ -67,7 +67,7 @@ export default function SectionEdit(props:{init:UISection}) {
           <Control>
             <Control.Label>ID</Control.Label>
             <Control.Section>
-              <Input value={state?.id} disabled/>
+              <Input value={state?.section_id} disabled/>
             </Control.Section>
           </Control>
           <Control className="mt15">
@@ -116,15 +116,15 @@ export default function SectionEdit(props:{init:UISection}) {
             placeholder="Добавить свойство"
             requestItemsOnFirstTouch={async () =>
               (await getSpecsByFilters({objectType: state?.object_type}))
-                ?.map((spec) => ({id: spec.id, label: spec.name_service, data: spec}))
+                ?.map((spec) => ({id: spec.spec_id, label: spec.name_service, data: spec}))
             }
           />
           <ul style={{marginBlockStart: "5px"}}>
             {state?.specs?.map((spec) => (
-              <li key={spec.id}>
-                <Button onClick={() => handleSpecs.delete(spec.id!)}>X</Button>
-                <InputAddon>{spec.id}</InputAddon>
-                <Link href={`/admin/specs/${spec.id}`}>{spec.name_service}</Link>
+              <li key={spec.spec_id}>
+                <Button onClick={() => handleSpecs.delete(spec.spec_id!)}>X</Button>
+                <InputAddon>{spec.spec_id}</InputAddon>
+                <Link href={`/admin/specs/${spec.spec_id}`}>{spec.name_service}</Link>
               </li>
             ))}
           </ul>
@@ -132,7 +132,7 @@ export default function SectionEdit(props:{init:UISection}) {
       </Card>
 
       <EditBottomPanel
-        id={state?.id}
+        id={state?.section_id}
         delFunc={deleteSectionById}
         delRedirectPath="/admin/sections"
         exitRedirectPath="./"

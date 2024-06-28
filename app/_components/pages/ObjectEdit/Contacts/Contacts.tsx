@@ -17,7 +17,7 @@ export default function Contacts() {
     add: (type:UIContactTypeEnum) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft[type]) draft[type] = [];
-        draft[type] = draft[type]?.concat({id: -1, object_id: -1, value: "", order: draft[type]?.length ?? 0, uiID: crypto.randomUUID(), comment: ""})
+        draft[type] = draft[type]?.concat({contact_id: -1, object_id: -1, value: "", order: draft[type]?.length ?? 0, uiID: crypto.randomUUID(), comment: ""})
       }))
     },
     delete: (type:UIContactTypeEnum, uiID:string) => {

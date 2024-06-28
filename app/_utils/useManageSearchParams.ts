@@ -54,7 +54,6 @@ export const useManageSearchParams = () => {
   //       const valueSet = new Set(urlSearchParams.get(key)?.split(","));
   //       valueSet.has(value) ? valueSet.delete(value) : valueSet.add(value);
   //       const valueString = [...Array.from(valueSet)].toSorted((a, b) => a > b ? 1 : -1).join(",");
-  //       console.log( valueString )
   //       valueString === "" ? urlSearchParams.delete(key) : urlSearchParams.set(key, valueString);
   //       break;
   //     }

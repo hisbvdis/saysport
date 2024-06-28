@@ -18,8 +18,8 @@ export default function Categories(props:Props) {
       <Card.Section>
         <ul>
           {sectionList.map((section) => (
-            <li key={section.id}>
-              <Link href={manageSearchParams.set("section", String(section.id))}>{section.name_plural}</Link>
+            <li key={section.section_id}>
+              <Link href={manageSearchParams.set("section", String(section.section_id))}>{section.name_plural}</Link>
             </li>
           ))}
         </ul>

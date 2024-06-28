@@ -12,7 +12,7 @@ export default async function SectionPage({params}:{params:{id:string}}) {
       <Breadcrumbs items={[
         { label: "Админка", href: "/admin" },
         { label: "Разделы", href: "/admin/sections" },
-        { label: section?.id ? "Редактировать" : "Создать" },
+        { label: section?.section_id ? "Редактировать" : "Создать" },
       ]}/>
       <SectionEdit init={section}/>
     </main>

@@ -19,10 +19,10 @@ export default async function SpecListPage() {
         </Card.Section>
         <Card.Section>
           <ul>
-            {specs?.toSorted((a, b) => a.name_service.localeCompare(b.name_service)).map(({id, name_service}) => (
-              <li key={id} style={{display: "flex", gap: "10px"}}>
-                <DelBtn id={id} delFunc={deleteSpecById}/>
-                <Link href={`/admin/specs/${id}`}>{name_service}</Link>
+            {specs?.toSorted((a, b) => a.name_service.localeCompare(b.name_service)).map((spec) => (
+              <li key={spec.spec_id} style={{display: "flex", gap: "10px"}}>
+                <DelBtn id={spec.spec_id} delFunc={deleteSpecById}/>
+                <Link href={`/admin/specs/${spec.spec_id}`}>{spec.name_service}</Link>
               </li>
             ))}
           </ul>

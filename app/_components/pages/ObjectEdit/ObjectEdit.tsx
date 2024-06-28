@@ -39,12 +39,12 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null})
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
     const stateWithoutFiles = {...state, photos: state.photos?.map((photo) => ({...photo, file: undefined}))};
-    const { id } = await upsertObject(stateWithoutFiles, props.init);
-    await syncPhotos(id, state, props.init);
+    const { object_id } = await upsertObject(stateWithoutFiles, props.init);
+    await syncPhotos(object_id, state, props.init);
     if (e.nativeEvent.submitter?.dataset?.leavePage) {
-      router.push(`/object/${id}`);
+      router.push(`/object/${object_id}`);
     } else {
-      router.replace(`/object/${id}/edit`, {scroll: false});
+      router.replace(`/object/${object_id}/edit`, {scroll: false});
       router.refresh();
     }
   }

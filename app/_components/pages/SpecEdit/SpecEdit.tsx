@@ -34,7 +34,7 @@ export default function SpecEdit(props:{init:UISpec}) {
     add: () => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft?.options) draft.options = [];
-        draft.options.push({id: -1, spec_id: -1, name: "", order: draft.options.length, uiID: crypto.randomUUID()});
+        draft.options.push({option_id: -1, spec_id: -1, name: "", order: draft.options.length, uiID: crypto.randomUUID()});
       }))
     },
     change: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
@@ -53,12 +53,12 @@ export default function SpecEdit(props:{init:UISpec}) {
 
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
-    const { id } = await upsertSpec(state, props.init);
+    const { spec_id } = await upsertSpec(state, props.init);
     if (e.nativeEvent.submitter?.dataset?.leavePage) {
       router.push("/admin/specs");
       router.refresh();
     } else {
-      router.replace(`/admin/specs/${id}`, {scroll: false});
+      router.replace(`/admin/specs/${spec_id}`, {scroll: false});
       router.refresh();
     }
   }
@@ -71,7 +71,7 @@ export default function SpecEdit(props:{init:UISpec}) {
           <Control>
             <Control.Label>ID</Control.Label>
             <Control.Section>
-              <Input value={state?.id ?? ""} disabled/>
+              <Input value={state?.spec_id ?? ""} disabled/>
             </Control.Section>
           </Control>
           <Control className="mt15">
@@ -139,7 +139,7 @@ export default function SpecEdit(props:{init:UISpec}) {
             {state.options?.map((option) => (
               <li key={option.uiID} style={{display: "flex"}}>
                 <Button onClick={() => handleOptions.delete(option.uiID)} tabIndex={-1}>X</Button>
-                <InputAddon>{option.id}</InputAddon>
+                <InputAddon>{option.option_id}</InputAddon>
                 <Input value={option.name} onChange={(e) => handleOptions.change(e, option.uiID)} required/>
               </li>
             ))}
@@ -148,7 +148,7 @@ export default function SpecEdit(props:{init:UISpec}) {
       </Card>
 
       <EditBottomPanel
-        id={state.id}
+        id={state.spec_id}
         delFunc={deleteSpecById}
         delRedirectPath="/admin/specs"
         exitRedirectPath="./"

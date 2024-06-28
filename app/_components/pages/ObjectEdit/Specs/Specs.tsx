@@ -20,7 +20,7 @@ export default function Specs() {
 
   const handleSections = {
     add: (section:UISection) => {
-      if (!section.id || state.sections?.some((stateSection) => stateSection.id === section.id)) return;
+      if (!section.section_id || state.sections?.some((stateSection) => stateSection.section_id === section.section_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.sections) draft.sections = [];
         draft.sections.push(section);
@@ -28,9 +28,9 @@ export default function Specs() {
     },
     delete: (section:UISection) => {
       setState((prevState) => create(prevState, (draft) => {
-        draft.sections = draft.sections?.filter(({id}) => id !== section.id);
-        const optionsOfDeletedSection = section.specs?.flatMap((spec) => spec.options?.flatMap(({id}) => id));
-        draft.options = draft.options?.filter((option) => !optionsOfDeletedSection?.includes(option.id));
+        draft.sections = draft.sections?.filter(({section_id}) => section_id !== section.section_id);
+        const optionsOfDeletedSection = section.specs?.flatMap((spec) => spec.options?.flatMap(({spec_id}) => spec_id));
+        draft.options = draft.options?.filter((option) => !optionsOfDeletedSection?.includes(option.option_id));
       }));
     },
   }
@@ -42,14 +42,14 @@ export default function Specs() {
         if (e.target.checked) {
           draft.options = draft.options.concat(opt);
         } else {
-          draft.options = draft.options.filter(({id}) => id !== opt.id);
+          draft.options = draft.options.filter(({option_id}) => option_id !== opt.option_id);
         }
       }))
     },
     changeRadio: (spec:UISpec, opt:UIOption) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.options) draft.options = [];
-        draft.options = draft.options?.filter((stateOpt) => !spec.options?.map((opt) => opt.id).includes(stateOpt.id));
+        draft.options = draft.options?.filter((stateOpt) => !spec.options?.map((opt) => opt.option_id).includes(stateOpt.option_id));
         draft.options = draft.options?.concat(opt);
       }));
     },
@@ -60,27 +60,27 @@ export default function Specs() {
       <Card.Heading>Характеристики</Card.Heading>
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
         {state.sections?.map((section) => (
-          <FieldSet key={section.id} style={{display: "flex", gap: "20px"}}>
+          <FieldSet key={section.section_id} style={{display: "flex", gap: "20px"}}>
             <FieldSet.Legend style={{inlineSize: "200px"}}>
               <Button onClick={() => handleSections.delete(section)}>X</Button>
               <span>{section.name_singular}</span>
             </FieldSet.Legend>
             <FieldSet.Section  style={{display: "flex", gap: "10px"}}>
               {section.specs?.map((spec) => (
-                <Control key={spec.id}>
+                <Control key={spec.spec_id}>
                   <Control.Label>{spec.name_public}</Control.Label>
                   <Control.Section>
                     {spec.options_number === "many"
-                      ? <CheckboxGroup arrayToCompareWith={state.options?.map((option) => String(option.id))} required>
+                      ? <CheckboxGroup arrayToCompareWith={state.options?.map((option) => String(option.option_id))} required>
                         {spec.options?.map((option) => (
-                          <Checkbox key={option.id} value={String(option.id)} onChange={(e) => handleOptions.changeCheckbox(e, option)}>{option.name}</Checkbox>
+                          <Checkbox key={option.option_id} value={String(option.option_id)} onChange={(e) => handleOptions.changeCheckbox(e, option)}>{option.name}</Checkbox>
                         ))}
                         </CheckboxGroup>
                       :
                     spec.options_number === "one"
-                      ? <RadioGroup arrayToCompareWith={state.options?.map((option) => String(option.id))} required>
+                      ? <RadioGroup arrayToCompareWith={state.options?.map((option) => String(option.option_id))} required>
                         {spec.options?.map((option) => (
-                          <Radio key={option.id} value={String(option.id)} onChange={() => handleOptions.changeRadio(spec, option)}>{option.name}</Radio>
+                          <Radio key={option.option_id} value={String(option.option_id)} onChange={() => handleOptions.changeRadio(spec, option)}>{option.name}</Radio>
                         ))}
                         </RadioGroup>
                       : ""}
@@ -99,7 +99,7 @@ export default function Specs() {
           placeholder="Добавить раздел"
           requestItemsOnFirstTouch={async () =>
             (await getSectionsByFilters({objectType: state.type}))
-              .map((section) => ({id: section.id!, label: section.name_plural, data: section}))
+              .map((section) => ({id: section.section_id!, label: section.name_plural, data: section}))
           }
         />
         <RequiredInput isValidIf={Boolean(state.sections?.length)}/>

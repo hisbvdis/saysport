@@ -11,7 +11,7 @@ datasource db {
 // OBJECT
 // ===========================================================================
 model object {
-  id                   Int                 @id @default(autoincrement())
+  object_id            Int                 @id @default(autoincrement())
   type                 objectTypeEnum
   name                 String
   name_locative        String?
@@ -35,18 +35,18 @@ model object {
   schedule_source      String?
   schedule_comment     String?
   created              DateTime            @default(now())
-  modified             DateTime            @updatedAt
+  modified             DateTime            @default(now())
   // --------------------------
   sections             object_on_section[] @relation("object_section")
   options              object_on_option[]  @relation("object_option")
   // --------------------------
-  statusInstead        object?             @relation("status_instead", fields: [status_instead_id], references: [id])
+  statusInstead        object?             @relation("status_instead", fields: [status_instead_id], references: [object_id])
   statusInsteadRelated object[]            @relation("status_instead")
   // --------------------------
-  parent               object?             @relation("object_parent", fields: [parent_id], references: [id])
+  parent               object?             @relation("object_parent", fields: [parent_id], references: [object_id])
   children             object[]            @relation("object_parent")
   // --------------------------
-  city                 city?               @relation("object_city", fields: [city_id], references: [id])
+  city                 city?               @relation("object_city", fields: [city_id], references: [city_id])
   links                object_link[]       @relation("object_link")
   phones               object_phone[]      @relation("object_phone")
   photos               object_photo[]      @relation("object_photo")
@@ -58,7 +58,7 @@ model object {
 // SECTION / SPEC / OPTION
 // ===========================================================================
 model section {
-  id            Int                 @id @default(autoincrement())
+  section_id    Int                 @id @default(autoincrement())
   name_plural   String
   name_singular String
   object_type   objectTypeEnum
@@ -67,7 +67,7 @@ model section {
 }
 
 model spec {
-  id             Int               @id @default(autoincrement())
+  spec_id        Int               @id @default(autoincrement())
   name_service   String
   name_public    String
   object_type    objectTypeEnum
@@ -77,61 +77,64 @@ model spec {
 }
 
 model option {
-  id      Int                @id @default(autoincrement())
-  name    String
-  order   Int
-  spec_id Int
-  spec    spec?              @relation("option_spec", fields: [spec_id], references: [id], onDelete: Cascade)
-  objects object_on_option[] @relation("object_option")
+  option_id Int                @id @default(autoincrement())
+  name      String
+  order     Int
+  spec_id   Int
+  spec      spec?              @relation("option_spec", fields: [spec_id], references: [spec_id], onDelete: Cascade)
+  objects   object_on_option[] @relation("object_option")
 
   @@unique([order, spec_id])
 }
 
 model section_on_spec {
-  id         Int     @id @default(autoincrement())
   section_id Int
   spec_id    Int
-  section    section @relation("section_on_spec-section", fields: [section_id], references: [id], onDelete: Cascade)
-  spec       spec    @relation("section_on_spec-spec", fields: [spec_id], references: [id], onDelete: Restrict)
+  section    section @relation("section_on_spec-section", fields: [section_id], references: [section_id], onDelete: Cascade)
+  spec       spec    @relation("section_on_spec-spec", fields: [spec_id], references: [spec_id], onDelete: Restrict)
+
+  @@id([section_id, spec_id])
 }
 
 model object_on_section {
-  id         Int     @id @default(autoincrement())
   object_id  Int
   section_id Int
-  object     object  @relation("object_section", fields: [object_id], references: [id], onDelete: Cascade)
-  section    section @relation("object_section", fields: [section_id], references: [id], onDelete: Cascade)
+  object     object  @relation("object_section", fields: [object_id], references: [object_id], onDelete: Cascade)
+  section    section @relation("object_section", fields: [section_id], references: [section_id], onDelete: Cascade)
+
+  @@id([object_id, section_id])
 }
 
 model object_on_option {
-  id        Int    @id @default(autoincrement())
   object_id Int
   option_id Int
-  object    object @relation("object_option", fields: [object_id], references: [id], onDelete: Cascade)
-  option    option @relation("object_option", fields: [option_id], references: [id], onDelete: Restrict)
+  object    object @relation("object_option", fields: [object_id], references: [object_id], onDelete: Cascade)
+  option    option @relation("object_option", fields: [option_id], references: [option_id], onDelete: Restrict)
+
+  @@id([object_id, option_id])
 }
 
 // ===========================================================================
 // CONTACTS
 // ===========================================================================
 model object_link {
-  id        Int     @id @default(autoincrement())
+  contact_id   Int     @id @default(autoincrement())
   object_id Int
   order     Int
   value     String
   comment   String?
-  object    object  @relation("object_link", fields: [object_id], references: [id], onDelete: Cascade)
+  object    object  @relation("object_link", fields: [object_id], references: [object_id], onDelete: Cascade)
 
   @@unique([object_id, order])
 }
 
 model object_phone {
-  id        Int     @id @default(autoincrement())
+  contact_id  Int     @id @default(autoincrement())
   object_id Int
   order     Int
   value     String
   comment   String?
-  object    object  @relation("object_phone", fields: [object_id], references: [id], onDelete: Cascade)
+  object    object  @relation("object_phone", fields: [object_id], references: [object_id], onDelete: Cascade)
 
   @@unique([object_id, order])
 }
@@ -140,39 +143,39 @@ model object_phone {
 // PHOTO
 // ===========================================================================
 model object_photo {
-  id        Int      @id @default(autoincrement())
+  photo_id  Int      @id @default(autoincrement())
   object_id Int
   name      String
   order     Int
   uploaded  DateTime @default(now())
-  object    object   @relation("object_photo", fields: [object_id], references: [id], onDelete: Cascade)
+  object    object   @relation("object_photo", fields: [object_id], references: [object_id], onDelete: Cascade)
 }
 
 // ===========================================================================
 // SCHEDULE
 // ===========================================================================
 model object_schedule {
-  id        Int    @id @default(autoincrement())
-  object_id Int
-  day_num   Int
-  time      String
-  from      Int
-  to        Int
-  object    object @relation("object_schedule", fields: [object_id], references: [id], onDelete: Cascade)
+  schedule_id Int    @id @default(autoincrement())
+  object_id   Int
+  day_num     Int
+  time        String
+  from        Int
+  to          Int
+  object      object @relation("object_schedule", fields: [object_id], references: [object_id], onDelete: Cascade)
 
   @@unique([object_id, day_num])
 }
 
 model city {
-  id                Int      @id
-  name              String
-  admin1            String?
-  admin2            String?
-  country           String
-  coord_lat         Float
-  cootd_lon         Float
+  city_id   Int      @id
+  name      String
+  admin1    String?
+  admin2    String?
+  country   String
+  coord_lat Float
+  coord_lon Float
   // --------------------------
-  objects           object[] @relation("object_city")
+  objects   object[] @relation("object_city")
 }
 
 // ===========================================================================

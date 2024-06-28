@@ -9,11 +9,11 @@ import { specReadProcessing } from "./spec.processing";
 
 export const getEmptySpec = async ():Promise<UISpec> => {
   return {
-    id: -1,
+    spec_id: -1,
     name_service: "",
     name_public: "",
-    object_type: $Enums.objectTypeEnum.org as $Enums.objectTypeEnum,
-    options_number: $Enums.optionsNumberEnum.many as $Enums.optionsNumberEnum,
+    object_type: $Enums.objectTypeEnum.org,
+    options_number: $Enums.optionsNumberEnum.many,
     uiID: crypto.randomUUID(),
   }
 }
@@ -31,7 +31,7 @@ export const getSpecsByFilters = async (filters?:{objectType?:$Enums.objectTypeE
 export const getSpecById = async (id: number):Promise<UISpec> => {
   const dbData = await prisma.spec.findUnique({
     where: {
-      id: id,
+      spec_id: id,
     },
     include: {
       options: { orderBy: { order: "asc" } },
@@ -45,7 +45,7 @@ export const getSpecById = async (id: number):Promise<UISpec> => {
 export const deleteSpecById = async (id:number): Promise<void> => {
   await prisma.spec.delete({
     where: {
-      id: id
+      spec_id: id
     }
   });
   revalidatePath("/admin/specs", "page");
@@ -58,12 +58,12 @@ export const upsertSpec = async (state:UISpec, init:UISpec):Promise<spec> => {
     object_type: state.object_type,
     options_number: state.options_number,
   }
-  const optionsAdded = state.options?.filter((stateOption) => !init.options?.some((initOption) => initOption.id === stateOption.id));
+  const optionsAdded = state.options?.filter((stateOption) => !init.options?.some((initOption) => initOption.option_id === stateOption.option_id));
   const optionsChanged = state.options?.filter((stateOption) => init.options?.some((initOption) => stateOption.uiID === initOption.uiID && (stateOption.name !== initOption.name || stateOption.order !== initOption.order)));
-  const optionsDeleted = init.options?.filter((initOption) => !state.options?.some((stateOption) => stateOption.id === initOption.id));
+  const optionsDeleted = init.options?.filter((initOption) => !state.options?.some((stateOption) => stateOption.option_id === initOption.option_id));
   const response = await prisma.spec.upsert({
     where: {
-      id: state?.id ?? -1
+      spec_id: state?.spec_id ?? -1
     },
     create: {
       ...fields,
@@ -75,8 +75,8 @@ export const upsertSpec = async (state:UISpec, init:UISpec):Promise<spec> => {
       ...fields,
       options: {
         create: optionsAdded?.length ? optionsAdded.map((opt) => ({...opt, id:undefined, spec_id: undefined, uiID: undefined})) : undefined,
-        update: optionsChanged?.length ? optionsChanged.map((opt) => ({where: {id: opt.id}, data: {...opt, id:undefined, uiID: undefined, spec_id: undefined}})) : undefined,
-        deleteMany: optionsDeleted?.length ? optionsDeleted.map(({id}) => ({id: id})) : undefined
+        update: optionsChanged?.length ? optionsChanged.map((opt) => ({where: {option_id: opt.option_id}, data: {...opt, id:undefined, uiID: undefined, spec_id: undefined}})) : undefined,
+        deleteMany: optionsDeleted?.length ? optionsDeleted.map(({option_id}) => ({option_id: option_id})) : undefined
       }
     }
   });

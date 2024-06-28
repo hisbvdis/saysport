@@ -19,8 +19,8 @@ export default function Children() {
       <Card.Section>
         <ul style={{display: "flex"}}>
           {state.children?.map((child) => (
-            <li key={child.id}>
-              <Link href={`/object/${child.id}`} style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "5px"}}>
+            <li key={child.object_id}>
+              <Link href={`/object/${child.object_id}`} style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "5px"}}>
                 <img src={child.photos?.length ? `/photos/${child.photos[0].name}` : "/no-photo.svg"} width="178" height="120" style={{width: "178px", height: "120px", objectFit: "cover"}} alt="Image" loading="lazy"/>
                 <span>{child.name}</span>
               </Link>

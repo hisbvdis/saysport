@@ -21,11 +21,11 @@ export default function Filters(props:Props) {
 
   const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:UISpec) => {
     if (e.target.checked) {
-      setAndSpecs(andSpecs.concat(spec.id))
-      router.push(manageSearchParams.set("options", searchParams.options?.split(",").map((v) => v.startsWith(`${spec.id}:`) ? `!${v}` : v).join(",")!))
+      setAndSpecs(andSpecs.concat(spec.spec_id))
+      router.push(manageSearchParams.set("options", searchParams.options?.split(",").map((v) => v.startsWith(`${spec.spec_id}:`) ? `!${v}` : v).join(",")!))
     } else {
-      setAndSpecs(andSpecs.filter((v) => v !== spec.id));
-      router.push(manageSearchParams.set("options", searchParams.options?.split(",").map((v) => v.startsWith(`!${spec.id}:`) ? v.slice(1) : v).join(",")!))
+      setAndSpecs(andSpecs.filter((v) => v !== spec.spec_id));
+      router.push(manageSearchParams.set("options", searchParams.options?.split(",").map((v) => v.startsWith(`!${spec.spec_id}:`) ? v.slice(1) : v).join(",")!))
     }
   }
 
@@ -44,16 +44,16 @@ export default function Filters(props:Props) {
         </Link>
       </Card.Heading>
       {section?.specs.map((spec) => (
-        <Card.Section key={spec.id}>
+        <Card.Section key={spec.spec_id}>
           <Control>
             <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
               <span>{spec.name_public}</span>
-              <Checkbox value={spec.id} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>
+              <Checkbox value={spec.spec_id} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>
             </Control.Label>
             <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
               {spec.options?.map((opt) => (
-                <Link key={opt.id} href={manageSearchParams.appendOrClear("options", `${andSpecs.includes(spec.id) ? "!" : ""}${spec.id}:${opt.id}`)}>
-                  <Checkbox value={`${andSpecs.includes(spec.id) ? "!" : ""}${spec.id}:${opt.id}`} tabIndex={-1}>{opt.name}</Checkbox>
+                <Link key={opt.option_id} href={manageSearchParams.appendOrClear("options", `${andSpecs.includes(spec.spec_id) ? "!" : ""}${spec.spec_id}:${opt.option_id}`)}>
+                  <Checkbox value={`${andSpecs.includes(spec.spec_id) ? "!" : ""}${spec.spec_id}:${opt.option_id}`} tabIndex={-1}>{opt.name}</Checkbox>
                 </Link>
               ))}
             </CheckboxGroup>

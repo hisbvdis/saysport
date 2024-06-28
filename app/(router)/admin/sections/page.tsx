@@ -20,10 +20,10 @@ export default async function SectionListPage() {
         <Card.Section style={{flex: "50%"}}>
           <h3>Организации</h3>
           <ul>
-            {sections.filter(({object_type}) => object_type === "org").map(({id, name_plural}) => (
-              <li key={id} style={{display: "flex", gap: "10px"}}>
-                <DelBtn id={id!} delFunc={deleteSectionById}/>
-                <Link href={`/admin/sections/${id}`}>{name_plural}</Link>
+            {sections.filter(({object_type}) => object_type === "org").map((section) => (
+              <li key={section.section_id} style={{display: "flex", gap: "10px"}}>
+                <DelBtn id={section.section_id!} delFunc={deleteSectionById}/>
+                <Link href={`/admin/sections/${section.section_id}`}>{section.name_plural}</Link>
               </li>
             ))}
           </ul>
@@ -31,10 +31,10 @@ export default async function SectionListPage() {
         <Card.Section style={{flex: "50%"}}>
           <h3>Места</h3>
           <ul>
-            {sections.filter(({object_type}) => object_type === "place").map(({id, name_plural}) => (
-              <li key={id} style={{display: "flex", gap: "10px"}}>
-                <DelBtn id={id!} delFunc={deleteSectionById}/>
-                <Link href={`/admin/sections/${id}`}>{name_plural}</Link>
+            {sections.filter(({object_type}) => object_type === "place").map((section) => (
+              <li key={section.section_id} style={{display: "flex", gap: "10px"}}>
+                <DelBtn id={section.section_id!} delFunc={deleteSectionById}/>
+                <Link href={`/admin/sections/${section.section_id}`}>{section.name_plural}</Link>
               </li>
             ))}
           </ul>
