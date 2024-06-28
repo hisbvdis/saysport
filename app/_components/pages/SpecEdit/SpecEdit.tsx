@@ -53,7 +53,7 @@ export default function SpecEdit(props:{init:UISpec}) {
 
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
-    const { spec_id } = await upsertSpec(state, props.init);
+    const [{ spec_id }] = await upsertSpec(state, props.init);
     if (e.nativeEvent.submitter?.dataset?.leavePage) {
       router.push("/admin/specs");
       router.refresh();

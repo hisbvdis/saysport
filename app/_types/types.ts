@@ -1,10 +1,11 @@
-import { city, object as object_, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option, section, section_on_spec, spec } from "@prisma/client";
+import { OptionSelect, SpecSelect } from "@/drizzle/schema";
+import { city, object as object_, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option as option_, section, section_on_spec, spec as spec_ } from "@prisma/client";
 
 // =============================================================================
 // DB TYPES
 // =============================================================================
-export interface DBSpec extends spec {
-  options: option[]
+export interface DBSpec extends SpecSelect {
+  options: OptionSelect[]
 }
 
 export interface DBSection extends section {
@@ -17,8 +18,8 @@ export interface DBObject extends object_ {
   parent?: object_ | null;
   phones?: object_phone[];
   links?: object_link[];
-  sections?: (object_on_section & {section: section & {specs: (section_on_spec & {spec: spec & {options: option[]}})[]}})[];
-  options?: (object_on_option & {option: option})[];
+  sections?: (object_on_section & {section: section & {specs: (section_on_spec & {spec: spec_ & {options: option_[]}})[]}})[];
+  options?: (object_on_option & {option: option_})[];
   schedule?: object_schedule[];
   photos?: object_photo[];
   children?: DBObject[],
@@ -27,11 +28,11 @@ export interface DBObject extends object_ {
 // =============================================================================
 // UI TYPES
 // =============================================================================
-export interface UIOption extends option {
+export interface UIOption extends OptionSelect {
   uiID: string;
 }
 
-export interface UISpec extends spec {
+export interface UISpec extends SpecSelect {
   options?: UIOption[];
   uiID: string;
 };
