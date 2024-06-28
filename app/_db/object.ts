@@ -20,12 +20,11 @@ export const getObjectsByFilters = async (filters?:Filters) => {
   const cityId = filters?.city ? Number(filters?.city) : undefined;
   const sectionId = filters?.section ? Number(filters.section) : undefined;
   const optionIds = filters?.options ?? undefined;
-  const groupedOptions = Object.entries(
-    optionIds
+  const groupedOptions = Object.entries(optionIds
     ? optionIds /* "1:1,1:2,!2:3" */
       .split(",") /* ["1:1"],["1:2"],["!2:3"] */
       .map((str) => str.split(":")) /* ["1":"1"],["1":"2"],["!2":"3"] */
-      .reduce((acc, [key, value]) => ({...acc,[key]: acc[key] ? [...acc[key], Number(value)] : [Number(value)]}), {} as {[key:string]: number[]}) /* { '1': [ 1, 2 ] } */
+      .reduce((acc, [key, value]) => ({...acc,[key]: acc[key] ? [...acc[key], Number(value)] : [Number(value)]}), {} as {[key:string]: number[]}) /* ['1',[1,2], ["!2",[5,6]]] */
     : {}
   )
   const dbData = await prisma.object.findMany({

@@ -34,14 +34,14 @@ export default function Filters(props:Props) {
       <Card.Heading style={{display: "flex", alignItems: "center"}}>
         <span style={{marginInlineEnd: "auto"}}>{section?.name_plural}</span>
         {searchParams.options
-          ? <Link href={manageSearchParams.delete("options")} style={{display: "flex", alignItems: "center"}}>
+          ? <a href={manageSearchParams.delete("options")} style={{display: "flex", alignItems: "center"}}>
               <img src="/icons/bin.svg" width={24} height={24} alt="Map Pin" style={{inlineSize: "19px", blockSize: "19px"}}/>
-            </Link>
+            </a>
           : null
         }
-        <Link href={manageSearchParams.delete(["section", "options"])}>
+        <a href={manageSearchParams.delete(["section", "options"])}>
           <img src="/icons/close.svg" width={15} height={20} alt="Close Icon"/>
-        </Link>
+        </a>
       </Card.Heading>
       {section?.specs.map((spec) => (
         <Card.Section key={spec.spec_id}>

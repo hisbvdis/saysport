@@ -118,23 +118,23 @@ model object_on_option {
 // CONTACTS
 // ===========================================================================
 model object_link {
-  contact_id   Int     @id @default(autoincrement())
-  object_id Int
-  order     Int
-  value     String
-  comment   String?
-  object    object  @relation("object_link", fields: [object_id], references: [object_id], onDelete: Cascade)
+  contact_id Int     @id @default(autoincrement())
+  object_id  Int
+  order      Int
+  value      String
+  comment    String?
+  object     object  @relation("object_link", fields: [object_id], references: [object_id], onDelete: Cascade)
 
   @@unique([object_id, order])
 }
 
 model object_phone {
-  contact_id  Int     @id @default(autoincrement())
-  object_id Int
-  order     Int
-  value     String
-  comment   String?
-  object    object  @relation("object_phone", fields: [object_id], references: [object_id], onDelete: Cascade)
+  contact_id Int     @id @default(autoincrement())
+  object_id  Int
+  order      Int
+  value      String
+  comment    String?
+  object     object  @relation("object_phone", fields: [object_id], references: [object_id], onDelete: Cascade)
 
   @@unique([object_id, order])
 }
@@ -167,15 +167,16 @@ model object_schedule {
 }
 
 model city {
-  city_id   Int      @id
-  name      String
-  admin1    String?
-  admin2    String?
-  country   String
-  coord_lat Float
-  coord_lon Float
+  city_id          Int      @id
+  name             String
+  admin1           String?
+  admin2           String?
+  country          String
+  coord_lat        Float
+  coord_lon        Float
+  name_preposition String
   // --------------------------
-  objects   object[] @relation("object_city")
+  objects          object[] @relation("object_city")
 }
 
 // ===========================================================================

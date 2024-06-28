@@ -21,8 +21,7 @@ export default function Results() {
           {label: section?.name_plural ?? ""}
         ]}/>
         <h1 style={{fontWeight: "400"}}>
-          {/* <span>{section?.name_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span> */}
-          <span>{section?.name_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name}` : null}</span>
+          <span>{section?.name_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
           <sup style={{fontSize: "0.5em"}}>{results?.length}</sup>
         </h1>
       </Card.Heading>
@@ -41,11 +40,9 @@ export default function Results() {
             <p>{object.city?.name}, {object.address}</p>
             <hr/>
             <ul style={{display: "flex", gap: "10px", flexWrap: "wrap", listStyle: "none", paddingInlineStart: 0}}>
-              {object.options?.map(({option}) => {
-                return (
-                  <li key={option?.option_id}>{option?.name}</li>
-                )
-              })}
+              {object.options?.map(({option}) => (
+                <li key={option?.option_id}>{option?.name}</li>
+              ))}
             </ul>
           </div>
         </Card.Section>

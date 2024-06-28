@@ -33,7 +33,7 @@ export default function Catalog(props:Props) {
                 isAutocomplete
                 value={city?.city_id ? Number(city?.city_id) : ""}
                 label={city?.name}
-                onChange={(e) => router.push(manageSearchParams.set("city", e.target.value))}
+                onChange={(e) => {e.target.value ? router.push(manageSearchParams.set("city", e.target.value)) : router.push(manageSearchParams.delete("city"))}}
                 placeholder="Введите название"
                 requestItemsOnInputChange={async (value) => (
                   await getCitiesByFilters({name: value})).map((city) => ({
