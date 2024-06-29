@@ -1,15 +1,15 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useContext, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
+import { UISpec } from "@/app/_types/types";
 import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
-import { useRouter } from "next/navigation";
-import { UISpec } from "@/app/_types/types";
 
 
 export default function Filters(props:Props) {
@@ -34,9 +34,9 @@ export default function Filters(props:Props) {
       <Card.Heading style={{display: "flex", alignItems: "center"}}>
         <span style={{marginInlineEnd: "auto"}}>{section?.name_plural}</span>
         {searchParams.options
-          ? <a href={manageSearchParams.delete("options")} style={{display: "flex", alignItems: "center"}}>
+          ? <Link href={manageSearchParams.delete("options")} style={{display: "flex", alignItems: "center"}}>
               <img src="/icons/bin.svg" width={24} height={24} alt="Map Pin" style={{inlineSize: "19px", blockSize: "19px"}}/>
-            </a>
+            </Link>
           : null
         }
         <a href={manageSearchParams.delete(["section", "options"])}>

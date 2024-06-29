@@ -19,7 +19,6 @@ export const getEmptySpec = async ():Promise<UISpec> => {
   }
 }
 
-
 export const getSpecsByFilters = async (filters?:{objectType?:objectTypeEnum}) => {
   const objectType = filters?.objectType;
   const dbData = await db.query.spec.findMany({
@@ -27,7 +26,6 @@ export const getSpecsByFilters = async (filters?:{objectType?:objectTypeEnum}) =
   })
   return dbData;
 }
-
 
 export const getSpecById = async (id: number):Promise<UISpec> => {
   const dbData = await db.query.spec.findFirst({
@@ -41,14 +39,12 @@ export const getSpecById = async (id: number):Promise<UISpec> => {
   return processed;
 };
 
-
 export const deleteSpecById = async (id:number): Promise<void> => {
   await db.delete(spec).where(
     eq(spec.spec_id, id)
   );
   revalidatePath("/admin/specs", "page");
 }
-
 
 export const upsertSpec = async (state:UISpec, init:UISpec):Promise<SpecSelect> => {
   const fields = {

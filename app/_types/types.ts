@@ -1,4 +1,4 @@
-import { OptionSelect, SpecSelect } from "@/drizzle/schema";
+import { OptionSelect, SectionOnSpecSelect, SectionSelect, SpecSelect } from "@/drizzle/schema";
 import { city, object as object_, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option as option_, section, section_on_spec, spec as spec_ } from "@prisma/client";
 
 // =============================================================================
@@ -8,8 +8,8 @@ export interface DBSpec extends SpecSelect {
   options: OptionSelect[]
 }
 
-export interface DBSection extends section {
-  specs: (section_on_spec & { spec: DBSpec })[];
+export interface DBSection extends SectionSelect {
+  sectionOnSpec: (SectionOnSpecSelect & { spec: DBSpec })[];
 }
 
 export interface DBObject extends object_ {
@@ -37,7 +37,7 @@ export interface UISpec extends SpecSelect {
   uiID: string;
 };
 
-export interface UISection extends section {
+export interface UISection extends SectionSelect {
   specs: UISpec[];
   uiID: string;
 }

@@ -15,7 +15,7 @@ export default function Results() {
   return (
     <Card>
       <Card.Heading>
-        <Breadcrumbs style={{marginBlockEnd: "5px"}} items={[
+        <Breadcrumbs style={{fontSize: "0.85em", marginBlockEnd: "5px"}} items={[
           {label: "Каталог", href: city || section ? "/catalog" : null},
           {label: city?.name ?? "", href: section?.section_id ? `/catalog?city=${city?.city_id}` : null},
           {label: section?.name_plural ?? ""}
