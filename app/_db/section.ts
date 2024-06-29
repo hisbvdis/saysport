@@ -34,7 +34,7 @@ export const getSectionById = async (id:number):Promise<UISection> => {
     where: eq(section.section_id, id),
     with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
   })
-  if (dbData === undefined) throw new Error("getSectionById returned null");
+  if (dbData === undefined) throw new Error("getSectionById returned undefined");
   const processed = sectionReadProcessing(dbData);
   return processed;
 }

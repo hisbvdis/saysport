@@ -1,5 +1,5 @@
-import { relations } from "drizzle-orm";
-import { integer, pgEnum, pgTable, primaryKey, serial, varchar } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
+import { AnyPgColumn, boolean, doublePrecision, integer, pgEnum, pgTable, primaryKey, serial, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 
 export enum objectTypeEnum {org="org", place="place"};
 export const objectTypeColumnType = pgEnum("objectType", ["org", "place"]);
@@ -80,3 +80,164 @@ export const sectionOnSpecRelations = relations(section_on_spec, ({ one }) => ({
 }))
 
 export type SectionOnSpecSelect = typeof section_on_spec.$inferSelect;
+
+
+// ===========================================================================
+// CITY
+// ===========================================================================
+export const city = pgTable("city", {
+  city_id: serial("city_id").primaryKey(),
+  name: varchar("name").notNull(),
+  name_preposition: varchar("name_preposition").notNull(),
+  admin1: varchar("admin1"),
+  admin2: varchar("admin2"),
+  country: varchar("country").notNull(),
+  coord_lat: doublePrecision("coord_lat").notNull(),
+  coord_lon: doublePrecision("coord_lon").notNull(),
+})
+
+export const cityRelations = relations(city, ({ many }) => ({
+  objects: many(object),
+}))
+
+export type CitySelect = typeof city.$inferSelect;
+
+
+// ===========================================================================
+// OBJECT
+// ===========================================================================
+export const object = pgTable("object", {
+  object_id: serial("object_id").notNull(),
+  type: objectTypeColumnType("type").notNull(),
+  name: varchar("name").notNull(),
+  name_locative: varchar("name_locative"),
+  name_where: varchar("name_where"),
+  status_inherit: boolean("status_inherit"),
+  status: objectStatusColumnType("status").notNull(),
+  status_comment: varchar("status_comment"),
+  status_confirm: varchar("status_confirm"),
+  status_instead_id: integer("status_instead_id").references(():AnyPgColumn => object.object_id),
+  city_id: integer("city_id").notNull().references(() => city.city_id),
+  parent_id: integer("parent_id").references(():AnyPgColumn => object.object_id),
+  address: varchar("address"),
+  address_2: varchar("address_2"),
+  coord_inherit: boolean("coord_inherit"),
+  coord_lat: doublePrecision("coord_lat"),
+  coord_lon: doublePrecision("coord_lon"),
+  description: varchar("description"),
+  schedule_inherit: boolean("schedule_inherit"),
+  schedule_24_7: boolean("schedule_24_7"),
+  schedule_date: timestamp("schedule_date"),
+  schedule_source: varchar("schedule_source"),
+  schedule_comment: varchar("schedule_comment"),
+  created: timestamp("created").notNull().defaultNow(),
+  modified: timestamp("modified").notNull().defaultNow(),
+})
+
+export const objectRelations = relations(object, ({ one, many }) => ({
+  objectOnSection: many(object_on_section),
+  objectOnOption: many(object_on_option),
+  // --------------------------
+  statusInstead: one(object, {fields: [object.status_instead_id], references: [object.object_id]}),
+  parent: one(object, {fields: [object.parent_id], references: [object.object_id]}),
+  children: many(object),
+  // --------------------------
+  city: one(city, {fields: [object.city_id], references: [city.city_id]}),
+  links: many(object_link),
+  phones: many(object_phone),
+  photos: many(object_photo),
+  schedules: many(object_schedule),
+}))
+
+
+// ===========================================================================
+// OBJECT_ON_SECTION / OBJECT_ON_OPTION
+// ===========================================================================
+export const object_on_section = pgTable("object_on_section", {
+  object_id: integer("object_id").notNull().references(() => object.object_id),
+  section_id: integer("section_id").notNull().references(() => section.section_id)
+}, (table) => ({
+  pk: primaryKey({columns: [table.object_id, table.section_id]})
+}))
+
+export const objectOnSectionRelations = relations(object_on_section, ({ one }) => ({
+  object: one(object, {fields: [object_on_section.object_id], references: [object.object_id]}),
+  section: one(section, {fields: [object_on_section.section_id], references: [section.section_id]}),
+}))
+
+export const object_on_option = pgTable("object_on_option", {
+  object_id: integer("object_id").notNull().references(() => object.object_id),
+  option_id: integer("option_id").notNull().references(() => option.option_id)
+}, (table) => ({
+  pk: primaryKey({columns: [table.object_id, table.option_id]})
+}))
+
+export const objectOnOptionRelations = relations(object_on_option, ({ one }) => ({
+  object: one(object, {fields: [object_on_option.object_id], references: [object.object_id]}),
+  option: one(option, {fields: [object_on_option.option_id], references: [option.option_id]}),
+}))
+
+
+// ===========================================================================
+// CONTACTS
+// ===========================================================================
+export const object_link = pgTable("object_link", {
+  object_id: integer("object_id").notNull().references(() => object.object_id),
+  order: integer("order").notNull(),
+  value: varchar("value").notNull(),
+  comment: varchar("value"),
+}, (table) => ({
+  pk: primaryKey({columns: [table.object_id, table.order]})
+}))
+
+export const objectLinkRelations = relations(object_link, ({ one }) => ({
+  object: one(object, {fields: [object_link.object_id], references: [object.object_id]})
+}))
+
+export const object_phone = pgTable("object_phone", {
+  object_id: integer("object_id").notNull().references(() => object.object_id),
+  order: integer("order").notNull(),
+  value: varchar("value").notNull(),
+  comment: varchar("value"),
+}, (table) => ({
+  pk: primaryKey({columns: [table.object_id, table.order]})
+}))
+
+export const objectPhoneRelations = relations(object_phone, ({ one }) => ({
+  object: one(object, {fields: [object_phone.object_id], references: [object.object_id]})
+}))
+
+
+// ===========================================================================
+// PHOTO
+// ===========================================================================
+export const object_photo = pgTable("object_photo", {
+  object_id: integer("object_id").notNull().references(() => object.object_id),
+  order: integer("order").notNull(),
+  name: varchar("name").notNull(),
+  uploaded: timestamp("uploaded").notNull().defaultNow(),
+}, (table) => ({
+  pk: primaryKey({columns: [table.object_id, table.order, table.name]})
+}))
+
+export const objectPhotoRelations = relations(object_photo, ({ one }) => ({
+  object: one(object, {fields: [object_photo.object_id], references: [object.object_id]}),
+}))
+
+
+// ===========================================================================
+// SCHEDULE
+// ===========================================================================
+export const object_schedule = pgTable("object_schedule", {
+  object_id: integer("object_id").notNull().references(() => object.object_id),
+  day_num: integer("day_num").notNull(),
+  time: varchar("time").notNull(),
+  from: integer("from").notNull(),
+  to: integer("to").notNull(),
+}, (table) => ({
+  pk: primaryKey({columns: [table.object_id, table.day_num]})
+}))
+
+export const objectScheduleRelations = relations(object_schedule, ({ one }) => ({
+  object: one(object, {fields: [object_schedule.object_id], references: [object.object_id]}),
+}))

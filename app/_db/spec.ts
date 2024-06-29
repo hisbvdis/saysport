@@ -34,7 +34,7 @@ export const getSpecById = async (id: number):Promise<UISpec> => {
       options: true,
     }
   });
-  if (dbData === undefined) throw new Error("getSpecById returned null");
+  if (dbData === undefined) throw new Error("getSpecById returned undefined");
   const processed = specReadProcessing(dbData);
   return processed;
 };

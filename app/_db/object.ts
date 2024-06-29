@@ -74,7 +74,7 @@ export const getObjectById = async (id:number) => {
       children: {include: {photos: true, phones: true, links: true, schedule: true}},
     }
   });
-  if (dbData === null) throw new Error("getObjectById returned null");
+  if (dbData === null) throw new Error("getObjectById returned undefined");
   const processed = objectReadProcessing(dbData);
   return processed;
 }

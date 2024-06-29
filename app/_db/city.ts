@@ -1,28 +1,25 @@
 "use server";
-import { prisma } from "@/prisma/dbClient";
-import { city } from "@prisma/client";
+import { db } from "@/drizzle/client";
+import { eq, ilike, sql } from "drizzle-orm";
+import { CitySelect, city } from "@/drizzle/schema";
+// -----------------------------------------------------------------------------
 
-export const getCitiesByFilters = async (filters:{name?:string}):Promise<city[]> => {
-  const dbData = await prisma.$queryRawUnsafe(`
-    SELECT
-      *
-    FROM
-      city
-    WHERE
-      name ilike '${filters?.name}%'
-    ORDER BY
-      length(name),
-      name
-    LIMIT 25
-  `) as city[];
+
+export const getCitiesByFilters = async (filters:{name?:string}):Promise<CitySelect[]> => {
+  const cityName = filters?.name;
+  const dbData = await db
+    .select()
+    .from(city)
+    .where(cityName ? ilike(city.name, `${cityName}%`) : undefined)
+    .orderBy(sql`length(${city.name}), ${city.name}`)
+    .limit(25)
   return dbData;
 }
 
-export const getCityById = async (id:number):Promise<city> => {
-  const dbData = await prisma.city.findUnique({
-    where: {
-      city_id: id
-    }
-  }) as city;
+export const getCityById = async (id:number):Promise<CitySelect> => {
+  const dbData = await db.query.city.findFirst({
+    where: eq(city.city_id, id)
+  })
+  if (dbData === undefined) throw new Error("getCityById returned undefined");
   return dbData;
 }
