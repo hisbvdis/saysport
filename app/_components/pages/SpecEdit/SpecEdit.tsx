@@ -34,7 +34,7 @@ export default function SpecEdit(props:{init:UISpec}) {
     add: () => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft?.options) draft.options = [];
-        draft.options.push({option_id: -1, spec_id: -1, name: "", order: draft.options.length, uiID: crypto.randomUUID()});
+        draft.options.push({option_id: 0, spec_id: 0, name: "", order: draft.options.length, uiID: crypto.randomUUID()});
       }))
     },
     change: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
@@ -53,7 +53,7 @@ export default function SpecEdit(props:{init:UISpec}) {
 
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
-    const [{ spec_id }] = await upsertSpec(state, props.init);
+    const { spec_id } = await upsertSpec(state, props.init);
     if (e.nativeEvent.submitter?.dataset?.leavePage) {
       router.push("/admin/specs");
       router.refresh();
