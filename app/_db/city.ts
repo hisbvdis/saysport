@@ -1,11 +1,11 @@
 "use server";
 import { db } from "@/drizzle/client";
 import { eq, ilike, sql } from "drizzle-orm";
-import { CitySelect, city } from "@/drizzle/schema";
+import { City, city } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 
 
-export const getCitiesByFilters = async (filters:{name?:string}):Promise<CitySelect[]> => {
+export const getCitiesByFilters = async (filters:{name?:string}):Promise<City[]> => {
   const cityName = filters?.name;
   const dbData = await db
     .select()
@@ -16,7 +16,7 @@ export const getCitiesByFilters = async (filters:{name?:string}):Promise<CitySel
   return dbData;
 }
 
-export const getCityById = async (id:number):Promise<CitySelect> => {
+export const getCityById = async (id:number):Promise<City> => {
   const dbData = await db.query.city.findFirst({
     where: eq(city.city_id, id)
   })

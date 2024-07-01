@@ -15,7 +15,7 @@ import styles from "./styles.module.css";
 export default function Select(props:Props) {
   const { requestItemsOnInputChange, requestItemsOnFirstTouch, requestMinInputLenght=3 } = props;
   const { onChange=(e=>e), onChangeData=(e=>e) } = props;
-  const { placeholder, disabled, isAutocomplete } = props;
+  const { placeholder, disabled, isAutocomplete, required } = props;
   const [ localItems, setLocalItems ] = useState(props.items ?? []);
   const [ suggestions, setSuggestions ] = useState(localItems);
   const [ selectedItem, setSelectedItem ] = useState<Item | undefined>(isAutocomplete ? {id: props.value ?? "", label: props.label ?? ""} : localItems?.find((item) => item.id === props.value));
@@ -147,6 +147,7 @@ export default function Select(props:Props) {
           placeholder={placeholder}
           disabled={disabled}
           readOnly={!isAutocomplete}
+          required={required}
         />
         {isAutocomplete ? null :
           <Button className={clsx(styles["select__btn"], styles["select__btn--arrow"])} disabled={disabled} tabIndex={-1}>
@@ -185,6 +186,7 @@ interface Props {
   onChangeData?: (data: any) => any;
   placeholder?: string;
   disabled?: boolean;
+  required?: boolean;
 }
 
 interface Item {

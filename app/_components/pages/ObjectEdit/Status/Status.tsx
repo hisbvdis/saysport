@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import { useContext } from "react";
-import { $Enums } from "@prisma/client";
 // -----------------------------------------------------------------------------
 import { Input } from "@/app/_components/ui/Input";
 import { Select } from "@/app/_components/ui/Select";
@@ -9,6 +8,7 @@ import { Control } from "@/app/_components/ui/Control";
 import { ObjectEditContext } from "../ObjectEdit";
 import { create } from "mutative";
 import { getObjectsByFilters } from "@/app/_db/object";
+import { objectStatusEnum } from "@/drizzle/schema";
 
 
 export default function Status(props:Props) {
@@ -26,11 +26,11 @@ export default function Status(props:Props) {
             onChange={handleStateChange?.value}
             disabled={Boolean(state?.status_inherit)}
             items={[
-              {id: $Enums.objectStatusEnum.works, label: "Работает"},
-              {id: $Enums.objectStatusEnum.open_soon, label: "Скоро открытие"},
-              {id: $Enums.objectStatusEnum.might_not_work, label: "Возможно, не работает"},
-              {id: $Enums.objectStatusEnum.closed_temp, label: "Временно закрыто"},
-              {id: $Enums.objectStatusEnum.closed_forever, label: "Закрыто навсегда"},
+              {id: objectStatusEnum.works, label: "Работает"},
+              {id: objectStatusEnum.open_soon, label: "Скоро открытие"},
+              {id: objectStatusEnum.might_closed, label: "Возможно, не работает"},
+              {id: objectStatusEnum.closed_temp, label: "Временно закрыто"},
+              {id: objectStatusEnum.closed_forever, label: "Закрыто навсегда"},
             ]}
           />
         </Control.Section>
@@ -42,7 +42,7 @@ export default function Status(props:Props) {
             name="status_comment"
             value={state?.status_comment}
             onChange={handleStateChange?.value}
-            disabled={state?.status_inherit || state?.status === $Enums.objectStatusEnum.works}
+            disabled={state?.status_inherit || state?.status === objectStatusEnum.works}
           />
         </Control.Section>
       </Control>
@@ -53,7 +53,7 @@ export default function Status(props:Props) {
             name="status_confirm"
             value={state?.status_confirm}
             onChange={handleStateChange?.value}
-            disabled={state?.status_inherit || state?.status === $Enums.objectStatusEnum.works}
+            disabled={state?.status_inherit || state?.status === objectStatusEnum.works}
           />
         </Control.Section>
       </Control>
@@ -68,7 +68,7 @@ export default function Status(props:Props) {
             onChangeData={(data) => setState(create((draft) => {draft.statusInstead = data}))}
             isAutocomplete
             placeholder="Введите название"
-            disabled={state?.status_inherit || state?.status !== $Enums.objectStatusEnum.closed_forever}
+            disabled={state?.status_inherit || state?.status !== objectStatusEnum.closed_forever}
             requestItemsOnInputChange={
               async (value) => (await getObjectsByFilters({city: String(state.city_id), type: state?.type, query: value}))
               ?.filter((object) => object.object_id !== state?.id)

@@ -1,6 +1,7 @@
 "use server";
-import { prisma } from "@/prisma/dbClient"
-import { $Enums, object as object_ } from "@prisma/client"
+import { db } from "@/drizzle/client";
+import { and, eq, ilike, inArray } from "drizzle-orm";
+import { Object_ as Object_, object, objectStatusEnum, objectTypeEnum, objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -9,14 +10,18 @@ import { SearchParamsType } from "../(router)/catalog/page";
 
 export const getEmptyObject = async ():Promise<UIObject> => {
   return {
-    type: $Enums.objectTypeEnum.org,
-    status: $Enums.objectStatusEnum.works,
-    schedule: Array(7).fill(null).map((_,i) => ({ schedule_id: -1, object_id: -1, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
+    name: "",
+    city_id: 0,
+    object_id: 0,
+    type: objectTypeEnum.org,
+    status: objectStatusEnum.works,
+    schedule: Array(7).fill(null).map((_,i) => ({ object_id: 0, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
   }
 }
 
 export const getObjectsByFilters = async (filters?:Filters) => {
-  const { query, type } = filters ?? {};
+  const type = filters?.type;
+  const query = filters?.query;
   const cityId = filters?.city ? Number(filters?.city) : undefined;
   const sectionId = filters?.section ? Number(filters.section) : undefined;
   const optionIds = filters?.options ?? undefined;
@@ -27,78 +32,74 @@ export const getObjectsByFilters = async (filters?:Filters) => {
       .reduce((acc, [key, value]) => ({...acc,[key]: acc[key] ? [...acc[key], Number(value)] : [Number(value)]}), {} as {[key:string]: number[]}) /* ['1',[1,2], ["!2",[5,6]]] */
     : {}
   )
-  const dbData = await prisma.object.findMany({
-    where: {
-      name: query ? {contains: query, mode: "insensitive"} : undefined,
-      city_id: cityId,
-      type: type,
-      sections: sectionId ? {some: {section_id: {equals: sectionId}}} : undefined,
+  const objectIdsWithSectionId = sectionId ? (await db.select({objectId: object_on_section.object_id}).from(object_on_section).where(eq(object_on_section.section_id, sectionId))).map(({objectId}) => objectId) : undefined;
+  const dbData = await db.query.object.findMany({
+    where: and(
+      query ? ilike(object.name, `%${query}%`) : undefined,
+      cityId ? eq(object.city_id, cityId) : undefined,
+      type ? eq(object.type, type) : undefined,
+      (sectionId && objectIdsWithSectionId?.length) ? inArray(object.object_id, objectIdsWithSectionId) : undefined,
       // AND: optionValues?.length ? optionValues.map((ids) => ({options: {some: {option_id: {in: ids}}}})) : undefined,
-      AND: groupedOptions?.length ? groupedOptions.map(([specId, optionsArr]:[string, number[]]) => specId.startsWith("!") ? ({options: {every: {option_id: {in: optionsArr}}}}) : ({options: {some: {option_id: {in: optionsArr}}}})) : undefined,
-    },
-    include: {
+      // AND: groupedOptions?.length ? groupedOptions.map(([specId, optionsArr]:[string, number[]]) => specId.startsWith("!") ? ({options: {every: {option_id: {in: optionsArr}}}}) : ({options: {some: {option_id: {in: optionsArr}}}})) : undefined,
+    ),
+    with: {
       statusInstead: true,
       city: true,
       parent: true,
-      phones: {orderBy: {order: "asc"}},
-      links: {orderBy: {order: "asc"}},
-      options: {include: {option: true}},
+      phones: true,
+      links: true,
+      objectOnOption: {with: {option: true}},
       schedule: true,
-      photos: {orderBy: {order: "asc"}},
-      sections: {include: {section: {include: {specs: {include: {spec: {include: {options: true}}}}}}}},
+      photos: true,
+      objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
     },
   });
   return dbData;
 }
 
 interface Filters extends SearchParamsType {
-  type?: $Enums.objectTypeEnum;
+  type?: objectTypeUnion;
   query?: string;
 }
 
 export const getObjectById = async (id:number) => {
-  const dbData = await prisma.object.findUnique({
-    where: {
-      object_id: id
-    },
-    include: {
+  const dbData = await db.query.object.findFirst({
+    where: eq(object.object_id, id),
+    with: {
       statusInstead: true,
       city: true,
       parent: true,
-      phones: {orderBy: {order: "asc"}},
-      links: {orderBy: {order: "asc"}},
-      sections: {include: {section: {include: {specs: {include: {spec: {include: {options: true}}}}}}}},
-      options: {include: {option: true}},
+      phones: true,
+      links: true,
+      objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
+      objectOnOption: {with: {option: true}},
       schedule: true,
-      photos: {orderBy: {order: "asc"}},
-      children: {include: {photos: true, phones: true, links: true, schedule: true}},
+      photos: true,
+      children: {with: {photos: true, phones: true, links: true, schedule: true}},
     }
   });
-  if (dbData === null) throw new Error("getObjectById returned undefined");
+  if (dbData === undefined) throw new Error("getObjectById returned undefined");
   const processed = objectReadProcessing(dbData);
   return processed;
 }
 
 export const deleteObjectById = async (id:number) => {
-  await prisma.object.delete({
-    where: {
-      object_id: id
-    }
-  })
+  await db.delete(object).where(eq(object.object_id, id));
 }
 
-export const upsertObject = async (state:UIObject, init: UIObject): Promise<object_> => {
+export const upsertObject = async (state:UIObject, init: UIObject): Promise<Object_> => {
   const fields = {
-    name: state.name!,
+    object_id: state.object_id || undefined,
+    name: state.name,
     name_locative: state.name_locative || null,
     name_where: state.name_where || null,
     type: state.type!,
-    status: state.status || null,
+    status: state.status,
     status_inherit: state.status_inherit || null,
     status_comment: state.status_comment || null,
     status_confirm: state.status_confirm || null,
     status_instead_id: state.status_instead_id || null,
-    city_id: state.city_id || null,
+    city_id: state.city_id,
     parent_id: state.parent_id || null,
     address: state.address || null,
     address_2: state.address_2 || null,
@@ -111,127 +112,92 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<obje
     schedule_date: state.schedule_date || null,
     schedule_source: state.schedule_source || null,
     schedule_comment: state.schedule_comment || null,
+    created: state.created ? state.created : new Date(),
   };
-  const phonesAdded = state.phones?.filter((statePhone) => !init?.phones?.some((initPhone) => statePhone.uiID === initPhone.uiID && statePhone.value !== ""));
+
+  const [ upsertedObject ] = await db.insert(object).values(fields).onConflictDoUpdate({target: object.object_id, set: {...fields}}).returning();
+  const children = await db.select({object_id: object.object_id}).from(object).where(eq(object.parent_id, upsertedObject.object_id));
+
+  const phonesAdded = state.phones?.filter((statePhone) => !init?.phones?.some((initPhone) => statePhone.uiID === initPhone.uiID) && statePhone.value !== "");
+  if (phonesAdded?.length) {
+    await db.insert(object_phone).values(phonesAdded.map((phone) => ({...phone, object_id:upsertedObject.object_id})));
+    children.length && children.forEach(async (child) => await db.insert(object_phone).values(phonesAdded.map((phone) => ({...phone, object_id:child.object_id}))));
+  }
   const phonesChanged = state.phones?.filter((statePhone) => init.phones?.some((initPhone) => statePhone.uiID === initPhone.uiID && (statePhone.value !== initPhone.value || statePhone.comment !== initPhone.comment)));
+  if (phonesChanged?.length) {
+    phonesChanged.forEach(async (phone) => await db.update(object_phone).set({...phone, object_id: upsertedObject.object_id}).where(and(eq(object_phone.object_id, upsertedObject.object_id), eq(object_phone.order, phone.order))));
+    children.length && children.forEach(async (child) => phonesChanged.forEach(async (phone) => await db.update(object_phone).set({...phone, object_id: child.object_id}).where(and(eq(object_phone.object_id, child.object_id), eq(object_phone.order, phone.order)))));
+  }
   const phonesDeleted = init.phones?.filter((initPhone) => !state.phones?.some((statePhone) => initPhone.uiID === statePhone.uiID));
-  const linksAdded = state.links?.filter((stateLink) => !init?.links?.some((initLink) => stateLink.uiID === initLink.uiID && stateLink.value !== ""));
+  if (phonesDeleted?.length) {
+    await db.delete(object_phone).where(and(eq(object_phone.object_id, upsertedObject.object_id), inArray(object_phone.order, phonesDeleted.map((phone) => phone.order))));
+    children.length && children.forEach(async (child) => phonesDeleted.forEach(async (phone) => await db.delete(object_phone).where(and(eq(object_phone.object_id, child.object_id), inArray(object_phone.order, phonesDeleted.map((phone) => phone.order))))));
+  }
+
+  const linksAdded = state.links?.filter((stateLink) => !init?.links?.some((initLink) => stateLink.uiID === initLink.uiID) && stateLink.value !== "");
+  if (linksAdded?.length) {
+    await db.insert(object_link).values(linksAdded?.map((link) => ({...link, object_id:upsertedObject.object_id})));
+    children.length && children.forEach(async (child) => await db.insert(object_link).values(linksAdded?.map((link) => ({...link, object_id:child.object_id}))));
+  }
   const linksChanged = state.links?.filter((stateLink) => init.links?.some((initLink) => stateLink.uiID === initLink.uiID && (stateLink.value !== initLink.value || stateLink.comment !== initLink.comment)));
+  if (linksChanged?.length) {
+    linksChanged.forEach(async (link) => await db.update(object_link).set({...link, object_id: upsertedObject.object_id}).where(and(eq(object_link.object_id, upsertedObject.object_id), eq(object_link.order, link.order))));
+    children.length && children.forEach(async (child) => linksChanged.forEach(async (link) => await db.update(object_link).set({...link, object_id: child.object_id}).where(and(eq(object_link.object_id, child.object_id), eq(object_link.order, link.order)))));
+  }
   const linksDeleted = init.links?.filter((initLink) => !state.links?.some((stateLink) => initLink.uiID === stateLink.uiID));
-  const optionsAdded = state.options?.filter((stateOption) => !init?.options?.some((initOption) => stateOption.option_id === initOption.option_id));
-  const optionsDeleted = init.options?.filter((initOption) => !state.options?.some((stateOption) => initOption.option_id === stateOption.option_id));
+  if (linksDeleted?.length) {
+    await db.delete(object_link).where(and(eq(object_link.object_id, upsertedObject.object_id), inArray(object_link.order, linksDeleted.map((link) => link.order))));
+    children.length && children.forEach(async (child) => await db.delete(object_link).where(and(eq(object_link.object_id, child.object_id), inArray(object_link.order, linksDeleted.map((link) => link.order)))));
+  }
+
   const sectionsAdded = state.sections?.filter((stateSection) => !init?.sections?.some((initSection) => stateSection.section_id === initSection.section_id));
+  if (sectionsAdded?.length) {
+    await db.insert(object_on_section).values(sectionsAdded.map((section) => ({...section, object_id: upsertedObject.object_id})));
+    children.length && children.forEach(async (child) => await db.insert(object_on_section).values(sectionsAdded.map((section) => ({...section, object_id: child.object_id}))));
+  }
   const sectionsDeleted = init.sections?.filter((initSection) => !state.sections?.some((stateSection) => initSection.section_id === stateSection.section_id));
+  if (sectionsDeleted?.length) {
+    await db.delete(object_on_section).where(and(eq(object_on_section.object_id, upsertedObject.object_id), inArray(object_on_section.section_id, sectionsDeleted.map((section) => section.section_id))));
+    children.length && children.forEach(async (child) => await db.delete(object_on_section).where(and(eq(object_on_section.object_id, upsertedObject.object_id), inArray(object_on_section.section_id, sectionsDeleted.map((section) => section.section_id)))));
+  }
+
+  const optionsAdded = state.options?.filter((stateOption) => !init?.options?.some((initOption) => stateOption.option_id === initOption.option_id));
+  if (optionsAdded?.length) {
+    await db.insert(object_on_option).values(optionsAdded.map((option) => ({...option, object_id: upsertedObject.object_id})));
+    children.length && children.forEach(async (child) => await db.insert(object_on_option).values(optionsAdded.map((option) => ({...option, object_id: child.object_id}))));
+  }
+  const optionsDeleted = init.options?.filter((initOption) => !state.options?.some((stateOption) => initOption.option_id === stateOption.option_id));
+  if (optionsDeleted?.length) {
+    await db.delete(object_on_option).where(and(eq(object_on_option.object_id, upsertedObject.object_id), inArray(object_on_option.option_id, optionsDeleted.map((opt) => opt.option_id))));
+    children.length && children.forEach(async (child) => await db.delete(object_on_option).where(and(eq(object_on_option.object_id, child.object_id), inArray(object_on_option.option_id, optionsDeleted.map((opt) => opt.option_id)))));
+  }
+
   const scheduleAdded = state.schedule?.filter((stateDay) => init.schedule?.some((initDay) => stateDay.day_num === initDay.day_num && !initDay.time && stateDay.time));
-  const scheduleChanged = state.schedule?.filter((stateDay) => init.schedule?.some((initDay) => stateDay.day_num === initDay.day_num && initDay.schedule_id !== -1 && stateDay.time && stateDay.time !== initDay.time));
+  if (scheduleAdded?.length) {
+    await db.insert(object_schedule).values(scheduleAdded.map((schedule) => ({...schedule, object_id: upsertedObject.object_id})));
+    children.length && children.forEach(async (child) => await db.insert(object_schedule).values(scheduleAdded.map((schedule) => ({...schedule, object_id: child.object_id}))));
+  }
+  const scheduleChanged = state.schedule?.filter((stateDay) => init.schedule?.some((initDay) => stateDay.day_num === initDay.day_num && stateDay.time && stateDay.time !== initDay.time));
+  if (scheduleChanged?.length) {
+    scheduleChanged.forEach(async (schedule) => await db.update(object_schedule).set({...schedule, object_id:undefined}).where(and(eq(object_schedule.object_id, upsertedObject.object_id), eq(object_schedule.day_num, schedule.day_num))));
+    children.length && children.forEach(async (child) => scheduleChanged.forEach(async (schedule) => await db.update(object_schedule).set({...schedule, object_id:undefined}).where(and(eq(object_schedule.object_id, child.object_id), eq(object_schedule.day_num, schedule.day_num)))));
+  }
   const scheduleDeleted = init.schedule?.filter((initDay) => state.schedule?.some((stateDay) => initDay.day_num === stateDay.day_num && initDay.time && !stateDay.time));
+  if (scheduleDeleted?.length) {
+    await db.delete(object_schedule).where(and(eq(object_schedule.object_id, upsertedObject.object_id), inArray(object_schedule.day_num, scheduleDeleted.map((schedule) => schedule.day_num))));
+    children.length && children.forEach(async (child) => await db.delete(object_schedule).where(and(eq(object_schedule.object_id, child.object_id), inArray(object_schedule.day_num, scheduleDeleted.map((schedule) => schedule.day_num)))));
+  }
+
   const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));
+  if (photosAdded?.length) {
+    await db.insert(object_photo).values(photosAdded.map((photo) => ({...photo, name: photo.name.replace("ID", String(upsertedObject.object_id)), object_id: upsertedObject.object_id})));
+    children.length && children.forEach(async (child) => await db.insert(object_photo).values(photosAdded.map((photo) => ({...photo, name: photo.name.replace("ID", String(child.object_id)), object_id: child.object_id}))));
+  }
   const photosDeleted = init.photos?.filter((initPhoto) => !state.photos?.some((statePhoto) => initPhoto.uiID === statePhoto.uiID));
+  if (photosDeleted?.length) {
+    await db.delete(object_photo).where(and(eq(object_photo.object_id, upsertedObject.object_id), inArray(object_photo.order, photosDeleted.map((photo) => photo.order))));
+    children.length && children.forEach(async (child) => await db.delete(object_photo).where(and(eq(object_photo.object_id, upsertedObject.object_id), inArray(object_photo.order, photosDeleted.map((photo) => photo.order)))));
+  }
   // const photosMoved = state.photos?.filter((statePhoto) => init.photos?.some((initPhoto) => statePhoto.localId === initPhoto.localId && statePhoto.order !== initPhoto.order));
-  const addedObject = await prisma.object.upsert({
-    where: {
-      object_id: state.id ?? -1
-    },
-    create: {
-      ...fields,
-      phones: {
-        create: phonesAdded?.length ? phonesAdded.map((item) => ({...item, contact_id: undefined, uiID: undefined, object_id: undefined})) : undefined,
-      },
-      links: {
-        create: linksAdded?.length ? linksAdded.map((item) => ({...item, contact_id: undefined, uiID: undefined, object_id: undefined})) : undefined,
-      },
-      options: {
-        create: optionsAdded?.length ? optionsAdded.map(({option_id}) => ({option: {connect: {option_id}}})) : undefined,
-      },
-      sections: {
-        create: sectionsAdded?.length ? sectionsAdded.map(({section_id}) => ({section: {connect: {section_id}}})) : undefined,
-      },
-      schedule: {
-        create: scheduleAdded?.length ? scheduleAdded.map((day) => ({...day, schedule_id: undefined, object_id: undefined, uiID: undefined, isWork: undefined})) : undefined,
-      },
-      photos: {
-        // Don't: The
-      },
-      // created: new Date(),
-    },
-    update: {
-      ...fields,
-      phones: {
-        create: phonesAdded?.length ? phonesAdded.map((item) => ({...item, contact_id: undefined, uiID: undefined, object_id: undefined})) : undefined,
-        update: phonesChanged?.length ? phonesChanged.map((item) => ({where: {contact_id: item.contact_id}, data: {...item, contact_id: undefined, uiID: undefined, object_id: undefined}})) : undefined,
-        deleteMany: phonesDeleted?.length ? phonesDeleted.map((item) => ({...item, uiID: undefined})) : undefined,
-      },
-      links: {
-        create: linksAdded?.length ? linksAdded.map((item) => ({...item, contact_id: undefined, uiID: undefined, object_id: undefined})) : undefined,
-        update: linksChanged?.length ? linksChanged.map((item) => ({where: {contact_id: item.contact_id}, data: {...item, contact_id: undefined, uiID: undefined, object_id: undefined}})) : undefined,
-        deleteMany: linksDeleted?.length ? linksDeleted.map((item) => ({...item, uiID: undefined})) : undefined,
-      },
-      options: {
-        create: optionsAdded?.length ? optionsAdded.map(({option_id}) => ({option: {connect: {option_id}}})) : undefined,
-        deleteMany: optionsDeleted?.length ? {option_id: {in: optionsDeleted.map(({option_id}) => option_id!)}} : undefined,
-      },
-      sections: {
-        create: sectionsAdded?.length ? sectionsAdded.map(({section_id}) => ({section: {connect: {section_id}}})) : undefined,
-        deleteMany: sectionsDeleted?.length ? {section_id: {in: sectionsDeleted.map(({section_id}) => section_id!)}} : undefined,
-      },
-      schedule: {
-        create: scheduleAdded?.length ? scheduleAdded.map((day) => ({...day, schedule_id: undefined, object_id: undefined, uiID: undefined, isWork: undefined})) : undefined,
-        update: scheduleChanged?.length ? scheduleChanged.map((day) => ({where: {schedule_id: day.schedule_id}, data: {...day, schedule_id: undefined, object_id: undefined, uiID: undefined, isWork: undefined}})) : undefined,
-        deleteMany: scheduleDeleted?.length ? {schedule_id: {in: scheduleDeleted.map(({schedule_id}) => schedule_id)}} : undefined,
-      },
-      photos: {
-        create: photosAdded?.length ? photosAdded.map(({name, order}) => ({name, order})) : undefined,
-        // update: photosMoved?.length ? photosMoved.map((photo) => ({where: {id: photo.id}, data: {order: photo.order}})) : undefined,
-        deleteMany: photosDeleted?.length ? {photo_id: {in: photosDeleted.map(({photo_id}) => photo_id)}} : undefined,
-      },
-      modified: new Date(),
-      children: {
-        update: state.children?.length ? state.children.map((child) => ({where: {object_id: child.object_id}, data: {
-          name_where: child.name_where !== state.name_locative ? state.name_locative : undefined,
-          status: child.status_inherit && child.status !== state.status ? state.status : undefined,
-          status_comment: child.status_inherit && child.status_comment !== state.status_comment ? state.status_comment : undefined,
-          status_confirm: child.status_inherit && child.status_confirm !== state.status_confirm ? state.status_confirm : undefined,
-          status_instead_id: child.status_inherit && child.status_instead_id !== state.status_instead_id ? state.status_instead_id : undefined,
-          city_id: child.city_id !== state.city_id ? state.city_id : undefined,
-          address: child.address !== state.address ? state.address : undefined,
-          address_2: child.address_2 !== state.address_2 ? state.address_2 : undefined,
-          coord_lat: child.coord_inherit && child.coord_lat !== state.coord_lat ? state.coord_lat : undefined,
-          coord_lon: child.coord_inherit && child.coord_lat !== state.coord_lat ? state.coord_lon : undefined,
-          schedule_24_7: child.schedule_inherit && child.schedule_24_7 !== state.schedule_24_7 ? state.schedule_24_7 : undefined,
-          schedule_date: child.schedule_inherit && child.schedule_date !== state.schedule_date ? state.schedule_date  : null,
-          schedule_source: child.schedule_inherit && child.schedule_source !== state.schedule_source ? state.schedule_source : undefined,
-          schedule_comment: child.schedule_inherit && child.schedule_comment !== state.schedule_comment ? state.schedule_comment : undefined,
-          phones: {
-            create: phonesAdded?.length ? phonesAdded.map((item) => ({...item, contact_id: undefined, uiID: undefined, object_id: undefined})) : undefined,
-            update: phonesChanged?.length ? phonesChanged.map((item) => ({where: {object_id_order: {object_id: child.object_id, order: item.order}}, data: {...item, id: undefined, uiID: undefined, object_id: undefined}})) : undefined,
-            delete: phonesDeleted?.length ? phonesDeleted.map((item) => ({object_id_order: {object_id: child.object_id, order: item.order}})) : undefined,
-          },
-          links: {
-            create: linksAdded?.length ? linksAdded.map((item) => ({...item, contact_id: undefined, uiID: undefined, object_id: undefined})) : undefined,
-            update: linksChanged?.length ? linksChanged.map((item) => ({where: {object_id_order: {object_id: child.object_id, order: item.order}}, data: {...item, id: undefined, uiID: undefined, object_id: undefined}})) : undefined,
-            delete: linksDeleted?.length ? linksDeleted.map((item) => ({object_id_order: {object_id: child.object_id, order: item.order}})) : undefined,
-          },
-          schedule: {
-            create: (child.schedule_inherit && scheduleAdded?.length) ? scheduleAdded.map((day) => ({...day, isWork: undefined, id: undefined, uiID: undefined, object_id: undefined})) : undefined,
-            update: (child.schedule_inherit && scheduleChanged?.length) ? scheduleChanged.map((day) => ({where: {object_id_day_num: {object_id: child.object_id, day_num: day.day_num}}, data: {...day, id: undefined, object_id: undefined, uiID: undefined, isWork: undefined}})) : undefined,
-            delete: (child.schedule_inherit && scheduleDeleted?.length) ? scheduleDeleted.map((day) => ({object_id_day_num: {object_id: child.object_id, day_num: day.day_num}})) : undefined,
-          },
-          modified: new Date(),
-        }})) : undefined
-      }
-    }
-  });
-   // Rename photo names of created object
-   if (!state.object_id && state.photos?.length) {
-    const updatedObject = await prisma.object.update({
-      where: {object_id: addedObject.object_id},
-      data: {
-        photos: {
-          create: state.photos.map(({name, order}) => ({ name: name.replace("ID", String(addedObject.object_id)),order})),
-        }
-      },
-    });
-    return updatedObject;
-  };
-  return addedObject
+  return upsertedObject;
 }

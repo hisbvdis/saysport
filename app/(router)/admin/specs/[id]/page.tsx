@@ -11,7 +11,7 @@ export default async function SpecEditPage({params}:{params: {id:string}}) {
     <main className="container page">
       <Breadcrumbs items={[
         { label: "Админка", href: "/admin" },
-        { label: "Свойства", href: "/admin/specs" },
+        { label: "Характеристики", href: "/admin/specs" },
         { label: spec?.spec_id ? "Редактировать" : "Создать" }
       ]}/>
       <SpecEdit init={spec}/>

@@ -1,4 +1,4 @@
-import { $Enums } from "@prisma/client";
+import { objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { ObjectEdit } from "@/app/_components/pages/ObjectEdit/";
@@ -16,7 +16,7 @@ export default async function AddObjectPage({params, searchParams}:Props) {
         { label: "Каталог", href: "/catalog" },
         { label: `Добавить ${params.type === "org" ? "организацию" : "место"}` },
       ]}/>
-      <ObjectEdit init={{...emptyObject, type: params.type as $Enums.objectTypeEnum}} parent={parentObject}/>
+      <ObjectEdit init={{...emptyObject, type: params.type as objectTypeEnum}} parent={parentObject}/>
     </main>
   )
 }

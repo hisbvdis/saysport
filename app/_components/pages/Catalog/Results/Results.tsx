@@ -40,7 +40,7 @@ export default function Results() {
             <p>{object.city?.name}, {object.address}</p>
             <hr/>
             <ul style={{display: "flex", gap: "10px", flexWrap: "wrap", listStyle: "none", paddingInlineStart: 0}}>
-              {object.options?.map(({option}) => (
+              {object.objectOnOption?.map(({option}) => (
                 <li key={option?.option_id}>{option?.name}</li>
               ))}
             </ul>

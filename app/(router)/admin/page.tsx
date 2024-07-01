@@ -14,7 +14,7 @@ export default async function AdminPage() {
             <Link href="/admin/sections">Разделы</Link>
           </li>
           <li>
-            <Link href="/admin/specs">Свойства</Link>
+            <Link href="/admin/specs">Характеристики</Link>
           </li>
         </ul>
       </Card>

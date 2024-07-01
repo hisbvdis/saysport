@@ -1,56 +1,64 @@
-import { OptionSelect, SectionOnSpecSelect, SectionSelect, SpecSelect } from "@/drizzle/schema";
-import { city, object as object_, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option as option_, section, section_on_spec, spec as spec_ } from "@prisma/client";
+import { City, Object_Link, Object_On_Option, Object_Phone, Object_Photo, Object_Schedule, Object_, Option, Section_On_Spec, Section, Spec, objectTypeEnum, Object_On_Section, objectStatusEnum, objectTypeUnion, objectStatusUnion } from "@/drizzle/schema";
+
 
 // =============================================================================
 // DB TYPES
 // =============================================================================
-export interface DBSpec extends SpecSelect {
-  options: OptionSelect[]
+export interface DBSpec extends Spec {
+  options: Option[]
 }
 
-export interface DBSection extends SectionSelect {
-  sectionOnSpec: (SectionOnSpecSelect & { spec: DBSpec })[];
+export interface DBSection extends Section {
+  sectionOnSpec: (Section_On_Spec & { spec: DBSpec })[];
 }
 
-export interface DBObject extends object_ {
-  statusInstead?: object_ | null;
-  city?: city | null;
-  parent?: object_ | null;
-  phones?: object_phone[];
-  links?: object_link[];
-  sections?: (object_on_section & {section: section & {specs: (section_on_spec & {spec: spec_ & {options: option_[]}})[]}})[];
-  options?: (object_on_option & {option: option_})[];
-  schedule?: object_schedule[];
-  photos?: object_photo[];
+export interface DBObject extends Object_ {
+  type: objectTypeUnion;
+  status: objectStatusUnion;
+  statusInstead?: Object_ | null;
+  city?: City;
+  parent?: Object_ | null;
+  phones?: Object_Phone[];
+  links?: Object_Link[];
+  objectOnSection?: (Object_On_Section & {section: Section & {sectionOnSpec: (Section_On_Spec & {spec: Spec & {options: Option[]}})[]}})[];
+  objectOnOption?: (Object_On_Option & {option: Option})[];
+  schedule?: Object_Schedule[];
+  photos?: Object_Photo[];
   children?: DBObject[],
 }
+
 
 // =============================================================================
 // UI TYPES
 // =============================================================================
-export interface UIOption extends OptionSelect {
+export interface UIOption extends Option {
   uiID: string;
 }
 
-export interface UISpec extends SpecSelect {
+export interface UISpec extends Spec {
   options?: UIOption[];
   uiID: string;
 };
 
-export interface UISection extends SectionSelect {
+export interface UISection extends Section {
   specs: UISpec[];
   uiID: string;
 }
 
-export interface UIObject extends Partial<object_> {
-  city?: city | null;
-  parent?: object_ | UIObject | null;
-  phones?: (object_phone & {uiID: string})[];
-  links?: (object_link & {uiID: string})[];
+export interface UIObject extends Partial<Object_> {
+  name: string;
+  city_id: number;
+  type: objectTypeUnion;
+  status: objectStatusUnion;
+  statusInstead?: Object_ | null;
+  city?: City;
+  parent?: Object_ | UIObject | null;
+  phones?: (Object_Phone & {uiID: string})[];
+  links?: (Object_Link & {uiID: string})[];
   sections?: UISection[];
   options?: UIOption[];
-  schedule: (object_schedule & {uiID: string, isWork: boolean})[];
-  photos?: (object_photo & {uiID: string, blob?: string, file?: File})[];
+  schedule: (Object_Schedule & {uiID: string, isWork: boolean})[];
+  photos?: (Object_Photo & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
   [key: string]: any;
 }

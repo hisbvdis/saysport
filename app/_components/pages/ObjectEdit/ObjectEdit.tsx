@@ -1,6 +1,5 @@
 "use client";
 import { create } from "mutative";
-import { $Enums } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, ChangeEventHandler, SetStateAction, SyntheticEvent, createContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
@@ -12,6 +11,7 @@ import { UIObject } from "@/app/_types/types";
 import { syncPhotos } from "./Photos/syncPhotos";
 import { setInheritedData } from "./Address/setInheritedData";
 import { deleteObjectById, upsertObject } from "@/app/_db/object";
+import { objectTypeEnum } from "@/drizzle/schema";
 
 
 export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null}) {
@@ -51,8 +51,8 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null})
 
   return (
     <ObjectEditContext.Provider value={{ state, setState, handleStateChange }}>
-      <Form onSubmit={handleFormSubmit}>
-        {state.type === $Enums.objectTypeEnum.org ? <NameOrg/> : <NamePlace/>}
+      <Form onSubmit={handleFormSubmit} noValidate>
+        {state.type === objectTypeEnum.org ? <NameOrg/> : <NamePlace/>}
         <Address/>
         <Contacts/>
         <Specs/>
@@ -60,7 +60,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null})
         <Schedule/>
         <Photos/>
         <EditBottomPanel
-          id={state.id}
+          id={state.object_id}
           delFunc={deleteObjectById}
           exitRedirectPath="./"
           delRedirectPath="/catalog"

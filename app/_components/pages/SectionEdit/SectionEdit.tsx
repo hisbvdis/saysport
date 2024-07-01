@@ -108,14 +108,14 @@ export default function SectionEdit(props:{init:UISection}) {
       </Card>
 
       <Card style={{marginBlockStart: "10px"}}>
-        <Card.Heading>Свойства</Card.Heading>
+        <Card.Heading>Характеристики</Card.Heading>
         <Card.Section>
           <Select
             isAutocomplete
             onChangeData={handleSpecs.add}
-            placeholder="Добавить свойство"
+            placeholder="Добавить характеристику"
             requestItemsOnFirstTouch={async () =>
-              (await getSpecsByFilters({objectType: state?.object_type}))
+              (await getSpecsByFilters({objectType: state.object_type}))
                 ?.map((spec) => ({id: spec.spec_id, label: spec.name_service, data: spec}))
             }
           />

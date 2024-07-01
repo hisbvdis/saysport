@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { createContext } from "react";
-import { city } from "@prisma/client";
+import { City } from "@/drizzle/schema";
 import { useRouter } from "next/navigation";
 // -----------------------------------------------------------------------------
 import { Card } from "../../ui/Card";
@@ -58,7 +58,7 @@ interface Props {
   results: DBObject[];
   sectionList: UISection[];
   searchParams: SearchParamsType;
-  city?: city;
+  city?: City;
   section?: UISection;
 }
 
@@ -67,5 +67,5 @@ interface CatalogContextType {
   searchParams: SearchParamsType;
   sectionList: UISection[];
   section?: UISection;
-  city?: city;
+  city?: City;
 }

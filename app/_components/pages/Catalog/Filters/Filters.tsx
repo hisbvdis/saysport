@@ -10,6 +10,7 @@ import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 import { UISpec } from "@/app/_types/types";
 import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import { objectTypeEnum } from "@/drizzle/schema";
 
 
 export default function Filters(props:Props) {

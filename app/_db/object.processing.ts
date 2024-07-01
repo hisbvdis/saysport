@@ -8,8 +8,8 @@ export const objectReadProcessing = (dbData: DBObject): UIObject => {
     ...dbData,
     phones: dbData.phones?.map((phone) => ({ ...phone, uiID: crypto.randomUUID() })),
     links: dbData.links?.map((link) => ({ ...link, uiID: crypto.randomUUID() })),
-    sections: dbData.sections?.map(({ section }) => section).map((section) => sectionReadProcessing(section)),
-    options: dbData.options?.map(({ option }) => ({...option, uiID: crypto.randomUUID()})),
+    sections: dbData.objectOnSection?.map(({ section }) => sectionReadProcessing(section)),
+    options: dbData.objectOnOption?.map(({ option }) => ({...option, uiID: crypto.randomUUID()})),
     schedule: Array(7).fill(null)
       .map((_, i) => ({schedule_id: -1, object_id: -1, time: "", from: 0, to: 0, day_num: i}))
       .map((localDay) => dbData.schedule?.find((dbDay) => dbDay.day_num === localDay.day_num) ?? localDay)

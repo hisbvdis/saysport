@@ -16,8 +16,9 @@ import { getCitiesByFilters } from "@/app/_db/city";
 import { setInheritedData } from "./setInheritedData";
 import { getObjectsByFilters } from "@/app/_db/object";
 import { handleQuotes } from "@/app/_utils/handleQuotes";
-import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
 import { objectReadProcessing } from "@/app/_db/object.processing";
+import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
+import { objectTypeEnum } from "@/drizzle/schema";
 
 
 export default function Address() {
@@ -96,6 +97,7 @@ export default function Address() {
                 isAutocomplete
                 disabled={Boolean(state.parent_id)}
                 placeholder="Введите название"
+                required
                 requestItemsOnInputChange={async (inputValue) => (
                   await getCitiesByFilters({name: inputValue})).map((city) => ({
                     id: city.city_id, label: `${city.name}, ${city.country}`, data: city
@@ -116,7 +118,7 @@ export default function Address() {
                 placeholder="Введите название"
                 disabled={!state.city_id}
                 requestItemsOnInputChange={async (value) => (
-                  await getObjectsByFilters({city: String(state.city_id), type: "org", query: value}))
+                  await getObjectsByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))
                     .filter((org) => org.object_id !== state.id)
                     .map((org) => ({id: org.object_id, label: org.name, data: org})
                 )}

@@ -1,8 +1,8 @@
 "use server";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
-import { SpecSelect, objectTypeEnum, option, optionsNumberEnum, spec } from "@/drizzle/schema";
+import { Spec, objectTypeEnum, objectTypeUnion, option, optionsNumberEnum, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { UISpec } from "@/app/_types/types";
 import { specReadProcessing } from "./spec.processing";
@@ -19,7 +19,7 @@ export const getEmptySpec = async ():Promise<UISpec> => {
   }
 }
 
-export const getSpecsByFilters = async (filters?:{objectType?:objectTypeEnum}) => {
+export const getSpecsByFilters = async (filters?:{objectType?:objectTypeUnion}) => {
   const objectType = filters?.objectType;
   const dbData = await db.query.spec.findMany({
     where: objectType ? eq(spec.object_type, objectType) : undefined
@@ -46,7 +46,7 @@ export const deleteSpecById = async (id:number): Promise<void> => {
   revalidatePath("/admin/specs", "page");
 }
 
-export const upsertSpec = async (state:UISpec, init:UISpec):Promise<SpecSelect> => {
+export const upsertSpec = async (state:UISpec, init:UISpec):Promise<Spec> => {
   const fields = {
     spec_id: state.spec_id || undefined,
     name_service: state.name_service,
@@ -58,13 +58,13 @@ export const upsertSpec = async (state:UISpec, init:UISpec):Promise<SpecSelect> 
   const [upsertedSpec] = await db.insert(spec).values({...fields}).onConflictDoUpdate({target: spec.spec_id, set: {...fields}}).returning();
 
   const optionsAdded = state.options?.filter((stateOption) => !init.options?.some((initOption) => initOption.option_id === stateOption.option_id));
-  optionsAdded?.forEach(async (item) => await db.insert(option).values({...item, option_id: undefined, spec_id: upsertedSpec.spec_id}))
+  optionsAdded?.length ? await db.insert(option).values(optionsAdded.map((option) => ({...option, spec_id: upsertedSpec.spec_id, option_id: undefined}))) : undefined;
 
   const optionsChanged = state.options?.filter((stateOption) => init.options?.some((initOption) => stateOption.uiID === initOption.uiID && (stateOption.name !== initOption.name || stateOption.order !== initOption.order)));
   optionsChanged?.forEach(async (item) => await db.update(option).set(item).where(eq(option.option_id, item.option_id)));
 
   const optionsDeleted = init.options?.filter((initOption) => !state.options?.some((stateOption) => stateOption.option_id === initOption.option_id));
-  optionsDeleted?.forEach(async (item) => await db.delete(option).where(eq(option.option_id, item.option_id)));
+  optionsDeleted?.length ? await db.delete(option).where(inArray(option.option_id, optionsDeleted.map((opt) => opt.option_id))) : undefined;
 
   revalidatePath("/admin/specs", "page");
   return upsertedSpec;

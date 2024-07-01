@@ -1,8 +1,8 @@
 "use server";
 import { db } from "@/drizzle/client";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { objectTypeEnum, section, section_on_spec } from "@/drizzle/schema";
+import { objectTypeEnum, objectTypeUnion, section, section_on_spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { UISection } from "@/app/_types/types";
 import { sectionReadProcessing } from "./section.processing";
@@ -19,7 +19,7 @@ export const getEmptySection = async ():Promise<UISection> => {
   }
 }
 
-export const getSectionsByFilters = async (filters?:{objectType?:objectTypeEnum}):Promise<UISection[]> => {
+export const getSectionsByFilters = async (filters?:{objectType?:objectTypeUnion}):Promise<UISection[]> => {
   const objectType = filters?.objectType;
   const dbData = await db.query.section.findMany({
     where: objectType ? eq(section.object_type, objectType) : undefined,
@@ -51,13 +51,13 @@ export const upsertSection = async (state:UISection, init: UISection) => {
     name_singular: state.name_singular,
     object_type: state.object_type,
   }
-  const [upsertedSection] = await db.insert(section).values({...fields}).onConflictDoUpdate({target: section.section_id, set: {...fields}}).returning();
+  const [upsertedSection] = await db.insert(section).values(fields).onConflictDoUpdate({target: section.section_id, set: fields}).returning();
 
   const specsAdded = state.specs?.filter((stateSpec) => !init.specs?.some((initSpec) => stateSpec.spec_id === initSpec.spec_id));
-  specsAdded.forEach(async (specItem) => await db.insert(section_on_spec).values({section_id: upsertedSection.section_id, spec_id: specItem.spec_id}))
+  specsAdded.length ? await db.insert(section_on_spec).values(specsAdded.map((section_on_spec) => ({section_id: upsertedSection.section_id, spec_id: section_on_spec.spec_id}))) : undefined;
 
   const specsDeleted = init.specs?.filter((initSpec) => !state.specs?.some((stateSpec) => initSpec.spec_id === stateSpec.spec_id));
-  specsDeleted.forEach(async (specItem) => await db.delete(section_on_spec).where(and(eq(section_on_spec.section_id, upsertedSection.section_id), eq(section_on_spec.spec_id, specItem.spec_id))));
+  specsDeleted.length ? await db.delete(section_on_spec).where(and(eq(section_on_spec.section_id, upsertedSection.section_id), inArray(section_on_spec.spec_id, specsDeleted.map((spec) => spec.spec_id)))) : undefined;
 
   revalidatePath("/admin/sections");
   return upsertedSection;
