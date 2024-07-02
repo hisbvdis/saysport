@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/drizzle/client";
 import { and, eq, ilike, inArray } from "drizzle-orm";
-import { Object_ as Object_, object, objectStatusEnum, objectTypeEnum, objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule } from "@/drizzle/schema";
+import { Object_ as Object_, object, objectStatusEnum, objectTypeEnum, objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -32,13 +32,15 @@ export const getObjectsByFilters = async (filters?:Filters) => {
       .reduce((acc, [key, value]) => ({...acc,[key]: acc[key] ? [...acc[key], Number(value)] : [Number(value)]}), {} as {[key:string]: number[]}) /* ['1',[1,2], ["!2",[5,6]]] */
     : {}
   )
-  const objectIdsWithSectionId = sectionId ? (await db.select({objectId: object_on_section.object_id}).from(object_on_section).where(eq(object_on_section.section_id, sectionId))).map(({objectId}) => objectId) : undefined;
+  const objectsWithSectionId = sectionId ? (await db.select({id: object_on_section.object_id}).from(object_on_section).where(eq(object_on_section.section_id, sectionId))).map(({id}) => id) : undefined;
+  console.log( groupedOptions )
+  // const objectsWithOptionId = groupedOptions.length ? await db.select().from(object_on_option).where() : undefined
   const dbData = await db.query.object.findMany({
     where: and(
       query ? ilike(object.name, `%${query}%`) : undefined,
       cityId ? eq(object.city_id, cityId) : undefined,
       type ? eq(object.type, type) : undefined,
-      (sectionId && objectIdsWithSectionId?.length) ? inArray(object.object_id, objectIdsWithSectionId) : undefined,
+      (sectionId && objectsWithSectionId?.length) ? inArray(object.object_id, objectsWithSectionId) : undefined,
       // AND: optionValues?.length ? optionValues.map((ids) => ({options: {some: {option_id: {in: ids}}}})) : undefined,
       // AND: groupedOptions?.length ? groupedOptions.map(([specId, optionsArr]:[string, number[]]) => specId.startsWith("!") ? ({options: {every: {option_id: {in: optionsArr}}}}) : ({options: {some: {option_id: {in: optionsArr}}}})) : undefined,
     ),

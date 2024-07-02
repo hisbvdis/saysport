@@ -14,7 +14,7 @@ export default function Children() {
     <Card>
       <Card.Heading style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
         <span>На базе организации</span>
-        <Link href={`/object/add/place?parent=${state.id}`}>Добавить</Link>
+        <Link href={`/object/add/place?parent=${state.object_id}`}>Добавить</Link>
       </Card.Heading>
       <Card.Section>
         <ul style={{display: "flex"}}>

@@ -60,7 +60,6 @@ export interface UIObject extends Partial<Object_> {
   schedule: (Object_Schedule & {uiID: string, isWork: boolean})[];
   photos?: (Object_Photo & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
-  [key: string]: any;
 }
 
 export enum UIContactTypeEnum {

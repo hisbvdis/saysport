@@ -21,18 +21,18 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null})
 
   const handleStateChange = {
     value: (e:ChangeEvent<HTMLInputElement>) => {
-      setState((prevState) => create(prevState, (draft) => {draft[e.target.name] = e.target.value}));
+      setState((prevState) => create(prevState, (draft) => {draft[e.target.name as keyof typeof draft] = e.target.value as never}));
     },
     checked: (e:ChangeEvent<HTMLInputElement>) => {
-      setState((prevState) => create(prevState, (draft) => {draft[e.target.name] = e.target.checked}));
+      setState((prevState) => create(prevState, (draft) => {draft[e.target.name as keyof typeof draft] = e.target.checked as never}));
     },
     valueAsNumber: (e:ChangeEvent<HTMLInputElement>) => {
-      setState((prevState) => create(prevState, (draft) => {draft[e.target.name] = Number(e.target.value) || null}));
+      setState((prevState) => create(prevState, (draft) => {draft[e.target.name as keyof typeof draft] = Number(e.target.value) as never || null}));
     },
   }
 
   useEffect(() => {
-    if (state.id || !props.parent) return;
+    if (state.object_id || !props.parent) return;
     setInheritedData(props.parent, setState);
   }, [])
 

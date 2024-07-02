@@ -21,7 +21,7 @@ async function main() {
 
 
   // ===========================================================================
-  // OBJECT — ORGS
+  // OBJECT — ORG
   // ===========================================================================
   await db.insert(object).values(
     [
@@ -87,6 +87,25 @@ async function main() {
         object_id: 4,
         type: "place",
         name: "Тренажерный зал",
+        name_where: "в клубе «Asgard»",
+        status_inherit: true,
+        status: "works",
+        city_id: 7525990,
+        parent_id: 3,
+        address: "Независимости проспект, 39",
+        address_2: null,
+        coord_inherit: true,
+        coord_lat: 47.8282178082006,
+        coord_lon: 31.16828262805939,
+        description: "Наш тренажерный зал — это территория силы и выносливости.\n\nСовременные тренажеры, свободные веса, зоны для функционального тренинга и кардио – у нас есть все для эффективных тренировок. Опытные инструкторы помогут составить индивидуальную программу и научат правильной технике выполнения упражнений.\n\nПриходите и станьте лучшей версией себя!",
+        schedule_inherit: true,
+        schedule_source: "https://www.instagram.com/asgard_pg",
+        created: new Date(),
+      },
+      {
+        object_id: 5,
+        type: "place",
+        name: "Бассейн",
         name_where: "в клубе «Asgard»",
         status_inherit: true,
         status: "works",
@@ -169,6 +188,7 @@ async function main() {
       {object_id: 2, section_id: 4},
       {object_id: 2, section_id: 5},
       {object_id: 1, section_id: 1},
+      {object_id: 5, section_id: 4},
     ]
   )
 
@@ -180,6 +200,8 @@ async function main() {
       {object_id: 2, option_id: 13},
       {object_id: 1, option_id: 2},
       {object_id: 1, option_id: 1},
+      {object_id: 5, option_id: 5},
+      {object_id: 5, option_id: 13},
     ]
   )
 
@@ -217,6 +239,13 @@ async function main() {
       {object_id: 3, day_num: 4, time: "8:00 - 22:00", from: 480, to: 1320},
       {object_id: 3, day_num: 5, time: "9:00 - 20:00", from: 540, to: 1200},
       {object_id: 3, day_num: 6, time: "9:00 - 20:00", from: 540, to: 1200},
+      {object_id: 5, day_num: 0, time: "8:00 - 22:00", from: 480, to: 1320},
+      {object_id: 5, day_num: 1, time: "8:00 - 22:00", from: 480, to: 1320},
+      {object_id: 5, day_num: 2, time: "8:00 - 22:00", from: 480, to: 1320},
+      {object_id: 5, day_num: 3, time: "8:00 - 22:00", from: 480, to: 1320},
+      {object_id: 5, day_num: 4, time: "8:00 - 22:00", from: 480, to: 1320},
+      {object_id: 5, day_num: 5, time: "9:00 - 20:00", from: 540, to: 1200},
+      {object_id: 5, day_num: 6, time: "9:00 - 20:00", from: 540, to: 1200},
     ]
   )
 
@@ -228,6 +257,7 @@ async function main() {
     [
       {object_id: 3, order: 0, value: "https://www.instagram.com/asgard_pg"},
       {object_id: 4, order: 0, value: "https://www.instagram.com/asgard_pg"},
+      {object_id: 5, order: 0, value: "https://www.instagram.com/asgard_pg"},
     ]
   )
 
@@ -237,6 +267,7 @@ async function main() {
       {object_id: 2, order: 0, value: "+380 (5136) 5-59-10"},
       {object_id: 3, order: 0, value: "+380 (97) 558-79-89"},
       {object_id: 4, order: 0, value: "+380 (97) 558-79-89"},
+      {object_id: 5, order: 0, value: "+380 (97) 558-79-89"},
     ]
   )
 
@@ -252,6 +283,7 @@ async function main() {
       {object_id: 3, order: 1, name: "object_3_1.webp", uploaded: new Date("2024-06-19 16:22:55.162")},
       {object_id: 4, order: 0, name: "object_4_0.webp", uploaded: new Date("2024-06-19 16:59:43.395")},
       {object_id: 4, order: 1, name: "object_4_1.webp", uploaded: new Date("2024-06-19 16:59:43.395")},
+      {object_id: 5, order: 1, name: "object_5_0.webp", uploaded: new Date("2024-06-19 16:59:43.395")},
     ]
   )
 

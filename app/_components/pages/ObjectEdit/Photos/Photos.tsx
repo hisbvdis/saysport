@@ -17,7 +17,7 @@ export default function Photos() {
       const existingIndexes = statePhotos.map((photo) => photo.name?.match(/\d(?=\.webp)/g)?.[0]).map((index) => Number(index));
       const newIndexes = Array(10).fill(null).map((_, i) => i).filter((i) => !existingIndexes.includes(i)).toSorted((a, b) => a - b);
       const selectedPhotos = Array.from(e.target.files).slice(0, 10 - statePhotos.length)
-        .map((file, i) => ({name: `object_${state.id ?? "ID"}_${newIndexes.shift()}.webp`, uiID: crypto.randomUUID(), blob: URL.createObjectURL(file), file, photo_id: -1, object_id: -1, uploaded: new Date(), order: i}));
+        .map((file, i) => ({name: `object_${state.object_id ?? "ID"}_${newIndexes.shift()}.webp`, uiID: crypto.randomUUID(), blob: URL.createObjectURL(file), file, photo_id: -1, object_id: -1, uploaded: new Date(), order: i}));
       const allPhotos = statePhotos.concat(selectedPhotos).map((photo, i) => ({...photo, order: i}));
       setState((prevState) => create(prevState, (draft) => {draft.photos = allPhotos}))
     },

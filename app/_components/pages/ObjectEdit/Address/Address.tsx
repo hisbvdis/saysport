@@ -119,7 +119,7 @@ export default function Address() {
                 disabled={!state.city_id}
                 requestItemsOnInputChange={async (value) => (
                   await getObjectsByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))
-                    .filter((org) => org.object_id !== state.id)
+                    .filter((org) => org.object_id !== state.object_id)
                     .map((org) => ({id: org.object_id, label: org.name, data: org})
                 )}
               />
