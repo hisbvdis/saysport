@@ -5,7 +5,7 @@ import { City, Object_Link, Object_On_Option, Object_Phone, Object_Photo, Object
 // DB TYPES
 // =============================================================================
 export interface DBSpec extends Spec {
-  options: Option[]
+  options: Option[];
 }
 
 export interface DBSection extends Section {
@@ -36,7 +36,7 @@ export interface UIOption extends Option {
 }
 
 export interface UISpec extends Spec {
-  options?: UIOption[];
+  options: UIOption[];
   uiID: string;
 };
 

@@ -16,6 +16,7 @@ export const getEmptySpec = async ():Promise<UISpec> => {
     object_type: objectTypeEnum.org,
     options_number: optionsNumberEnum.many,
     uiID: crypto.randomUUID(),
+    options: [],
   }
 }
 
@@ -24,16 +25,12 @@ export const getAllSpecs = async ():Promise<Spec[]> => {
   return dbData;
 }
 
-export const getSpecsByFilters = async (filters:Filters):Promise<Spec[]> => {
+export const getSpecsByFilters = async (filters:{objectType?:objectTypeUnion}):Promise<Spec[]> => {
   const objectType = filters.objectType;
   const dbData = await db.select().from(spec).where(
     objectType ? eq(spec.object_type, objectType) : undefined
   );
   return dbData;
-}
-
-interface Filters {
-  objectType?:objectTypeUnion
 }
 
 export const getSpecById = async (id: number):Promise<UISpec> => {

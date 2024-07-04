@@ -33,7 +33,6 @@ export const getObjectsByFilters = async (filters?:Filters) => {
     : {}
   )
   const objectsWithSectionId = sectionId ? (await db.select({id: object_on_section.object_id}).from(object_on_section).where(eq(object_on_section.section_id, sectionId))).map(({id}) => id) : undefined;
-  console.log( groupedOptions )
   // const objectsWithOptionId = groupedOptions.length ? await db.select().from(object_on_option).where() : undefined
   const dbData = await db.query.object.findMany({
     where: and(

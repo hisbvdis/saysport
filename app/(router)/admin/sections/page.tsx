@@ -4,11 +4,11 @@ import { Card } from "@/app/_components/ui/Card";
 import { DelBtn } from "@/app/_components/ui/DelBtn";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 // -----------------------------------------------------------------------------
-import { deleteSectionById, getSectionsByFilters } from "@/app/_db/section";
+import { deleteSectionById, getAllSections } from "@/app/_db/section";
 
 
 export default async function SectionListPage() {
-  const sections = await getSectionsByFilters();
+  const sections = await getAllSections();
 
   return (
     <main className="container page">

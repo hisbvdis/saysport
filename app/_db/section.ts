@@ -1,10 +1,10 @@
 "use server";
 import { db } from "@/drizzle/client";
-import { and, eq, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { objectTypeEnum, objectTypeUnion, section, section_on_spec } from "@/drizzle/schema";
+import { and, eq, inArray } from "drizzle-orm";
+import { objectTypeEnum, objectTypeUnion, option, Section, section, section_on_spec, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
-import { UISection } from "@/app/_types/types";
+import { DBSection, UISection } from "@/app/_types/types";
 import { sectionReadProcessing } from "./section.processing";
 
 
@@ -19,8 +19,34 @@ export const getEmptySection = async ():Promise<UISection> => {
   }
 }
 
-export const getSectionsByFilters = async (filters?:{objectType?:objectTypeUnion}):Promise<UISection[]> => {
-  const objectType = filters?.objectType;
+export const getAllSections = async ():Promise<Section[]> => {
+  const dbData = await db.select().from(section);
+  return dbData;
+}
+
+export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion}):Promise<Section[]> => {
+  const objectType = filters.objectType;
+  const dbData = await db.select().from(section).where(
+    objectType ? eq(section.object_type, objectType) : undefined
+  );
+  return dbData;
+}
+
+export const getSectionById = async (id:number):Promise<Section> => {
+  const dbData = (await db.select().from(section).where(eq(section.section_id, id)))[0];
+  return dbData;
+}
+
+export const getAllSectionsWithPayload = async ():Promise<UISection[]> => {
+  const dbData = await db.query.section.findMany({
+    with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
+  })
+  const processed = dbData.map((section) => sectionReadProcessing(section));
+  return processed;
+}
+
+export const getSectionsWithPayloadByFilters = async (filters:{objectType?:objectTypeUnion}):Promise<UISection[]> => {
+  const objectType = filters.objectType;
   const dbData = await db.query.section.findMany({
     where: objectType ? eq(section.object_type, objectType) : undefined,
     with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
@@ -29,12 +55,12 @@ export const getSectionsByFilters = async (filters?:{objectType?:objectTypeUnion
   return processed;
 }
 
-export const getSectionById = async (id:number):Promise<UISection> => {
+export const getSectionWithPayloadById = async (id:number):Promise<UISection> => {
   const dbData = await db.query.section.findFirst({
     where: eq(section.section_id, id),
     with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
   })
-  if (dbData === undefined) throw new Error("getSectionById returned undefined");
+  if (dbData === undefined) throw new Error("getSectionWithPayloadById returned undefined");
   const processed = sectionReadProcessing(dbData);
   return processed;
 }

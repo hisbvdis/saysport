@@ -7,7 +7,6 @@ import { getEmptyObject, getObjectById } from "@/app/_db/object";
 
 
 export default async function AddObjectPage({params, searchParams}:Props) {
-  console.log( searchParams )
   const emptyObject = await getEmptyObject();
   const parentObject = searchParams.parent ? await getObjectById(Number(searchParams.parent)) : null;
 
