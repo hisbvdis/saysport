@@ -1,6 +1,6 @@
 "use server";
-import { eq, inArray } from "drizzle-orm";
 import { db } from "@/drizzle/client";
+import { eq, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { Spec, objectTypeEnum, objectTypeUnion, option, optionsNumberEnum, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
@@ -19,30 +19,33 @@ export const getEmptySpec = async ():Promise<UISpec> => {
   }
 }
 
-export const getSpecsByFilters = async (filters?:{objectType?:objectTypeUnion}) => {
-  const objectType = filters?.objectType;
-  const dbData = await db.query.spec.findMany({
-    where: objectType ? eq(spec.object_type, objectType) : undefined
-  })
+export const getAllSpecs = async ():Promise<Spec[]> => {
+  const dbData = await db.select().from(spec);
   return dbData;
 }
 
+export const getSpecsByFilters = async (filters:Filters):Promise<Spec[]> => {
+  const objectType = filters.objectType;
+  const dbData = await db.select().from(spec).where(
+    objectType ? eq(spec.object_type, objectType) : undefined
+  );
+  return dbData;
+}
+
+interface Filters {
+  objectType?:objectTypeUnion
+}
+
 export const getSpecById = async (id: number):Promise<UISpec> => {
-  const dbData = await db.query.spec.findFirst({
-    where: eq(spec.spec_id, id),
-    with: {
-      options: true,
-    }
-  });
-  if (dbData === undefined) throw new Error("getSpecById returned undefined");
+  const dbSpec = (await db.select().from(spec).where(eq(spec.spec_id, id)))[0];
+  const dbSpecOptions = await db.select().from(option).where(eq(option.spec_id, id));
+  const dbData = {...dbSpec, options: dbSpecOptions};
   const processed = specReadProcessing(dbData);
   return processed;
 };
 
 export const deleteSpecById = async (id:number): Promise<void> => {
-  await db.delete(spec).where(
-    eq(spec.spec_id, id)
-  );
+  await db.delete(spec).where(eq(spec.spec_id, id));
   revalidatePath("/admin/specs", "page");
 }
 

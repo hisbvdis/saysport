@@ -4,11 +4,11 @@ import { Card } from "@/app/_components/ui/Card";
 import { DelBtn } from "@/app/_components/ui/DelBtn/";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 // -----------------------------------------------------------------------------
-import { deleteSpecById, getSpecsByFilters } from "@/app/_db/spec";
+import { deleteSpecById, getAllSpecs, getSpecsByFilters } from "@/app/_db/spec";
 
 
 export default async function SpecListPage() {
-  const specs = await getSpecsByFilters();
+  const specs = await getAllSpecs();
 
   return (
     <main className="container  page">
