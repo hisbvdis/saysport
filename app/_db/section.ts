@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { and, eq, inArray } from "drizzle-orm";
 import { objectTypeEnum, objectTypeUnion, option, Section, section, section_on_spec, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
-import { DBSection, UISection } from "@/app/_types/types";
+import { UISection } from "@/app/_types/types";
 import { sectionReadProcessing } from "./section.processing";
 
 
