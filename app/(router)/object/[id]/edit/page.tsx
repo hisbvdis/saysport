@@ -1,11 +1,11 @@
 import { ObjectEdit } from "@/app/_components/pages/ObjectEdit";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 // -----------------------------------------------------------------------------
-import { getObjectById } from "@/app/_db/object"
+import { getObjectWithPayloadById } from "@/app/_db/object"
 
 
 export default async function ObjectEditPage({params}:{params: {id:string, type:string}}) {
-  const object = await getObjectById(Number(params.id));
+  const object = await getObjectWithPayloadById(Number(params.id));
 
   return (
     <div className="container page">

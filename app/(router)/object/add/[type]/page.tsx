@@ -3,12 +3,12 @@ import { objectTypeEnum } from "@/drizzle/schema";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { ObjectEdit } from "@/app/_components/pages/ObjectEdit/";
 // -----------------------------------------------------------------------------
-import { getEmptyObject, getObjectById } from "@/app/_db/object";
+import { getEmptyObject, getObjectWithPayloadById } from "@/app/_db/object";
 
 
 export default async function AddObjectPage({params, searchParams}:Props) {
   const emptyObject = await getEmptyObject();
-  const parentObject = searchParams.parent ? await getObjectById(Number(searchParams.parent)) : null;
+  const parentObject = searchParams.parent ? await getObjectWithPayloadById(Number(searchParams.parent)) : null;
 
   return (
     <main className="container  page">

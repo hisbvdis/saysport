@@ -14,7 +14,7 @@ import { Checkbox } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import { setInheritedData } from "./setInheritedData";
-import { getObjectsByFilters } from "@/app/_db/object";
+import { getObjectsWIthPayloadByFilters } from "@/app/_db/object";
 import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
@@ -118,7 +118,7 @@ export default function Address() {
                 placeholder="Введите название"
                 disabled={!state.city_id}
                 requestItemsOnInputChange={async (value) => (
-                  await getObjectsByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))
+                  await getObjectsWIthPayloadByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))
                     .filter((org) => org.object_id !== state.object_id)
                     .map((org) => ({id: org.object_id, label: org.name, data: org})
                 )}

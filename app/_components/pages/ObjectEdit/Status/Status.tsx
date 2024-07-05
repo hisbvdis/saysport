@@ -7,7 +7,7 @@ import { Control } from "@/app/_components/ui/Control";
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit";
 import { create } from "mutative";
-import { getObjectsByFilters } from "@/app/_db/object";
+import { getObjectsWIthPayloadByFilters } from "@/app/_db/object";
 import { objectStatusEnum } from "@/drizzle/schema";
 
 
@@ -70,7 +70,7 @@ export default function Status(props:Props) {
             placeholder="Введите название"
             disabled={state?.status_inherit || state?.status !== objectStatusEnum.closed_forever}
             requestItemsOnInputChange={
-              async (value) => (await getObjectsByFilters({city: String(state.city_id), type: state?.type, query: value}))
+              async (value) => (await getObjectsWIthPayloadByFilters({city: String(state.city_id), type: state?.type, query: value}))
               ?.filter((object) => object.object_id !== state?.object_id)
               ?.map((object) => ({id: object.object_id, label: object.name, data: object}))
             }

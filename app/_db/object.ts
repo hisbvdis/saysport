@@ -19,7 +19,7 @@ export const getEmptyObject = async ():Promise<UIObject> => {
   }
 }
 
-export const getObjectsByFilters = async (filters?:Filters) => {
+export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
   const type = filters?.type;
   const query = filters?.query;
   const cityId = filters?.city ? Number(filters?.city) : undefined;
@@ -63,7 +63,7 @@ interface Filters extends SearchParamsType {
   query?: string;
 }
 
-export const getObjectById = async (id:number) => {
+export const getObjectWithPayloadById = async (id:number) => {
   const dbData = await db.query.object.findFirst({
     where: eq(object.object_id, id),
     with: {
