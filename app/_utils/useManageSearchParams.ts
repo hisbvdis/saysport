@@ -9,7 +9,7 @@ export const useManageSearchParams = () => {
     set: (key:string, value:string) => {
       const urlSearchParams = new URLSearchParams(searchParams);
       value ? urlSearchParams.set(key, value) : urlSearchParams.delete(key, value);
-      return decodeURIComponent("?" + urlSearchParams.toString());
+      return decodeURIComponent(`?${urlSearchParams.toString()}`);
     },
 
     appendOrClear: (key:string, value:string) => {
@@ -19,7 +19,7 @@ export const useManageSearchParams = () => {
       const arrayOfValues = [...Array.from(setOfValues)];
       const stringValue = arrayOfValues.toSorted((a, b) => a > b ? 1 : -1).join(",");
       stringValue === "" ? urlSearchParams.delete(key) : urlSearchParams.set(key, stringValue);
-      return decodeURIComponent("?" + urlSearchParams.toString());
+      return decodeURIComponent(`?${urlSearchParams.toString()}`);
     },
 
     delete: (key:string|string[]) => {
@@ -29,7 +29,7 @@ export const useManageSearchParams = () => {
       } else {
         urlSearchParams.delete(key);
       }
-      return decodeURIComponent("?" + urlSearchParams.toString());
+      return decodeURIComponent(`?${urlSearchParams.toString()}`);
     },
 
     // leaveOnly: (key:string) => {

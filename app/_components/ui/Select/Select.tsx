@@ -63,7 +63,7 @@ export default function Select(props:Props) {
   }
 
   const handleDocumentMousedown = (e:MouseEvent) => {
-    if ((e.target as HTMLElement).closest("." + styles["select"]) === divRef.current) return;
+    if ((e.target as HTMLElement).closest(`.${styles["select"]}`) === divRef.current) return;
     setIsShowMenu(false);
     setSuggestions(localItems ?? []);
     isAutocomplete ? setInputValue(props.label) : setInputValue(selectedItem?.label);
