@@ -122,7 +122,7 @@ export default function SectionEdit(props:{init:UISection}) {
           <ul style={{marginBlockStart: "5px"}}>
             {state?.specs?.map((spec) => (
               <li key={spec.spec_id}>
-                <Button onClick={() => handleSpecs.delete(spec.spec_id!)}>X</Button>
+                <Button onClick={() => handleSpecs.delete(spec.spec_id)}>X</Button>
                 <InputAddon>{spec.spec_id}</InputAddon>
                 <Link href={`/admin/specs/${spec.spec_id}`}>{spec.name_service}</Link>
               </li>

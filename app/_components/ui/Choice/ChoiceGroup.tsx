@@ -33,7 +33,7 @@ function ChoiceGroup(props:Props) {
   )
 }
 
-export const ChoiceGroupContext = createContext<ChoiceGroupContextType>(null!);
+export const ChoiceGroupContext = createContext<ChoiceGroupContextType>({} as ChoiceGroupContextType);
 
 interface Props {
   name?: string;

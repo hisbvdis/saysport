@@ -30,7 +30,7 @@ export default function Control(props:Props) {
 Control.Label = ControlLabel;
 Control.Section = ControlSection;
 
-export const ControlContext = createContext<ControlContextType>(null!)
+export const ControlContext = createContext<ControlContextType>({} as ControlContextType)
 
 interface Props {
   className?: string;

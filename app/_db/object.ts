@@ -94,7 +94,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     name: state.name,
     name_locative: state.name_locative || null,
     name_where: state.name_where || null,
-    type: state.type!,
+    type: state.type,
     status: state.status,
     status_inherit: state.status_inherit || null,
     status_comment: state.status_comment || null,

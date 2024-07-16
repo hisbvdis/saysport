@@ -99,7 +99,7 @@ export default function Specs() {
           placeholder="Добавить раздел"
           requestItemsOnFirstTouch={async () =>
             (await getSectionsByFilters({objectType: state.type}))
-              .map((section) => ({id: section.section_id!, label: section.name_plural, data: section}))
+              .map((section) => ({id: section.section_id, label: section.name_plural, data: section}))
           }
         />
         <RequiredInput isValidIf={Boolean(state.sections?.length)}/>

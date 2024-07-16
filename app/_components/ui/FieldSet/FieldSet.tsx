@@ -24,7 +24,7 @@ export default function FieldSet(props:Props) {
   )
 }
 
-export const FieldSetContext = createContext<FieldSetContextType>(null!);
+export const FieldSetContext = createContext<FieldSetContextType>({} as FieldSetContextType);
 FieldSet.Legend = FieldSetLegend;
 FieldSet.Section = FieldSetSection;
 

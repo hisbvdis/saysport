@@ -23,7 +23,7 @@ export default function Form(props:Props) {
   )
 }
 
-export const FormContext = createContext<FormContextType>(null!)
+export const FormContext = createContext<FormContextType>({} as FormContextType)
 
 interface Props {
   className?: string;

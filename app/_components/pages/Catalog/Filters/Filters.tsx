@@ -23,10 +23,10 @@ export default function Filters(props:Props) {
   const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:UISpec) => {
     if (e.target.checked) {
       setAndSpecs(andSpecs.concat(spec.spec_id))
-      router.push(manageSearchParams.set("options", searchParams.options?.split(",").map((v) => v.startsWith(`${spec.spec_id}:`) ? `!${v}` : v).join(",")!))
+      router.push(manageSearchParams.set("options", searchParams.options?.split(",").map((v) => v.startsWith(`${spec.spec_id}:`) ? `!${v}` : v).join(",") ?? ""))
     } else {
       setAndSpecs(andSpecs.filter((v) => v !== spec.spec_id));
-      router.push(manageSearchParams.set("options", searchParams.options?.split(",").map((v) => v.startsWith(`!${spec.spec_id}:`) ? v.slice(1) : v).join(",")!))
+      router.push(manageSearchParams.set("options", searchParams.options?.split(",").map((v) => v.startsWith(`!${spec.spec_id}:`) ? v.slice(1) : v).join(",") ?? ""))
     }
   }
 

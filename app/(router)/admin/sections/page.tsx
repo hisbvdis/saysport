@@ -22,7 +22,7 @@ export default async function SectionListPage() {
           <ul>
             {sections.filter(({object_type}) => object_type === "org").map((section) => (
               <li key={section.section_id} style={{display: "flex", gap: "10px"}}>
-                <DelBtn id={section.section_id!} delFunc={deleteSectionById}/>
+                <DelBtn id={section.section_id} delFunc={deleteSectionById}/>
                 <Link href={`/admin/sections/${section.section_id}`}>{section.name_plural}</Link>
               </li>
             ))}
@@ -33,7 +33,7 @@ export default async function SectionListPage() {
           <ul>
             {sections.filter(({object_type}) => object_type === "place").map((section) => (
               <li key={section.section_id} style={{display: "flex", gap: "10px"}}>
-                <DelBtn id={section.section_id!} delFunc={deleteSectionById}/>
+                <DelBtn id={section.section_id} delFunc={deleteSectionById}/>
                 <Link href={`/admin/sections/${section.section_id}`}>{section.name_plural}</Link>
               </li>
             ))}

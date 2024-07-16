@@ -18,7 +18,8 @@ export const syncPhotos = async (objectId:UIObject["object_id"], state:UIObject,
   if (photosToUpload && photosToUpload.length > 0) {
     const formData = new FormData();
     photosToUpload.forEach((photo) => {
-      formData.append("file", photo.file!);
+      if (!photo.file) return;
+      formData.append("file", photo.file);
       formData.append("name", photo.name.replace("ID", String(objectId)));
     });
     await fetch("/api/photos", { method: "POST", body: formData });
