@@ -1,11 +1,11 @@
 "use server";
 import { db } from "@/drizzle/client";
 import { and, eq, ilike, inArray } from "drizzle-orm";
-import { Object_ as Object_, object, objectStatusEnum, objectTypeEnum, objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option } from "@/drizzle/schema";
+import { type Object_, object, objectStatusEnum, objectTypeEnum, type objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
-import { UIObject } from "../_types/types";
+import type { UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
-import { SearchParamsType } from "../(router)/catalog/page";
+import type { SearchParamsType } from "../(router)/catalog/page";
 
 
 export const getEmptyObject = async ():Promise<UIObject> => {

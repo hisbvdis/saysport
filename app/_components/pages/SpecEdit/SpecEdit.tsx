@@ -1,7 +1,7 @@
 "use client";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
@@ -13,7 +13,7 @@ import { InputAddon } from "@/app/_components/ui/InputAddon";
 import { RadioGroup } from "@/app/_components/ui/Choice/ChoiceGroup";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
-import { UISpec } from "@/app/_types/types";
+import type { UISpec } from "@/app/_types/types";
 import { deleteSpecById, upsertSpec } from "@/app/_db/spec";
 
 

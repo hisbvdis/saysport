@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { ReactEventHandler, createContext, useContext, useId, useRef } from "react"
+import { type ReactEventHandler, createContext, useContext, useId, useRef } from "react"
 import { ControlContext } from "../Control";
 import styles from "./styles.module.css";
 

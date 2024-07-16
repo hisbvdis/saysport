@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { AnyPgColumn, boolean, doublePrecision, integer, pgEnum, pgTable, primaryKey, serial, timestamp, varchar } from "drizzle-orm/pg-core";
+import { type AnyPgColumn, boolean, doublePrecision, integer, pgEnum, pgTable, primaryKey, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export enum objectTypeEnum {org="org", place="place"};
 export type objectTypeUnion = "org" | "place";

@@ -1,5 +1,5 @@
 import { create } from "mutative";
-import { ChangeEvent, useContext } from "react"
+import { type ChangeEvent, useContext } from "react"
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Button } from "@/app/_components/ui/Button";

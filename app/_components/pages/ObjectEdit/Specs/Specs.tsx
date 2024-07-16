@@ -1,6 +1,6 @@
 "use client";
 import { create } from "mutative";
-import React, { ChangeEvent, useContext } from "react";
+import React, { type ChangeEvent, useContext } from "react";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Select } from "@/app/_components/ui/Select";
@@ -11,7 +11,7 @@ import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@/app/_components/ui
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit";
 import { getSectionsByFilters } from "@/app/_db/section";
-import { UIOption, UISection, UISpec } from "@/app/_types/types";
+import type { UIOption, UISection, UISpec } from "@/app/_types/types";
 import { RequiredInput } from "@/app/_components/ui/RequiredInput";
 
 

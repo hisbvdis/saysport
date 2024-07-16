@@ -1,5 +1,5 @@
 "use client";
-import * as Leaflet from "leaflet";
+import type * as Leaflet from "leaflet";
 import { useContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { MapContext } from "./Map";

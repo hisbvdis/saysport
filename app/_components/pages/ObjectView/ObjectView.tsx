@@ -5,7 +5,7 @@ import { createContext } from "react";
 import Gallery from "./Gallery/Gallery";
 import { Children, Contacts, Description, Header, Specs } from ".";
 // -----------------------------------------------------------------------------
-import { UIObject } from "@/app/_types/types";
+import type { UIObject } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 

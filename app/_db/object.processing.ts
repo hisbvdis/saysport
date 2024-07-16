@@ -1,4 +1,4 @@
-import { DBObject, UIObject } from "../_types/types";
+import type { DBObject, UIObject } from "../_types/types";
 import { sectionReadProcessing } from "./section.processing";
 // -----------------------------------------------------------------------------
 

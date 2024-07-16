@@ -3,7 +3,7 @@ export async function queryCoodFromAddress(params:AddressParams) {
   if (typeof country !== "string" || country.length === 0) return;
   if (typeof city !== "string" || city.length === 0) return;
 
-  let baseUrl = "https://nominatim.openstreetmap.org/search.php?"
+  const baseUrl = "https://nominatim.openstreetmap.org/search.php?"
     .concat(`country=${country.replaceAll(" ", "+")}`)
     .concat(`&city=${city.replaceAll(" ", "+")}`)
     .concat(`&street=${street ? street.replaceAll(" ", "+") : ""}`)
@@ -17,7 +17,7 @@ export async function queryCoodFromAddress(params:AddressParams) {
 
 export async function queryAddressForCoord(params: CoordParams) {
   const { lat, lon, limit=1, lang="ru-RU" } = params;
-  let baseUrl = "https://nominatim.openstreetmap.org/reverse?"
+  const baseUrl = "https://nominatim.openstreetmap.org/reverse?"
     .concat(`&lat=${lat}&lon=${lon}`)
     .concat(`&limit=${limit}`)
     .concat(`&accept-language=${lang}`)

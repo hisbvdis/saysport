@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
-import * as Leaflet from "leaflet";
-import { RefObject, createContext, useEffect, useRef, useState } from "react"
+import type * as Leaflet from "leaflet";
+import { type RefObject, createContext, useEffect, useRef, useState } from "react"
 // -----------------------------------------------------------------------------
 import { TileLayer } from ".";
 // -----------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import React, { useContext } from "react";
+import type React from "react";
+import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { FieldSetContext } from "./FieldSet";
 // -----------------------------------------------------------------------------

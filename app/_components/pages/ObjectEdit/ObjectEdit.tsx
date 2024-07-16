@@ -1,13 +1,13 @@
 "use client";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, ChangeEventHandler, SetStateAction, SyntheticEvent, createContext, useEffect, useState } from "react";
+import { type ChangeEvent, type ChangeEventHandler, type SetStateAction, type SyntheticEvent, createContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 import { NameOrg, NamePlace, Address, Contacts, Specs, Description, Schedule, Photos } from "./"
 // -----------------------------------------------------------------------------
-import { UIObject } from "@/app/_types/types";
+import type { UIObject } from "@/app/_types/types";
 import { syncPhotos } from "./Photos/syncPhotos";
 import { setInheritedData } from "./Address/setInheritedData";
 import { deleteObjectById, upsertObject } from "@/app/_db/object";

@@ -2,9 +2,9 @@
 import { db } from "@/drizzle/client";
 import { eq, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { Spec, objectTypeEnum, objectTypeUnion, option, optionsNumberEnum, spec } from "@/drizzle/schema";
+import { type Spec, objectTypeEnum, type objectTypeUnion, option, optionsNumberEnum, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
-import { UISpec } from "@/app/_types/types";
+import type { UISpec } from "@/app/_types/types";
 import { specReadProcessing } from "./spec.processing";
 
 

@@ -7,13 +7,13 @@ export const useManageSearchParams = () => {
 
   return {
     set: (key:string, value:string) => {
-      let urlSearchParams = new URLSearchParams(searchParams);
+      const urlSearchParams = new URLSearchParams(searchParams);
       value ? urlSearchParams.set(key, value) : urlSearchParams.delete(key, value);
       return decodeURIComponent("?" + urlSearchParams.toString());
     },
 
     appendOrClear: (key:string, value:string) => {
-      let urlSearchParams = new URLSearchParams(searchParams);
+      const urlSearchParams = new URLSearchParams(searchParams);
       const setOfValues = new Set(urlSearchParams.get(key)?.split(","));
       setOfValues.has(value) ? setOfValues.delete(value) : setOfValues.add(value);
       const arrayOfValues = [...Array.from(setOfValues)];
@@ -23,7 +23,7 @@ export const useManageSearchParams = () => {
     },
 
     delete: (key:string|string[]) => {
-      let urlSearchParams = new URLSearchParams(searchParams);
+      const urlSearchParams = new URLSearchParams(searchParams);
       if (Array.isArray(key)) {
         key.forEach((key) => urlSearchParams.delete(key));
       } else {

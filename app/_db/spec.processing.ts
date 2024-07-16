@@ -1,4 +1,4 @@
-import { DBSpec, UISpec } from "@/app/_types/types";
+import type { DBSpec, UISpec } from "@/app/_types/types";
 
 
 export const specReadProcessing = (dbData:DBSpec):UISpec => {

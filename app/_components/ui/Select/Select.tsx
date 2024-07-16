@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { ChangeEvent, ChangeEventHandler, useEffect, useRef, useState } from "react";
+import { type ChangeEvent, type ChangeEventHandler, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Menu } from "@/app/_components/ui/Menu";
 import { Input } from "@/app/_components/ui/Input/";

@@ -1,7 +1,7 @@
 "use client";
 import { create } from "mutative";
 import { useContext, useEffect, useState } from "react";
-import * as Leaflet from "leaflet";
+import type * as Leaflet from "leaflet";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";

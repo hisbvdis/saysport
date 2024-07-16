@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
-import { SyntheticEvent, useEffect, useState } from "react"
+import { type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
@@ -15,7 +15,7 @@ import { Radio, RadioGroup } from "@/app/_components/ui/Choice";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { getSpecsByFilters } from "@/app/_db/spec";
-import { UISection, UISpec } from "@/app/_types/types";
+import type { UISection, UISpec } from "@/app/_types/types";
 import { deleteSectionById, upsertSection } from "@/app/_db/section";
 
 

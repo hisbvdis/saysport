@@ -1,6 +1,6 @@
-import { UIObject } from "@/app/_types/types";
+import type { UIObject } from "@/app/_types/types";
 import { create } from "mutative";
-import { SetStateAction } from "react";
+import type { SetStateAction } from "react";
 
 export const setInheritedData = (parent:UIObject|null, setState:React.Dispatch<SetStateAction<UIObject>>) => {
   if (parent) {

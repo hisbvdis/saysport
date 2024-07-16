@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useContext, useState } from "react";
+import { type ChangeEvent, useContext, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
-import { UISpec } from "@/app/_types/types";
+import type { UISpec } from "@/app/_types/types";
 import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 import { objectTypeEnum } from "@/drizzle/schema";

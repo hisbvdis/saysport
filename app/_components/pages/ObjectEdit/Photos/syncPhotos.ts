@@ -1,4 +1,4 @@
-import { UIObject } from "@/app/_types/types";
+import type { UIObject } from "@/app/_types/types";
 
 
 export const syncPhotos = async (objectId:UIObject["object_id"], state:UIObject, init:UIObject) => {

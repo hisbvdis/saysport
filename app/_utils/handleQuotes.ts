@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import type { ChangeEvent } from "react";
 
 export const handleQuotes = (e:ChangeEvent<HTMLInputElement>) => {
   const entries = Array.from(e.target.value.matchAll(/["']/g));

@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { ChangeEventHandler, FocusEventHandler, KeyboardEventHandler, MouseEventHandler, createElement, forwardRef, useContext, useEffect, useRef, useState } from "react";
+import { type ChangeEventHandler, type FocusEventHandler, type KeyboardEventHandler, type MouseEventHandler, createElement, forwardRef, useContext, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
 import { ControlContext } from "../Control";
 // -----------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-import { DBSection, UISection } from "@/app/_types/types"
+import type { DBSection, UISection } from "@/app/_types/types"
 import { specReadProcessing } from "./spec.processing"
 
 

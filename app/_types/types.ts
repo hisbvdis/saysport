@@ -1,4 +1,4 @@
-import { City, Object_Link, Object_On_Option, Object_Phone, Object_Photo, Object_Schedule, Object_, Option, Section_On_Spec, Section, Spec, objectTypeEnum, Object_On_Section, objectStatusEnum, objectTypeUnion, objectStatusUnion } from "@/drizzle/schema";
+import { type City, type Object_Link, type Object_On_Option, type Object_Phone, type Object_Photo, type Object_Schedule, type Object_, type Option, type Section_On_Spec, type Section, type Spec, objectTypeEnum, type Object_On_Section, objectStatusEnum, type objectTypeUnion, type objectStatusUnion } from "@/drizzle/schema";
 
 
 // =============================================================================

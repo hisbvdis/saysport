@@ -1,4 +1,4 @@
-import { objectTypeEnum } from "@/drizzle/schema";
+import type { objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { ObjectEdit } from "@/app/_components/pages/ObjectEdit/";

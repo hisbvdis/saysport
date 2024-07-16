@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { createContext } from "react";
-import { City } from "@/drizzle/schema";
+import type { City } from "@/drizzle/schema";
 import { useRouter } from "next/navigation";
 // -----------------------------------------------------------------------------
 import { Card } from "../../ui/Card";
@@ -10,8 +10,8 @@ import { Control } from "../../ui/Control";
 import { Categories, Filters, Results } from ".";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
-import { DBObject, UISection } from "@/app/_types/types"
-import { SearchParamsType } from "@/app/(router)/catalog/page";
+import type { DBObject, UISection } from "@/app/_types/types"
+import type { SearchParamsType } from "@/app/(router)/catalog/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";

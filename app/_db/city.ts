@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/drizzle/client";
 import { eq, ilike, sql } from "drizzle-orm";
-import { City, city } from "@/drizzle/schema";
+import { type City, city } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 
 

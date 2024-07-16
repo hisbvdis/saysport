@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { ChangeEventHandler, useContext, useId, useRef } from "react"
+import { type ChangeEventHandler, useContext, useId, useRef } from "react"
 // -----------------------------------------------------------------------------
 import { RequiredInput } from "../RequiredInput";
 // -----------------------------------------------------------------------------

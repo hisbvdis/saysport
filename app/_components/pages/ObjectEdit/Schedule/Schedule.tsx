@@ -9,7 +9,7 @@ import { Button } from "@/app/_components/ui/Button";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
-import { UIObject } from "@/app/_types/types";
+import type { UIObject } from "@/app/_types/types";
 import { ObjectEditContext } from "../ObjectEdit";
 
 
@@ -36,7 +36,7 @@ export default function Schedule() {
       const [from, to] = e.target.value.split("-").map((value) => {
         const matching = value.trim().match(/(\d+?)\s?[:.]?\s?(\d{2})?$/);
         if (!matching) return;
-        let [_, hours, min] = matching;
+        const [_, hours, min] = matching;
         return {
           string: `${hours}:${min ?? "00"}`,
           min: Number(hours) * 60 + Number(min ?? 0)
