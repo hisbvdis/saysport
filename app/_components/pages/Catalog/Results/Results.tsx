@@ -34,7 +34,7 @@ export default function Results() {
       </Card.Section>
       {results.map((object) => (
         <Card.Section key={object.object_id} style={{display: "grid", gap: "15px", gridTemplateColumns: "1fr 1.5fr"}}>
-          <img src={object.photos?.length ? `/photos/${object.photos[0].name}` : "/photos/no-photo.svg"} width="250" height="210" alt="Image" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210"}}/>
+          <img src={object.photos?.length ? `/photos/${object.photos[0].name}` : "/photos/no-photo.svg"} width="250" height="210" alt="" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210"}}/>
           <div>
             <Link href={`object/${object.object_id}`}>{object.name} {object.name_where}</Link>
             <p>{object.city?.name}, {object.address}</p>
