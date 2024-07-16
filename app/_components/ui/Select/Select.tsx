@@ -161,7 +161,7 @@ export default function Select(props:Props) {
         : null}
       </p>
       <select className={styles["select__nativeSelect"]} name={props.name} value={props.value || ""} onChange={onChange} ref={selectRef} tabIndex={-1}>
-        <option value={selectedItem?.id ?? ""}></option>
+        <option value={selectedItem?.id ?? ""}/>
       </select>
       <Menu
         isShowMenu={isShowMenu}
@@ -183,7 +183,7 @@ interface Props {
   requestItemsOnFirstTouch?: (value:string) => Promise<Item[]>;
   requestMinInputLenght?: number;
   onChange?: ChangeEventHandler<HTMLSelectElement>;
-  onChangeData?: (data: any) => any;
+  onChangeData?: (data: unknown) => unknown;
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
@@ -193,5 +193,5 @@ interface Item {
   id: string | number;
   label: string | null;
   index?: number;
-  data?: any;
+  data?: unknown;
 }

@@ -1,6 +1,6 @@
 import sharp from "sharp";
 import { type NextRequest, NextResponse } from "next/server";
-import { existsSync, mkdirSync, unlinkSync } from "fs";
+import { existsSync, mkdirSync, unlinkSync } from "node:fs";
 
 export async function POST(request:NextRequest) {
   if (!existsSync("./public/photos")) mkdirSync("./public/photos");

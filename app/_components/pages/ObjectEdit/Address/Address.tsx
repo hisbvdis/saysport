@@ -8,7 +8,7 @@ import { ObjectEditContext } from "../ObjectEdit";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
 import { Select } from "@/app/_components/ui/Select";
-import { Map, Marker } from "@/app/_components/ui/Map";
+import { MapComponent, Marker } from "@/app/_components/ui/MapComponent";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
@@ -162,7 +162,7 @@ export default function Address() {
           >
             Наследовать координату
           </Checkbox>
-          <Map
+          <MapComponent
             center={[state.coord_lat, state.coord_lon]}
             zoom={17}
             liftMapInstance={setMapInstance}
@@ -173,7 +173,7 @@ export default function Address() {
               draggable={Boolean(!state.coord_inherit)}
               onDragEnd={handleMap.markerDragEnd}
             />
-          </Map>
+          </MapComponent>
         </div>
       </Card.Section>
     </Card>

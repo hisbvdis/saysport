@@ -75,7 +75,7 @@ export default function Schedule() {
       setState((prevState) => create(prevState, (draft) => {
         draft.schedule_inherit = false;
         draft.schedule_24_7 = false;
-        draft.schedule = Array(7).fill(null).map((_,i) => ({ schedule_id: -1, object_id: -1, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
+        draft.schedule = Array(7).fill(null).map((_,i) => ({ schedule_id: -1, object_id: -1, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false }));
         draft.schedule_date = null;
         draft.schedule_source = "";
         draft.schedule_comment = "";

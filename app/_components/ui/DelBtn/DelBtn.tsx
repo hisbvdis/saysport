@@ -29,7 +29,7 @@ export default function DelBtn(props:Props) {
 
 interface Props {
   id: number;
-  delFunc: (id:number) => Promise<any>;
+  delFunc: (id:number) => void;
   style?: React.CSSProperties;
   children?: React.ReactNode;
   redirectPath?: string;

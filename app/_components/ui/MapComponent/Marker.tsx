@@ -2,7 +2,7 @@
 import type * as Leaflet from "leaflet";
 import { useContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
-import { MapContext } from "./Map";
+import { MapContext } from "./MapComponent";
 
 
 export default function Marker(props:Props) {

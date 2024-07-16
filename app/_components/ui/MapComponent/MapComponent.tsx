@@ -6,10 +6,10 @@ import { type RefObject, createContext, useEffect, useRef, useState } from "reac
 import { TileLayer } from ".";
 // -----------------------------------------------------------------------------
 import "leaflet/dist/leaflet.css";
-import styles from "./Map.module.css"
+import styles from "./MapComponent.module.css"
 
 
-export default function Map(props: Props) {
+export default function MapComponent(props: Props) {
   const { zoomControl=true, onMapRightClick=(e=>e), liftMapInstance=(e=>e), fitBoundsArray } = props;
   const center = (props.center?.[0] && props.center?.[1] ? props.center : [0, 0]) as [number, number];
   const zoom = props.zoom ?? 3;
@@ -43,7 +43,7 @@ export default function Map(props: Props) {
   return (
     <MapContext.Provider value={{ L, map, center, zoom, mapContainerRef }}>
       <TileLayer/>
-      <div className={clsx(styles.map, className)} ref={mapContainerRef} style={style}></div>
+      <div className={clsx(styles.map, className)} ref={mapContainerRef} style={style}/>
       {children}
     </MapContext.Provider>
   )

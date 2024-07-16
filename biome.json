@@ -8,10 +8,14 @@
 		"rules": {
 			"recommended": true,
 			"complexity": {
-				"noForEach": "off"
+				"noForEach": "off",
+				"useLiteralKeys": "off"
 			},
 			"suspicious": {
 				"noArrayIndexKey": "off"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "off"
 			}
 		}
 	}

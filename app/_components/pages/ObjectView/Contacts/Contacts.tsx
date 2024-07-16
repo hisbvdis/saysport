@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { ObjectViewContext } from "../ObjectView"
 import { Card } from "@/app/_components/ui/Card";
-import { Map, Marker } from "@/app/_components/ui/Map";
+import { MapComponent, Marker } from "@/app/_components/ui/MapComponent";
 
 export default function Contacts() {
   const { state } = useContext(ObjectViewContext);
@@ -23,9 +23,9 @@ export default function Contacts() {
       : null}
 
       <Card.Section style={{blockSize: "300px"}}>
-        <Map center={[state.coord_lat, state.coord_lon]} zoom={17} zoomControl={false}>
+        <MapComponent center={[state.coord_lat, state.coord_lon]} zoom={17} zoomControl={false}>
           <Marker coord={[state.coord_lat, state.coord_lon]}/>
-        </Map>
+        </MapComponent>
       </Card.Section>
     </Card>
   )
