@@ -33,15 +33,14 @@ export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
     : {}
   )
   const objectsWithSectionId = sectionId ? (await db.select({id: object_on_section.object_id}).from(object_on_section).where(eq(object_on_section.section_id, sectionId))).map(({id}) => id) : undefined;
-  // const objectsWithOptionId = groupedOptions.length ? await db.select().from(object_on_option).where() : undefined
+  const objectsWithOptionId = groupedOptions.length ? (await db.select({id: object_on_option.object_id}).from(object_on_option).where(inArray(object_on_option.option_id, groupedOptions[0][1]))).map(({id}) => id) : undefined
   const dbData = await db.query.object.findMany({
     where: and(
       query ? ilike(object.name, `%${query}%`) : undefined,
       cityId ? eq(object.city_id, cityId) : undefined,
       type ? eq(object.type, type) : undefined,
       (sectionId && objectsWithSectionId?.length) ? inArray(object.object_id, objectsWithSectionId) : undefined,
-      // AND: optionValues?.length ? optionValues.map((ids) => ({options: {some: {option_id: {in: ids}}}})) : undefined,
-      // AND: groupedOptions?.length ? groupedOptions.map(([specId, optionsArr]:[string, number[]]) => specId.startsWith("!") ? ({options: {every: {option_id: {in: optionsArr}}}}) : ({options: {some: {option_id: {in: optionsArr}}}})) : undefined,
+      (optionIds && objectsWithOptionId?.length) ? inArray(object.object_id, objectsWithOptionId) : undefined
     ),
     with: {
       statusInstead: true,
