@@ -11,25 +11,25 @@
   "dependencies": {
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.32.0",
+    "drizzle-orm": "^0.32.1",
     "leaflet": "^1.9.4",
-    "mutative": "^1.0.6",
+    "mutative": "^1.0.7",
     "next": "14.2.5",
     "postgres": "^3.4.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sharp": "^0.33.4",
-    "swiper": "^11.1.5"
+    "swiper": "^11.1.7"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.12",
-    "@types/node": "^20.14.11",
+    "@types/node": "^20.14.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.23.0",
     "eslint": "^9.7.0",
     "eslint-config-next": "14.2.5",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   }
 }
