@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/drizzle/client";
-import { and, eq, ilike, inArray } from "drizzle-orm";
-import { type Object_, object, objectStatusEnum, objectTypeEnum, type objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option } from "@/drizzle/schema";
+import { and, eq, exists, ilike, inArray } from "drizzle-orm";
+import { type Object_, object, objectStatusEnum, objectTypeEnum, type objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option, section } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -32,15 +32,13 @@ export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
       .reduce((acc, [key, value]) => ({...acc, [key]: acc[key] ? [...acc[key], Number(value)] : [Number(value)]}), {} as {[key:string]: number[]}) /* ['1',[1,2], ["!2",[5,6]]] */
     : {}
   )
-  const objectsWithSectionId = sectionId ? (await db.select({id: object_on_section.object_id}).from(object_on_section).where(eq(object_on_section.section_id, sectionId))).map(({id}) => id) : undefined;
-  const objectsWithOptionId = groupedOptions.length ? (await db.select({id: object_on_option.object_id}).from(object_on_option).where(inArray(object_on_option.option_id, groupedOptions[0][1]))).map(({id}) => id) : undefined
   const dbData = await db.query.object.findMany({
     where: and(
       query ? ilike(object.name, `%${query}%`) : undefined,
       cityId ? eq(object.city_id, cityId) : undefined,
       type ? eq(object.type, type) : undefined,
-      (sectionId && objectsWithSectionId?.length) ? inArray(object.object_id, objectsWithSectionId) : undefined,
-      (optionIds && objectsWithOptionId?.length) ? inArray(object.object_id, objectsWithOptionId) : undefined
+      sectionId ? exists(db.select().from(object_on_section).where(and(eq(object.object_id, object_on_section.object_id), eq(object_on_section.section_id, sectionId)))) : undefined,
+      optionIds ? and(...groupedOptions.map(([_, optionIdArr]) => exists(db.select().from(object_on_option).where(and(eq(object.object_id, object_on_option.object_id), inArray(object_on_option.option_id, optionIdArr)))))) : undefined,
     ),
     with: {
       statusInstead: true,
