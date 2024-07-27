@@ -7,10 +7,9 @@ import { Card } from "@/app/_components/ui/Card";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
-import type { UISpec } from "@/app/_types/types";
 import { CatalogContext } from "../Catalog";
+import type { UISpec } from "@/app/_types/types";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
-import { objectTypeEnum } from "@/drizzle/schema";
 
 
 export default function Filters(props:Props) {
