@@ -167,7 +167,7 @@ export default function SpecEdit(props:{init:UISpec}) {
         </Card.Heading>
         <Card.Section>
           <ul style={{paddingInlineStart: 0}}>
-            {state.options?.map((option) => (
+            {state.options?.toSorted((a, b) => a.order - b.order).map((option) => (
               <li key={option.uiID} style={{display: "flex"}}>
                 <Button onClick={() => handleOptions.delete(option.uiID)} tabIndex={-1}>X</Button>
                 <InputAddon>{option.option_id}</InputAddon>

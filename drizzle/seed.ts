@@ -140,29 +140,29 @@ async function main() {
 
   await db.insert(spec).values(
     [
-      {spec_id: 1 , name_service: "Фитнес-клубы — Тип"  , name_public: "Тип"          , object_type: "org"    , options_number: "many" , order: 1},
-      {spec_id: 2 , name_service: "Бассейны — Длина"    , name_public: "Длина"        , object_type: "place"  , options_number: "one"  , order: 0},
-      {spec_id: 3 , name_service: "Бассейны — Тип"      , name_public: "Тип"          , object_type: "place"  , options_number: "one"  , order: 1},
-      {spec_id: 4 , name_service: "Конструкция — Места" , name_public: "Конструкция"  , object_type: "place"  , options_number: "one"  , order: 0},
+      {spec_id: 1  , name_service: "Фитнес-клубы — Тип"        , name_public: "Тип"            , object_type: "org"    , options_number: "many"  , order: 1},
+      {spec_id: 2  , name_service: "Бассейны — Длина дорожек"  , name_public: "Длина дорожек"  , object_type: "place"  , options_number: "one"   , order: 0},
+      {spec_id: 3  , name_service: "Бассейны — Тип"            , name_public: "Тип"            , object_type: "place"  , options_number: "one"   , order: 1},
+      {spec_id: 4  , name_service: "Конструкция — Места"       , name_public: "Конструкция"    , object_type: "place"  , options_number: "one"   , order: 0},
     ]
   )
 
   await db.insert(option).values(
     [
-      {option_id: 1  , name: "С бассейном"         , order: 0 , spec_id: 1},
-      {option_id: 2  , name: "С тренажёрным залом" , order: 1 , spec_id: 1},
-      {option_id: 3  , name: "Только для женщин"   , order: 2 , spec_id: 1},
-      {option_id: 4  , name: "Другие"              , order: 3 , spec_id: 1},
-      {option_id: 5  , name: "50 метров"           , order: 0 , spec_id: 2},
-      {option_id: 6  , name: "25 метров"           , order: 1 , spec_id: 2},
-      {option_id: 7  , name: "до 24 метров"        , order: 2 , spec_id: 2},
-      {option_id: 8  , name: "Неизвестно"          , order: 3 , spec_id: 2},
-      {option_id: 9  , name: "Спортивные"          , order: 0 , spec_id: 3},
-      {option_id: 10 , name: "Плавательные"        , order: 1 , spec_id: 3},
-      {option_id: 11 , name: "Детские"             , order: 2 , spec_id: 3},
-      {option_id: 12 , name: "Грудничковые"        , order: 3 , spec_id: 3},
-      {option_id: 13 , name: "Крытое"              , order: 0 , spec_id: 4},
-      {option_id: 14 , name: "Открытое"            , order: 1 , spec_id: 4},
+      {option_id: 1 , name: "С бассейном" , order: 0 , spec_id: 1},
+      {option_id: 2 , name: "С тренажёрным залом" , order: 1 , spec_id: 1},
+      {option_id: 3 , name: "Только для женщин" , order: 2 , spec_id: 1},
+      {option_id: 4 , name: "Другие" , order: 3 , spec_id: 1},
+      {option_id: 5 , name: "50 метров" , order: 0 , spec_id: 2},
+      {option_id: 6 , name: "25 метров" , order: 1 , spec_id: 2},
+      {option_id: 7 , name: "до 24 метров" , order: 2 , spec_id: 2},
+      {option_id: 8 , name: "Отсутствуют" , order: 3 , spec_id: 2},
+      {option_id: 9 , name: "Спортивные" , order: 0 , spec_id: 3},
+      {option_id: 10 , name: "Плавательные" , order: 1 , spec_id: 3},
+      {option_id: 11 , name: "Детские" , order: 2 , spec_id: 3},
+      {option_id: 12 , name: "Грудничковые" , order: 3 , spec_id: 3},
+      {option_id: 13 , name: "Крытое" , order: 0 , spec_id: 4},
+      {option_id: 14 , name: "Открытое" , order: 1 , spec_id: 4},
     ]
   )
 
