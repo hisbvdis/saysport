@@ -70,7 +70,7 @@ interface Props {
   readOnly?: boolean;
   required?: boolean;
   style?: React.CSSProperties;
-  type?: "input" | "textarea";
+  type?: "input" | "textarea" | "number";
   value?: string | number | undefined | null;
   size?: string;
 }

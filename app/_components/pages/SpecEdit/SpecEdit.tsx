@@ -37,11 +37,18 @@ export default function SpecEdit(props:{init:UISpec}) {
         draft.options.push({option_id: 0, spec_id: 0, name: "", order: draft.options.length, uiID: crypto.randomUUID()});
       }))
     },
-    change: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
+    changeName: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
       setState((prevState) => create(prevState, (draft) => {
         const option = draft.options?.find((option) => option.uiID === uiID);
         if (!option) return;
         option.name = e.target.value;
+      }))
+    },
+    changeOrder: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const option = draft.options?.find((option) => option.uiID === uiID);
+        if (!option) return;
+        option.order = Number(e.target.value);
       }))
     },
     delete: (uiID:string) => {
@@ -140,7 +147,8 @@ export default function SpecEdit(props:{init:UISpec}) {
               <li key={option.uiID} style={{display: "flex"}}>
                 <Button onClick={() => handleOptions.delete(option.uiID)} tabIndex={-1}>X</Button>
                 <InputAddon>{option.option_id}</InputAddon>
-                <Input value={option.name} onChange={(e) => handleOptions.change(e, option.uiID)} required/>
+                <Input value={option.order} onChange={(e) => handleOptions.changeOrder(e, option.uiID)} required style={{flex: "0 1 40px"}}/>
+                <Input value={option.name} onChange={(e) => handleOptions.changeName(e, option.uiID)} required/>
               </li>
             ))}
           </ul>

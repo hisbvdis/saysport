@@ -37,7 +37,9 @@ export const getSpecsByFilters = async (filters:{objectType?:objectTypeUnion}):P
 export const getSpecWithPayloadById = async (id: number):Promise<UISpec> => {
   const dbData = await db.query.spec.findFirst({
     where: eq(spec.spec_id, id),
-    with: {options: true}
+    with: {options: {
+      orderBy: (options, { asc }) => [asc(options.order)],
+    }}
   })
   if (dbData === undefined) throw new Error("getSpecById returned undefined");
   const processed = specReadProcessing(dbData);
