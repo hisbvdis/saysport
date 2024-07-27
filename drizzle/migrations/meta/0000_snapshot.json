@@ -1,5 +1,5 @@
 {
-  "id": "d1025ff9-4193-4178-869e-26717d6f09b2",
+  "id": "8c06e959-0aea-4390-affc-a9486ee3ac7e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -210,8 +210,7 @@
           "name": "created",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         },
         "modified": {
           "name": "modified",
@@ -233,7 +232,7 @@
           "columnsTo": [
             "object_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "restrict",
           "onUpdate": "no action"
         },
         "object_city_id_city_city_id_fk": {
@@ -259,7 +258,7 @@
           "columnsTo": [
             "object_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },
@@ -307,7 +306,7 @@
           "columnsTo": [
             "object_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -351,7 +350,7 @@
           "columnsTo": [
             "object_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "object_on_option_option_id_option_option_id_fk": {
@@ -364,7 +363,7 @@
           "columnsTo": [
             "option_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },
@@ -408,7 +407,7 @@
           "columnsTo": [
             "object_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "object_on_section_section_id_section_section_id_fk": {
@@ -421,7 +420,7 @@
           "columnsTo": [
             "section_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },
@@ -477,7 +476,7 @@
           "columnsTo": [
             "object_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -534,7 +533,7 @@
           "columnsTo": [
             "object_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -596,7 +595,7 @@
           "columnsTo": [
             "object_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -736,7 +735,7 @@
           "columnsTo": [
             "spec_id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },
@@ -786,6 +785,13 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
         }
       },
       "indexes": {},
@@ -824,6 +830,7 @@
     }
   },
   "schemas": {},
+  "sequences": {},
   "_meta": {
     "columns": {},
     "schemas": {},

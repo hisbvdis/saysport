@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1719760358262,
-      "tag": "0000_omniscient_cassandra_nova",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1719836354315,
-      "tag": "0001_icy_black_knight",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1719838149799,
-      "tag": "0002_true_pyro",
+      "when": 1722069204590,
+      "tag": "0000_bent_mole_man",
       "breakpoints": true
     }
   ]

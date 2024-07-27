@@ -2,6 +2,8 @@ import { sql } from "drizzle-orm";
 import { db } from "./client";
 import { city, object, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option, section, section_on_spec, spec } from "./schema";
 
+main();
+
 async function main() {
   // ===========================================================================
   // CITY
