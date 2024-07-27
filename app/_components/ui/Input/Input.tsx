@@ -11,7 +11,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, i
   const controlContext = useContext(ControlContext);
   const [ changed, setChanged ] = useState(false);
   const name = props.name ?? "";
-  const value = props.value ? String(props.value) : "";
+  const value = (typeof props.value === "number" || typeof props.value === "string") ? String(props.value) : "";
   const required = props.required ?? controlContext?.required;
   const labelId = controlContext?.labelId;
   const inputRefInner = useRef(null);

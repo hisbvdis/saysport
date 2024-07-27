@@ -17,6 +17,7 @@ export const getEmptySpec = async ():Promise<UISpec> => {
     options_number: optionsNumberEnum.many,
     uiID: crypto.randomUUID(),
     options: [],
+    order: 1,
   }
 }
 

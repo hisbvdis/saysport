@@ -130,11 +130,11 @@ async function main() {
   // ===========================================================================
   await db.insert(section).values(
     [
-      { section_id: 1 , name_plural: "Фитнес-клубы"         , name_singular: "Фитнес-клуб"          , object_type: "org" },
-      { section_id: 2 , name_plural: "Спорткомплексы"       , name_singular: "Спорткомплекс"        , object_type: "org" },
-      { section_id: 3 , name_plural: "Тренажёрные залы"     , name_singular: "Трежажерный зал"      , object_type: "place" },
-      { section_id: 4 , name_plural: "Бассейны"             , name_singular: "Бассейн"              , object_type: "place" },
-      { section_id: 5 , name_plural: "Общие характеристики" , name_singular: "Общие характеристики" , object_type: "place" }
+      { section_id: 1 , name_plural: "Фитнес-клубы"              , name_singular: "Фитнес-клуб"               , object_type: "org" },
+      { section_id: 2 , name_plural: "Спорткомплексы"            , name_singular: "Спорткомплекс"             , object_type: "org" },
+      { section_id: 3 , name_plural: "Тренажёрные залы"          , name_singular: "Трежажерный зал"           , object_type: "place" },
+      { section_id: 4 , name_plural: "Бассейны"                  , name_singular: "Бассейн"                   , object_type: "place" },
+      { section_id: 5 , name_plural: "Общие характеристики мест" , name_singular: "Общие характеристики мест" , object_type: "place" }
     ]
   )
 
@@ -182,7 +182,6 @@ async function main() {
   await db.insert(object_on_section).values(
     [
       {object_id: 1, section_id: 2},
-      {object_id: 2, section_id: 3},
       {object_id: 3, section_id: 1},
       {object_id: 4, section_id: 3},
       {object_id: 2, section_id: 4},
@@ -201,7 +200,7 @@ async function main() {
       {object_id: 1, option_id: 2},
       {object_id: 1, option_id: 1},
       {object_id: 5, option_id: 5},
-      {object_id: 5, option_id: 13},
+      {object_id: 5, option_id: 10},
     ]
   )
 

@@ -183,7 +183,7 @@ interface Props {
   requestItemsOnFirstTouch?: (value:string) => Promise<Item[]>;
   requestMinInputLenght?: number;
   onChange?: ChangeEventHandler<HTMLSelectElement>;
-  onChangeData?: (data: unknown) => unknown;
+  onChangeData?: (data: any) => any;
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
@@ -193,5 +193,5 @@ interface Item {
   id: string | number;
   label: string | null;
   index?: number;
-  data?: unknown;
+  data?: any;
 }
