@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/drizzle/client";
-import { and, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
+import { and, asc, desc, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
 import { type Object_, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option, section } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { UIObject } from "../_types/types";
@@ -60,6 +60,7 @@ export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
       photos: true,
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
     },
+    orderBy: [desc(object.created)]
   });
   return dbData;
 }
