@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/drizzle/client";
-import { and, eq, exists, ilike, inArray, sql } from "drizzle-orm";
-import { type Object_, object, objectStatusEnum, objectTypeEnum, type objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option, section } from "@/drizzle/schema";
+import { and, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
+import { type Object_, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option, section } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -23,6 +23,8 @@ export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
   const type = filters?.type;
   const query = filters?.query;
   const cityId = filters?.city ? Number(filters?.city) : undefined;
+  const status = filters?.status?.split(",") as objectStatusUnion[];
+  const photo = filters?.photo?.split(",");
   const sectionId = filters?.section ? Number(filters.section) : undefined;
   const optionIds = filters?.options ?? undefined;
   const groupedOptions = Object.entries(optionIds
@@ -44,6 +46,8 @@ export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
         }
         return exists(db.select().from(object_on_option).where(and(eq(object.object_id, object_on_option.object_id), inArray(object_on_option.option_id, optionIdArr))))
       })) : undefined,
+      status ? inArray(object.status, status) : undefined,
+      photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(object_photo => eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(object_photo => eq(object_photo.object_id, object.object_id))) : undefined
     ),
     with: {
       statusInstead: true,

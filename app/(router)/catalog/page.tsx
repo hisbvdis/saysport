@@ -25,4 +25,6 @@ export interface SearchParamsType {
   section?:string;
   options?:string;
   map?:boolean;
+  photo?:string;
+  status?:string;
 }

@@ -10,6 +10,7 @@ import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 import { CatalogContext } from "../Catalog";
 import type { UISpec } from "@/app/_types/types";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import { objectStatusEnum } from "@/drizzle/schema";
 
 
 export default function Filters(props:Props) {
@@ -33,8 +34,8 @@ export default function Filters(props:Props) {
     <Card className={className} style={style}>
       <Card.Heading style={{display: "flex", alignItems: "center"}}>
         <span style={{marginInlineEnd: "auto"}}>{section?.name_plural}</span>
-        {searchParams.options
-          ? <Link href={manageSearchParams.delete("options")} style={{display: "flex", alignItems: "center"}}>
+        {Object.keys(searchParams).filter((paramName) => paramName !== "section" && paramName !== "city" ).length
+          ? <Link href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => paramName !== "section" && paramName !== "city" ))} style={{display: "flex", alignItems: "center"}}>
               <img src="/icons/bin.svg" width={24} height={24} alt="Map Pin" style={{inlineSize: "19px", blockSize: "19px"}}/>
             </Link>
           : null
@@ -43,12 +44,12 @@ export default function Filters(props:Props) {
           <img src="/icons/close.svg" width={15} height={20} alt="Close Icon"/>
         </a>
       </Card.Heading>
-      {section?.specs.map((spec) => (
+      {section?.specs.toSorted((a, b) => a.order - b.order).map((spec) => (
         <Card.Section key={spec.spec_id}>
           <Control>
             <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
               <span>{spec.name_public}</span>
-              <Checkbox value={spec.spec_id} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>
+              {spec.is_and_search && <Checkbox value={spec.spec_id} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>}
             </Control.Label>
             <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
               {spec.options?.toSorted((a, b) => a.order - b.order).map((opt) => (
@@ -60,6 +61,69 @@ export default function Filters(props:Props) {
           </Control>
         </Card.Section>
       ))}
+
+      {/* Construction */}
+      {section?.object_type === "place"
+        ? <Card.Section>
+            <Control>
+              <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+                <span>Конструкция</span>
+              </Control.Label>
+              <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
+                <Link href={manageSearchParams.appendOrClear("options", "4:13")}>
+                  <Checkbox value={"4:13"} tabIndex={-1}>Крытое</Checkbox>
+                </Link>
+                <Link href={manageSearchParams.appendOrClear("options", "4:14")}>
+                  <Checkbox value={"4:14"} tabIndex={-1}>Открытое</Checkbox>
+                </Link>
+              </CheckboxGroup>
+            </Control>
+          </Card.Section>
+        : null
+      }
+
+      {/* Status */}
+      <Card.Section>
+        <Control>
+          <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+            <span>Статус</span>
+          </Control.Label>
+          <CheckboxGroup arrayToCompareWith={searchParams.status?.split(",")}>
+            <Link href={manageSearchParams.appendOrClear("status", objectStatusEnum.works)}>
+              <Checkbox value={objectStatusEnum.works} tabIndex={-1}>Работает</Checkbox>
+            </Link>
+            <Link href={manageSearchParams.appendOrClear("status", objectStatusEnum.open_soon)}>
+              <Checkbox value={objectStatusEnum.open_soon} tabIndex={-1}>Скоро открытие</Checkbox>
+            </Link>
+            <Link href={manageSearchParams.appendOrClear("status", objectStatusEnum.might_closed)}>
+              <Checkbox value={objectStatusEnum.might_closed} tabIndex={-1}>Возможно, не работает</Checkbox>
+            </Link>
+            <Link href={manageSearchParams.appendOrClear("status", objectStatusEnum.closed_temp)}>
+              <Checkbox value={objectStatusEnum.closed_temp} tabIndex={-1}>Временно не работает</Checkbox>
+            </Link>
+            <Link href={manageSearchParams.appendOrClear("status", objectStatusEnum.closed_forever)}>
+              <Checkbox value={objectStatusEnum.closed_forever} tabIndex={-1}>Закрыто навсегда</Checkbox>
+            </Link>
+          </CheckboxGroup>
+        </Control>
+      </Card.Section>
+
+      {/* Photo */}
+      <Card.Section>
+        <Control>
+          <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+            <span>Фото</span>
+          </Control.Label>
+          <CheckboxGroup arrayToCompareWith={searchParams.photo?.split(",")}>
+            <Link href={manageSearchParams.appendOrClear("photo", "true")}>
+              <Checkbox value="true" tabIndex={-1}>С фото</Checkbox>
+            </Link>
+            <Link href={manageSearchParams.appendOrClear("photo", "false")}>
+              <Checkbox value="false" tabIndex={-1}>Без фото</Checkbox>
+            </Link>
+          </CheckboxGroup>
+        </Control>
+      </Card.Section>
     </Card>
   )
 }

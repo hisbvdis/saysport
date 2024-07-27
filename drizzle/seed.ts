@@ -140,10 +140,10 @@ async function main() {
 
   await db.insert(spec).values(
     [
-      {spec_id: 1, name_service: "Фитнес-клубы — Тип" , name_public: "Тип"         , object_type: "org"   , options_number: "many"},
-      {spec_id: 2, name_service: "Бассейны — Длина"   , name_public: "Длина"       , object_type: "place" , options_number: "one"},
-      {spec_id: 3, name_service: "Бассейны — Тип"     , name_public: "Тип"         , object_type: "place" , options_number: "one"},
-      {spec_id: 4, name_service: "Конструкция — Места", name_public: "Конструкция" , object_type: "place" , options_number: "one" },
+      {spec_id: 1 , name_service: "Фитнес-клубы — Тип"  , name_public: "Тип"          , object_type: "org"    , options_number: "many" , order: 1},
+      {spec_id: 2 , name_service: "Бассейны — Длина"    , name_public: "Длина"        , object_type: "place"  , options_number: "one"  , order: 0},
+      {spec_id: 3 , name_service: "Бассейны — Тип"      , name_public: "Тип"          , object_type: "place"  , options_number: "one"  , order: 1},
+      {spec_id: 4 , name_service: "Конструкция — Места" , name_public: "Конструкция"  , object_type: "place"  , options_number: "one"  , order: 0},
     ]
   )
 

@@ -80,7 +80,10 @@ export const upsertSection = async (state:UISection, init: UISection) => {
   const [upsertedSection] = await db.insert(section).values(fields).onConflictDoUpdate({target: section.section_id, set: fields}).returning();
 
   const specsAdded = state.specs?.filter((stateSpec) => !init.specs?.some((initSpec) => stateSpec.spec_id === initSpec.spec_id));
-  specsAdded.length ? await db.insert(section_on_spec).values(specsAdded.map((section_on_spec) => ({section_id: upsertedSection.section_id, spec_id: section_on_spec.spec_id}))) : undefined;
+  if (specsAdded.length) {
+    await db.insert(section_on_spec).values(specsAdded.map((section_on_spec) => ({section_id: upsertedSection.section_id, spec_id: section_on_spec.spec_id})));
+    specsAdded?.forEach(async (item) => await db.update(spec).set(item).where(eq(spec.spec_id, item.spec_id)));
+  }
 
   const specsDeleted = init.specs?.filter((initSpec) => !state.specs?.some((stateSpec) => initSpec.spec_id === stateSpec.spec_id));
   specsDeleted.length ? await db.delete(section_on_spec).where(and(eq(section_on_spec.section_id, upsertedSection.section_id), inArray(section_on_spec.spec_id, specsDeleted.map((spec) => spec.spec_id)))) : undefined;
