@@ -51,7 +51,7 @@ export default function Filters(props:Props) {
               <Checkbox value={spec.spec_id} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>
             </Control.Label>
             <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
-              {spec.options?.map((opt) => (
+              {spec.options?.toSorted((a, b) => a.order - b.order).map((opt) => (
                 <Link key={opt.option_id} href={manageSearchParams.appendOrClear("options", `${andSpecs.includes(spec.spec_id) ? "!" : ""}${spec.spec_id}:${opt.option_id}`)}>
                   <Checkbox value={`${andSpecs.includes(spec.spec_id) ? "!" : ""}${spec.spec_id}:${opt.option_id}`} tabIndex={-1}>{opt.name}</Checkbox>
                 </Link>

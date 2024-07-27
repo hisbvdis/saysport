@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
-import { type SyntheticEvent, useEffect, useState } from "react"
+import { ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
@@ -43,6 +43,13 @@ export default function SectionEdit(props:{init:UISection}) {
     delete: (id:number) => {
       setState((prevState) => create(prevState, (draft) => {
         draft.specs = draft.specs?.filter((spec) => spec.spec_id !== id);
+      }))
+    },
+    changeOrder: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const spec = draft.specs?.find((spec) => spec.uiID === uiID);
+        if (!spec) return;
+        spec.order = Number(e.target.value);
       }))
     },
   }
@@ -120,11 +127,12 @@ export default function SectionEdit(props:{init:UISection}) {
             }
           />
           <ul style={{marginBlockStart: "5px"}}>
-            {state?.specs?.map((spec) => (
-              <li key={spec.spec_id}>
+            {state?.specs?.toSorted((a, b) => a.order - b.order).map((spec) => (
+              <li key={spec.spec_id} style={{display: "flex"}}>
                 <Button onClick={() => handleSpecs.delete(spec.spec_id)}>X</Button>
                 <InputAddon>{spec.spec_id}</InputAddon>
-                <Link href={`/admin/specs/${spec.spec_id}`}>{spec.name_service}</Link>
+                <Input value={spec.order} onChange={(e) => handleSpecs.changeOrder(e, spec.uiID)} required style={{flex: "0 1 40px"}}/>
+                <Link href={`/admin/specs/${spec.spec_id}`} style={{alignSelf: "center"}}>{spec.name_service}</Link>
               </li>
             ))}
           </ul>

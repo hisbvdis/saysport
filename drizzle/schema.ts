@@ -125,7 +125,7 @@ export const spec = pgTable("spec", {
   name_public: varchar("name_public").notNull(),
   object_type: objectTypeColumnType("object_type").notNull(),
   options_number: optionsNumberColumnType("options_number").notNull(),
-  order: integer("order").notNull().default(1),
+  order: integer("order").notNull(),
 })
 
 export const specRelations = relations(spec, ({ many }) => ({

@@ -8,6 +8,13 @@
       "when": 1722069204590,
       "tag": "0000_bent_mole_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1722079157245,
+      "tag": "0001_talented_stephen_strange",
+      "breakpoints": true
     }
   ]
 }

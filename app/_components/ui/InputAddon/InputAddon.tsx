@@ -2,10 +2,10 @@ import styles from "./styles.module.css";
 
 
 export default function InputAddon(props:Props) {
-  const { children } = props;
+  const { children, style } = props;
 
   return (
-    <span className={styles["inputAddon"]}>
+    <span className={styles["inputAddon"]} style={style}>
       {children}
     </span>
   )
@@ -13,4 +13,5 @@ export default function InputAddon(props:Props) {
 
 interface Props {
   children: React.ReactNode;
+  style?: React.CSSProperties;
 }
