@@ -6,7 +6,7 @@ import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "reac
 import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
-import { Radio } from "@/app/_components/ui/Choice";
+import { Checkbox, Radio } from "@/app/_components/ui/Choice";
 import { Button } from "@/app/_components/ui/Button";
 import { Control } from "@/app/_components/ui/Control";
 import { InputAddon } from "@/app/_components/ui/InputAddon";
@@ -27,7 +27,12 @@ export default function SpecEdit(props:{init:UISpec}) {
       setState((prevState) => create(prevState, (draft) => {
         (draft as any)[e.target.name] = e.target.value;
       }))
-    }
+    },
+    checked: (e:ChangeEvent<HTMLInputElement>) => {
+      setState((prevState) => create(prevState, (draft) => {
+        (draft as any)[e.target.name] = e.target.checked;
+      }));
+    },
   }
 
   const handleOptions = {
@@ -82,6 +87,12 @@ export default function SpecEdit(props:{init:UISpec}) {
             </Control.Section>
           </Control>
           <Control className="mt15">
+            <Control.Label>Order</Control.Label>
+            <Control.Section>
+              <Input value={state?.order} disabled/>
+            </Control.Section>
+          </Control>
+          <Control className="mt15">
             <Control.Label>Название (служебное)</Control.Label>
             <Control.Section>
               <Input
@@ -131,6 +142,19 @@ export default function SpecEdit(props:{init:UISpec}) {
                 <Radio value="many">Много</Radio>
                 <Radio value="one">Одна</Radio>
               </RadioGroup>
+            </Control.Section>
+          </Control>
+        </Card.Section>
+      </Card>
+
+      <Card style={{marginBlockStart: "10px"}}>
+        <Card.Heading>Страница "Поиск"</Card.Heading>
+        <Card.Section>
+          <Control>
+            <Control.Section>
+              <Checkbox name="is_and_search" checked={Boolean(state.is_and_search)} onChange={handleStateChange.checked}>
+                Показывать режим поиска "И"
+              </Checkbox>
             </Control.Section>
           </Control>
         </Card.Section>

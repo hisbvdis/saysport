@@ -37,7 +37,7 @@ export const ChoiceGroupContext = createContext<ChoiceGroupContextType>({} as Ch
 
 interface Props {
   name?: string;
-  valueToCompareWith?: string;
+  valueToCompareWith?: string | boolean;
   arrayToCompareWith?: string[];
   onChange?: ReactEventHandler;
   className?: string;
@@ -50,7 +50,7 @@ interface Props {
 interface ChoiceGroupContextType {
   groupName: string;
   onChange: ReactEventHandler;
-  valueToCompareWith?: string;
+  valueToCompareWith?: string | boolean;
   arrayToCompareWith?: string[];
   requiredGroup: boolean;
   disabledGroup: boolean;

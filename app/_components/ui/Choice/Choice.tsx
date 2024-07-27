@@ -54,7 +54,7 @@ interface Props {
   type?: "radio" | "checkbox";
   name?: string;
   value?: string | number;
-  valueToCompareWith?: string | number;
+  valueToCompareWith?: string | number | boolean;
   arrayToCompareWith?: (string | number)[];
   checked?: boolean;
   required?: boolean;
