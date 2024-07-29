@@ -67,7 +67,6 @@ export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
 
 interface Filters extends SearchParamsType {
   type?: objectTypeUnion;
-  query?: string;
 }
 
 export const getObjectWithPayloadById = async (id:number) => {

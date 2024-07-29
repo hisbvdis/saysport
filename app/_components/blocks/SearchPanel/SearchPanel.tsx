@@ -8,17 +8,17 @@ import { Button } from "../../ui/Button";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 import { useRouter } from "next/navigation";
-import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 import { CatalogContext } from "../../pages/Catalog/Catalog";
+import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 
 
 export default function SearchPanel() {
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
   const { searchParams } = useContext(CatalogContext);
-  const [ searchText, setSearchText ] = useState<string>("");
+  const [ searchText, setSearchText ] = useState<string>(searchParams.query);
 
-  const handleClearButtonClick = (e) => {
+  const handleClearButtonClick = () => {
     setSearchText("");
     router.push(manageSearchParams.delete("query"));
   }
@@ -30,7 +30,7 @@ export default function SearchPanel() {
 
   return (
     <Form className={clsx(styles["searchPanel"])} onSubmit={handleFormSubmit}>
-      <Input value={searchText} onChangeValue={setSearchText}/>
+      <Input value={searchText} onChangeValue={setSearchText} placeholder="Введите название"/>
       {searchText && <Button onClick={handleClearButtonClick}>X</Button>}
       <Button type="submit">Поиск</Button>
     </Form>

@@ -27,4 +27,5 @@ export interface SearchParamsType {
   map?:boolean;
   photo?:string;
   status?:string;
+  query:string;
 }
