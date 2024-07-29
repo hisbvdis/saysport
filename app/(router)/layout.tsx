@@ -10,7 +10,6 @@ export default function RootLayout(props:Props) {
     <html lang="en">
       <body>
         <PageHeader/>
-        <SearchPanel/>
         {children}
       </body>
     </html>

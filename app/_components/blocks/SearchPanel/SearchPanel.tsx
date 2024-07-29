@@ -29,12 +29,10 @@ export default function SearchPanel() {
   }
 
   return (
-    <section className={styles["searchPanel"]}>
-      <Form className={clsx("container", styles["searchPanel__container"])} onSubmit={handleFormSubmit}>
-        <Input value={searchText} onChangeValue={setSearchText}/>
-        {searchText && <Button onClick={handleClearButtonClick}>X</Button>}
-        <Button type="submit">Поиск</Button>
-      </Form>
-    </section>
+    <Form className={clsx(styles["searchPanel"])} onSubmit={handleFormSubmit}>
+      <Input value={searchText} onChangeValue={setSearchText}/>
+      {searchText && <Button onClick={handleClearButtonClick}>X</Button>}
+      <Button type="submit">Поиск</Button>
+    </Form>
   )
 }

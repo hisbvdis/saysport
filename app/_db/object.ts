@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/drizzle/client";
-import { and, asc, desc, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
+import { and, asc, desc, eq, exists, ilike, inArray, notExists, or, sql } from "drizzle-orm";
 import { type Object_, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option, section } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { UIObject } from "../_types/types";
@@ -36,7 +36,7 @@ export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
   )
   const dbData = await db.query.object.findMany({
     where: and(
-      query ? ilike(object.name, `%${query}%`) : undefined,
+      query ? or(ilike(object.name, `%${query}%`), ilike(object.name_where, `%${query}%`)) : undefined,
       cityId ? eq(object.city_id, cityId) : undefined,
       type ? eq(object.type, type) : undefined,
       sectionId ? exists(db.select().from(object_on_section).where(and(eq(object.object_id, object_on_section.object_id), eq(object_on_section.section_id, sectionId)))) : undefined,

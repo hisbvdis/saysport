@@ -6,6 +6,7 @@ import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import SearchPanel from "@/app/_components/blocks/SearchPanel/SearchPanel";
 
 
 export default function Results() {
@@ -24,6 +25,7 @@ export default function Results() {
           <span>{section?.name_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
           <sup style={{fontSize: "0.5em"}}>{results?.length}</sup>
         </h1>
+        <SearchPanel/>
       </Card.Heading>
       <Card.Section style={{display: "flex", justifyContent: "space-between"}}>
         <p>Сортировка: По дате добавления</p>
