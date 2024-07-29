@@ -1,5 +1,6 @@
 import "@/app/_assets/globals.css";
 import { PageHeader } from "@/app/_components/blocks/PageHeader/";
+import SearchPanel from "../_components/blocks/SearchPanel/SearchPanel";
 
 
 export default function RootLayout(props:Props) {
@@ -9,6 +10,7 @@ export default function RootLayout(props:Props) {
     <html lang="en">
       <body>
         <PageHeader/>
+        <SearchPanel/>
         {children}
       </body>
     </html>
