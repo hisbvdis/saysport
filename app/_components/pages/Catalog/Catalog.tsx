@@ -10,6 +10,7 @@ import { Control } from "../../ui/Control";
 import { Categories, Filters, Results } from ".";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
+import { MapComponent, Marker } from "../../ui/MapComponent";
 import type { DBObject, UISection } from "@/app/_types/types"
 import type { SearchParamsType } from "@/app/(router)/catalog/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
@@ -24,7 +25,7 @@ export default function Catalog(props:Props) {
 
   return (
     <CatalogContext.Provider value={{searchParams, results, sectionList, section, city}}>
-      <div className={clsx(styles["catalog"], "container", "page")}>
+      <div className={clsx(styles["catalog"], !searchParams.map && "container", "page")}>
         <aside>
           <Card>
             <Control>
@@ -47,6 +48,13 @@ export default function Catalog(props:Props) {
         <main>
           <Results/>
         </main>
+        <aside>
+          {searchParams.map &&
+            <MapComponent fitBoundsArray={results.map((object) => [object.coord_lat, object.coord_lon])}>
+              {results.map((object) => <Marker key={object.object_id} coord={[object.coord_lat, object.coord_lon]}/>)}
+            </MapComponent>
+          }
+        </aside>
       </div>
     </CatalogContext.Provider>
   )
