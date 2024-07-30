@@ -19,9 +19,10 @@ export const objectStatusColumnType = pgEnum("objectStatus", ["works", "open_soo
 export const object = pgTable("object", {
   object_id: serial("object_id").primaryKey(),
   type: objectTypeColumnType("type").notNull(),
-  name: varchar("name").notNull(),
-  name_locative: varchar("name_locative"),
+  name_type: varchar("name_type").notNull(),
+  name_title: varchar("name_title"),
   name_where: varchar("name_where"),
+  name_locative: varchar("name_locative"),
   status_inherit: boolean("status_inherit"),
   status: objectStatusColumnType("status").notNull(),
   status_comment: varchar("status_comment"),
@@ -178,7 +179,7 @@ export type Section_On_Spec = typeof section_on_spec.$inferSelect;
 export const city = pgTable("city", {
   city_id: serial("city_id").primaryKey(),
   name: varchar("name").notNull(),
-  name_preposition: varchar("name_preposition").notNull(),
+  name_preposition: varchar("name_preposition"),
   admin1: varchar("admin1"),
   admin2: varchar("admin2"),
   country: varchar("country").notNull(),

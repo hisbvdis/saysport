@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/drizzle/client";
-import { and, asc, desc, eq, exists, ilike, inArray, notExists, or, sql } from "drizzle-orm";
+import { and, ColumnDataType, desc, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
 import { type Object_, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option, section } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { UIObject } from "../_types/types";
@@ -10,9 +10,11 @@ import type { SearchParamsType } from "../(router)/catalog/page";
 
 export const getEmptyObject = async ():Promise<UIObject> => {
   return {
-    name: "",
+    name_type: "",
     city_id: 0,
     object_id: 0,
+    coord_lat: 0,
+    coord_lon: 0,
     type: objectTypeEnum.org,
     status: objectStatusEnum.works,
     schedule: Array(7).fill(null).map((_,i) => ({ object_id: 0, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
@@ -36,7 +38,8 @@ export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
   )
   const dbData = await db.query.object.findMany({
     where: and(
-      query ? or(ilike(object.name, `%${query}%`), ilike(object.name_where, `%${query}%`)) : undefined,
+      // query ? or(ilike(object.name, `%${query}%`), ilike(object.name_where, `%${query}%`)) : undefined,
+      query ? ilike(sql`TRIM(CONCAT(${object.name_type}, COALESCE(NULLIF(CONCAT(' ', ${object.name_title}), ' '), ''), COALESCE(NULLIF(CONCAT(' ', ${object.name_where}), ' '), '')))` as any, `%${query}%`) : undefined,
       cityId ? eq(object.city_id, cityId) : undefined,
       type ? eq(object.type, type) : undefined,
       sectionId ? exists(db.select().from(object_on_section).where(and(eq(object.object_id, object_on_section.object_id), eq(object_on_section.section_id, sectionId)))) : undefined,
@@ -97,7 +100,8 @@ export const deleteObjectById = async (id:number) => {
 export const upsertObject = async (state:UIObject, init: UIObject): Promise<Object_> => {
   const fields = {
     object_id: state.object_id || undefined,
-    name: state.name,
+    name_type: state.name_type,
+    name_title: state.name_title,
     name_locative: state.name_locative || null,
     name_where: state.name_where || null,
     type: state.type,
@@ -111,8 +115,8 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     address: state.address || null,
     address_2: state.address_2 || null,
     coord_inherit: state.coord_inherit || null,
-    coord_lat: state.coord_lat || null,
-    coord_lon: state.coord_lon || null,
+    coord_lat: state.coord_lat,
+    coord_lon: state.coord_lon,
     description: state.description || null,
     schedule_inherit: state.schedule_inherit || null,
     schedule_24_7: state.schedule_24_7 || null,

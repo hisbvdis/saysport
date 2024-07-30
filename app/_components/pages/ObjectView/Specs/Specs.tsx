@@ -17,7 +17,7 @@ export default function Specs() {
           {section.specs.map((spec) => (
             <div key={spec.spec_id} style={{display: "flex", gap: "10px"}}>
               <p>{spec.name_public}</p>
-              <ul>
+              <ul style={{display: "flex", gap: "10px"}}>
                 {state.options?.filter((option) => option.spec_id === spec.spec_id).map((option) => (
                   <li key={option.option_id}>
                     <Link href={`/catalog?city=${state.city_id}&section=${section?.section_id}&options=${option.spec_id}:${option.option_id}`}>{option.name}</Link>

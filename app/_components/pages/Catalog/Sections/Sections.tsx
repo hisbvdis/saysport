@@ -7,7 +7,7 @@ import { Card } from "@/app/_components/ui/Card";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 
 
-export default function Categories(props:Props) {
+export default function Sections(props:Props) {
   const { style, className } = props;
   const { sectionList } = useContext(CatalogContext);
   const manageSearchParams = useManageSearchParams();
@@ -17,7 +17,7 @@ export default function Categories(props:Props) {
       <Card.Heading>Разделы</Card.Heading>
       <Card.Section>
         <ul>
-          {sectionList.map((section) => (
+          {sectionList.filter((section) => section.section_id !== 5).map((section) => (
             <li key={section.section_id}>
               <Link href={manageSearchParams.set("section", String(section.section_id))}>{section.name_plural}</Link>
             </li>

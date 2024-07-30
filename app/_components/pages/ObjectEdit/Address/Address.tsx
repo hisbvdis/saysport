@@ -19,6 +19,7 @@ import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
 import { objectTypeEnum } from "@/drizzle/schema";
+import Link from "next/link";
 
 
 export default function Address() {
@@ -75,6 +76,7 @@ export default function Address() {
   useEffect(() => {
     if (!state.coord_inherit) return;
     setState((prevState) => create(prevState, (draft) => {
+      if (!draft.parent?.coord_lat || !draft.parent?.coord_lon) return;
       draft.coord_lat = draft.parent?.coord_lat;
       draft.coord_lon = draft.parent?.coord_lon;
     }))
@@ -106,12 +108,15 @@ export default function Address() {
             </Control.Section>
           </Control>
           <Control className="mt15">
-            <Control.Label>На базе организации</Control.Label>
+            <Control.Label>
+              <span>На базе организации</span>
+              <Link href={`/object/${state.parent?.object_id}`}>(Open)</Link>
+            </Control.Label>
             <Control.Section>
               <Select
                 name="parent_id"
                 value={state.parent_id}
-                label={state.parent?.name}
+                label={state.parent?.name_type?.concat(state.parent.name_title ? ` «${state.parent.name_title}»` : "").concat(state.parent.name_where ? ` ${state.parent.name_where}` : "")}
                 onChange={handleStateChange?.valueAsNumber}
                 onChangeData={(parent) => setInheritedData(parent.id ? objectReadProcessing(parent) : null, setState)}
                 isAutocomplete
@@ -120,7 +125,7 @@ export default function Address() {
                 requestItemsOnInputChange={async (value) => (
                   await getObjectsWIthPayloadByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))
                     .filter((org) => org.object_id !== state.object_id)
-                    .map((org) => ({id: org.object_id, label: org.name, data: org})
+                    .map((org) => ({id: org.object_id, label: `${org.name_type} ${org.name_title} ${org.name_where}`, data: org})
                 )}
               />
             </Control.Section>

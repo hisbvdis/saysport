@@ -1,6 +1,6 @@
 import Catalog from "./Catalog";
 import Results from "./Results/Results";
-import Categories from "./Categories/Categories";
+import Sections from "./Sections/Sections";
 import Filters from "./Filters/Filters";
 
-export { Catalog, Results, Categories, Filters }
+export { Catalog, Results, Sections, Filters }

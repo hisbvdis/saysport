@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Card } from "../../ui/Card";
 import { Select } from "../../ui/Select";
 import { Control } from "../../ui/Control";
-import { Categories, Filters, Results } from ".";
+import { Sections, Filters, Results } from ".";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import { MapComponent, Marker } from "../../ui/MapComponent";
@@ -43,7 +43,7 @@ export default function Catalog(props:Props) {
               />
             </Control>
           </Card>
-          {searchParams.section ? <Filters className="mt10"/> : <Categories className="mt10"/>}
+          {searchParams.section ? <Filters className="mt10"/> : <Sections className="mt10"/>}
         </aside>
         <main>
           <Results/>

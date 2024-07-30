@@ -7,14 +7,14 @@ import { Form } from "@/app/_components/ui/Form";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 import { NameOrg, NamePlace, Address, Contacts, Specs, Description, Schedule, Photos } from "./"
 // -----------------------------------------------------------------------------
-import type { UIObject } from "@/app/_types/types";
+import type { UIObject, UISection } from "@/app/_types/types";
 import { syncPhotos } from "./Photos/syncPhotos";
 import { setInheritedData } from "./Address/setInheritedData";
 import { deleteObjectById, upsertObject } from "@/app/_db/object";
 import { objectTypeEnum } from "@/drizzle/schema";
 
 
-export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null}) {
+export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, commonPlaceSection?: UISection}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -32,7 +32,15 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null})
   }
 
   useEffect(() => {
-    if (state.object_id || !props.parent) return;
+    if (state.object_id) return;
+    if (state.type === objectTypeEnum.place) {
+      setState((prevState) => create(prevState, (draft) => {
+        if (!draft.sections) draft.sections = [];
+        if (!props.commonPlaceSection) return;
+        draft.sections.push(props.commonPlaceSection);
+      }))
+    }
+    if (!props.parent) return;
     setInheritedData(props.parent, setState);
   }, [])
 
@@ -40,6 +48,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null})
     e.preventDefault();
     const stateWithoutFiles = {...state, photos: state.photos?.map((photo) => ({...photo, file: undefined}))};
     const { object_id } = await upsertObject(stateWithoutFiles, props.init);
+    console.log( "object_id:", object_id  )
     await syncPhotos(object_id, state, props.init);
     if (e.nativeEvent.submitter?.dataset?.leavePage) {
       router.push(`/object/${object_id}`);
@@ -51,7 +60,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null})
 
   return (
     <ObjectEditContext.Provider value={{ state, setState, handleStateChange }}>
-      <Form onSubmit={handleFormSubmit} noValidate>
+      <Form onSubmit={handleFormSubmit}>
         {state.type === objectTypeEnum.org ? <NameOrg/> : <NamePlace/>}
         <Address/>
         <Contacts/>
@@ -79,5 +88,5 @@ interface ObjectEditContextType {
     value: ChangeEventHandler,
     checked: ChangeEventHandler,
     valueAsNumber: ChangeEventHandler,
-  }
+  },
 }

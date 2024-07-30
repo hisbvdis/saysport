@@ -9,9 +9,10 @@ export default function Contacts() {
   return (
     <Card>
       <Card.Section>
-        <p>{state.city?.name}, {state.city?.country}</p>
+        <p>{state.city?.name},</p>
         <p>{state.address}</p>
         <p style={{color: "var(--fontColor-light)", marginBlockStart: "2px", fontSize: "0.8em"}}>{state.address_2}</p>
+        <p style={{color: "var(--fontColor-light)", marginBlockStart: "10px", fontSize: "0.8em"}}>{state.city?.country}, {state.city?.admin1}, {state.city?.admin2}</p>
       </Card.Section>
 
       {state.phones?.length ?

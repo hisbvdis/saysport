@@ -72,14 +72,14 @@ export default function Specs() {
                   <Control.Section>
                     {spec.options_number === "many"
                       ? <CheckboxGroup arrayToCompareWith={state.options?.map((option) => String(option.option_id))} required>
-                        {spec.options?.map((option) => (
+                        {spec.options?.toSorted((a, b) => a.order - b.order).map((option) => (
                           <Checkbox key={option.option_id} value={String(option.option_id)} onChange={(e) => handleOptions.changeCheckbox(e, option)}>{option.name}</Checkbox>
                         ))}
                         </CheckboxGroup>
                       :
                     spec.options_number === "one"
                       ? <RadioGroup arrayToCompareWith={state.options?.map((option) => String(option.option_id))} required>
-                        {spec.options?.map((option) => (
+                        {spec.options?.toSorted((a, b) => a.order - b.order).map((option) => (
                           <Radio key={option.option_id} value={String(option.option_id)} onChange={() => handleOptions.changeRadio(spec, option)}>{option.name}</Radio>
                         ))}
                         </RadioGroup>

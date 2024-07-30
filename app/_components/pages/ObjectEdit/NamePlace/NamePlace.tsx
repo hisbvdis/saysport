@@ -21,8 +21,8 @@ export default function NamePlace() {
             <Control.Label>Тип места</Control.Label>
             <Control.Section>
               <Input
-                name="name"
-                value={state?.name}
+                name="name_type"
+                value={state?.name_type}
                 onChange={(e) => handleStateChange?.value(handleQuotes(e))}
                 placeholder="Футбольное поле"
                 required

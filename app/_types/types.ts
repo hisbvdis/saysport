@@ -46,7 +46,9 @@ export interface UISection extends Section {
 }
 
 export interface UIObject extends Partial<Object_> {
-  name: string;
+  name_type: string;
+  coord_lat: number;
+  coord_lon: number;
   city_id: number;
   type: objectTypeUnion;
   status: objectStatusUnion;

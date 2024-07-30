@@ -25,18 +25,18 @@ export default function Contacts() {
         draft[type] = draft[type]?.filter((item) => item.uiID !== uiID);
       }));
     },
-    changeValue: (type:UIContactTypeEnum, e:ChangeEvent<HTMLInputElement>, uiID:string) => {
+    changeValue: (type:UIContactTypeEnum, value:string, uiID:string) => {
       setState((prevState) => create(prevState, (draft) => {
         const item = draft[type]?.find((item) => item.uiID === uiID);
         if (!item) return;
-        item.value = e.target.value;
+        item.value = value;
       }));
     },
-    changeComment: (type:UIContactTypeEnum, e:ChangeEvent<HTMLInputElement>, uiID:string) => {
+    changeComment: (type:UIContactTypeEnum, value:string, uiID:string) => {
       setState((prevState) => create(prevState, (draft) => {
         const item = draft[type]?.find((item) => item.uiID === uiID);
         if (!item) return;
-        item.comment = e.target.value;
+        item.comment = value;
       }));
     },
   }
@@ -63,13 +63,13 @@ export default function Contacts() {
                   value={phone.value}
                   placeholder="+1 (111) 111-11-11"
                   disabled={Boolean(state.parent_id)}
-                  onChange={(e) => handleContacts.changeValue(UIContactTypeEnum.PHONES, e, phone.uiID)}
+                  onChangeValue={(value) => handleContacts.changeValue(UIContactTypeEnum.PHONES, value, phone.uiID)}
                 />
                 <Input
                   value={phone.comment}
                   placeholder="Комментарий"
                   disabled={Boolean(state.parent_id)}
-                  onChange={(e) => handleContacts.changeComment(UIContactTypeEnum.PHONES, e, phone.uiID)}
+                  onChangeValue={(value) => handleContacts.changeComment(UIContactTypeEnum.PHONES, value, phone.uiID)}
                 />
               </div>
             ))}
@@ -93,13 +93,13 @@ export default function Contacts() {
                   value={link.value}
                   placeholder="site.com"
                   disabled={Boolean(state.parent_id)}
-                  onChange={(e) => handleContacts.changeValue(UIContactTypeEnum.LINKS, e, link.uiID)}
+                  onChangeValue={(value) => handleContacts.changeValue(UIContactTypeEnum.LINKS, value, link.uiID)}
                 />
                 <Input
                   value={link.comment}
                   placeholder="Комментарий"
                   disabled={Boolean(state.parent_id)}
-                  onChange={(e) => handleContacts.changeComment(UIContactTypeEnum.LINKS, e, link.uiID)}
+                  onChangeValue={(value) => handleContacts.changeComment(UIContactTypeEnum.LINKS, value, link.uiID)}
                 />
               </div>
             ))}
