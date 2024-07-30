@@ -13,6 +13,7 @@ import { ObjectEditContext } from "../ObjectEdit";
 import { getSectionsWithPayloadByFilters } from "@/app/_db/section";
 import type { UIOption, UISection, UISpec } from "@/app/_types/types";
 import { RequiredInput } from "@/app/_components/ui/RequiredInput";
+import { objectTypeEnum } from "@/drizzle/schema";
 
 
 export default function Specs() {
@@ -102,7 +103,7 @@ export default function Specs() {
               .map((section) => ({id: section.section_id, label: section.name_plural, data: section}))
           }
         />
-        <RequiredInput isValidIf={Boolean(state.sections?.length)}/>
+        <RequiredInput isValidIf={state.type === objectTypeEnum.org ? Boolean(state.sections?.length) : Boolean(state.sections?.length > 1)}/>
       </Card.Section>
     </Card>
   )

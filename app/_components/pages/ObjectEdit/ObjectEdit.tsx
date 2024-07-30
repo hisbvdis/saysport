@@ -53,7 +53,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
       router.push(`/object/${object_id}`);
     } else {
       router.replace(`/object/${object_id}/edit`, {scroll: false});
-      router.refresh();
+      // router.refresh();
     }
   }
 

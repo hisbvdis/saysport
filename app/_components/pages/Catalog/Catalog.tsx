@@ -22,7 +22,7 @@ export default function Catalog(props:Props) {
   const { searchParams, results, sectionList, section, city } = props;
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
-
+  console.log( results )
   return (
     <CatalogContext.Provider value={{searchParams, results, sectionList, section, city}}>
       <div className={clsx(styles["catalog"], !searchParams.map && "container", "page")}>

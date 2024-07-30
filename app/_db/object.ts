@@ -17,6 +17,7 @@ export const getEmptyObject = async ():Promise<UIObject> => {
     coord_lat: 0,
     coord_lon: 0,
     type: objectTypeEnum.org,
+    sections: [],
     status: objectStatusEnum.works,
     schedule: Array(7).fill(null).map((_,i) => ({ object_id: 0, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
   }
@@ -214,12 +215,12 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
   const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));
   if (photosAdded?.length) {
     await db.insert(object_photo).values(photosAdded.map((photo) => ({...photo, name: photo.name.replace("ID", String(upsertedObject.object_id)), object_id: upsertedObject.object_id})));
-    children.length && children.forEach(async (child) => await db.insert(object_photo).values(photosAdded.map((photo) => ({...photo, name: photo.name.replace("ID", String(child.object_id)), object_id: child.object_id}))));
+    // children.length && children.forEach(async (child) => await db.insert(object_photo).values(photosAdded.map((photo) => ({...photo, name: photo.name.replace("ID", String(child.object_id)), object_id: child.object_id}))));
   }
   const photosDeleted = init.photos?.filter((initPhoto) => !state.photos?.some((statePhoto) => initPhoto.uiID === statePhoto.uiID));
   if (photosDeleted?.length) {
     await db.delete(object_photo).where(and(eq(object_photo.object_id, upsertedObject.object_id), inArray(object_photo.order, photosDeleted.map((photo) => photo.order))));
-    children.length && children.forEach(async (child) => await db.delete(object_photo).where(and(eq(object_photo.object_id, upsertedObject.object_id), inArray(object_photo.order, photosDeleted.map((photo) => photo.order)))));
+    // children.length && children.forEach(async (child) => await db.delete(object_photo).where(and(eq(object_photo.object_id, upsertedObject.object_id), inArray(object_photo.order, photosDeleted.map((photo) => photo.order)))));
   }
   // const photosMoved = state.photos?.filter((statePhoto) => init.photos?.some((initPhoto) => statePhoto.localId === initPhoto.localId && statePhoto.order !== initPhoto.order));
   revalidatePath(`object/${upsertedObject.object_id}`, "page");
