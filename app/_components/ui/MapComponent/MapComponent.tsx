@@ -10,7 +10,7 @@ import styles from "./MapComponent.module.css"
 
 
 export default function MapComponent(props: Props) {
-  const { zoomControl=true, onMapRightClick=(e=>e), liftMapInstance=(e=>e), fitBoundsArray } = props;
+  const { zoomControl=true, onMapRightClick=(e=>e), liftMapInstance=(e=>e), onMapDrag=(e=>e), fitBoundsArray } = props;
   const center = (props.center?.[0] && props.center?.[1] ? props.center : [0, 0]) as [number, number];
   const zoom = props.zoom ?? 3;
   const { className, style, children } = props;
@@ -25,6 +25,7 @@ export default function MapComponent(props: Props) {
     const map = L.map(mapContainerRef.current, { center, zoom, zoomControl });
     L.Icon.Default.imagePath = "/map/";
     map.on("contextmenu", onMapRightClick);
+    map.on("dragend", () => liftMapInstance(map));
     setL(L);
     setMap(map);
     liftMapInstance(map);
@@ -67,6 +68,7 @@ interface Props {
   zoom?: number;
   zoomControl?: boolean;
   onMapRightClick?: (e: Leaflet.LeafletMouseEvent) => void;
+  onMapDrag?: (e: Leaflet.LeafletEvent) => void;
   liftMapInstance?: (mapInstance:Leaflet.Map) => void;
   fitBoundsArray?: Leaflet.LatLngTuple[];
 }

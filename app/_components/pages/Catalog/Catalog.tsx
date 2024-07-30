@@ -10,7 +10,7 @@ import { Control } from "../../ui/Control";
 import { Sections, Filters, Results } from ".";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
-import { MapComponent, Marker } from "../../ui/MapComponent";
+import { MapComponent, MapMarker } from "../../ui/MapComponent";
 import type { DBObject, UISection } from "@/app/_types/types"
 import type { SearchParamsType } from "@/app/(router)/catalog/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
@@ -51,7 +51,7 @@ export default function Catalog(props:Props) {
         <aside>
           {searchParams.map &&
             <MapComponent fitBoundsArray={results.map((object) => [object.coord_lat, object.coord_lon])}>
-              {results.map((object) => <Marker key={object.object_id} coord={[object.coord_lat, object.coord_lon]}/>)}
+              {results.map((object) => <MapMarker key={object.object_id} coord={[object.coord_lat, object.coord_lon]}/>)}
             </MapComponent>
           }
         </aside>

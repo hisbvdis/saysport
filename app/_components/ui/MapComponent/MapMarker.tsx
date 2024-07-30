@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { MapContext } from "./MapComponent";
 
 
-export default function Marker(props:Props) {
+export default function MapMarker(props:Props) {
   const { draggable, onDragEnd=(e=>e) } = props;
   const coord = (props.coord?.[0] && props.coord?.[1] ? props.coord : [0, 0]) as [number, number];
   const mapContext = useContext(MapContext);

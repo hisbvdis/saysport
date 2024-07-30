@@ -11,7 +11,7 @@ import { Button } from "@/app/_components/ui/Button";
 import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
-import { MapComponent, Marker } from "@/app/_components/ui/MapComponent";
+import { MapComponent, MapMarker } from "@/app/_components/ui/MapComponent";
 // -----------------------------------------------------------------------------
 import { objectTypeEnum } from "@/drizzle/schema";
 import { getCitiesByFilters } from "@/app/_db/city";
@@ -20,11 +20,13 @@ import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { getObjectsWIthPayloadByFilters } from "@/app/_db/object";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
+import MapButton from "@/app/_components/ui/MapComponent/MapButton";
 
 
 export default function Address() {
   const { state, setState, handleStateChange } = useContext(ObjectEditContext);
   const [ mapInstance, setMapInstance ] = useState<Leaflet.Map>();
+  console.log( mapInstance )
 
   const handleMap = {
     getCoordFromAddress: async () => {
@@ -173,11 +175,12 @@ export default function Address() {
             liftMapInstance={setMapInstance}
             onMapRightClick={handleMap.rightClick}
           >
-            <Marker
+            <MapMarker
               coord={[state.coord_lat, state.coord_lon]}
               draggable={Boolean(!state.coord_inherit)}
               onDragEnd={handleMap.markerDragEnd}
             />
+            <MapButton html={`<a href='https://www.google.com/maps/@${mapInstance?.getCenter().lat},${mapInstance?.getCenter().lng},${mapInstance?.getZoom()}' target='blank'>Google<a/>`}/>
           </MapComponent>
         </div>
       </Card.Section>
