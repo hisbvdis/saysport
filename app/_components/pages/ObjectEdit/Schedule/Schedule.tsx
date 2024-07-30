@@ -88,13 +88,13 @@ export default function Schedule() {
       <Card.Heading>Расписание</Card.Heading>
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "10px"}}>
         <div style={{display: "flex", gap: "20px"}}>
-          <Checkbox
+          {state.parent_id && <Checkbox
             name="schedule_inherit"
             checked={Boolean(state.schedule_inherit)}
             onChange={handleStateChange.checked}
             disabled={!state.parent_id}
             className="me-auto"
-          >Наследовать расписание</Checkbox>
+          >Наследовать расписание</Checkbox>}
           <Checkbox
             name="schedule_24_7"
             checked={Boolean(state.schedule_24_7)}

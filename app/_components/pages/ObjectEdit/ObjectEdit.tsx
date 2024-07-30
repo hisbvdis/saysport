@@ -48,7 +48,6 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
     e.preventDefault();
     const stateWithoutFiles = {...state, photos: state.photos?.map((photo) => ({...photo, file: undefined}))};
     const { object_id } = await upsertObject(stateWithoutFiles, props.init);
-    console.log( "object_id:", object_id  )
     await syncPhotos(object_id, state, props.init);
     if (e.nativeEvent.submitter?.dataset?.leavePage) {
       router.push(`/object/${object_id}`);

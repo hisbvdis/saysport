@@ -9,6 +9,7 @@ import { ObjectEditContext } from "../ObjectEdit";
 import { create } from "mutative";
 import { getObjectsWIthPayloadByFilters } from "@/app/_db/object";
 import { objectStatusEnum } from "@/drizzle/schema";
+import { Checkbox } from "@/app/_components/ui/Choice";
 
 
 export default function Status(props:Props) {
@@ -18,7 +19,10 @@ export default function Status(props:Props) {
   return (
     <div className={clsx(className)} style={{...style, display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px"}}>
       <Control>
-        <Control.Label>Статус</Control.Label>
+        <Control.Label>
+          <span>Статус</span>
+          {state.parent_id && <Checkbox name="status_inherit" checked={Boolean(state.status_inherit)} onChange={handleStateChange.checked} disabled={!state.parent_id}>Наследовать</Checkbox>}
+        </Control.Label>
         <Control.Section>
           <Select
             name="status"
@@ -63,7 +67,7 @@ export default function Status(props:Props) {
           <Select
             name="status_instead_id"
             value={state?.status_instead_id}
-            label={`${state?.statusInstead?.name_type} ${state.statusInstead?.name_title} ${state.statusInstead?.name_where}`}
+            label={`${state?.statusInstead?.name_type ?? ""} ${state.statusInstead?.name_title ?? ""} ${state.statusInstead?.name_where ?? ""}`}
             onChange={handleStateChange?.valueAsNumber}
             onChangeData={(data) => setState(create((draft) => {draft.statusInstead = data}))}
             isAutocomplete
@@ -72,7 +76,7 @@ export default function Status(props:Props) {
             requestItemsOnInputChange={
               async (value) => (await getObjectsWIthPayloadByFilters({city: String(state.city_id), type: state?.type, query: value}))
               ?.filter((object) => object.object_id !== state?.object_id)
-              ?.map((object) => ({id: object.object_id, label: `${object.name_type} ${object.name_title} ${object.name_where}`, data: object}))
+              ?.map((object) => ({id: object.object_id, label: `${object.name_type ?? ""} ${object.name_title ?? ""} ${object.name_where ?? ""}`, data: object}))
             }
           />
         </Control.Section>

@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { type SyntheticEvent, useContext, useState } from "react";
+import { type SyntheticEvent, useContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Form } from "../../ui/Form";
 import { Input } from "../../ui/Input";
@@ -27,6 +27,8 @@ export default function SearchPanel() {
     e.preventDefault();
     router.push(searchText ? manageSearchParams.set("query", searchText) : manageSearchParams.delete("query"));
   }
+
+  useEffect(() => {setSearchText(searchParams.query)}, [searchParams.query])
 
   return (
     <Form className={clsx(styles["searchPanel"])} onSubmit={handleFormSubmit}>

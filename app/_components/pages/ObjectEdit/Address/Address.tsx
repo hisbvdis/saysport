@@ -110,13 +110,13 @@ export default function Address() {
           <Control className="mt15">
             <Control.Label>
               <span>На базе организации</span>
-              <Link href={`/object/${state.parent?.object_id}`}>(Open)</Link>
+              {state.parent_id && <Link href={`/object/${state.parent?.object_id}`}>(Open)</Link>}
             </Control.Label>
             <Control.Section>
               <Select
                 name="parent_id"
                 value={state.parent_id}
-                label={state.parent?.name_type?.concat(state.parent.name_title ? ` «${state.parent.name_title}»` : "").concat(state.parent.name_where ? ` ${state.parent.name_where}` : "")}
+                label={state.parent?.name_type?.concat(state.parent.name_title ?? "").concat(state.parent.name_where ?? "")}
                 onChange={handleStateChange?.valueAsNumber}
                 onChangeData={(parent) => setInheritedData(parent.id ? objectReadProcessing(parent) : null, setState)}
                 isAutocomplete
@@ -125,7 +125,7 @@ export default function Address() {
                 requestItemsOnInputChange={async (value) => (
                   await getObjectsWIthPayloadByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))
                     .filter((org) => org.object_id !== state.object_id)
-                    .map((org) => ({id: org.object_id, label: `${org.name_type} ${org.name_title} ${org.name_where}`, data: org})
+                    .map((org) => ({id: org.object_id, label: `${org.name_type ?? ""} ${org.name_title ?? ""} ${org.name_where ?? ""}`, data: org})
                 )}
               />
             </Control.Section>
@@ -159,14 +159,14 @@ export default function Address() {
           </Control>
         </div>
         <div style={{flexBasis: "66%", display: "flex", flexDirection: "column"}}>
-          <Checkbox
+          {state.parent_id && <Checkbox
             name="coord_inherit"
             checked={Boolean(state.coord_inherit)}
             onChange={handleStateChange.checked}
             disabled={!state.parent_id}
           >
             Наследовать координату
-          </Checkbox>
+          </Checkbox>}
           <MapComponent
             center={[state.coord_lat, state.coord_lon]}
             zoom={17}
