@@ -10,7 +10,7 @@ import SearchPanel from "@/app/_components/blocks/SearchPanel/SearchPanel";
 
 
 export default function Results() {
-  const { searchParams, city, results, section } = useContext(CatalogContext);
+  const { searchParams, city, results, section, resultsCount } = useContext(CatalogContext);
   const manageSearchParams = useManageSearchParams();
 
   return (
@@ -23,7 +23,7 @@ export default function Results() {
         ]}/>
         <h1 style={{fontWeight: "400"}}>
           <span>{section?.name_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
-          <sup style={{fontSize: "0.5em"}}>{results?.length}</sup>
+          <sup style={{fontSize: "0.5em"}}>{resultsCount}</sup>
         </h1>
         <SearchPanel/>
       </Card.Heading>

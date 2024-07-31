@@ -19,12 +19,12 @@ import styles from "./styles.module.css";
 
 
 export default function Catalog(props:Props) {
-  const { searchParams, results, sectionList, section, city } = props;
+  const { searchParams, results, sectionList, section, city, resultsCount } = props;
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
-  console.log( results )
+
   return (
-    <CatalogContext.Provider value={{searchParams, results, sectionList, section, city}}>
+    <CatalogContext.Provider value={{searchParams, results, sectionList, section, city, resultsCount}}>
       <div className={clsx(styles["catalog"], !searchParams.map && "container", "page")}>
         <aside>
           <Card>
@@ -68,10 +68,12 @@ interface Props {
   searchParams: SearchParamsType;
   city?: City;
   section?: UISection;
+  resultsCount:number;
 }
 
 interface CatalogContextType {
   results: DBObject[];
+  resultsCount: number;
   searchParams: SearchParamsType;
   sectionList: UISection[];
   section?: UISection;

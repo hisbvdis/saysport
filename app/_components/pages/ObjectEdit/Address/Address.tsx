@@ -17,7 +17,7 @@ import { objectTypeEnum } from "@/drizzle/schema";
 import { getCitiesByFilters } from "@/app/_db/city";
 import { setInheritedData } from "./setInheritedData";
 import { handleQuotes } from "@/app/_utils/handleQuotes";
-import { getObjectsWIthPayloadByFilters } from "@/app/_db/object";
+import { getObjectsWithPayloadByFilters } from "@/app/_db/object";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
 import MapButton from "@/app/_components/ui/MapComponent/MapButton";
@@ -125,7 +125,7 @@ export default function Address() {
                 placeholder="Введите название"
                 disabled={!state.city_id}
                 requestItemsOnInputChange={async (value) => (
-                  await getObjectsWIthPayloadByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))
+                  await getObjectsWithPayloadByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))
                     .filter((org) => org.object_id !== state.object_id)
                     .map((org) => ({id: org.object_id, label: `${org.name_type ?? ""} ${org.name_title ?? ""} ${org.name_where ?? ""}`, data: org})
                 )}

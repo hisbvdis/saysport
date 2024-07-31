@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/drizzle/client";
-import { and, desc, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
+import { and, count, desc, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
 import { type Object_, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_link, object_on_option, object_on_section, object_phone, object_photo, object_schedule, option, section } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { UIObject } from "../_types/types";
@@ -23,7 +23,7 @@ export const getEmptyObject = async ():Promise<UIObject> => {
   }
 }
 
-export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
+export const getObjectsCountByFilters = async (filters?:Filters) => {
   const type = filters?.type;
   const query = filters?.query;
   const cityId = filters?.city ? Number(filters?.city) : undefined;
@@ -38,9 +38,41 @@ export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
       .reduce((acc, [key, value]) => ({...acc, [key]: acc[key] ? [...acc[key], Number(value)] : [Number(value)]}), {} as {[key:string]: number[]}) /* ['1',[1,2], ["!2",[5,6]]] */
     : {}
   )
+  const dbData = await db.select({count: count()}).from(object).where(and(
+    query ? ilike(sql`TRIM(CONCAT(${object.name_type}, COALESCE(NULLIF(CONCAT(' ', ${object.name_title}), ' '), ''), COALESCE(NULLIF(CONCAT(' ', ${object.name_where}), ' '), '')))` as any, `%${query}%`) : undefined,
+    cityId ? eq(object.city_id, cityId) : undefined,
+    type ? eq(object.type, type) : undefined,
+    sectionId ? exists(db.select().from(object_on_section).where(and(eq(object.object_id, object_on_section.object_id), eq(object_on_section.section_id, sectionId)))) : undefined,
+    optionIds ? and(...groupedOptions.map(([specId, optionIdArr]) => {
+      if (specId.startsWith("!")) {
+        return inArray(object.object_id, db.select({object_id: object_on_option.object_id}).from(object_on_option).where(inArray(object_on_option.option_id, optionIdArr)).groupBy(object_on_option.object_id).having(eq(sql`COUNT(DISTINCT ${object_on_option.option_id})`, optionIdArr.length)))
+      }
+      return exists(db.select().from(object_on_option).where(and(eq(object.object_id, object_on_option.object_id), inArray(object_on_option.option_id, optionIdArr))))
+    })) : undefined,
+    status ? inArray(object.status, status) : undefined,
+    photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(object_photo => eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(object_photo => eq(object_photo.object_id, object.object_id))) : undefined
+  ))
+  return dbData;
+}
+
+export const getObjectsWithPayloadByFilters = async (filters?:Filters) => {
+  const type = filters?.type;
+  const query = filters?.query;
+  const cityId = filters?.city ? Number(filters?.city) : undefined;
+  const status = filters?.status?.split(",") as objectStatusUnion[];
+  const photo = filters?.photo?.split(",");
+  const page = filters?.page;
+  const sectionId = filters?.section ? Number(filters.section) : undefined;
+  const optionIds = filters?.options ?? undefined;
+  const groupedOptions = Object.entries(optionIds
+    ? optionIds /* "1:1,1:2,!2:3" */
+      .split(",") /* ["1:1"],["1:2"],["!2:3"] */
+      .map((str) => str.split(":")) /* ["1":"1"],["1":"2"],["!2":"3"] */
+      .reduce((acc, [key, value]) => ({...acc, [key]: acc[key] ? [...acc[key], Number(value)] : [Number(value)]}), {} as {[key:string]: number[]}) /* ['1',[1,2], ["!2",[5,6]]] */
+    : {}
+  )
   const dbData = await db.query.object.findMany({
     where: and(
-      // query ? or(ilike(object.name, `%${query}%`), ilike(object.name_where, `%${query}%`)) : undefined,
       query ? ilike(sql`TRIM(CONCAT(${object.name_type}, COALESCE(NULLIF(CONCAT(' ', ${object.name_title}), ' '), ''), COALESCE(NULLIF(CONCAT(' ', ${object.name_where}), ' '), '')))` as any, `%${query}%`) : undefined,
       cityId ? eq(object.city_id, cityId) : undefined,
       type ? eq(object.type, type) : undefined,
@@ -65,7 +97,9 @@ export const getObjectsWIthPayloadByFilters = async (filters?:Filters) => {
       photos: true,
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
     },
-    orderBy: [desc(object.created)]
+    orderBy: [desc(object.created)],
+    limit: 10,
+    offset: page ? Number(page) : undefined
   });
   return dbData;
 }
