@@ -6,14 +6,14 @@ export const useManageSearchParams = () => {
   const searchParams = useSearchParams();
 
   return {
-    set: (key:string, value:string) => {
-      const urlSearchParams = new URLSearchParams(searchParams);
+    set: (key:string, value:string, params?:string) => {
+      const urlSearchParams = params ? new URLSearchParams(params) : new URLSearchParams(searchParams);
       value ? urlSearchParams.set(key, value) : urlSearchParams.delete(key, value);
       return decodeURIComponent(`?${urlSearchParams.toString()}`);
     },
 
-    appendOrClear: (key:string, value:string) => {
-      const urlSearchParams = new URLSearchParams(searchParams);
+    appendOrClear: (key:string, value:string, params?:string) => {
+      const urlSearchParams = params ? new URLSearchParams(params) : new URLSearchParams(searchParams);
       const setOfValues = new Set(urlSearchParams.get(key)?.split(","));
       setOfValues.has(value) ? setOfValues.delete(value) : setOfValues.add(value);
       const arrayOfValues = [...Array.from(setOfValues)];
@@ -22,13 +22,14 @@ export const useManageSearchParams = () => {
       return decodeURIComponent(`?${urlSearchParams.toString()}`);
     },
 
-    delete: (key:string|string[]) => {
-      const urlSearchParams = new URLSearchParams(searchParams);
-      if (Array.isArray(key)) {
-        key.forEach((key) => urlSearchParams.delete(key));
-      } else {
-        urlSearchParams.delete(key);
-      }
+    delete: (key:string[], params?:string) => {
+      const urlSearchParams = params ? new URLSearchParams(params) : new URLSearchParams(searchParams);
+      // if (Array.isArray(key)) {
+      //   key.forEach((key) => urlSearchParams.delete(key));
+      // } else {
+      //   urlSearchParams.delete(key);
+      // }
+      key.forEach((key) => urlSearchParams.delete(key));
       return decodeURIComponent(`?${urlSearchParams.toString()}`);
     },
 

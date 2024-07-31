@@ -16,6 +16,7 @@ import type { SearchParamsType } from "@/app/(router)/catalog/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
+import Pagination from "../../ui/Pagination/Pagination";
 
 
 export default function Catalog(props:Props) {
@@ -34,7 +35,7 @@ export default function Catalog(props:Props) {
                 isAutocomplete
                 value={city?.city_id ? Number(city?.city_id) : ""}
                 label={city?.name}
-                onChange={(e) => {e.target.value ? router.push(manageSearchParams.set("city", e.target.value)) : router.push(manageSearchParams.delete("city"))}}
+                onChange={(e) => {e.target.value ? router.push(manageSearchParams.set("city", e.target.value)) : router.push(manageSearchParams.delete(["city"]))}}
                 placeholder="Введите название"
                 requestItemsOnInputChange={async (value) => (
                   await getCitiesByFilters({name: value})).map((city) => ({
@@ -45,8 +46,9 @@ export default function Catalog(props:Props) {
           </Card>
           {searchParams.section ? <Filters className="mt10"/> : <Sections className="mt10"/>}
         </aside>
-        <main>
+        <main className={styles["catalog__main"]}>
           <Results/>
+          <Pagination itemsCount={resultsCount} pageSize={10} currentPage={searchParams.page ? Number(searchParams.page) : 1}/>
         </main>
         <aside>
           {searchParams.map &&

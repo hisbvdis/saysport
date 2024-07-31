@@ -29,14 +29,14 @@ export default function Results() {
       </Card.Heading>
       <Card.Section style={{display: "flex", justifyContent: "space-between"}}>
         <p>Сортировка: По дате добавления</p>
-        <Link href={searchParams.map ? manageSearchParams.delete("map") : manageSearchParams.set("map", "true")} style={{display: "flex", alignItems: "center", gap: "5px"}}>
+        <Link href={searchParams.map ? manageSearchParams.delete(["map"]) : manageSearchParams.set("map", "true")} style={{display: "flex", alignItems: "center", gap: "5px"}}>
           <img src="/icons/map-pin.svg" width={15} height={20} alt="Map Pin"/>
           <span>Карта</span>
         </Link>
       </Card.Section>
       {results.map((object) => (
         <Card.Section key={object.object_id} style={{display: "grid", gap: "15px", gridTemplateColumns: "1fr 1.5fr"}}>
-          <img src={object.photos?.length ? `/photos/${object.photos[0].name}` : "/photos/no-photo.svg"} width="250" height="210" alt="" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210"}}/>
+          <img src={object.photos?.length ? `/photos/${object.photos[0].name}` : "/photos/no-photo.svg"} width="250" height="210" alt="" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
           <div>
             <Link href={`object/${object.object_id}`}>{object.name_type} {object.name_title} {object.name_where}</Link>
             <p>{object.city?.name}, {object.address}</p>

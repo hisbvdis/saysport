@@ -1,0 +1,26 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--card-padding);
+
+  background-color: var(--color-white);
+}
+
+.pagination__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pagination__link {
+  display: block;
+  padding: 5px 10px;
+
+  border: 1px solid var(--card-borderColor);
+  border-radius: 5px;
+}
+
+.pagination__link--active {
+  background-color: var(--color-brand-lighter);
+}

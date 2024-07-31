@@ -4,3 +4,9 @@
   gap: 10px;
   min-block-size: calc(100vh - 100px);
 }
+
+.catalog__main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

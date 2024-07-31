@@ -99,7 +99,7 @@ export const getObjectsWithPayloadByFilters = async (filters?:Filters) => {
     },
     orderBy: [desc(object.created)],
     limit: 10,
-    offset: page ? Number(page) : undefined
+    offset: page ? (Number(page) - 1) * 10 : undefined
   });
   return dbData;
 }

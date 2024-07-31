@@ -20,12 +20,13 @@ export default function SearchPanel() {
 
   const handleClearButtonClick = () => {
     setSearchText("");
-    router.push(manageSearchParams.delete("query"));
+    router.push(manageSearchParams.delete(["query", "page"]));
   }
 
   const handleFormSubmit = (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
-    router.push(searchText ? manageSearchParams.set("query", searchText) : manageSearchParams.delete("query"));
+    const paramsWithoutPageParam = manageSearchParams.delete(["page"]);
+    router.push(searchText ? manageSearchParams.set("query", searchText, paramsWithoutPageParam) : manageSearchParams.delete(["query"]));
   }
 
   useEffect(() => {setSearchText(searchParams.query)}, [searchParams.query])
