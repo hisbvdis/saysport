@@ -26,7 +26,7 @@ import MapButton from "@/app/_components/ui/MapComponent/MapButton";
 export default function Address() {
   const { state, setState, handleStateChange } = useContext(ObjectEditContext);
   const [ mapInstance, setMapInstance ] = useState<Leaflet.Map>();
-  console.log( mapInstance )
+  const [ liveMap, setLiveMap ] = useState<{lat: number, lon: number, zoom: number}>({lat: state.coord_lat, lon: state.coord_lon, zoom: 17});
 
   const handleMap = {
     getCoordFromAddress: async () => {
@@ -174,13 +174,16 @@ export default function Address() {
             zoom={17}
             liftMapInstance={setMapInstance}
             onMapRightClick={handleMap.rightClick}
+            onMapDrag={(e) => setLiveMap({lat: e.target.getCenter().lat, lon: e.target.getCenter().lng, zoom: e.target.getZoom()})}
           >
             <MapMarker
               coord={[state.coord_lat, state.coord_lon]}
               draggable={Boolean(!state.coord_inherit)}
               onDragEnd={handleMap.markerDragEnd}
             />
-            <MapButton html={`<a href='https://www.google.com/maps/@${mapInstance?.getCenter().lat},${mapInstance?.getCenter().lng},${mapInstance?.getZoom()}' target='blank'>Google<a/>`}/>
+            <MapButton html={`<a href='https://www.google.com/maps/@${liveMap.lat},${liveMap.lon},${liveMap.zoom}z' target='blank'>Google<a/>`}/>
+            <MapButton html={`<a href='https://yandex.ru/maps/?ll=${liveMap.lon}%2C${liveMap.lat}&z=${liveMap.zoom}' target='blank'>Яндекс<a/>`}/>
+            <MapButton html={`<a href='https://2gis.ru/?m=${liveMap.lon}%2C${liveMap.lat}%2F${liveMap.zoom}' target='blank'>2Гис<a/>`}/>
           </MapComponent>
         </div>
       </Card.Section>

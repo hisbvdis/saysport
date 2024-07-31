@@ -25,10 +25,14 @@ export default function MapComponent(props: Props) {
     const map = L.map(mapContainerRef.current, { center, zoom, zoomControl });
     L.Icon.Default.imagePath = "/map/";
     map.on("contextmenu", onMapRightClick);
-    map.on("dragend", () => liftMapInstance(map));
+    map.on("moveend", onMapDrag);
     setL(L);
     setMap(map);
     liftMapInstance(map);
+    return (() => {
+      map.off("contextmenu");
+      map.off("moveend");
+    })
   })()}, [])
 
   useEffect(() => {
@@ -36,10 +40,10 @@ export default function MapComponent(props: Props) {
     map.fitBounds(fitBoundsArray);
   }, [map, fitBoundsArray])
 
-  useEffect(() => {
-    if (!map || !center[0] || !center[1]) return;
-    map.setView(center);
-  }, [center])
+  // useEffect(() => {
+  //   if (!map || !center[0] || !center[1]) return;
+  //   map.setView(center);
+  // }, [center])
 
   return (
     <MapContext.Provider value={{ L, map, center, zoom, mapContainerRef }}>

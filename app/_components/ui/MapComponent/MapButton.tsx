@@ -17,6 +17,9 @@ export default function MapButton(props:Props) {
         return button;
       }
       control.addTo(map);
+			return () => {
+				control.remove();
+			}
 			// const customControl = new L.Control({ position: "topright" });
 			// customControl.onAdd = () => {
 			// 	const container = L.DomUtil.create("div", "custom-control-container"); // Создаем контейнер для кнопки
@@ -36,7 +39,7 @@ export default function MapButton(props:Props) {
 			// 	return container;
 			// };
 			// customControl.addTo(map);
-		}, [L, map]);
+		}, [L, map, props.html]);
 
   return (
     null
