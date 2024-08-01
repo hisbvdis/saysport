@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
+import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
@@ -17,6 +17,7 @@ import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 import { getSpecsByFilters } from "@/app/_db/spec";
 import type { UISection, UISpec } from "@/app/_types/types";
 import { deleteSectionById, upsertSection } from "@/app/_db/section";
+import { sectionTypeEnum } from "@/drizzle/schema";
 
 
 export default function SectionEdit(props:{init:UISection}) {
@@ -96,6 +97,20 @@ export default function SectionEdit(props:{init:UISection}) {
               onChange={handleStateChange.value}
               required
             />
+          </Control>
+          <Control className="mt15">
+            <Control.Label>Тип раздела</Control.Label>
+            <Control.Section>
+              <RadioGroup
+                name="section_type"
+                valueToCompareWith={state?.section_type}
+                onChange={handleStateChange.value}
+              >
+                <Radio value={sectionTypeEnum.section}>Обычный раздел</Radio>
+                <Radio value={sectionTypeEnum.common}>Общий раздел</Radio>
+                <Radio value={sectionTypeEnum.usage}>Использование</Radio>
+              </RadioGroup>
+            </Control.Section>
           </Control>
           <Control className="mt15">
             <Control.Label>Тип объекта</Control.Label>

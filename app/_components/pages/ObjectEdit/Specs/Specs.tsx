@@ -13,7 +13,7 @@ import { ObjectEditContext } from "../ObjectEdit";
 import { getSectionsByFilters } from "@/app/_db/section";
 import type { UIOption, UISection, UISpec } from "@/app/_types/types";
 import { RequiredInput } from "@/app/_components/ui/RequiredInput";
-import { objectTypeEnum } from "@/drizzle/schema";
+import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 
 
 export default function Specs() {
@@ -60,7 +60,7 @@ export default function Specs() {
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Характеристики</Card.Heading>
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
-        {state.sections?.map((section) => (
+        {state.sections.filter((section) => section.section_type !== sectionTypeEnum.usage).map((section) => (
           <FieldSet key={section.section_id} style={{display: "flex", gap: "20px"}}>
             <FieldSet.Legend style={{inlineSize: "200px"}}>
               <Button onClick={() => handleSections.delete(section)}>X</Button>
@@ -103,7 +103,7 @@ export default function Specs() {
               .map((section) => ({id: section.section_id, label: section.name_plural, data: section}))
           }
         />
-        <RequiredInput isValidIf={state.type === objectTypeEnum.org ? Boolean(state.sections?.length) : Boolean(state.sections?.length > 1)}/>
+        <RequiredInput isValidIf={state.type === objectTypeEnum.org ? Boolean(state.sections.filter((section) => section.section_type !== sectionTypeEnum.usage).length > 0) : Boolean(state.sections.filter((section) => section.section_type !== sectionTypeEnum.usage).length > 1)}/>
       </Card.Section>
     </Card>
   )

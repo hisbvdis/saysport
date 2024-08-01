@@ -36,6 +36,55 @@
       "when": 1722248095815,
       "tag": "0004_optimal_calypso",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1722527130624,
+      "tag": "0005_petite_lorna_dane",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1722527396093,
+      "tag": "0006_wet_warpath",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1722527482928,
+      "tag": "0007_cheerful_satana",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1722527503177,
+      "tag": "0008_solid_molten_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1722527532288,
+      "tag": "0009_clammy_vin_gonzales",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1722527583865,
+      "tag": "0010_rich_luminals",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1722528051669,
+      "tag": "0011_late_hobgoblin",
+      "breakpoints": true
     }
   ]
 }

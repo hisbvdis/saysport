@@ -12,6 +12,9 @@ export enum objectStatusEnum { works="works", open_soon="open_soon", might_close
 export type objectStatusUnion = "works" | "open_soon" | "might_closed" | "closed_temp" | "closed_forever";
 export const objectStatusColumnType = pgEnum("objectStatus", ["works", "open_soon", "might_closed", "closed_temp", "closed_forever"]);
 
+export enum sectionTypeEnum {section="section", common="common", usage="usage"};
+export type sectionTypeUnion = "section" | "common" | "usage";
+export const sectionTypeColumnType = pgEnum("sectionType", ["section", "common", "usage"]);
 
 // ===========================================================================
 // OBJECT
@@ -104,6 +107,7 @@ export type Object_On_Option = typeof object_on_option.$inferSelect;
 // ===========================================================================
 export const section = pgTable("section", {
   section_id: serial("section_id").primaryKey(),
+  section_type: sectionTypeColumnType("section_type").notNull(),
   name_plural: varchar("name_plural").notNull(),
   name_singular: varchar("name_singular").notNull(),
   object_type: objectTypeColumnType("object_type").notNull(),

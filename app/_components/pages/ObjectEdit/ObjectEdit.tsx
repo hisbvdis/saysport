@@ -14,7 +14,7 @@ import { deleteObjectById, upsertObject } from "@/app/_db/object";
 import { objectTypeEnum } from "@/drizzle/schema";
 
 
-export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, commonPlaceSection?: UISection}) {
+export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, commonPlaceSections?: UISection[]}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -36,8 +36,8 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
     if (state.type === objectTypeEnum.place) {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.sections) draft.sections = [];
-        if (!props.commonPlaceSection) return;
-        draft.sections.push(props.commonPlaceSection);
+        if (!props.commonPlaceSections?.length) return;
+        draft.sections.concat(props.commonPlaceSections);
       }))
     }
     if (!props.parent) return;
@@ -53,7 +53,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
       router.push(`/object/${object_id}`);
     } else {
       router.replace(`/object/${object_id}/edit`, {scroll: false});
-      // router.refresh();
+      router.refresh();
     }
   }
 

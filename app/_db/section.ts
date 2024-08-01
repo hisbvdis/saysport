@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, eq, inArray } from "drizzle-orm";
-import { objectTypeEnum, type objectTypeUnion, option, type Section, section, section_on_spec, spec } from "@/drizzle/schema";
+import { objectTypeEnum, type objectTypeUnion, option, type Section, section, section_on_spec, sectionTypeEnum, sectionTypeUnion, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { UISection } from "@/app/_types/types";
 import { sectionReadProcessing } from "./section.processing";
@@ -11,6 +11,7 @@ import { sectionReadProcessing } from "./section.processing";
 export const getEmptySection = async ():Promise<UISection> => {
   return {
     section_id: 0,
+    section_type: sectionTypeEnum.section,
     object_type: objectTypeEnum.org,
     name_plural: "",
     name_singular: "",
@@ -27,10 +28,14 @@ export const getAllSections = async ():Promise<UISection[]> => {
   return processed;
 }
 
-export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion}):Promise<UISection[]> => {
+export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion,sectionType?:sectionTypeUnion}):Promise<UISection[]> => {
   const objectType = filters.objectType;
+  const sectionType = filters.sectionType;
   const dbData = await db.query.section.findMany({
-    where: objectType ? eq(section.object_type, objectType) : undefined,
+    where: and(
+      objectType ? eq(section.object_type, objectType) : undefined,
+      sectionType ? eq(section.section_type, sectionType) : undefined,
+    ),
     with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
   })
   const processed = dbData.map((section) => sectionReadProcessing(section));
@@ -55,6 +60,7 @@ export const deleteSectionById = async (id:number):Promise<void> => {
 export const upsertSection = async (state:UISection, init: UISection) => {
   const fields = {
     section_id: state.section_id || undefined,
+    section_type: state.section_type,
     name_plural: state.name_plural,
     name_singular: state.name_singular,
     object_type: state.object_type,
