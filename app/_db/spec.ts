@@ -35,7 +35,7 @@ export const getSpecsByFilters = async (filters:{objectType?:objectTypeUnion}):P
   return dbData;
 }
 
-export const getSpecWithPayloadById = async (id: number):Promise<UISpec> => {
+export const getSpecById = async (id: number):Promise<UISpec> => {
   const dbData = await db.query.spec.findFirst({
     where: eq(spec.spec_id, id),
     with: {options: {

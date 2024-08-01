@@ -19,25 +19,7 @@ export const getEmptySection = async ():Promise<UISection> => {
   }
 }
 
-export const getAllSections = async ():Promise<Section[]> => {
-  const dbData = await db.select().from(section);
-  return dbData;
-}
-
-export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion}):Promise<Section[]> => {
-  const objectType = filters.objectType;
-  const dbData = await db.select().from(section).where(
-    objectType ? eq(section.object_type, objectType) : undefined
-  );
-  return dbData;
-}
-
-export const getSectionById = async (id:number):Promise<Section> => {
-  const dbData = (await db.select().from(section).where(eq(section.section_id, id)))[0];
-  return dbData;
-}
-
-export const getAllSectionsWithPayload = async ():Promise<UISection[]> => {
+export const getAllSections = async ():Promise<UISection[]> => {
   const dbData = await db.query.section.findMany({
     with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
   })
@@ -45,7 +27,7 @@ export const getAllSectionsWithPayload = async ():Promise<UISection[]> => {
   return processed;
 }
 
-export const getSectionsWithPayloadByFilters = async (filters:{objectType?:objectTypeUnion}):Promise<UISection[]> => {
+export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion}):Promise<UISection[]> => {
   const objectType = filters.objectType;
   const dbData = await db.query.section.findMany({
     where: objectType ? eq(section.object_type, objectType) : undefined,
@@ -55,12 +37,12 @@ export const getSectionsWithPayloadByFilters = async (filters:{objectType?:objec
   return processed;
 }
 
-export const getSectionWithPayloadById = async (id:number):Promise<UISection> => {
+export const getSectionById = async (id:number):Promise<UISection> => {
   const dbData = await db.query.section.findFirst({
     where: eq(section.section_id, id),
     with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
   })
-  if (dbData === undefined) throw new Error("getSectionWithPayloadById returned undefined");
+  if (dbData === undefined) throw new Error("getSectionById returned undefined");
   const processed = sectionReadProcessing(dbData);
   return processed;
 }

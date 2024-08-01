@@ -1,12 +1,12 @@
 import { ObjectEdit } from "@/app/_components/pages/ObjectEdit";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 // -----------------------------------------------------------------------------
-import { getObjectWithPayloadById } from "@/app/_db/object"
+import { getObjectById } from "@/app/_db/object"
 import { objectTypeEnum } from "@/drizzle/schema";
 
 
 export default async function ObjectEditPage({params}:{params: {id:string, type:string}}) {
-  const object = await getObjectWithPayloadById(Number(params.id));
+  const object = await getObjectById(Number(params.id));
 
   return (
     <div className="container page">

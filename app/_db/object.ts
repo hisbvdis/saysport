@@ -55,7 +55,7 @@ export const getObjectsCountByFilters = async (filters?:Filters) => {
   return dbData;
 }
 
-export const getObjectsWithPayloadByFilters = async (filters?:Filters) => {
+export const getObjectsByFilters = async (filters?:Filters) => {
   const type = filters?.type;
   const query = filters?.query;
   const cityId = filters?.city ? Number(filters?.city) : undefined;
@@ -108,7 +108,7 @@ interface Filters extends SearchParamsType {
   type?: objectTypeUnion;
 }
 
-export const getObjectWithPayloadById = async (id:number) => {
+export const getObjectById = async (id:number) => {
   const dbData = await db.query.object.findFirst({
     where: eq(object.object_id, id),
     with: {
