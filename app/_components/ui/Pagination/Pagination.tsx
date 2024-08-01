@@ -19,7 +19,10 @@ export default function Pagination(props:Props) {
       <ul className={styles["pagination__list"]}>
         {pageNumbers.map((pageNumber) => (
           <li key={pageNumber} className={clsx(styles["pagination__item"] )}>
-            <Link className={clsx(styles["pagination__link"], pageNumber === currentPage && styles["pagination__link--active"])} href={pageNumber === 1 ? manageSearchParams.delete(["page"]) : manageSearchParams.set("page", String(pageNumber))}>{pageNumber}</Link>
+            {pageNumber === currentPage
+              ? <span className={clsx(styles["pagination__link"], pageNumber === currentPage && styles["pagination__link--active"])}>{pageNumber}</span>
+              : <Link className={clsx(styles["pagination__link"], pageNumber === currentPage && styles["pagination__link--active"])} href={pageNumber === 1 ? manageSearchParams.delete(["page"]) : manageSearchParams.set("page", String(pageNumber))}>{pageNumber}</Link>
+            }
           </li>
         ))}
       </ul>

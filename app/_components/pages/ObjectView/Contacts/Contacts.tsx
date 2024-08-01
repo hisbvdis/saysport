@@ -20,7 +20,7 @@ export default function Contacts() {
       : null}
 
       {state.links?.length ?
-        <Card.Section>{state.links.map((link) => link.value.match(/^(https?:\/\/)?(www.)?(.*?(?=\/))/)?.[3])}</Card.Section>
+        <Card.Section>{state.links.map((link) => <a key={link.order} href={link.value}>{link.value.match(/^(https?:\/\/)?(www.)?(.*?(?=\/))/)?.[3]}</a>)}</Card.Section>
       : null}
 
       <Card.Section style={{blockSize: "300px"}}>
