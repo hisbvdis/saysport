@@ -10,8 +10,8 @@ import { Control } from "../../ui/Control";
 import { Sections, Filters, Results } from ".";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
-import { MapComponent, MapMarker } from "../../ui/MapComponent";
 import type { DBObject, UISection } from "@/app/_types/types"
+import { MapComponent, MapMarker } from "../../ui/MapComponent";
 import type { SearchParamsType } from "@/app/(router)/catalog/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 // -----------------------------------------------------------------------------
@@ -20,12 +20,12 @@ import Pagination from "../../ui/Pagination/Pagination";
 
 
 export default function Catalog(props:Props) {
-  const { searchParams, results, sectionList, section, city, resultsCount } = props;
+  const { searchParams, resultsLimited, resultsAll, sectionList, section, city, resultsCount } = props;
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
 
   return (
-    <CatalogContext.Provider value={{searchParams, results, sectionList, section, city, resultsCount}}>
+    <CatalogContext.Provider value={{searchParams, resultsLimited, sectionList, section, city, resultsCount, resultsAll}}>
       <div className={clsx(styles["catalog"], !searchParams.map && "container", "page")}>
         <aside>
           <Card>
@@ -51,8 +51,8 @@ export default function Catalog(props:Props) {
           <Pagination itemsCount={resultsCount} pageSize={10} currentPage={searchParams.page ? Number(searchParams.page) : 1}/>
         </main>
         {searchParams.map &&
-          <MapComponent className={styles["catalog__map"]} fitBoundsArray={results.map((object) => [object.coord_lat, object.coord_lon])}>
-            {results.map((object) => <MapMarker key={object.object_id} coord={[object.coord_lat, object.coord_lon]}/>)}
+          <MapComponent className={styles["catalog__map"]} fitBoundsArray={resultsAll.map((object) => [object.coord_lat, object.coord_lon])}>
+            {resultsAll.map((object) => <MapMarker key={object.object_id} coord={[object.coord_lat, object.coord_lon]}/>)}
           </MapComponent>
         }
       </div>
@@ -63,7 +63,8 @@ export default function Catalog(props:Props) {
 export const CatalogContext = createContext<CatalogContextType>({} as CatalogContextType);
 
 interface Props {
-  results: DBObject[];
+  resultsLimited: DBObject[];
+  resultsAll: DBObject[];
   sectionList: UISection[];
   searchParams: SearchParamsType;
   city?: City;
@@ -72,7 +73,8 @@ interface Props {
 }
 
 interface CatalogContextType {
-  results: DBObject[];
+  resultsLimited: DBObject[];
+  resultsAll: DBObject[];
   resultsCount: number;
   searchParams: SearchParamsType;
   sectionList: UISection[];

@@ -7,7 +7,8 @@ export default async function CatalogPage({searchParams}:{searchParams:SearchPar
   const city = searchParams.city ? await getCityById(Number(searchParams.city)) : undefined;
   const section = searchParams.section ? await getSectionById(Number(searchParams.section)) : undefined;
   const sectionList = await getAllSections();
-  const results = await getObjectsByFilters(searchParams);
+  const resultsLimited = await getObjectsByFilters({...searchParams, limit: 10});
+  const resultsAll = await getObjectsByFilters(searchParams);
   const resultsCount = (await getObjectsCountByFilters(searchParams))[0].count;
 
   return (
@@ -15,7 +16,8 @@ export default async function CatalogPage({searchParams}:{searchParams:SearchPar
       searchParams={searchParams}
       city={city}
       sectionList={sectionList}
-      results={results}
+      resultsLimited={resultsLimited}
+      resultsAll={resultsAll}
       resultsCount={resultsCount}
       section={section}
     />

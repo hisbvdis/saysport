@@ -62,6 +62,7 @@ export const getObjectsByFilters = async (filters?:Filters) => {
   const status = filters?.status?.split(",") as objectStatusUnion[];
   const photo = filters?.photo?.split(",");
   const page = filters?.page;
+  const limit = filters?.limit;
   const sectionId = filters?.section ? Number(filters.section) : undefined;
   const optionIds = filters?.options ?? undefined;
   const groupedOptions = Object.entries(optionIds
@@ -98,14 +99,15 @@ export const getObjectsByFilters = async (filters?:Filters) => {
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
     },
     orderBy: [desc(object.created)],
-    limit: 10,
+    limit: limit,
     offset: page ? (Number(page) - 1) * 10 : undefined
   });
   return dbData;
 }
 
 interface Filters extends SearchParamsType {
-  type?: objectTypeUnion;
+  type?:objectTypeUnion;
+  limit?:number;
 }
 
 export const getObjectById = async (id:number) => {

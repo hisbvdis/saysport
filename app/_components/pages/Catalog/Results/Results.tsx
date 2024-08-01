@@ -10,7 +10,7 @@ import SearchPanel from "@/app/_components/blocks/SearchPanel/SearchPanel";
 
 
 export default function Results() {
-  const { searchParams, city, results, section, resultsCount } = useContext(CatalogContext);
+  const { searchParams, city, resultsLimited, section, resultsCount } = useContext(CatalogContext);
   const manageSearchParams = useManageSearchParams();
 
   return (
@@ -34,7 +34,7 @@ export default function Results() {
           <span>Карта</span>
         </Link>
       </Card.Section>
-      {results.map((object) => (
+      {resultsLimited.map((object) => (
         <Card.Section key={object.object_id} style={{display: "grid", gap: "15px", gridTemplateColumns: "1fr 1.5fr"}}>
           <img src={object.photos?.length ? `/photos/${object.photos[0].name}` : "/photos/no-photo.svg"} width="250" height="210" alt="" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
           <div>
