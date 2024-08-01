@@ -50,13 +50,11 @@ export default function Catalog(props:Props) {
           <Results/>
           <Pagination itemsCount={resultsCount} pageSize={10} currentPage={searchParams.page ? Number(searchParams.page) : 1}/>
         </main>
-        <aside>
-          {searchParams.map &&
-            <MapComponent fitBoundsArray={results.map((object) => [object.coord_lat, object.coord_lon])}>
-              {results.map((object) => <MapMarker key={object.object_id} coord={[object.coord_lat, object.coord_lon]}/>)}
-            </MapComponent>
-          }
-        </aside>
+        {searchParams.map &&
+          <MapComponent className={styles["catalog__map"]} fitBoundsArray={results.map((object) => [object.coord_lat, object.coord_lon])}>
+            {results.map((object) => <MapMarker key={object.object_id} coord={[object.coord_lat, object.coord_lon]}/>)}
+          </MapComponent>
+        }
       </div>
     </CatalogContext.Provider>
   )
