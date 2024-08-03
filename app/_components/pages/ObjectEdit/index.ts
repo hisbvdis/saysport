@@ -8,7 +8,7 @@ import Specs from "./Specs/Specs";
 import Description from "./Description/Description";
 import Schedule from "./Schedule/Schedule";
 import Photos from "./Photos/Photos";
-import SectionList from "./SectionList/SectionList";
+import SectionItem from "./SectionItem/SectionItem";
 import Usages from "./Usages/Usages";
 
 export {
@@ -22,6 +22,6 @@ export {
 	Description,
   Schedule,
   Photos,
-	SectionList,
+	SectionItem,
 	Usages,
 };

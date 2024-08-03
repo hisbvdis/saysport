@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, eq, inArray } from "drizzle-orm";
-import { objectTypeEnum, type objectTypeUnion, option, type Section, section, section_on_spec, sectionTypeEnum, sectionTypeUnion, spec } from "@/drizzle/schema";
+import { objectTypeEnum, type objectTypeUnion, section, section_on_spec, sectionTypeEnum, type sectionTypeUnion, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { UISection } from "@/app/_types/types";
 import { sectionReadProcessing } from "./section.processing";
