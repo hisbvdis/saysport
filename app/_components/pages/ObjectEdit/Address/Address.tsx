@@ -11,16 +11,15 @@ import { Button } from "@/app/_components/ui/Button";
 import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
-import { MapComponent, MapMarker } from "@/app/_components/ui/MapComponent";
+import { MapComponent, MapMarker, MapButton } from "@/app/_components/ui/MapComponent";
 // -----------------------------------------------------------------------------
 import { objectTypeEnum } from "@/drizzle/schema";
 import { getCitiesByFilters } from "@/app/_db/city";
 import { setInheritedData } from "./setInheritedData";
-import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { getObjectsByFilters } from "@/app/_db/object";
+import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
-import MapButton from "@/app/_components/ui/MapComponent/MapButton";
 
 
 export default function Address() {
@@ -118,7 +117,7 @@ export default function Address() {
               <Select
                 name="parent_id"
                 value={state.parent_id}
-                label={state.parent?.name_type?.concat(state.parent.name_title ?? "").concat(state.parent.name_where ?? "")}
+                label={state.parent?.name_type?.concat(state.parent.name_title ? ` ${state.parent.name_title}` : "").concat(state.parent.name_where ? ` ${state.parent.name_where}` : "")}
                 onChange={handleStateChange?.valueAsNumber}
                 onChangeData={(parent) => setInheritedData(parent.id ? objectReadProcessing(parent) : null, setState)}
                 isAutocomplete
