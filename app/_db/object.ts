@@ -1,8 +1,8 @@
 "use server";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
-import { and, asc, count, desc, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
-import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_schedule } from "@/drizzle/schema";
+import { and, count, desc, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
+import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -19,7 +19,7 @@ export const getEmptyObject = async ():Promise<UIObject> => {
     type: objectTypeEnum.org,
     sections: [],
     status: objectStatusEnum.works,
-    schedule: Array(7).fill(null).map((_,i) => ({ object_id: 0, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
+    // schedule: Array(7).fill(null).map((_,i) => ({ object_id: 0, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
   }
 }
 
@@ -88,13 +88,12 @@ export const getObjectsByFilters = async (filters?:Filters) => {
       photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined
     ),
     with: {
-      statusInstead: true,
+      // statusInstead: true,
       city: true,
-      parent: true,
-      phones: {orderBy: (phones, { asc }) => [asc(phones.order)]},
-      links: {orderBy: (links, { asc }) => [asc(links.order)]},
+      // parent: true,
+      // phones: {orderBy: (phones, { asc }) => [asc(phones.order)]},
+      // links: {orderBy: (links, { asc }) => [asc(links.order)]},
       objectOnOption: {with: {option: true}},
-      schedules: true,
       photos: true,
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
     },
@@ -120,11 +119,11 @@ export const getObjectById = async (id:number) => {
       phones: {orderBy: (phones, { asc }) => [asc(phones.order)]},
       links: {orderBy: (links, { asc }) => [asc(links.order)]},
       objectOnOption: {with: {option: true}},
-      schedules: true,
       photos: true,
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
+      // -----------------------------------------------------------------------------
       usages: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
-      children: {with: {photos: true, phones: true, links: true, schedules: true}},
+      children: {with: {photos: true, phones: true, links: true}},
     }
   });
   if (dbData === undefined) throw new Error("getObjectById returned undefined");

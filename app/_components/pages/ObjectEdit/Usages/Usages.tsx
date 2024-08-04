@@ -18,7 +18,7 @@ export default function Usages() {
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Использование</Card.Heading>
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
-        {state.usages.map((usage) => (
+        {state.usages?.map((usage) => (
           <React.Fragment key={usage.section_id}>
             <SectionItem section={usage.section}/>
             <Textarea name="" value={usage.description} onChange={handleStateChange.value} maxLength="2000" />

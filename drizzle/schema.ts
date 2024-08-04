@@ -57,7 +57,6 @@ export const objectRelations = relations(object, ({ one, many }) => ({
   links: many(object_link),
   phones: many(object_phone),
   photos: many(object_photo),
-  schedules: many(object_schedule),
   usages: many(object_usage),
 }))
 
@@ -122,7 +121,7 @@ export const sectionOnSpecRelations = relations(section_on_spec, ({ one }) => ({
   spec: one(spec, {fields: [section_on_spec.spec_id], references: [spec.spec_id]}),
 }))
 
-export type Section_On_Spec = typeof section_on_spec.$inferSelect;
+export type SectionOnSpec = typeof section_on_spec.$inferSelect;
 
 
 
@@ -170,7 +169,7 @@ export type City = typeof city.$inferSelect;
 // OBJECT_PHONE
 // ===========================================================================
 export const object_phone = pgTable("object_phone", {
-  object_id: integer("object_id").notNull(),
+  object_id: integer("object_id").notNull().references(() => object.object_id),
   order: integer("order").notNull(),
   value: varchar("value").notNull(),
   comment: varchar("comment"),
@@ -190,7 +189,7 @@ export type ObjectPhone = typeof object_phone.$inferSelect;
 // OBJECT_LINK
 // ===========================================================================
 export const object_link = pgTable("object_link", {
-  object_id: integer("object_id").notNull(),
+  object_id: integer("object_id").notNull().references(() => object.object_id),
   order: integer("order").notNull(),
   value: varchar("value").notNull(),
   comment: varchar("comment"),
@@ -210,7 +209,7 @@ export type ObjectLink = typeof object_link.$inferSelect;
 // OBJECT_PHOTO
 // ===========================================================================
 export const object_photo = pgTable("object_photo", {
-  object_id: integer("object_id").notNull(),
+  object_id: integer("object_id").notNull().references(() => object.object_id),
   order: integer("order").notNull(),
   name: varchar("name").notNull(),
   uploaded: timestamp("uploaded").notNull().defaultNow(),
@@ -231,7 +230,7 @@ export type ObjectPhoto = typeof object_photo.$inferSelect;
 // ===========================================================================
 export const object_schedule = pgTable("object_schedule", {
   schedule_id: serial("schedule_id").primaryKey(),
-  object_id: integer("object_id").notNull(),
+  object_id: integer("object_id").notNull().references(() => object.object_id),
   day_num: integer("day_num").notNull(),
   time: varchar("time").notNull(),
   from: integer("from").notNull(),
@@ -286,7 +285,7 @@ export const objectOnSectionRelations = relations(object_on_section, ({ one }) =
   section: one(section, {fields: [object_on_section.section_id], references: [section.section_id]}),
 }))
 
-export type Object_On_Section = typeof object_on_section.$inferSelect;
+export type ObjectOnSection = typeof object_on_section.$inferSelect;
 
 
 
@@ -305,4 +304,4 @@ export const objectOnOptionRelations = relations(object_on_option, ({ one }) => 
   option: one(option, {fields: [object_on_option.option_id], references: [option.option_id]}),
 }))
 
-export type Object_On_Option = typeof object_on_option.$inferSelect;
+export type ObjectOnOption = typeof object_on_option.$inferSelect;

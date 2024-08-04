@@ -1,4 +1,4 @@
-import type { City, Object_On_Option, Object_, Option, Section_On_Spec, Section, Spec, Object_On_Section, objectTypeUnion, objectStatusUnion, Object_On_Link, ObjectPhone, ObjectLink, Object_On_Schedule, ObjectSchedule, ObjectPhoto, ObjectUsage } from "@/drizzle/schema";
+import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, Object_On_Link, ObjectPhone, ObjectLink, Object_On_Schedule, ObjectSchedule, ObjectPhoto, ObjectUsage } from "@/drizzle/schema";
 
 
 // =============================================================================
@@ -9,7 +9,7 @@ export interface DBSpec extends Spec {
 }
 
 export interface DBSection extends Section {
-  sectionOnSpec: (Section_On_Spec & { spec: DBSpec })[];
+  sectionOnSpec: (SectionOnSpec & { spec: DBSpec })[];
 }
 
 export interface DBObject extends Object_ {
@@ -20,10 +20,9 @@ export interface DBObject extends Object_ {
   parent?: Object_ | null;
   phones: ObjectPhone[],
   links: ObjectLink[],
-  objectOnSection?: (Object_On_Section & {section: Section & {sectionOnSpec: (Section_On_Spec & {spec: Spec & {options: Option[]}})[]}})[];
-  objectOnOption?: (Object_On_Option & {option: Option})[];
-  usages: (ObjectUsage & {section: DBSection})[];
-  schedules?: ObjectSchedule[];
+  objectOnSection?: (ObjectOnSection & {section: Section & {sectionOnSpec: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}})[];
+  objectOnOption?: (ObjectOnOption & {option: Option})[];
+  usages?: (ObjectUsage & {section: DBSection})[];
   photos?: ObjectPhoto[];
   children?: DBObject[],
 }
@@ -60,8 +59,7 @@ export interface UIObject extends Partial<Object_> {
   links?: (ObjectLink & {uiID: string})[];
   sections: UISection[];
   options?: UIOption[];
-  usages: (ObjectUsage & {section: UISection})[];
-  schedule: (ObjectSchedule & {uiID: string, isWork: boolean})[];
+  usages?: (ObjectUsage & {section: UISection})[];
   photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
 }

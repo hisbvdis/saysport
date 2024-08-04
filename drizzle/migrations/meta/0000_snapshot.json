@@ -1,5 +1,5 @@
 {
-  "id": "72857d22-2f1a-4176-87eb-06e689a72f7c",
+  "id": "843e73f0-343f-4764-9d24-b24e0fcd4bce",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -271,7 +271,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "object_link_object_id_object_object_id_fk": {
+          "name": "object_link_object_id_object_object_id_fk",
+          "tableFrom": "object_link",
+          "tableTo": "object",
+          "columnsFrom": [
+            "object_id"
+          ],
+          "columnsTo": [
+            "object_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {
         "object_link_object_id_order_pk": {
           "name": "object_link_object_id_order_pk",
@@ -427,7 +441,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "object_phone_object_id_object_object_id_fk": {
+          "name": "object_phone_object_id_object_object_id_fk",
+          "tableFrom": "object_phone",
+          "tableTo": "object",
+          "columnsFrom": [
+            "object_id"
+          ],
+          "columnsTo": [
+            "object_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {
         "object_phone_object_id_order_pk": {
           "name": "object_phone_object_id_order_pk",
@@ -470,7 +498,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "object_photo_object_id_object_object_id_fk": {
+          "name": "object_photo_object_id_object_object_id_fk",
+          "tableFrom": "object_photo",
+          "tableTo": "object",
+          "columnsFrom": [
+            "object_id"
+          ],
+          "columnsTo": [
+            "object_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {
         "object_photo_object_id_order_pk": {
           "name": "object_photo_object_id_order_pk",
@@ -554,7 +596,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "object_schedule_object_id_object_object_id_fk": {
+          "name": "object_schedule_object_id_object_object_id_fk",
+          "tableFrom": "object_schedule",
+          "tableTo": "object",
+          "columnsFrom": [
+            "object_id"
+          ],
+          "columnsTo": [
+            "object_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
