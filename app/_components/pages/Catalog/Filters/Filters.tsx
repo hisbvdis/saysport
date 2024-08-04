@@ -49,7 +49,7 @@ export default function Filters(props:Props) {
           <Control>
             <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
               <span>{spec.name_public}</span>
-              {spec.is_and_search && <Checkbox value={spec.spec_id} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>}
+              {spec.is_and_in_search && <Checkbox value={spec.spec_id} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>}
             </Control.Label>
             <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
               {spec.options?.toSorted((a, b) => a.order - b.order).map((opt) => (

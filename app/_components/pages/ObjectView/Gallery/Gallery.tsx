@@ -8,7 +8,7 @@ export default function Gallery() {
 
   return (
     <Card>
-      <Swiper photos={state.photos?.map((photo) => photo.name) ?? ["no-photo.svg"]} width={565} height={350} navigation="true" speed="250" loop="true"/>
+      <Swiper photos={state.photos?.map((photo) => photo.name).length || ["no-photo.svg"]} width={565} height={350} navigation="true" speed="250" loop="true"/>
     </Card>
   )
 }

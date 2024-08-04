@@ -14,7 +14,7 @@ export default function NamePlace() {
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Название и Статус</Card.Heading>
+      <Card.Heading>Название и статус</Card.Heading>
       <Card.Section>
         <div style={{display: "flex", gap: "10px"}}>
           <Control style={{flexBasis: "50%"}}>

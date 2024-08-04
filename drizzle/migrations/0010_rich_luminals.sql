@@ -1,1 +1,0 @@
-ALTER TABLE "section" ALTER COLUMN "section_type" DROP DEFAULT;

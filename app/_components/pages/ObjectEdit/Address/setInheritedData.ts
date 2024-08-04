@@ -7,11 +7,10 @@ export const setInheritedData = (parent:UIObject|null, setState:React.Dispatch<S
     setState((prevState) => create(prevState, (draft) => {
       draft.status_inherit = true;
       draft.coord_inherit = true;
-      draft.schedule_inherit = true;
       draft.name_where = `${parent?.name_locative} ${parent.name_title ?? ""} ${parent.name_where ?? ""}`;
       draft.status = parent?.status;
       draft.status_comment = parent?.status_comment;
-      draft.status_confirm = parent?.status_confirm;
+      draft.status_source = parent?.status_source;
       draft.city_id = parent?.city_id;
       draft.city = parent?.city;
       draft.parent_id = parent?.object_id;
@@ -22,11 +21,6 @@ export const setInheritedData = (parent:UIObject|null, setState:React.Dispatch<S
       draft.coord_lon = parent?.coord_lon;
       draft.phones = parent?.phones;
       draft.links = parent?.links;
-      draft.schedule_24_7 = parent?.schedule_24_7;
-      draft.schedule = parent?.schedule;
-      draft.schedule_date = parent?.schedule_date;
-      draft.schedule_comment = parent?.schedule_comment;
-      draft.schedule_source = parent?.schedule_source;
       draft.statusInstead = parent?.statusInstead;
       draft.status_instead_id = parent?.status_instead_id;
     }))
@@ -36,7 +30,6 @@ export const setInheritedData = (parent:UIObject|null, setState:React.Dispatch<S
       draft.parent = null;
       draft.status_inherit = false;
       draft.coord_inherit = false;
-      draft.schedule_inherit = false;
     }))
   }
 }

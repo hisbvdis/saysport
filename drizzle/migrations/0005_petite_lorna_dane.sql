@@ -1,3 +1,0 @@
--- ALTER TABLE "object" RENAME COLUMN "name" TO "name_type";--> statement-breakpoint
--- ALTER TABLE "city" ALTER COLUMN "name_preposition" DROP NOT NULL;--> statement-breakpoint
--- ALTER TABLE "object" ADD COLUMN "name_title" varchar;

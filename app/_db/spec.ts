@@ -18,7 +18,7 @@ export const getEmptySpec = async ():Promise<UISpec> => {
     uiID: crypto.randomUUID(),
     options: [],
     order: 1,
-    is_and_search: null
+    is_and_in_search: null
   }
 }
 
@@ -60,7 +60,7 @@ export const upsertSpec = async (state:UISpec, init:UISpec):Promise<Spec> => {
     object_type: state.object_type,
     options_number: state.options_number,
     order: state.order,
-    is_and_search: state.is_and_search
+    is_and_in_search: state.is_and_in_search
   }
 
   const [upsertedSpec] = await db.insert(spec).values({...fields}).onConflictDoUpdate({target: spec.spec_id, set: {...fields}}).returning();

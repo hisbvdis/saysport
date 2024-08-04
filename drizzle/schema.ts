@@ -16,6 +16,8 @@ export enum sectionTypeEnum {section="section", common="common", usage="usage"};
 export type sectionTypeUnion = "section" | "common" | "usage";
 export const sectionTypeColumnType = pgEnum("sectionType", ["section", "common", "usage"]);
 
+
+
 // ===========================================================================
 // OBJECT
 // ===========================================================================
@@ -29,7 +31,7 @@ export const object = pgTable("object", {
   status_inherit: boolean("status_inherit"),
   status: objectStatusColumnType("status").notNull(),
   status_comment: varchar("status_comment"),
-  status_confirm: varchar("status_confirm"),
+  status_source: varchar("status_source"),
   status_instead_id: integer("status_instead_id").references(():AnyPgColumn => object.object_id, {onDelete: "restrict"}),
   city_id: integer("city_id").notNull().references(() => city.city_id),
   parent_id: integer("parent_id").references(():AnyPgColumn => object.object_id, {onDelete: "restrict"}),
@@ -39,11 +41,6 @@ export const object = pgTable("object", {
   coord_lat: doublePrecision("coord_lat").notNull(),
   coord_lon: doublePrecision("coord_lon").notNull(),
   description: varchar("description"),
-  schedule_inherit: boolean("schedule_inherit"),
-  schedule_24_7: boolean("schedule_24_7"),
-  schedule_date: timestamp("schedule_date"),
-  schedule_source: varchar("schedule_source"),
-  schedule_comment: varchar("schedule_comment"),
   created: timestamp("created").notNull(),
   modified: timestamp("modified").notNull().defaultNow(),
 })
@@ -60,46 +57,12 @@ export const objectRelations = relations(object, ({ one, many }) => ({
   links: many(object_link),
   phones: many(object_phone),
   photos: many(object_photo),
-  schedule: many(object_schedule),
+  schedules: many(object_schedule),
+  usages: many(object_usage),
 }))
 
 export type Object_ = typeof object.$inferSelect;
 
-
-// ===========================================================================
-// OBJECT_ON_SECTION
-// ===========================================================================
-export const object_on_section = pgTable("object_on_section", {
-  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
-  section_id: integer("section_id").notNull().references(() => section.section_id, {onDelete: "restrict"})
-}, (table) => ({
-  pk: primaryKey({columns: [table.object_id, table.section_id]})
-}))
-
-export const objectOnSectionRelations = relations(object_on_section, ({ one }) => ({
-  object: one(object, {fields: [object_on_section.object_id], references: [object.object_id]}),
-  section: one(section, {fields: [object_on_section.section_id], references: [section.section_id]}),
-}))
-
-export type Object_On_Section = typeof object_on_section.$inferSelect;
-
-
-// ===========================================================================
-// OBJECT_ON_OPTION
-// ===========================================================================
-export const object_on_option = pgTable("object_on_option", {
-  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
-  option_id: integer("option_id").notNull().references(() => option.option_id, {onDelete: "restrict"})
-}, (table) => ({
-  pk: primaryKey({columns: [table.object_id, table.option_id]})
-}))
-
-export const objectOnOptionRelations = relations(object_on_option, ({ one }) => ({
-  object: one(object, {fields: [object_on_option.object_id], references: [object.object_id]}),
-  option: one(option, {fields: [object_on_option.option_id], references: [option.option_id]}),
-}))
-
-export type Object_On_Option = typeof object_on_option.$inferSelect;
 
 
 // ===========================================================================
@@ -121,6 +84,7 @@ export const sectionRelations = relations(section, ({ many }) => ({
 export type Section = typeof section.$inferSelect;
 
 
+
 // ===========================================================================
 // SPEC
 // ===========================================================================
@@ -131,7 +95,7 @@ export const spec = pgTable("spec", {
   object_type: objectTypeColumnType("object_type").notNull(),
   options_number: optionsNumberColumnType("options_number").notNull(),
   order: integer("order").notNull(),
-  is_and_search: boolean("is_and_search"),
+  is_and_in_search: boolean("is_and_in_search"),
 })
 
 export const specRelations = relations(spec, ({ many }) => ({
@@ -141,22 +105,6 @@ export const specRelations = relations(spec, ({ many }) => ({
 
 export type Spec = typeof spec.$inferSelect;
 
-
-// ===========================================================================
-// OPTION
-// ===========================================================================
-export const option = pgTable("option", {
-  option_id: serial("option_id").primaryKey(),
-  name: varchar("name").notNull(),
-  order: integer("order").notNull(),
-  spec_id: integer("spec_id").notNull().references(() => spec.spec_id, { onDelete: "cascade" }),
-})
-
-export const optionRelations = relations(option, ({ one }) => ({
-  spec: one(spec, {fields: [option.spec_id], references: [spec.spec_id]}),
-}))
-
-export type Option = typeof option.$inferSelect;
 
 
 // ===========================================================================
@@ -175,6 +123,25 @@ export const sectionOnSpecRelations = relations(section_on_spec, ({ one }) => ({
 }))
 
 export type Section_On_Spec = typeof section_on_spec.$inferSelect;
+
+
+
+// ===========================================================================
+// OPTION
+// ===========================================================================
+export const option = pgTable("option", {
+  option_id: serial("option_id").primaryKey(),
+  name: varchar("name").notNull(),
+  order: integer("order").notNull(),
+  spec_id: integer("spec_id").notNull().references(() => spec.spec_id, { onDelete: "cascade" }),
+})
+
+export const optionRelations = relations(option, ({ one }) => ({
+  spec: one(spec, {fields: [option.spec_id], references: [spec.spec_id]}),
+}))
+
+export type Option = typeof option.$inferSelect;
+
 
 
 // ===========================================================================
@@ -198,11 +165,12 @@ export const cityRelations = relations(city, ({ many }) => ({
 export type City = typeof city.$inferSelect;
 
 
+
 // ===========================================================================
 // OBJECT_PHONE
 // ===========================================================================
 export const object_phone = pgTable("object_phone", {
-  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
+  object_id: integer("object_id").notNull(),
   order: integer("order").notNull(),
   value: varchar("value").notNull(),
   comment: varchar("comment"),
@@ -211,17 +179,18 @@ export const object_phone = pgTable("object_phone", {
 }))
 
 export const objectPhoneRelations = relations(object_phone, ({ one }) => ({
-  object: one(object, {fields: [object_phone.object_id], references: [object.object_id]})
+  object: one(object, {fields: [object_phone.object_id], references: [object.object_id]}),
 }))
 
-export type Object_Phone = typeof object_phone.$inferSelect;
+export type ObjectPhone = typeof object_phone.$inferSelect;
+
 
 
 // ===========================================================================
 // OBJECT_LINK
 // ===========================================================================
 export const object_link = pgTable("object_link", {
-  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
+  object_id: integer("object_id").notNull(),
   order: integer("order").notNull(),
   value: varchar("value").notNull(),
   comment: varchar("comment"),
@@ -230,17 +199,18 @@ export const object_link = pgTable("object_link", {
 }))
 
 export const objectLinkRelations = relations(object_link, ({ one }) => ({
-  object: one(object, {fields: [object_link.object_id], references: [object.object_id]})
+  object: one(object, {fields: [object_link.object_id], references: [object.object_id]}),
 }))
 
-export type Object_Link = typeof object_link.$inferSelect;
+export type ObjectLink = typeof object_link.$inferSelect;
+
 
 
 // ===========================================================================
-// PHOTO
+// OBJECT_PHOTO
 // ===========================================================================
 export const object_photo = pgTable("object_photo", {
-  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
+  object_id: integer("object_id").notNull(),
   order: integer("order").notNull(),
   name: varchar("name").notNull(),
   uploaded: timestamp("uploaded").notNull().defaultNow(),
@@ -252,24 +222,87 @@ export const objectPhotoRelations = relations(object_photo, ({ one }) => ({
   object: one(object, {fields: [object_photo.object_id], references: [object.object_id]}),
 }))
 
-export type Object_Photo = typeof object_photo.$inferSelect;
+export type ObjectPhoto = typeof object_photo.$inferSelect;
+
 
 
 // ===========================================================================
-// SCHEDULE
+// OBJECT_SCHEDULE
 // ===========================================================================
 export const object_schedule = pgTable("object_schedule", {
-  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
+  schedule_id: serial("schedule_id").primaryKey(),
+  object_id: integer("object_id").notNull(),
   day_num: integer("day_num").notNull(),
   time: varchar("time").notNull(),
   from: integer("from").notNull(),
   to: integer("to").notNull(),
-}, (table) => ({
-  pk: primaryKey({columns: [table.object_id, table.day_num]})
-}))
+  schedule_inherit: boolean("schedule_inherit"),
+  schedule_24_7: boolean("schedule_24_7"),
+  schedule_date: timestamp("schedule_date"),
+  schedule_source: varchar("schedule_source"),
+  schedule_comment: varchar("schedule_comment"),
+})
 
 export const objectScheduleRelations = relations(object_schedule, ({ one }) => ({
   object: one(object, {fields: [object_schedule.object_id], references: [object.object_id]}),
 }))
 
-export type Object_Schedule = typeof object_schedule.$inferSelect;
+export type ObjectSchedule = typeof object_schedule.$inferSelect;
+
+
+
+// ===========================================================================
+// OBJECT_USAGE
+// ===========================================================================
+export const object_usage = pgTable("object_usage", {
+  object_id: integer("object_id").notNull().references(() => object.object_id),
+  section_id: integer("section_id").notNull().references(() => section.section_id),
+  description: varchar("description"),
+  schedule_id: integer("schedule_id").references(() => object_schedule.schedule_id),
+})
+
+export const objectUsageRelations = relations(object_usage, ({ one }) => ({
+  object: one(object, {fields: [object_usage.object_id], references: [object.object_id]}),
+  section: one(section, {fields: [object_usage.section_id], references: [section.section_id]}),
+  schedule: one(object_schedule, {fields: [object_usage.schedule_id], references: [object_schedule.schedule_id]}),
+}))
+
+export type ObjectUsage = typeof object_usage.$inferSelect;
+
+
+
+// ===========================================================================
+// OBJECT_ON_SECTION
+// ===========================================================================
+export const object_on_section = pgTable("object_on_section", {
+  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
+  section_id: integer("section_id").notNull().references(() => section.section_id, {onDelete: "restrict"})
+}, (table) => ({
+  pk: primaryKey({columns: [table.object_id, table.section_id]})
+}))
+
+export const objectOnSectionRelations = relations(object_on_section, ({ one }) => ({
+  object: one(object, {fields: [object_on_section.object_id], references: [object.object_id]}),
+  section: one(section, {fields: [object_on_section.section_id], references: [section.section_id]}),
+}))
+
+export type Object_On_Section = typeof object_on_section.$inferSelect;
+
+
+
+// ===========================================================================
+// OBJECT_ON_OPTION
+// ===========================================================================
+export const object_on_option = pgTable("object_on_option", {
+  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
+  option_id: integer("option_id").notNull().references(() => option.option_id, {onDelete: "restrict"})
+}, (table) => ({
+  pk: primaryKey({columns: [table.object_id, table.option_id]})
+}))
+
+export const objectOnOptionRelations = relations(object_on_option, ({ one }) => ({
+  object: one(object, {fields: [object_on_option.object_id], references: [object.object_id]}),
+  option: one(option, {fields: [object_on_option.option_id], references: [option.option_id]}),
+}))
+
+export type Object_On_Option = typeof object_on_option.$inferSelect;

@@ -41,9 +41,9 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
     },
     delete: (section:UISection) => {
       setState((prevState) => create(prevState, (draft) => {
-        draft.sections = draft.sections?.filter(({section_id}) => section_id !== section.section_id);
+        draft.sections = draft.sections?.filter((draftSection) => draftSection.section_id !== section.section_id);
         const optionsOfDeletedSection = section.specs?.flatMap((spec) => spec.options?.flatMap(({spec_id}) => spec_id));
-        draft.options = draft.options?.filter((option) => !optionsOfDeletedSection?.includes(option.option_id));
+        draft.options = draft.options?.filter((option) => !optionsOfDeletedSection.includes(option.spec_id));
       }));
     },
   }
@@ -74,7 +74,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.sections) draft.sections = [];
         if (!props.commonPlaceSections?.length) return;
-        draft.sections.concat(props.commonPlaceSections);
+        draft.sections = draft.sections.concat(props.commonPlaceSections);
       }))
     }
     if (!props.parent) return;
@@ -102,7 +102,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
         <Contacts/>
         <Specs/>
         <Description/>
-        {state.type === objectTypeEnum.org ? <Schedule/> : <Usages/>}
+        <Usages/>
         <Photos/>
         <EditBottomPanel
           id={state.object_id}

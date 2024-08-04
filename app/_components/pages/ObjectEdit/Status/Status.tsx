@@ -51,11 +51,14 @@ export default function Status(props:Props) {
         </Control.Section>
       </Control>
       <Control>
-        <Control.Label>Подтверждение</Control.Label>
+        <Control.Label>
+          <span>Источник</span>
+          {state.status_source?.includes("http") || state.status_source?.includes("www") ? <a href={state.status_source}>(Open)</a> : null}
+        </Control.Label>
         <Control.Section>
           <Input
-            name="status_confirm"
-            value={state?.status_confirm}
+            name="status_source"
+            value={state?.status_source}
             onChange={handleStateChange?.value}
             disabled={state?.status_inherit || state?.status === objectStatusEnum.works}
           />
@@ -67,7 +70,7 @@ export default function Status(props:Props) {
           <Select
             name="status_instead_id"
             value={state?.status_instead_id}
-            label={`${state?.statusInstead?.name_type ?? ""} ${state.statusInstead?.name_title ?? ""} ${state.statusInstead?.name_where ?? ""}`}
+            label={state?.statusInstead?.name_type.concat(state.statusInstead?.name_title ? ` ${state.statusInstead?.name_title}` : "").concat(state.statusInstead?.name_where ? ` ${state.statusInstead?.name_where}` : "")}
             onChange={handleStateChange?.valueAsNumber}
             onChangeData={(data) => setState(create((draft) => {draft.statusInstead = data}))}
             isAutocomplete

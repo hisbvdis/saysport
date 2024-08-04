@@ -1,4 +1,4 @@
-import { type City, type Object_Link, type Object_On_Option, type Object_Phone, type Object_Photo, type Object_Schedule, type Object_, type Option, type Section_On_Spec, type Section, type Spec, objectTypeEnum, type Object_On_Section, objectStatusEnum, type objectTypeUnion, type objectStatusUnion } from "@/drizzle/schema";
+import type { City, Object_On_Option, Object_, Option, Section_On_Spec, Section, Spec, Object_On_Section, objectTypeUnion, objectStatusUnion, Object_On_Link, ObjectPhone, ObjectLink, Object_On_Schedule, ObjectSchedule, ObjectPhoto, ObjectUsage } from "@/drizzle/schema";
 
 
 // =============================================================================
@@ -18,12 +18,13 @@ export interface DBObject extends Object_ {
   statusInstead?: Object_ | null;
   city?: City;
   parent?: Object_ | null;
-  phones?: Object_Phone[];
-  links?: Object_Link[];
+  phones: ObjectPhone[],
+  links: ObjectLink[],
   objectOnSection?: (Object_On_Section & {section: Section & {sectionOnSpec: (Section_On_Spec & {spec: Spec & {options: Option[]}})[]}})[];
   objectOnOption?: (Object_On_Option & {option: Option})[];
-  schedule?: Object_Schedule[];
-  photos?: Object_Photo[];
+  usages: (ObjectUsage & {section: DBSection})[];
+  schedules?: ObjectSchedule[];
+  photos?: ObjectPhoto[];
   children?: DBObject[],
 }
 
@@ -55,12 +56,13 @@ export interface UIObject extends Partial<Object_> {
   statusInstead?: Object_ | null;
   city?: City;
   parent?: Object_ | UIObject | null;
-  phones?: (Object_Phone & {uiID: string})[];
-  links?: (Object_Link & {uiID: string})[];
+  phones?: (ObjectPhone & {uiID: string})[];
+  links?: (ObjectLink & {uiID: string})[];
   sections: UISection[];
   options?: UIOption[];
-  schedule: (Object_Schedule & {uiID: string, isWork: boolean})[];
-  photos?: (Object_Photo & {uiID: string, blob?: string, file?: File})[];
+  usages: (ObjectUsage & {section: UISection})[];
+  schedule: (ObjectSchedule & {uiID: string, isWork: boolean})[];
+  photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
 }
 

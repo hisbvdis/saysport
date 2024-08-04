@@ -152,7 +152,7 @@ export default function SpecEdit(props:{init:UISpec}) {
         <Card.Section>
           <Control>
             <Control.Section>
-              <Checkbox name="is_and_search" checked={Boolean(state.is_and_search)} onChange={handleStateChange.checked}>
+              <Checkbox name="is_and_in_search" checked={Boolean(state.is_and_in_search)} onChange={handleStateChange.checked}>
                 Показывать режим поиска "И"
               </Checkbox>
             </Control.Section>
