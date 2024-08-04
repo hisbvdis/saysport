@@ -58,8 +58,8 @@ interface Props {
   id?: string;
   maxLength?: string;
   name?: string;
-  onBlur?: FocusEventHandler;
-  onBlurIfChanged?: FocusEventHandler;
+  onBlur?: FocusEventHandler<HTMLInputElement>;
+  onBlurIfChanged?: FocusEventHandler<HTMLInputElement>;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onChangeValue?: (value:string) => void;
   onClick?: MouseEventHandler;

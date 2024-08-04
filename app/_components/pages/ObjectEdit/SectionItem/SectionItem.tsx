@@ -11,7 +11,7 @@ import type { UISection } from "@/app/_types/types";
 
 export default function SectionItem(props:{section:UISection, delFunc:(section:UISection) => void}) {
   const { section } = props;
-  const { state, handleSections, handleOptions } = useContext(ObjectEditContext);
+  const { state, handleOptions } = useContext(ObjectEditContext);
 
   return (
     <FieldSet key={section?.section_id} style={{display: "flex", gap: "20px"}}>

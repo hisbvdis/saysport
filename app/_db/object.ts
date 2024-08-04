@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, count, desc, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
-import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_usage } from "@/drizzle/schema";
+import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_usage, object_schedule } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -19,7 +19,6 @@ export const getEmptyObject = async ():Promise<UIObject> => {
     type: objectTypeEnum.org,
     sections: [],
     status: objectStatusEnum.works,
-    // schedule: Array(7).fill(null).map((_,i) => ({ object_id: 0, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false })),
   }
 }
 
@@ -122,7 +121,7 @@ export const getObjectById = async (id:number) => {
       photos: true,
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
       // -----------------------------------------------------------------------------
-      usages: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
+      usages: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}, schedules: true}},
       children: {with: {photos: true, phones: true, links: true}},
     }
   });
@@ -225,11 +224,21 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
 
   const usagesAdded = state.usages?.filter((stateUsage) => !init?.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id));
   if (usagesAdded?.length) {
-    await db.insert(object_usage).values(usagesAdded.map((usage) => ({...usage, object_id: upsertedObject.object_id})));
+    usagesAdded.forEach(async (usage) => {
+      const insertedUsage = (await db.insert(object_usage).values({...usage, usage_id: undefined, object_id: upsertedObject.object_id}).returning())[0];
+      const schedulesAdded = usage.schedules.filter((schedule) => schedule.time !== "");
+      if (schedulesAdded.length) {
+        schedulesAdded.forEach(async (schedule) => await db.insert(object_schedule).values({...schedule, usage_id: insertedUsage.usage_id, object_id: upsertedObject.object_id}));
+      }
+    });
   }
   const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id && (stateUsage.description !== initUsage.description)));
   if (usagesChanged?.length) {
-    usagesChanged.forEach(async (changedUsage) => await db.update(object_usage).set({...changedUsage, usage_id:undefined, object_id: undefined, section_id: undefined}).where(eq(object_usage.usage_id, changedUsage.usage_id)));
+    usagesChanged.forEach(async (usage) => {
+      await db.update(object_usage).set({...usage, usage_id:undefined, object_id: undefined, section_id: undefined}).where(eq(object_usage.usage_id, usage.usage_id))
+      const schedulesChanged = usage.schedules?.filter((stateDay) => init.usages?.find((initUsage) => initUsage.usage_id === usage.usage_id)?.schedules?.some((initDay) => stateDay.day_num === initDay.day_num && stateDay.time && stateDay.time !== initDay.time));
+      console.log( schedulesChanged )
+    });
   }
   const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.usage_id === stateUsage.usage_id));
   if (usagesDeleted?.length) {

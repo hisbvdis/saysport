@@ -22,7 +22,7 @@ export interface DBObject extends Object_ {
   links: ObjectLink[],
   objectOnSection?: (ObjectOnSection & {section: Section & {sectionOnSpec: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}})[];
   objectOnOption?: (ObjectOnOption & {option: Option})[];
-  usages?: (ObjectUsage & {section: DBSection})[];
+  usages?: (ObjectUsage & {section: DBSection, schedules: ObjectSchedule[]})[];
   photos?: ObjectPhoto[];
   children?: DBObject[],
 }
@@ -49,7 +49,8 @@ export interface UIObjectUsage extends Partial<ObjectUsage> {
   usage_id:number;
   object_id:number;
   section_id:number;
-  section:UISection
+  section:UISection;
+  schedules:(ObjectSchedule & {isWork:boolean})[];
 }
 
 export interface UIObject extends Partial<Object_> {

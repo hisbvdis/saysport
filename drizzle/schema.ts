@@ -237,6 +237,7 @@ export const object_usage = pgTable("object_usage", {
   schedule_date: timestamp("schedule_date"),
   schedule_source: varchar("schedule_source"),
   schedule_comment: varchar("schedule_comment"),
+  schedule_24_7: boolean("schedule_24_7"),
 })
 
 export const objectUsageRelations = relations(object_usage, ({ one, many }) => ({
@@ -259,7 +260,6 @@ export const object_schedule = pgTable("object_schedule", {
   time: varchar("time").notNull(),
   from: integer("from").notNull(),
   to: integer("to").notNull(),
-  schedule_24_7: boolean("schedule_24_7"),
 })
 
 export const objectScheduleRelations = relations(object_schedule, ({ one }) => ({
