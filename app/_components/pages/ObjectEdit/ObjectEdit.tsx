@@ -158,7 +158,7 @@ interface ObjectEditContextType {
     changeRadio: (spec:UISpec, opt:UIOption) => void,
   },
   handleUsages: {
-    add: (usage:UIObjectUsage) => void,
+    add: (section:UISection) => void,
     changeDescription: (e:ChangeEvent<HTMLInputElement>, usage: UIObjectUsage) => void,
     delete: (section:UISection) => void,
   },
