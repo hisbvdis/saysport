@@ -94,24 +94,24 @@ CREATE TABLE IF NOT EXISTS "object_photo" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_schedule" (
-	"schedule_id" serial PRIMARY KEY NOT NULL,
 	"object_id" integer NOT NULL,
+	"usage_id" integer NOT NULL,
 	"day_num" integer NOT NULL,
 	"time" varchar NOT NULL,
 	"from" integer NOT NULL,
 	"to" integer NOT NULL,
-	"schedule_inherit" boolean,
-	"schedule_24_7" boolean,
-	"schedule_date" timestamp,
-	"schedule_source" varchar,
-	"schedule_comment" varchar
+	"schedule_24_7" boolean
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_usage" (
+	"usage_id" serial PRIMARY KEY NOT NULL,
 	"object_id" integer NOT NULL,
 	"section_id" integer NOT NULL,
 	"description" varchar,
-	"schedule_id" integer
+	"schedule_inherit" boolean,
+	"schedule_date" timestamp,
+	"schedule_source" varchar,
+	"schedule_comment" varchar
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "option" (
@@ -212,6 +212,12 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "object_schedule" ADD CONSTRAINT "object_schedule_usage_id_object_usage_usage_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."object_usage"("usage_id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "object_usage" ADD CONSTRAINT "object_usage_object_id_object_object_id_fk" FOREIGN KEY ("object_id") REFERENCES "public"."object"("object_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -219,12 +225,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "object_usage" ADD CONSTRAINT "object_usage_section_id_section_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "public"."section"("section_id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "object_usage" ADD CONSTRAINT "object_usage_schedule_id_object_schedule_schedule_id_fk" FOREIGN KEY ("schedule_id") REFERENCES "public"."object_schedule"("schedule_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

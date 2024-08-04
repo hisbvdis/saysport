@@ -2,7 +2,7 @@
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
 import { objectTypeEnum } from "@/drizzle/schema";
-import type { UIObject, UIOption, UISection, UISpec } from "@/app/_types/types";
+import type { UIObject, UIObjectUsage, UIOption, UISection, UISpec } from "@/app/_types/types";
 import { type ChangeEvent, type ChangeEventHandler, type SetStateAction, type SyntheticEvent, createContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
@@ -68,6 +68,30 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
     },
   }
 
+  const handleUsages = {
+    add: (section:UISection) => {
+      handleSections.add(section);
+      if (!section.section_id || state.usages?.some((stateUsage) => stateUsage.section_id === section.section_id)) return;
+      setState((prevState) => create(prevState, (draft) => {
+        if (!draft.usages) draft.usages = [];
+        draft.usages.push({object_id: 0, usage_id: 0, section_id: section.section_id, description: "", section: section});
+      }))
+    },
+    changeDescription: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const localUsage = draft.usages?.find((stateUsage) => stateUsage.usage_id === usage?.usage_id);
+        if (!localUsage) return;
+        localUsage.description = e.target.value;
+      }))
+    },
+    delete: (section:UISection) => {
+      handleSections.delete(section);
+      setState((prevState) => create(prevState, (draft) => {
+        draft.usages = draft.usages?.filter((draftUsage) => draftUsage.section_id !== section.section_id);
+      }))
+    },
+  }
+
   useEffect(() => {
     if (state.object_id) return;
     if (state.type === objectTypeEnum.place) {
@@ -95,7 +119,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
   }
 
   return (
-    <ObjectEditContext.Provider value={{ state, setState, handleStateChange, handleSections, handleOptions }}>
+    <ObjectEditContext.Provider value={{ state, setState, handleStateChange, handleSections, handleOptions, handleUsages }}>
       <Form onSubmit={handleFormSubmit}>
         {state.type === objectTypeEnum.org ? <NameOrg/> : <NamePlace/>}
         <Address/>
@@ -132,5 +156,10 @@ interface ObjectEditContextType {
   handleOptions: {
     changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: UIOption) => void,
     changeRadio: (spec:UISpec, opt:UIOption) => void,
-  }
+  },
+  handleUsages: {
+    add: (usage:UIObjectUsage) => void,
+    changeDescription: (e:ChangeEvent<HTMLInputElement>, usage: UIObjectUsage) => void,
+    delete: (section:UISection) => void,
+  },
 }

@@ -12,7 +12,7 @@ import { getSectionsByFilters } from "@/app/_db/section";
 
 
 export default function Usages() {
-  const { state, handleSections, handleStateChange } = useContext(ObjectEditContext);
+  const { state, handleUsages } = useContext(ObjectEditContext);
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
@@ -20,8 +20,8 @@ export default function Usages() {
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
         {state.usages?.map((usage) => (
           <React.Fragment key={usage.section_id}>
-            <SectionItem section={usage.section}/>
-            <Textarea name="" value={usage.description} onChange={handleStateChange.value} maxLength="2000" />
+            <SectionItem section={usage.section} delFunc={handleUsages.delete}/>
+            <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.changeDescription(e, usage)} maxLength="2000" />
           </React.Fragment>
         ))}
       </Card.Section>
@@ -29,7 +29,7 @@ export default function Usages() {
         <Select
           isAutocomplete
           value=""
-          onChangeData={handleSections.add}
+          onChangeData={handleUsages.add}
           placeholder="Добавить использование"
           requestItemsOnFirstTouch={async () =>
             (await getSectionsByFilters({objectType: state.type, sectionType: sectionTypeEnum.usage}))

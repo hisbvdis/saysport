@@ -9,14 +9,14 @@ import { ObjectEditContext } from "../ObjectEdit";
 import type { UISection } from "@/app/_types/types";
 
 
-export default function SectionItem(props:{section:UISection}) {
+export default function SectionItem(props:{section:UISection, delFunc:(section:UISection) => void}) {
   const { section } = props;
   const { state, handleSections, handleOptions } = useContext(ObjectEditContext);
 
   return (
     <FieldSet key={section?.section_id} style={{display: "flex", gap: "20px"}}>
       <FieldSet.Legend style={{inlineSize: "200px"}}>
-        <Button onClick={() => handleSections.delete(section)}>X</Button>
+        <Button onClick={() => props.delFunc(section)}>X</Button>
         <span>{section?.name_singular}</span>
       </FieldSet.Legend>
       <FieldSet.Section  style={{display: "flex", gap: "10px"}}>

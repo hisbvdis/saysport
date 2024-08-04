@@ -45,6 +45,13 @@ export interface UISection extends Section {
   uiID: string;
 }
 
+export interface UIObjectUsage extends Partial<ObjectUsage> {
+  usage_id:number;
+  object_id:number;
+  section_id:number;
+  section:UISection
+}
+
 export interface UIObject extends Partial<Object_> {
   name_type: string;
   coord_lat: number;
@@ -59,7 +66,7 @@ export interface UIObject extends Partial<Object_> {
   links?: (ObjectLink & {uiID: string})[];
   sections: UISection[];
   options?: UIOption[];
-  usages?: (ObjectUsage & {section: UISection})[];
+  usages?: UIObjectUsage[];
   photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
 }

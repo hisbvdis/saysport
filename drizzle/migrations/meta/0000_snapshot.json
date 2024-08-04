@@ -1,5 +1,5 @@
 {
-  "id": "843e73f0-343f-4764-9d24-b24e0fcd4bce",
+  "id": "d60212f2-8af7-476f-a3c5-071f23837278",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -528,14 +528,14 @@
       "name": "object_schedule",
       "schema": "",
       "columns": {
-        "schedule_id": {
-          "name": "schedule_id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
         "object_id": {
           "name": "object_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "usage_id": {
+          "name": "usage_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -564,14 +564,75 @@
           "primaryKey": false,
           "notNull": true
         },
-        "schedule_inherit": {
-          "name": "schedule_inherit",
+        "schedule_24_7": {
+          "name": "schedule_24_7",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "object_schedule_object_id_object_object_id_fk": {
+          "name": "object_schedule_object_id_object_object_id_fk",
+          "tableFrom": "object_schedule",
+          "tableTo": "object",
+          "columnsFrom": [
+            "object_id"
+          ],
+          "columnsTo": [
+            "object_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
-        "schedule_24_7": {
-          "name": "schedule_24_7",
+        "object_schedule_usage_id_object_usage_usage_id_fk": {
+          "name": "object_schedule_usage_id_object_usage_usage_id_fk",
+          "tableFrom": "object_schedule",
+          "tableTo": "object_usage",
+          "columnsFrom": [
+            "usage_id"
+          ],
+          "columnsTo": [
+            "usage_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.object_usage": {
+      "name": "object_usage",
+      "schema": "",
+      "columns": {
+        "usage_id": {
+          "name": "usage_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "object_id": {
+          "name": "object_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "section_id": {
+          "name": "section_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_inherit": {
+          "name": "schedule_inherit",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false
@@ -591,54 +652,6 @@
         "schedule_comment": {
           "name": "schedule_comment",
           "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "object_schedule_object_id_object_object_id_fk": {
-          "name": "object_schedule_object_id_object_object_id_fk",
-          "tableFrom": "object_schedule",
-          "tableTo": "object",
-          "columnsFrom": [
-            "object_id"
-          ],
-          "columnsTo": [
-            "object_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.object_usage": {
-      "name": "object_usage",
-      "schema": "",
-      "columns": {
-        "object_id": {
-          "name": "object_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "section_id": {
-          "name": "section_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "schedule_id": {
-          "name": "schedule_id",
-          "type": "integer",
           "primaryKey": false,
           "notNull": false
         }
@@ -667,19 +680,6 @@
           ],
           "columnsTo": [
             "section_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "object_usage_schedule_id_object_schedule_schedule_id_fk": {
-          "name": "object_usage_schedule_id_object_schedule_schedule_id_fk",
-          "tableFrom": "object_usage",
-          "tableTo": "object_schedule",
-          "columnsFrom": [
-            "schedule_id"
-          ],
-          "columnsTo": [
-            "schedule_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
