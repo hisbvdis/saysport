@@ -42,6 +42,13 @@ export default function Usages() {
         usageItem[e.target.name as keyof typeof usageItem] = e.target.value as never
       }));
     },
+    changeDate: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const usageItem = draft.usages?.find((stateUsage) => stateUsage.usage_id === usage?.usage_id);
+        if (!usageItem) return;
+        usageItem[e.target.name as keyof typeof usageItem] = new Date(e.target.value) as never;
+      }));
+    },
     checked: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages?.find((stateUsage) => stateUsage.usage_id === usage?.usage_id);
@@ -169,7 +176,7 @@ export default function Usages() {
             <Control>
               <Control.Label>Дата расписания</Control.Label>
               <Control.Section>
-                <input type="date" name="schedule_date" value={usage.schedule_date ? format(usage.schedule_date, "yyyy-MM-dd") : ""} onChange={(e) => handleUsages.value(e, usage)} disabled={Boolean(usage.schedule_inherit)}/>
+                <input type="date" name="schedule_date" value={usage.schedule_date ? format(usage.schedule_date, "yyyy-MM-dd") : ""} onChange={(e) => handleUsages.changeDate(e, usage)} disabled={Boolean(usage.schedule_inherit)}/>
                 <Button onClick={() => handleUsages.setDate(new Date(), usage)} disabled={Boolean(usage.schedule_inherit)}>Сегодня</Button>
                 <Button onClick={() => handleUsages.setDate("", usage)} disabled={Boolean(usage.schedule_inherit)}>X</Button>
               </Control.Section>

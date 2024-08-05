@@ -232,7 +232,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
       }
     });
   }
-  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id && (stateUsage.description !== initUsage.description)));
+  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id && (stateUsage.description !== initUsage.description || stateUsage.schedule_24_7 !== initUsage.schedule_24_7 || stateUsage.schedule_comment !== initUsage.schedule_comment || stateUsage.schedule_date !== initUsage.schedule_date || stateUsage.schedule_inherit !== initUsage.schedule_inherit || stateUsage.schedule_source !== initUsage.schedule_source)));
   if (usagesChanged?.length) {
     usagesChanged.forEach(async (usage) => {
       await db.update(object_usage).set({...usage, usage_id:undefined, object_id: undefined, section_id: undefined}).where(eq(object_usage.usage_id, usage.usage_id))
