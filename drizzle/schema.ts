@@ -58,6 +58,7 @@ export const objectRelations = relations(object, ({ one, many }) => ({
   phones: many(object_phone),
   photos: many(object_photo),
   usages: many(object_usage),
+  schedules: many(object_schedule),
 }))
 
 export type Object_ = typeof object.$inferSelect;

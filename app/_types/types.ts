@@ -22,9 +22,10 @@ export interface DBObject extends Object_ {
   links: ObjectLink[],
   objectOnSection?: (ObjectOnSection & {section: Section & {sectionOnSpec: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}})[];
   objectOnOption?: (ObjectOnOption & {option: Option})[];
-  usages?: (ObjectUsage & {section: DBSection, schedules: ObjectSchedule[]})[];
+  usages?: ObjectUsage[];
   photos?: ObjectPhoto[];
-  children?: DBObject[],
+  children?: DBObject[];
+  schedules: ObjectSchedule[];
 }
 
 
@@ -49,8 +50,10 @@ export interface UIObjectUsage extends Partial<ObjectUsage> {
   usage_id:number;
   object_id:number;
   section_id:number;
-  section:UISection;
-  schedules:(ObjectSchedule & {isWork:boolean})[];
+}
+
+export interface UIScheduleDay extends ObjectSchedule {
+  isWork:boolean;
 }
 
 export interface UIObject extends Partial<Object_> {
@@ -70,6 +73,7 @@ export interface UIObject extends Partial<Object_> {
   usages?: UIObjectUsage[];
   photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
+  schedules: UIScheduleDay[];
 }
 
 export enum UIContactTypeEnum {

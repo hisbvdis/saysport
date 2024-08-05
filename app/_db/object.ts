@@ -121,7 +121,7 @@ export const getObjectById = async (id:number) => {
       photos: true,
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
       // -----------------------------------------------------------------------------
-      usages: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}, schedules: true}},
+      usages: true,
       children: {with: {photos: true, phones: true, links: true}},
     }
   });
