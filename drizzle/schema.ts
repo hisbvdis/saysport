@@ -230,7 +230,7 @@ export type ObjectPhoto = typeof object_photo.$inferSelect;
 // OBJECT_USAGE
 // ===========================================================================
 export const object_usage = pgTable("object_usage", {
-  usage_id: serial("usage_id").primaryKey(),
+  usage_id: integer("usage_id").notNull(),
   object_id: integer("object_id").notNull().references(() => object.object_id),
   section_id: integer("section_id").notNull().references(() => section.section_id),
   description: varchar("description"),
@@ -256,7 +256,7 @@ export type ObjectUsage = typeof object_usage.$inferSelect;
 // ===========================================================================
 export const object_schedule = pgTable("object_schedule", {
   object_id: integer("object_id").notNull().references(() => object.object_id),
-  usage_id: integer("usage_id").notNull().references(() => object_usage.usage_id),
+  usage_id: integer("usage_id").notNull().references(() => object_usage.usage_id, {onDelete: "cascade"}),
   day_num: integer("day_num").notNull(),
   time: varchar("time").notNull(),
   from: integer("from").notNull(),

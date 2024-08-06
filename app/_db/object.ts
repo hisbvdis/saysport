@@ -224,7 +224,19 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     await db.delete(object_on_option).where(and(eq(object_on_option.object_id, upsertedObject.object_id), inArray(object_on_option.option_id, optionsDeleted.map((opt) => opt.option_id))));
   }
 
-  // "Schedules" first, then "Usages"
+  const usagesAdded = state.usages?.filter((stateUsage) => !init?.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id));
+  if (usagesAdded?.length) {
+    await db.insert(object_usage).values(usagesAdded.map((usage) => ({...usage, object_id: upsertedObject.object_id, usage_id: usage.section_id})));
+  }
+  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id && (stateUsage.description !== initUsage.description || stateUsage.schedule_24_7 !== initUsage.schedule_24_7 || stateUsage.schedule_comment !== initUsage.schedule_comment || stateUsage.schedule_date !== initUsage.schedule_date || stateUsage.schedule_inherit !== initUsage.schedule_inherit || stateUsage.schedule_source !== initUsage.schedule_source)));
+  if (usagesChanged?.length) {
+    usagesChanged.forEach(async (usage) => await db.update(object_usage).set({...usage, usage_id: undefined, object_id: undefined, section_id: undefined}).where(eq(object_usage.usage_id, usage.usage_id)));
+  }
+  const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.usage_id === stateUsage.usage_id));
+  if (usagesDeleted?.length) {
+    await db.delete(object_usage).where(inArray(object_usage.usage_id, usagesDeleted.map((usage) => usage.usage_id)));
+  }
+
   const schedulesAdded = state.schedules?.filter((stateDay) => !init.schedules.some((initDay) => stateDay.usage_id === initDay.usage_id && stateDay.day_num === initDay.day_num));
   if (schedulesAdded.length) {
     await db.insert(object_schedule).values(schedulesAdded.map((schedule) => ({...schedule, object_id: upsertedObject.object_id})));
@@ -236,19 +248,6 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
   const scheduleDeleted = init.schedules?.filter((initDay) => !state.schedules.some((stateDay) => initDay.usage_id === stateDay.usage_id && initDay.day_num === stateDay.day_num) || state.schedules?.some((stateDay) => initDay.usage_id === stateDay.usage_id && initDay.day_num === stateDay.day_num && initDay.time && !stateDay.time));
   if (scheduleDeleted.length) {
     scheduleDeleted.forEach(async (schedule) => await db.delete(object_schedule).where(and(eq(object_schedule.usage_id, schedule.usage_id), eq(object_schedule.day_num, schedule.day_num))));
-  }
-
-  const usagesAdded = state.usages?.filter((stateUsage) => !init?.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id));
-  if (usagesAdded?.length) {
-    await db.insert(object_usage).values(usagesAdded.map((usage) => ({...usage, object_id: upsertedObject.object_id, usage_id: undefined})));
-  }
-  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id && (stateUsage.description !== initUsage.description || stateUsage.schedule_24_7 !== initUsage.schedule_24_7 || stateUsage.schedule_comment !== initUsage.schedule_comment || stateUsage.schedule_date !== initUsage.schedule_date || stateUsage.schedule_inherit !== initUsage.schedule_inherit || stateUsage.schedule_source !== initUsage.schedule_source)));
-  if (usagesChanged?.length) {
-    usagesChanged.forEach(async (usage) => await db.update(object_usage).set({...usage, usage_id: undefined, object_id: undefined, section_id: undefined}).where(eq(object_usage.usage_id, usage.usage_id)));
-  }
-  const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.usage_id === stateUsage.usage_id));
-  if (usagesDeleted?.length) {
-    await db.delete(object_usage).where(inArray(object_usage.usage_id, usagesDeleted.map((usage) => usage.usage_id)));
   }
 
   const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));

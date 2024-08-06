@@ -26,7 +26,7 @@ export default function Usages() {
       if (!section.section_id || state.usages?.some((stateUsage) => stateUsage.section_id === section.section_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages.push({object_id: -1, usage_id: -1, section_id: section.section_id, description: ""});
+        draft.usages.push({object_id: -1, usage_id: section.section_id, section_id: section.section_id, description: ""});
       }))
     },
     delete: (section:UISection, usage:UIObjectUsage) => {
@@ -90,7 +90,7 @@ export default function Usages() {
           scheduleDay.isWork = e.target.checked;
           if (!e.target.checked) scheduleDay.time = "";
         } else {
-          draft.schedules.push({object_id: -1, usage_id: usage.usage_id, day_num: dayNum, time: "", from: 0, to: 0, isWork: true})
+          draft.schedules.push({object_id: -1, usage_id: usage.section_id, day_num: dayNum, time: "", from: 0, to: 0, isWork: true})
         }
       }))
     },
@@ -164,7 +164,7 @@ export default function Usages() {
             </div>
             <div style={{display: "flex"}}>
               {Array(7).fill(null)
-                .map((_,i) => ({ usage_id: -1, schedule_id: -1, object_id: -1, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false }))
+                .map((_,i) => ({ usage_id: usage.usage_id, schedule_id: -1, object_id: -1, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false }))
                 .map((localDay) => schedules?.find((dbDay) => dbDay.day_num === localDay.day_num) ?? localDay)
                 .map((day) => ({ ...day, uiID: crypto.randomUUID(),  }))
                 .map((day, i) => (
