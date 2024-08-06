@@ -59,8 +59,13 @@ export default function Usages() {
         if (!usageItem) return;
         usageItem[e.target.name as keyof typeof usageItem] = e.target.checked as never;
         if (e.target.checked) {
-          if (!draft.parent || !draft.parent.schedules) return;
+          if (!draft.parent || !draft.parent.schedules || !draft.parent.usages?.length) return;
           draft.schedules = draft.schedules.filter((day) => day.usage_id !== usage.usage_id).concat(draft.parent?.schedules.map((parentUsage) => ({...parentUsage, usage_id: usage.usage_id, object_id: -1, isWork: true})));
+          console.log( "test" )
+          usageItem.schedule_24_7 = draft.parent.usages[0].schedule_24_7;
+          usageItem.schedule_date = draft.parent.usages[0].schedule_date;
+          usageItem.schedule_source = draft.parent.usages[0].schedule_source;
+          usageItem.schedule_comment = draft.parent.usages[0].schedule_comment;
         }
       }));
     },
