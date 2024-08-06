@@ -29,10 +29,11 @@ export default function Usages() {
         draft.usages.push({object_id: -1, usage_id: -1, section_id: section.section_id, description: ""});
       }))
     },
-    delete: (section:UISection) => {
+    delete: (section:UISection, usage:UIObjectUsage) => {
       handleSections.delete(section);
       setState((prevState) => create(prevState, (draft) => {
         draft.usages = draft.usages?.filter((draftUsage) => draftUsage.section_id !== section.section_id);
+        draft.schedules = draft.schedules.filter((schedule) => schedule.usage_id !== usage.usage_id);
       }))
     },
     value: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
@@ -139,7 +140,7 @@ export default function Usages() {
         if (!section) return;
         return (
           <React.Fragment key={usage.section_id}>
-            <SectionItem section={section} delFunc={handleUsages.delete}/>
+            <SectionItem section={section} delFunc={(section) => handleUsages.delete(section, usage)}/>
             <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.value(e, usage)} maxLength="2000" />
             <div style={{display: "flex", gap: "20px"}}>
               {state.parent_id && <Checkbox
