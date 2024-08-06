@@ -26,7 +26,7 @@ export default function Usages() {
       if (!section.section_id || state.usages?.some((stateUsage) => stateUsage.section_id === section.section_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages.push({object_id: 11, usage_id: -1, section_id: section.section_id, description: ""});
+        draft.usages.push({object_id: -1, usage_id: -1, section_id: section.section_id, description: ""});
       }))
     },
     delete: (section:UISection) => {
@@ -48,7 +48,7 @@ export default function Usages() {
         if (!usageItem) return;
         usageItem.schedule_24_7 = e.target.checked;
         if (e.target.checked) {
-          draft.schedules = draft.schedules.filter((day) => day.usage_id === usage.usage_id).concat(Array(7).fill(null).map((_, i) => ({object_id: -1, usage_id: usage.usage_id, day_num: i, isWork: true, time: "0:00 - 24:00", from: 0, to: 1440})));
+          draft.schedules = draft.schedules.filter((day) => day.usage_id !== usage.usage_id).concat(Array(7).fill(null).map((_, i) => ({object_id: -1, usage_id: usage.usage_id, day_num: i, isWork: true, time: "0:00 - 24:00", from: 0, to: 1440})));
         }
       }));
     },
