@@ -99,8 +99,7 @@ CREATE TABLE IF NOT EXISTS "object_schedule" (
 	"day_num" integer NOT NULL,
 	"time" varchar NOT NULL,
 	"from" integer NOT NULL,
-	"to" integer NOT NULL,
-	"schedule_24_7" boolean
+	"to" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_usage" (
@@ -111,7 +110,8 @@ CREATE TABLE IF NOT EXISTS "object_usage" (
 	"schedule_inherit" boolean,
 	"schedule_date" timestamp,
 	"schedule_source" varchar,
-	"schedule_comment" varchar
+	"schedule_comment" varchar,
+	"schedule_24_7" boolean
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "option" (

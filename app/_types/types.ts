@@ -1,4 +1,4 @@
-import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, Object_On_Link, ObjectPhone, ObjectLink, Object_On_Schedule, ObjectSchedule, ObjectPhoto, ObjectUsage } from "@/drizzle/schema";
+import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectSchedule, ObjectPhoto, ObjectUsage } from "@/drizzle/schema";
 
 
 // =============================================================================
@@ -18,8 +18,8 @@ export interface DBObject extends Object_ {
   statusInstead?: Object_ | null;
   city?: City;
   parent?: Object_ | null;
-  phones: ObjectPhone[],
-  links: ObjectLink[],
+  phones?: ObjectPhone[],
+  links?: ObjectLink[],
   objectOnSection?: (ObjectOnSection & {section: Section & {sectionOnSpec: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}})[];
   objectOnOption?: (ObjectOnOption & {option: Option})[];
   usages?: ObjectUsage[];

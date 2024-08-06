@@ -1,5 +1,5 @@
 {
-  "id": "d60212f2-8af7-476f-a3c5-071f23837278",
+  "id": "cfe3e921-1755-4e8c-9a68-151aad3e74db",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -563,12 +563,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
-        },
-        "schedule_24_7": {
-          "name": "schedule_24_7",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -652,6 +646,12 @@
         "schedule_comment": {
           "name": "schedule_comment",
           "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_24_7": {
+          "name": "schedule_24_7",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": false
         }

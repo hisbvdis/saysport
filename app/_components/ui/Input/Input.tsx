@@ -32,7 +32,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, i
       id: id,
       maxLength: maxLength,
       name: name,
-      onBlur: (e:React.FocusEvent) => {onBlur(e);if(changed)onBlurIfChanged(e);setChanged(false)},
+      onBlur: (e:React.FocusEvent<HTMLInputElement>) => {onBlur(e);if(changed)onBlurIfChanged(e);setChanged(false)},
       onChange: (e:React.ChangeEvent<HTMLInputElement>) => {onChange(e);onChangeValue(e.target.value);if(!changed)setChanged(true)},
       onClick: (e:React.MouseEvent) => {onClick(e)},
       onFocus: (e:React.FocusEvent) => {onFocus(e)},
