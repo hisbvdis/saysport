@@ -53,11 +53,15 @@ export default function Usages() {
         }
       }));
     },
-    checked: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
+    setInherit: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages?.find((stateUsage) => stateUsage.usage_id === usage?.usage_id);
         if (!usageItem) return;
         usageItem[e.target.name as keyof typeof usageItem] = e.target.checked as never;
+        if (e.target.checked) {
+          if (!draft.parent || !draft.parent.schedules) return;
+          draft.schedules = draft.schedules.filter((day) => day.usage_id !== usage.usage_id).concat(draft.parent?.schedules.map((parentUsage) => ({...parentUsage, usage_id: usage.usage_id, object_id: -1, isWork: true})));
+        }
       }));
     },
     setDate: (date:Date|null, usage:UIObjectUsage) => {
@@ -80,7 +84,6 @@ export default function Usages() {
       }));
     }
   }
-
   const handleSchedule = {
     changeIsWork: (e:React.ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
       const dayNum = Number(e.target.name);
@@ -146,7 +149,7 @@ export default function Usages() {
               {state.parent_id && <Checkbox
                 name="schedule_inherit"
                 checked={Boolean(usage.schedule_inherit)}
-                onChange={(e) => handleUsages.checked(e, usage)}
+                onChange={(e) => handleUsages.setInherit(e, usage)}
                 disabled={!state.parent_id}
                 className="me-auto"
               >Наследовать расписание</Checkbox>}

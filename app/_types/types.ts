@@ -17,7 +17,7 @@ export interface DBObject extends Object_ {
   status: objectStatusUnion;
   statusInstead?: Object_ | null;
   city?: City;
-  parent?: Object_ | null;
+  parent?: Object_ & {schedules: ObjectSchedule[]} | null;
   phones?: ObjectPhone[],
   links?: ObjectLink[],
   objectOnSection?: (ObjectOnSection & {section: Section & {sectionOnSpec: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}})[];
@@ -53,7 +53,7 @@ export interface UIObjectUsage extends Partial<ObjectUsage> {
 }
 
 export interface UIScheduleDay extends ObjectSchedule {
-  isWork:boolean;
+  isWork?:boolean;
 }
 
 export interface UIObject extends Partial<Object_> {
@@ -65,7 +65,7 @@ export interface UIObject extends Partial<Object_> {
   status: objectStatusUnion;
   statusInstead?: Object_ | null;
   city?: City;
-  parent?: Object_ | UIObject | null;
+  parent?: DBObject | null;
   phones?: (ObjectPhone & {uiID: string})[];
   links?: (ObjectLink & {uiID: string})[];
   sections: UISection[];
