@@ -25,7 +25,7 @@ export interface DBObject extends Object_ {
   usages?: ObjectUsage[];
   photos?: ObjectPhoto[];
   children?: DBObject[];
-  schedules: ObjectSchedule[];
+  schedules?: ObjectSchedule[];
 }
 
 
