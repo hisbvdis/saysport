@@ -1,7 +1,10 @@
+"use client";
+import Link from "next/link";
 import { useContext } from "react"
+// -----------------------------------------------------------------------------
 import { ObjectViewContext } from "../ObjectView"
 import { Card } from "@/app/_components/ui/Card";
-import Link from "next/link";
+
 
 export default function Specs() {
   const { state } = useContext(ObjectViewContext);

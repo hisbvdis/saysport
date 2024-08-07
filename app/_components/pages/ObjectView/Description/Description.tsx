@@ -11,7 +11,6 @@ import styles from "./styles.module.css";
 
 export default function Description() {
   const { state } = useContext(ObjectViewContext);
-  if (!state.description) return null;
   const textRef = useRef<HTMLParagraphElement>(null);
   const [ shouldShowFullText, setShouldShowFullText ] = useState(false);
   const [ isTrimmedText, setIsTrimmedText ] = useState(true);

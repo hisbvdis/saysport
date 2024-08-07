@@ -5,5 +5,6 @@ import Description from "./Description/Description";
 import Children from "./Children/Children";
 import Specs from "./Specs/Specs";
 import Contacts from "./Contacts/Contacts";
+import Usages from "./Usages/Usages";
 
-export { Header, ObjectView, ObjectViewContext, Description, Children, Specs, Contacts };
+export { Header, ObjectView, ObjectViewContext, Description, Children, Specs, Contacts, Usages };
