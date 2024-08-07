@@ -45,23 +45,23 @@ export default function Filters(props:Props) {
         </a>
       </Card.Heading>
       {section?.specs
-      .concat(section.object_type === objectTypeEnum.place ? sectionList.filter((section) => section.section_type === sectionTypeEnum.common && section.object_type === objectTypeEnum.place).flatMap((section) => section.specs) : [])
-      .toSorted((a, b) => a.order - b.order).map((spec) => (
-        <Card.Section key={spec.spec_id}>
-          <Control>
-            <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
-              <span>{spec.name_public}</span>
-              {spec.is_and_in_search && <Checkbox value={spec.spec_id} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>}
-            </Control.Label>
-            <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
-              {spec.options?.toSorted((a, b) => a.order - b.order).map((opt) => (
-                <Link key={opt.option_id} href={manageSearchParams.appendOrClear("options", `${andSpecs.includes(spec.spec_id) ? "!" : ""}${spec.spec_id}:${opt.option_id}`)}>
-                  <Checkbox value={`${andSpecs.includes(spec.spec_id) ? "!" : ""}${spec.spec_id}:${opt.option_id}`} tabIndex={-1}>{opt.name}</Checkbox>
-                </Link>
-              ))}
-            </CheckboxGroup>
-          </Control>
-        </Card.Section>
+        .concat(section.object_type === objectTypeEnum.place ? sectionList.filter((section) => section.section_type === sectionTypeEnum.common && section.object_type === objectTypeEnum.place).flatMap((section) => section.specs) : [])
+        .toSorted((a, b) => a.order - b.order).map((spec) => (
+          <Card.Section key={spec.spec_id}>
+            <Control>
+              <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+                <span>{spec.name_public}</span>
+                {spec.is_and_in_search && <Checkbox value={spec.spec_id} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>}
+              </Control.Label>
+              <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
+                {spec.options?.toSorted((a, b) => a.order - b.order).map((opt) => (
+                  <Link key={opt.option_id} href={manageSearchParams.appendOrClear("options", `${andSpecs.includes(spec.spec_id) ? "!" : ""}${spec.spec_id}:${opt.option_id}`)}>
+                    <Checkbox value={`${andSpecs.includes(spec.spec_id) ? "!" : ""}${spec.spec_id}:${opt.option_id}`} tabIndex={-1}>{opt.name}</Checkbox>
+                  </Link>
+                ))}
+              </CheckboxGroup>
+            </Control>
+          </Card.Section>
       ))}
 
       {/* Status */}
