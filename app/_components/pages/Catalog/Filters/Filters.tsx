@@ -10,15 +10,15 @@ import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 import { CatalogContext } from "../Catalog";
 import type { UISpec } from "@/app/_types/types";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
-import { objectStatusEnum } from "@/drizzle/schema";
+import { objectStatusEnum, objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 
 
 export default function Filters(props:Props) {
   const { className, style } = props;
-  const { searchParams, section } = useContext(CatalogContext);
-  const manageSearchParams = useManageSearchParams();
   const router = useRouter();
+  const manageSearchParams = useManageSearchParams();
   const [ andSpecs, setAndSpecs ] = useState<number[]>([]);
+  const { searchParams, section, sectionList } = useContext(CatalogContext);
 
   const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:UISpec) => {
     if (e.target.checked) {
@@ -44,7 +44,9 @@ export default function Filters(props:Props) {
           <img src="/icons/close.svg" width={15} height={20} alt="Close Icon"/>
         </a>
       </Card.Heading>
-      {section?.specs.toSorted((a, b) => a.order - b.order).map((spec) => (
+      {section?.specs
+      .concat(section.object_type === objectTypeEnum.place ? sectionList.filter((section) => section.section_type === sectionTypeEnum.common && section.object_type === objectTypeEnum.place).flatMap((section) => section.specs) : [])
+      .toSorted((a, b) => a.order - b.order).map((spec) => (
         <Card.Section key={spec.spec_id}>
           <Control>
             <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
@@ -61,26 +63,6 @@ export default function Filters(props:Props) {
           </Control>
         </Card.Section>
       ))}
-
-      {/* Construction */}
-      {section?.object_type === "place"
-        ? <Card.Section>
-            <Control>
-              <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
-                <span>Конструкция</span>
-              </Control.Label>
-              <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
-                <Link href={manageSearchParams.appendOrClear("options", "4:13")}>
-                  <Checkbox value={"4:13"} tabIndex={-1}>Крытое</Checkbox>
-                </Link>
-                <Link href={manageSearchParams.appendOrClear("options", "4:14")}>
-                  <Checkbox value={"4:14"} tabIndex={-1}>Открытое</Checkbox>
-                </Link>
-              </CheckboxGroup>
-            </Control>
-          </Card.Section>
-        : null
-      }
 
       {/* Status */}
       <Card.Section>
