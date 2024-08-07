@@ -8,6 +8,7 @@ import { Card } from "../../ui/Card";
 import { Select } from "../../ui/Select";
 import { Control } from "../../ui/Control";
 import { Sections, Filters, Results } from ".";
+import { Pagination } from "../../ui/Pagination";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import type { DBObject, UISection } from "@/app/_types/types"
@@ -16,7 +17,6 @@ import type { SearchParamsType } from "@/app/(router)/catalog/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import Pagination from "../../ui/Pagination/Pagination";
 
 
 export default function Catalog(props:Props) {

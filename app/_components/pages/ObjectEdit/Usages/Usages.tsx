@@ -8,13 +8,13 @@ import { SectionItem } from "../";
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
 import { Select } from "@/app/_components/ui/Select";
+import { Button } from "@/app/_components/ui/Button";
+import { Control } from "@/app/_components/ui/Control";
+import { Checkbox } from "@/app/_components/ui/Choice";
 import { Input, Textarea } from "@/app/_components/ui/Input";
 // -----------------------------------------------------------------------------
 import { getSectionsByFilters } from "@/app/_db/section";
 import type { UIObjectUsage, UIScheduleDay, UISection } from "@/app/_types/types";
-import { Checkbox } from "@/app/_components/ui/Choice";
-import { Button } from "@/app/_components/ui/Button";
-import { Control } from "@/app/_components/ui/Control";
 
 
 export default function Usages() {
@@ -61,7 +61,6 @@ export default function Usages() {
         if (e.target.checked) {
           if (!draft.parent || !draft.parent.schedules || !draft.parent.usages?.length) return;
           draft.schedules = draft.schedules.filter((day) => day.usage_id !== usage.usage_id).concat(draft.parent?.schedules.map((parentUsage) => ({...parentUsage, usage_id: usage.usage_id, object_id: -1, isWork: true})));
-          console.log( "test" )
           usageItem.schedule_24_7 = draft.parent.usages[0].schedule_24_7;
           usageItem.schedule_date = draft.parent.usages[0].schedule_date;
           usageItem.schedule_source = draft.parent.usages[0].schedule_source;

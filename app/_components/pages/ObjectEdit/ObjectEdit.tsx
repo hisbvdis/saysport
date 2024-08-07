@@ -93,7 +93,6 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
       router.refresh();
     }
   }
-  console.log( state )
   return (
     <ObjectEditContext.Provider value={{ state, setState, handleStateChange, handleSections, handleOptions }}>
       <Form onSubmit={handleFormSubmit}>

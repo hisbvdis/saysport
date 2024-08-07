@@ -5,6 +5,7 @@ import { CatalogContext } from "../Catalog";
 import { Card } from "@/app/_components/ui/Card";
 // -----------------------------------------------------------------------------
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import { sectionTypeEnum } from "@/drizzle/schema";
 
 
 export default function Sections(props:Props) {
@@ -17,7 +18,7 @@ export default function Sections(props:Props) {
       <Card.Heading>Разделы</Card.Heading>
       <Card.Section>
         <ul>
-          {sectionList.filter((section) => section.section_id !== 5).map((section) => (
+          {sectionList.filter((section) => section.section_type === sectionTypeEnum.section).map((section) => (
             <li key={section.section_id}>
               <Link href={manageSearchParams.set("section", String(section.section_id))}>{section.name_plural}</Link>
             </li>

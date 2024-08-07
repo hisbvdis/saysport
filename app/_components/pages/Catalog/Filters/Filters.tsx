@@ -30,7 +30,7 @@ export default function Filters(props:Props) {
     }
   }
 
-  return (
+  return (<>
     <Card className={className} style={style}>
       <Card.Heading style={{display: "flex", alignItems: "center"}}>
         <span style={{marginInlineEnd: "auto"}}>{section?.name_plural}</span>
@@ -125,7 +125,7 @@ export default function Filters(props:Props) {
         </Control>
       </Card.Section>
     </Card>
-  )
+  </>)
 }
 
 interface Props {
