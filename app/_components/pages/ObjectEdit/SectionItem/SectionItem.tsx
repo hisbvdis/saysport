@@ -17,7 +17,7 @@ export default function SectionItem(props:{section:UISection, delFunc:(section:U
     <FieldSet key={section?.section_id} style={{display: "flex", gap: "20px"}}>
       <FieldSet.Legend style={{inlineSize: "200px"}}>
         <Button onClick={() => props.delFunc(section)}>X</Button>
-        <span>{section?.name_singular}</span>
+        <span>{section?.name_public_singular}</span>
       </FieldSet.Legend>
       <FieldSet.Section  style={{display: "flex", gap: "10px"}}>
         {section?.specs?.map((spec) => (

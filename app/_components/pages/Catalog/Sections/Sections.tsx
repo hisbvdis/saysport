@@ -20,7 +20,7 @@ export default function Sections(props:Props) {
         <ul>
           {sectionList.filter((section) => section.section_type === sectionTypeEnum.section).map((section) => (
             <li key={section.section_id}>
-              <Link href={manageSearchParams.set("section", String(section.section_id))}>{section.name_plural}</Link>
+              <Link href={manageSearchParams.set("section", String(section.section_id))}>{section.name_public_plural}</Link>
             </li>
           ))}
         </ul>

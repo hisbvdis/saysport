@@ -9,7 +9,7 @@ import "leaflet/dist/leaflet.css";
 import styles from "./MapComponent.module.css"
 
 
-export default function MapComponent(props: Props) {
+export default function MapComponent(props:Props) {
   const { zoomControl=true, onMapRightClick=(e=>e), liftMapInstance=(e=>e), onMapDrag=(e=>e), fitBoundsArray } = props;
   const center = (props.center?.[0] && props.center?.[1] ? props.center : [0, 0]) as [number, number];
   const zoom = props.zoom ?? 3;
@@ -38,7 +38,7 @@ export default function MapComponent(props: Props) {
   useEffect(() => {
     if (!map || !fitBoundsArray || fitBoundsArray.length === 0) return;
     map.fitBounds(fitBoundsArray);
-  }, [map, fitBoundsArray])
+  }, [fitBoundsArray])
 
   // useEffect(() => {
   //   if (!map || !center[0] || !center[1]) return;

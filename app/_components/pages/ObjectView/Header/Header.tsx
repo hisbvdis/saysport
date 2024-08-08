@@ -21,7 +21,7 @@ export default function Header(props:Props) {
           <Breadcrumbs items={[
             {label: "Каталог", href: "/catalog"},
             {label: `${state.city?.name ?? ""}`, href: `/catalog?city=${state.city?.city_id}`},
-            {label: `${state.sections?.filter((section) => section.section_id !== 5)[0]?.name_plural ?? ""}`, href: `/catalog?city=${state.city?.city_id}&section=${state.sections?.filter((section) => section.section_id !== 5)[0]?.section_id}`}
+            {label: `${state.sections?.filter((section) => section.section_id !== 5)[0]?.name_public_plural ?? ""}`, href: `/catalog?city=${state.city?.city_id}&section=${state.sections?.filter((section) => section.section_id !== 5)[0]?.section_id}`}
           ]} style={{fontSize: "0.85em"}}/>
           <Link href={`/object/${state.object_id}/edit`} style={{marginInlineStart: "auto"}}>Ред</Link>
           <DelBtn id={state.object_id ? state.object_id : -1} delFunc={deleteObjectById} redirectPath="/">X</DelBtn>

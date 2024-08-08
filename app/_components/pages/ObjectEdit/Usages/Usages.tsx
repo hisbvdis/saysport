@@ -43,7 +43,7 @@ export default function Usages() {
           placeholder="Добавить использование"
           requestItemsOnFirstTouch={async () =>
             (await getSectionsByFilters({objectType: state.type, sectionType: sectionTypeEnum.usage}))
-              .map((section) => ({id: section.section_id, label: section.name_plural, data: section}))
+              .map((section) => ({id: section.section_id, label: section.name_service, data: section}))
           }
         />
       </Card.Section>

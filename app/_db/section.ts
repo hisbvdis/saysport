@@ -13,8 +13,9 @@ export const getEmptySection = async ():Promise<UISection> => {
     section_id: 0,
     section_type: sectionTypeEnum.section,
     object_type: objectTypeEnum.org,
-    name_plural: "",
-    name_singular: "",
+    name_service: "",
+    name_public_plural: "",
+    name_public_singular: "",
     specs: [],
     uiID: crypto.randomUUID(),
   }
@@ -61,8 +62,9 @@ export const upsertSection = async (state:UISection, init: UISection) => {
   const fields = {
     section_id: state.section_id || undefined,
     section_type: state.section_type,
-    name_plural: state.name_plural,
-    name_singular: state.name_singular,
+    name_service: state.name_service,
+    name_public_plural: state.name_public_plural,
+    name_public_singular: state.name_public_singular,
     object_type: state.object_type,
   }
   const [upsertedSection] = await db.insert(section).values(fields).onConflictDoUpdate({target: section.section_id, set: fields}).returning();

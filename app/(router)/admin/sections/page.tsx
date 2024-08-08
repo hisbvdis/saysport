@@ -24,7 +24,7 @@ export default async function SectionListPage() {
             {sections.filter(({object_type, section_type}) => section_type === sectionTypeEnum.section && object_type === "org").map((section) => (
               <li key={section.section_id} style={{display: "flex", gap: "10px"}}>
                 <DelBtn id={section.section_id} delFunc={deleteSectionById}/>
-                <Link href={`/admin/sections/${section.section_id}`}>{section.name_plural}</Link>
+                <Link href={`/admin/sections/${section.section_id}`}>{section.name_public_plural}</Link>
               </li>
             ))}
           </ul>
@@ -35,7 +35,7 @@ export default async function SectionListPage() {
             {sections.filter(({object_type, section_type}) => section_type === sectionTypeEnum.section && object_type === "place").map((section) => (
               <li key={section.section_id} style={{display: "flex", gap: "10px"}}>
                 <DelBtn id={section.section_id} delFunc={deleteSectionById}/>
-                <Link href={`/admin/sections/${section.section_id}`}>{section.name_plural}</Link>
+                <Link href={`/admin/sections/${section.section_id}`}>{section.name_public_plural}</Link>
               </li>
             ))}
           </ul>
@@ -49,7 +49,7 @@ export default async function SectionListPage() {
             {sections.filter(({section_type}) => section_type === sectionTypeEnum.common).map((section) => (
               <li key={section.section_id} style={{display: "flex", gap: "10px"}}>
                 <DelBtn id={section.section_id} delFunc={deleteSectionById}/>
-                <Link href={`/admin/sections/${section.section_id}`}>{section.name_plural}</Link>
+                <Link href={`/admin/sections/${section.section_id}`}>{section.name_public_plural}</Link>
               </li>
             ))}
           </ul>
@@ -60,7 +60,7 @@ export default async function SectionListPage() {
             {sections.filter(({section_type}) => section_type === sectionTypeEnum.usage).map((section) => (
               <li key={section.section_id} style={{display: "flex", gap: "10px"}}>
                 <DelBtn id={section.section_id} delFunc={deleteSectionById}/>
-                <Link href={`/admin/sections/${section.section_id}`}>{section.name_plural}</Link>
+                <Link href={`/admin/sections/${section.section_id}`}>{section.name_public_plural}</Link>
               </li>
             ))}
           </ul>

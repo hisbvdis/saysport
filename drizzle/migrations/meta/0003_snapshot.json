@@ -1,6 +1,6 @@
 {
-  "id": "5bafca47-59cd-4e9f-a3bb-8d7152622213",
-  "prevId": "2cfac9fc-39b5-49db-8e8c-8bc1401b755b",
+  "id": "483ee3e5-30db-4ad3-b045-5eaaefe84d08",
+  "prevId": "562bc5c3-80e6-40bd-82b5-e82ad1385483",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -679,14 +679,20 @@
           "primaryKey": false,
           "notNull": true
         },
-        "name_plural": {
-          "name": "name_public",
+        "name_service": {
+          "name": "name_service",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
-        "name_singular": {
-          "name": "name_public",
+        "name_public_plural": {
+          "name": "name_public_plural",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name_public_singular": {
+          "name": "name_public_singular",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true

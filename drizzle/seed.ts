@@ -130,11 +130,11 @@
 //   // ===========================================================================
 //   await db.insert(section).values(
 //     [
-//       { section_id: 1 , name_plural: "Фитнес-клубы"              , name_singular: "Фитнес-клуб"               , object_type: "org" },
-//       { section_id: 2 , name_plural: "Спорткомплексы"            , name_singular: "Спорткомплекс"             , object_type: "org" },
-//       { section_id: 3 , name_plural: "Тренажёрные залы"          , name_singular: "Трежажерный зал"           , object_type: "place" },
-//       { section_id: 4 , name_plural: "Бассейны"                  , name_singular: "Бассейн"                   , object_type: "place" },
-//       { section_id: 5 , name_plural: "Общие характеристики мест" , name_singular: "Общие характеристики мест" , object_type: "place" }
+//       { section_id: 1 , name_public_plural: "Фитнес-клубы"              , name_public_singular: "Фитнес-клуб"               , object_type: "org" },
+//       { section_id: 2 , name_public_plural: "Спорткомплексы"            , name_public_singular: "Спорткомплекс"             , object_type: "org" },
+//       { section_id: 3 , name_public_plural: "Тренажёрные залы"          , name_public_singular: "Трежажерный зал"           , object_type: "place" },
+//       { section_id: 4 , name_public_plural: "Бассейны"                  , name_public_singular: "Бассейн"                   , object_type: "place" },
+//       { section_id: 5 , name_public_plural: "Общие характеристики мест" , name_public_singular: "Общие характеристики мест" , object_type: "place" }
 //     ]
 //   )
 

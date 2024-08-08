@@ -75,8 +75,9 @@ export type Object_ = typeof object.$inferSelect;
 export const section = pgTable("section", {
   section_id: serial("section_id").primaryKey(),
   section_type: sectionTypeColumnType("section_type").notNull(),
-  name_plural: varchar("name_plural").notNull(),
-  name_singular: varchar("name_singular").notNull(),
+  name_service: varchar("name_service").notNull(),
+  name_public_plural: varchar("name_public_plural").notNull(),
+  name_public_singular: varchar("name_public_singular").notNull(),
   object_type: objectTypeColumnType("object_type").notNull(),
 })
 

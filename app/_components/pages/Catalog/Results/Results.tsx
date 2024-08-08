@@ -19,10 +19,10 @@ export default function Results() {
         <Breadcrumbs style={{fontSize: "0.85em", marginBlockEnd: "5px"}} items={[
           {label: "Каталог", href: city || section ? "/catalog" : null},
           {label: city?.name ?? "", href: section?.section_id ? `/catalog?city=${city?.city_id}` : null},
-          {label: section?.name_plural ?? ""}
+          {label: section?.name_public_plural ?? ""}
         ]}/>
         <h1 style={{fontWeight: "400"}}>
-          <span>{section?.name_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
+          <span>{section?.name_public_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
           <sup style={{fontSize: "0.5em"}}>{resultsCount}</sup>
         </h1>
         <SearchPanel/>

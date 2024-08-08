@@ -15,9 +15,7 @@ export default function Usages() {
       <Card.Heading>Использование</Card.Heading>
       {state.sections?.filter((section) => section.section_type === sectionTypeEnum.usage).map((section) => (
         <Card.Section key={section.section_id}>
-          <Link href={`/catalog?city=${state.city_id}&section=${section.section_id}`}>
-            {section.name_singular}
-          </Link>
+          <p>{section.name_public_singular}</p>
           {section.specs.map((spec) => (
             <div key={spec.spec_id} style={{display: "flex", gap: "10px"}}>
               <p>{spec.name_public}</p>

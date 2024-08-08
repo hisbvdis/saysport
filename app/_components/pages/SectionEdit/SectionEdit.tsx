@@ -79,11 +79,22 @@ export default function SectionEdit(props:{init:UISection}) {
             </Control.Section>
           </Control>
           <Control className="mt15">
+            <Control.Label>Название (служебное)</Control.Label>
+            <Control.Section>
+              <Input
+                name="name_service"
+                value={state?.name_service}
+                onChange={handleStateChange.value}
+                required
+              />
+            </Control.Section>
+          </Control>
+          <Control className="mt15">
             <Control.Label>Название (множественное число)</Control.Label>
             <Control.Section>
               <Input
-                name="name_plural"
-                value={state?.name_plural}
+                name="name_public_plural"
+                value={state?.name_public_plural}
                 onChange={handleStateChange.value}
                 required
               />
@@ -92,8 +103,8 @@ export default function SectionEdit(props:{init:UISection}) {
           <Control className="mt15">
             <Control.Label>Название (единственное число)</Control.Label>
             <Input
-              name="name_singular"
-              value={state?.name_singular}
+              name="name_public_singular"
+              value={state?.name_public_singular}
               onChange={handleStateChange.value}
               required
             />

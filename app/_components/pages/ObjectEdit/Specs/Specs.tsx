@@ -30,7 +30,7 @@ export default function Specs() {
           placeholder="Добавить раздел"
           requestItemsOnFirstTouch={async () =>
             (await getSectionsByFilters({objectType: state.type, sectionType: sectionTypeEnum.section}))
-              .map((section) => ({id: section.section_id, label: section.name_plural, data: section}))
+              .map((section) => ({id: section.section_id, label: section.name_service, data: section}))
           }
         />
         <RequiredInput isValidIf={state.type === objectTypeEnum.org ? Boolean(state.sections.filter((section) => section.section_type !== sectionTypeEnum.usage).length > 0) : Boolean(state.sections.filter((section) => section.section_type !== sectionTypeEnum.usage).length > 1)}/>

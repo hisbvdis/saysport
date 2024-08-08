@@ -33,7 +33,7 @@ export default function Filters(props:Props) {
   return (<>
     <Card className={className} style={style}>
       <Card.Heading style={{display: "flex", alignItems: "center"}}>
-        <span style={{marginInlineEnd: "auto"}}>{section?.name_plural}</span>
+        <span style={{marginInlineEnd: "auto"}}>{section?.name_public_plural}</span>
         {Object.keys(searchParams).filter((paramName) => paramName !== "section" && paramName !== "city" && paramName !== "map" ).length
           ? <Link href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => paramName !== "section" && paramName !== "city" && paramName !== "map" ))} style={{display: "flex", alignItems: "center"}}>
               <img src="/icons/bin.svg" width={24} height={24} alt="Map Pin" style={{inlineSize: "19px", blockSize: "19px"}}/>
