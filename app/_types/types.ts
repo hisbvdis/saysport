@@ -10,6 +10,7 @@ export interface DBSpec extends Spec {
 
 export interface DBSection extends Section {
   sectionOnSpec: (SectionOnSpec & { spec: DBSpec })[];
+  description:string|null;
 }
 
 export interface DBObject extends Object_ {
@@ -20,7 +21,7 @@ export interface DBObject extends Object_ {
   parent?: Object_ & {schedules: ObjectSchedule[]} | null;
   phones?: ObjectPhone[],
   links?: ObjectLink[],
-  objectOnSection?: (ObjectOnSection & {section: Section & {sectionOnSpec: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}})[];
+  objectOnSection?: (ObjectOnSection & {section: Section & {sectionOnSpec: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}, description:string|null})[];
   objectOnOption?: (ObjectOnOption & {option: Option})[];
   photos?: ObjectPhoto[];
   children?: DBObject[];
@@ -42,6 +43,7 @@ export interface UISpec extends Spec {
 
 export interface UISection extends Section {
   specs: UISpec[];
+  description:string|null;
   uiID: string;
 }
 

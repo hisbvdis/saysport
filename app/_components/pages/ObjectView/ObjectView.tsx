@@ -1,14 +1,12 @@
 "use client";
 import clsx from "clsx";
 import { createContext } from "react";
-// -----------------------------------------------------------------------------
-import Gallery from "./Gallery/Gallery";
-import { Children, Contacts, Description, Header, Specs, Usages } from ".";
-// -----------------------------------------------------------------------------
+import { objectTypeEnum } from "@/drizzle/schema";
 import type { UIObject } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
+import { Children, Contacts, Description, Header, Specs, Usages, Gallery } from ".";
+// -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import { objectTypeEnum } from "@/drizzle/schema";
 
 
 export default function ObjectView(props:{init:UIObject}) {

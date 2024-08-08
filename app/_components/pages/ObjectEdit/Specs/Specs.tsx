@@ -18,7 +18,7 @@ export default function Specs() {
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Характеристики</Card.Heading>
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
-        {state.sections.filter((section) => section.section_type === sectionTypeEnum.section || section.section_type === sectionTypeEnum.common).map((section) => (
+        {state.sections?.filter((section) => section.section_type === sectionTypeEnum.section || section.section_type === sectionTypeEnum.common).map((section) => (
           <SectionItem key={section.section_id} section={section} delFunc={handleSections.delete}/>
         ))}
       </Card.Section>

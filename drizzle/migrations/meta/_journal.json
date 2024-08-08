@@ -8,6 +8,13 @@
       "when": 1723108644286,
       "tag": "0000_steady_the_initiative",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1723115132203,
+      "tag": "0001_thick_vulture",
+      "breakpoints": true
     }
   ]
 }

@@ -8,7 +8,7 @@ export const objectReadProcessing = (dbData: DBObject): UIObject => {
     ...dbData,
     phones: dbData.phones?.map((phone) => ({...phone, uiID: crypto.randomUUID()})) ?? [],
     links: dbData.links?.map((link) => ({...link, uiID: crypto.randomUUID()})) ?? [],
-    sections: dbData.objectOnSection?.map(({ section }) => sectionReadProcessing(section)) ?? [],
+    sections: dbData.objectOnSection?.map((objectOnSection) => sectionReadProcessing({...objectOnSection.section, description: objectOnSection.description})) ?? [],
     options: dbData.objectOnOption?.map(({ option }) => ({...option, uiID: crypto.randomUUID()})),
     photos: dbData.photos?.map((photo) => ({...photo, uiID: crypto.randomUUID()})) ?? [],
     schedules: dbData.schedules?.map((day) => ({...day, isWork: Boolean(day.time)})) ?? [],

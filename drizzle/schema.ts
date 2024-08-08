@@ -254,7 +254,8 @@ export type ObjectSchedule = typeof object_schedule.$inferSelect;
 // ===========================================================================
 export const object_on_section = pgTable("object_on_section", {
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
-  section_id: integer("section_id").notNull().references(() => section.section_id, {onDelete: "restrict"})
+  section_id: integer("section_id").notNull().references(() => section.section_id, {onDelete: "restrict"}),
+  description: varchar("description"),
 }, (table) => ({
   pk: primaryKey({columns: [table.object_id, table.section_id]})
 }))

@@ -102,7 +102,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
         <Contacts/>
         <Specs/>
         <Description/>
-        <Usages/>
+        {props.init.type === objectTypeEnum.place ? <Usages/> : null}
         <Schedule/>
         <Photos/>
         <EditBottomPanel

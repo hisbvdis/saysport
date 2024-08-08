@@ -1,15 +1,15 @@
 "use client";
 import { create } from "mutative";
-import { type ChangeEvent, useContext } from "react";
 import { format } from "date-fns";
+import { type ChangeEvent, useContext } from "react";
 // -----------------------------------------------------------------------------
+import { Card } from "@/app/_components/ui/Card";
+import { ObjectEditContext } from "../ObjectEdit";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
-import { ObjectEditContext } from "../ObjectEdit";
-import { Card } from "@/app/_components/ui/Card";
 import type { UIScheduleDay } from "@/app/_types/types";
 
 
@@ -102,7 +102,7 @@ export default function Schedule() {
 
   return (<>
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Расписание</Card.Heading>
+      <Card.Heading>График работы</Card.Heading>
       <Card.Section>
         <div style={{display: "flex", gap: "20px"}}>
           {state.parent_id && <Checkbox
