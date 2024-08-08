@@ -22,6 +22,34 @@
       "when": 1722945940923,
       "tag": "0002_brown_devos",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1723104429609,
+      "tag": "0003_moaning_blackheart",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1723104522713,
+      "tag": "0004_conscious_nightshade",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1723104688831,
+      "tag": "0005_eager_earthquake",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1723104721092,
+      "tag": "0006_acoustic_champions",
+      "breakpoints": true
     }
   ]
 }

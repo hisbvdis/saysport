@@ -65,7 +65,7 @@ export interface UIObject extends Partial<Object_> {
   status: objectStatusUnion;
   statusInstead?: Object_ | null;
   city?: City;
-  parent?: DBObject | null;
+  parent?: UIObject | null;
   phones?: (ObjectPhone & {uiID: string})[];
   links?: (ObjectLink & {uiID: string})[];
   sections: UISection[];

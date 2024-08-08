@@ -170,7 +170,7 @@ export type City = typeof city.$inferSelect;
 // OBJECT_PHONE
 // ===========================================================================
 export const object_phone = pgTable("object_phone", {
-  object_id: integer("object_id").notNull().references(() => object.object_id),
+  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   order: integer("order").notNull(),
   value: varchar("value").notNull(),
   comment: varchar("comment"),
@@ -190,7 +190,7 @@ export type ObjectPhone = typeof object_phone.$inferSelect;
 // OBJECT_LINK
 // ===========================================================================
 export const object_link = pgTable("object_link", {
-  object_id: integer("object_id").notNull().references(() => object.object_id),
+  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   order: integer("order").notNull(),
   value: varchar("value").notNull(),
   comment: varchar("comment"),
@@ -231,7 +231,7 @@ export type ObjectPhoto = typeof object_photo.$inferSelect;
 // ===========================================================================
 export const object_usage = pgTable("object_usage", {
   usage_id: integer("usage_id").notNull(),
-  object_id: integer("object_id").notNull().references(() => object.object_id),
+  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   section_id: integer("section_id").notNull().references(() => section.section_id),
   description: varchar("description"),
   schedule_inherit: boolean("schedule_inherit"),
@@ -255,7 +255,7 @@ export type ObjectUsage = typeof object_usage.$inferSelect;
 // OBJECT_SCHEDULE
 // ===========================================================================
 export const object_schedule = pgTable("object_schedule", {
-  object_id: integer("object_id").notNull().references(() => object.object_id),
+  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   usage_id: integer("usage_id").notNull().references(() => object_usage.usage_id, {onDelete: "cascade"}),
   day_num: integer("day_num").notNull(),
   time: varchar("time").notNull(),

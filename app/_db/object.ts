@@ -161,6 +161,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     created: state.created ? state.created : new Date(),
   };
 
+
   const [ upsertedObject ] = await db.insert(object).values(fields).onConflictDoUpdate({target: object.object_id, set: {...fields}}).returning();
   const children:DBObject[] = await db.query.object.findMany({where: eq(object.parent_id, upsertedObject.object_id), with: {usages: true}});
 
@@ -279,4 +280,5 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
 
   revalidatePath(`object/${upsertedObject.object_id}`, "page");
   return upsertedObject;
+
 }
