@@ -20,6 +20,7 @@ import { getObjectsByFilters } from "@/app/_db/object";
 import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
+import { DBObject } from "@/app/_types/types";
 
 
 export default function Address() {
@@ -119,7 +120,7 @@ export default function Address() {
                 value={state.parent_id}
                 label={state.parent?.name_type?.concat(state.parent.name_title ? ` ${state.parent.name_title}` : "").concat(state.parent.name_where ? ` ${state.parent.name_where}` : "")}
                 onChange={handleStateChange?.valueAsNumber}
-                onChangeData={(parent) => setInheritedData(parent.id ? objectReadProcessing(parent) : null, setState)}
+                onChangeData={(parent:DBObject) => setInheritedData(parent.object_id ? objectReadProcessing(parent) : null, setState)}
                 isAutocomplete
                 placeholder="Введите название"
                 disabled={!state.city_id}

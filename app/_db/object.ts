@@ -55,7 +55,7 @@ export const getObjectsCountByFilters = async (filters?:Filters) => {
   return dbData;
 }
 
-export const getObjectsByFilters = async (filters?:Filters) => {
+export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> => {
   const type = filters?.type;
   const query = filters?.query;
   const cityId = filters?.city ? Number(filters?.city) : undefined;

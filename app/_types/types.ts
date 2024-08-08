@@ -10,7 +10,7 @@ export interface DBSpec extends Spec {
 
 export interface DBSection extends Section {
   sectionOnSpec: (SectionOnSpec & { spec: DBSpec })[];
-  description:string|null;
+  description?:string|null;
 }
 
 export interface DBObject extends Object_ {
@@ -43,7 +43,7 @@ export interface UISpec extends Spec {
 
 export interface UISection extends Section {
   specs: UISpec[];
-  description:string|null;
+  description?:string|null;
   uiID: string;
 }
 
