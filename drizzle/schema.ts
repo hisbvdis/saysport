@@ -41,6 +41,11 @@ export const object = pgTable("object", {
   coord_lat: doublePrecision("coord_lat").notNull(),
   coord_lon: doublePrecision("coord_lon").notNull(),
   description: varchar("description"),
+  schedule_inherit: boolean("schedule_inherit"),
+  schedule_date: timestamp("schedule_date"),
+  schedule_source: varchar("schedule_source"),
+  schedule_comment: varchar("schedule_comment"),
+  schedule_24_7: boolean("schedule_24_7"),
   created: timestamp("created").notNull(),
   modified: timestamp("modified").notNull().defaultNow(),
 })
@@ -57,7 +62,6 @@ export const objectRelations = relations(object, ({ one, many }) => ({
   links: many(object_link),
   phones: many(object_phone),
   photos: many(object_photo),
-  usages: many(object_usage),
   schedules: many(object_schedule),
 }))
 
@@ -227,36 +231,10 @@ export type ObjectPhoto = typeof object_photo.$inferSelect;
 
 
 // ===========================================================================
-// OBJECT_USAGE
-// ===========================================================================
-export const object_usage = pgTable("object_usage", {
-  usage_id: integer("usage_id").notNull(),
-  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
-  section_id: integer("section_id").notNull().references(() => section.section_id),
-  description: varchar("description"),
-  schedule_inherit: boolean("schedule_inherit"),
-  schedule_date: timestamp("schedule_date"),
-  schedule_source: varchar("schedule_source"),
-  schedule_comment: varchar("schedule_comment"),
-  schedule_24_7: boolean("schedule_24_7"),
-})
-
-export const objectUsageRelations = relations(object_usage, ({ one, many }) => ({
-  object: one(object, {fields: [object_usage.object_id], references: [object.object_id]}),
-  section: one(section, {fields: [object_usage.section_id], references: [section.section_id]}),
-  schedules: many(object_schedule),
-}))
-
-export type ObjectUsage = typeof object_usage.$inferSelect;
-
-
-
-// ===========================================================================
 // OBJECT_SCHEDULE
 // ===========================================================================
 export const object_schedule = pgTable("object_schedule", {
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
-  usage_id: integer("usage_id").notNull().references(() => object_usage.usage_id, {onDelete: "cascade"}),
   day_num: integer("day_num").notNull(),
   time: varchar("time").notNull(),
   from: integer("from").notNull(),
@@ -265,7 +243,6 @@ export const object_schedule = pgTable("object_schedule", {
 
 export const objectScheduleRelations = relations(object_schedule, ({ one }) => ({
   object: one(object, {fields: [object_schedule.object_id], references: [object.object_id]}),
-  usage: one(object_usage, {fields: [object_schedule.usage_id], references: [object_usage.usage_id]})
 }))
 
 export type ObjectSchedule = typeof object_schedule.$inferSelect;

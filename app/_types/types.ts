@@ -1,4 +1,4 @@
-import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectSchedule, ObjectPhoto, ObjectUsage } from "@/drizzle/schema";
+import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectSchedule, ObjectPhoto } from "@/drizzle/schema";
 
 
 // =============================================================================
@@ -22,7 +22,6 @@ export interface DBObject extends Object_ {
   links?: ObjectLink[],
   objectOnSection?: (ObjectOnSection & {section: Section & {sectionOnSpec: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}})[];
   objectOnOption?: (ObjectOnOption & {option: Option})[];
-  usages?: ObjectUsage[];
   photos?: ObjectPhoto[];
   children?: DBObject[];
   schedules?: ObjectSchedule[];
@@ -46,12 +45,6 @@ export interface UISection extends Section {
   uiID: string;
 }
 
-export interface UIObjectUsage extends Partial<ObjectUsage> {
-  usage_id:number;
-  object_id:number;
-  section_id:number;
-}
-
 export interface UIScheduleDay extends ObjectSchedule {
   isWork?:boolean;
 }
@@ -70,7 +63,6 @@ export interface UIObject extends Partial<Object_> {
   links?: (ObjectLink & {uiID: string})[];
   sections: UISection[];
   options?: UIOption[];
-  usages?: UIObjectUsage[];
   photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
   schedules: UIScheduleDay[];

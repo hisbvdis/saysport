@@ -103,6 +103,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
         <Specs/>
         <Description/>
         <Usages/>
+        <Schedule/>
         <Photos/>
         <EditBottomPanel
           id={state.object_id}

@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, count, desc, eq, exists, ilike, inArray, notExists, sql } from "drizzle-orm";
-import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_usage, object_schedule } from "@/drizzle/schema";
+import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_schedule } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBObject, UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -115,14 +115,13 @@ export const getObjectById = async (id:number) => {
     with: {
       statusInstead: true,
       city: true,
-      parent: {with: {schedules: true, usages: true}},
+      parent: {with: {schedules: true}},
       phones: {orderBy: (phones, { asc }) => [asc(phones.order)]},
       links: {orderBy: (links, { asc }) => [asc(links.order)]},
       objectOnOption: {with: {option: true}},
       photos: true,
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
       // -----------------------------------------------------------------------------
-      usages: true,
       schedules: true,
       children: {with: {photos: true, phones: true, links: true}},
     }
@@ -163,7 +162,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
 
 
   const [ upsertedObject ] = await db.insert(object).values(fields).onConflictDoUpdate({target: object.object_id, set: {...fields}}).returning();
-  const children:DBObject[] = await db.query.object.findMany({where: eq(object.parent_id, upsertedObject.object_id), with: {usages: true}});
+  const children:DBObject[] = await db.query.object.findMany({where: eq(object.parent_id, upsertedObject.object_id)});
 
   const coordsIsChanged = state.coord_lat !== init.coord_lat || state.coord_lon !== init.coord_lon;
   if (coordsIsChanged) {
@@ -223,28 +222,6 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
   const optionsDeleted = init.options?.filter((initOption) => !state.options?.some((stateOption) => initOption.option_id === stateOption.option_id));
   if (optionsDeleted?.length) {
     await db.delete(object_on_option).where(and(eq(object_on_option.object_id, upsertedObject.object_id), inArray(object_on_option.option_id, optionsDeleted.map((opt) => opt.option_id))));
-  }
-
-  const usagesAdded = state.usages?.filter((stateUsage) => !init?.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id));
-  if (usagesAdded?.length) {
-    await db.insert(object_usage).values(usagesAdded.map((usage) => ({...usage, object_id: upsertedObject.object_id, usage_id: usage.section_id})));
-    if (children.length) {
-      children.forEach((child) => child.usages?.filter((usage) => usage.schedule_inherit).forEach(async (usage) => await db.update(object_usage).set({...usagesAdded[0], object_id: undefined, usage_id: undefined, section_id: undefined, schedule_inherit: undefined, description: undefined}).where(and(eq(object_usage.usage_id, usage.usage_id), eq(object_usage.object_id, child.object_id)))));
-    }
-  }
-  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id && (stateUsage.description !== initUsage.description || stateUsage.schedule_24_7 !== initUsage.schedule_24_7 || stateUsage.schedule_comment !== initUsage.schedule_comment || stateUsage.schedule_date !== initUsage.schedule_date || stateUsage.schedule_inherit !== initUsage.schedule_inherit || stateUsage.schedule_source !== initUsage.schedule_source)));
-  if (usagesChanged?.length) {
-    usagesChanged.forEach(async (usage) => await db.update(object_usage).set({...usage, usage_id: undefined, object_id: undefined, section_id: undefined}).where(eq(object_usage.usage_id, usage.usage_id)));
-    if (children.length) {
-      children.forEach((child) => child.usages?.filter((usage) => usage.schedule_inherit).forEach(async (usage) => await db.update(object_usage).set({...usagesChanged[0], object_id: undefined, usage_id: undefined, section_id: undefined, schedule_inherit: undefined, description: undefined}).where(and(eq(object_usage.usage_id, usage.usage_id), eq(object_usage.object_id, child.object_id)))));
-    }
-  }
-  const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.usage_id === stateUsage.usage_id));
-  if (usagesDeleted?.length) {
-    await db.delete(object_usage).where(inArray(object_usage.usage_id, usagesDeleted.map((usage) => usage.usage_id)));
-    if (children.length) {
-      children.forEach((child) => child.usages?.filter((usage) => usage.schedule_inherit).forEach(async (usage) => await db.update(object_usage).set({schedule_date: null, schedule_source: null, schedule_comment: null, schedule_24_7: null,  object_id: undefined, usage_id: undefined, section_id: undefined, schedule_inherit: undefined, description: undefined}).where(and(eq(object_usage.usage_id, usage.usage_id), eq(object_usage.object_id, child.object_id)))));
-    }
   }
 
   const schedulesAdded = state.schedules?.filter((stateDay) => !init.schedules.some((initDay) => stateDay.usage_id === initDay.usage_id && stateDay.day_num === initDay.day_num));
