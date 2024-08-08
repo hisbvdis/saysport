@@ -1,1 +1,0 @@
-ALTER TABLE "section" ADD COLUMN "name_service" varchar DEFAULT 'temp' NOT NULL;

@@ -1,1 +1,0 @@
-ALTER TABLE "object_on_section" ADD COLUMN "description" varchar;

@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS "object_on_option" (
 CREATE TABLE IF NOT EXISTS "object_on_section" (
 	"object_id" integer NOT NULL,
 	"section_id" integer NOT NULL,
+	"description" varchar,
 	CONSTRAINT "object_on_section_object_id_section_id_pk" PRIMARY KEY("object_id","section_id")
 );
 --> statement-breakpoint
@@ -116,8 +117,9 @@ CREATE TABLE IF NOT EXISTS "option" (
 CREATE TABLE IF NOT EXISTS "section" (
 	"section_id" serial PRIMARY KEY NOT NULL,
 	"section_type" "sectionType" NOT NULL,
-	"name_plural" varchar NOT NULL,
-	"name_singular" varchar NOT NULL,
+	"name_service" varchar NOT NULL,
+	"name_public_plural" varchar NOT NULL,
+	"name_public_singular" varchar NOT NULL,
 	"object_type" "objectType" NOT NULL
 );
 --> statement-breakpoint
@@ -125,6 +127,12 @@ CREATE TABLE IF NOT EXISTS "section_on_spec" (
 	"section_id" integer NOT NULL,
 	"spec_id" integer NOT NULL,
 	CONSTRAINT "section_on_spec_section_id_spec_id_pk" PRIMARY KEY("section_id","spec_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "section_on_usage" (
+	"section_id" integer NOT NULL,
+	"usage_id" integer NOT NULL,
+	CONSTRAINT "section_on_usage_section_id_usage_id_pk" PRIMARY KEY("section_id","usage_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "spec" (
@@ -217,6 +225,18 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "section_on_spec" ADD CONSTRAINT "section_on_spec_spec_id_spec_spec_id_fk" FOREIGN KEY ("spec_id") REFERENCES "public"."spec"("spec_id") ON DELETE restrict ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "section_on_usage" ADD CONSTRAINT "section_on_usage_section_id_section_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "public"."section"("section_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "section_on_usage" ADD CONSTRAINT "section_on_usage_usage_id_section_section_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."section"("section_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

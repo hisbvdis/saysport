@@ -16,7 +16,7 @@ import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { getSpecsByFilters } from "@/app/_db/spec";
 import type { UISection, UISpec } from "@/app/_types/types";
-import { deleteSectionById, upsertSection } from "@/app/_db/section";
+import { deleteSectionById, getSectionsByFilters, upsertSection } from "@/app/_db/section";
 import { sectionTypeEnum } from "@/drizzle/schema";
 
 
@@ -53,6 +53,28 @@ export default function SectionEdit(props:{init:UISection}) {
         spec.order = Number(e.target.value);
       }))
     },
+  }
+
+  const handleUsages = {
+    add: (section:UISection) => {
+      if (state.usages?.some((stateUsage) => stateUsage.section_id === section.section_id)) return;
+      setState((prevState) => create(prevState, (draft) => {
+        if (!draft.usages) draft.usages = [];
+        draft.usages.push(section);
+      }))
+    },
+    delete: (id:number) => {
+      setState((prevState) => create(prevState, (draft) => {
+        draft.usages = draft.usages?.filter((usage) => usage.section_id !== id);
+      }))
+    },
+    // changeOrder: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
+    //   setState((prevState) => create(prevState, (draft) => {
+    //     const spec = draft.specs?.find((spec) => spec.uiID === uiID);
+    //     if (!spec) return;
+    //     spec.order = Number(e.target.value);
+    //   }))
+    // },
   }
 
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
@@ -159,6 +181,31 @@ export default function SectionEdit(props:{init:UISection}) {
                 <InputAddon>{spec.spec_id}</InputAddon>
                 <Input value={spec.order} onChange={(e) => handleSpecs.changeOrder(e, spec.uiID)} required style={{flex: "0 1 40px"}}/>
                 <Link href={`/admin/specs/${spec.spec_id}`} style={{alignSelf: "center"}}>{spec.name_service}</Link>
+              </li>
+            ))}
+          </ul>
+        </Card.Section>
+      </Card>
+
+      <Card style={{marginBlockStart: "10px"}}>
+        <Card.Heading>Использование</Card.Heading>
+        <Card.Section>
+          <Select
+            isAutocomplete
+            onChangeData={handleUsages.add}
+            placeholder="Добавить характеристику"
+            requestItemsOnFirstTouch={async () =>
+              (await getSectionsByFilters({objectType: state.object_type, sectionType: sectionTypeEnum.usage}))
+                .map((section) => ({id: section.section_id, label: section.name_service, data: section}))
+            }
+          />
+          <ul style={{marginBlockStart: "5px"}}>
+            {state?.usages?.map((section) => (
+              <li key={section.section_id} style={{display: "flex"}}>
+                <Button onClick={() => handleUsages.delete(section.section_id)}>X</Button>
+                <InputAddon>{section.section_id}</InputAddon>
+                {/* <Input value={section.order} onChange={(e) => handleSpecs.changeOrder(e, section.uiID)} required style={{flex: "0 1 40px"}}/> */}
+                <Link href={`/admin/specs/${section.section_id}`} style={{alignSelf: "center"}}>{section.name_service}</Link>
               </li>
             ))}
           </ul>

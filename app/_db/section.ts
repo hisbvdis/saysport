@@ -17,6 +17,7 @@ export const getEmptySection = async ():Promise<UISection> => {
     name_public_plural: "",
     name_public_singular: "",
     specs: [],
+    usages: [],
     uiID: crypto.randomUUID(),
   }
 }
@@ -46,7 +47,10 @@ export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion,
 export const getSectionById = async (id:number):Promise<UISection> => {
   const dbData = await db.query.section.findFirst({
     where: eq(section.section_id, id),
-    with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
+    with: {
+      sectionOnSpec: {with: {spec: {with: {options: true}}}},
+      sectionOnusage: {with: {usage: true}},
+    },
   })
   if (dbData === undefined) throw new Error("getSectionById returned undefined");
   const processed = sectionReadProcessing(dbData);
@@ -74,10 +78,8 @@ export const upsertSection = async (state:UISection, init: UISection) => {
     await db.insert(section_on_spec).values(specsAdded.map((section_on_spec) => ({section_id: upsertedSection.section_id, spec_id: section_on_spec.spec_id})));
     specsAdded?.forEach(async (item) => await db.update(spec).set(item).where(eq(spec.spec_id, item.spec_id)));
   }
-
   const specsDeleted = init.specs?.filter((initSpec) => !state.specs?.some((stateSpec) => initSpec.spec_id === stateSpec.spec_id));
   specsDeleted.length ? await db.delete(section_on_spec).where(and(eq(section_on_spec.section_id, upsertedSection.section_id), inArray(section_on_spec.spec_id, specsDeleted.map((spec) => spec.spec_id)))) : undefined;
-
   const specsChanged = state.specs?.filter((stateSpec) => init.specs?.some((initSpec) => stateSpec.uiID === initSpec.uiID && (stateSpec.order !== initSpec.order)));
   specsChanged?.forEach(async (item) => await db.update(spec).set(item).where(eq(spec.spec_id, item.spec_id)));
 
