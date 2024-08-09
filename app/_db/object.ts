@@ -233,7 +233,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     await db.delete(object_on_option).where(and(eq(object_on_option.object_id, upsertedObject.object_id), inArray(object_on_option.option_id, optionsDeleted.map((opt) => opt.option_id))));
   }
 
-  const schedulesAdded = state.schedules?.filter((stateDay) => !init.schedules.some((initDay) => stateDay.day_num === initDay.day_num));
+  const schedulesAdded = state.schedules?.filter((stateDay) => !init.schedules.some((initDay) => stateDay.day_num === initDay.day_num && stateDay.time !== ""));
   if (schedulesAdded.length) {
     await db.insert(object_schedule).values(schedulesAdded.map((schedule) => ({...schedule, object_id: upsertedObject.object_id})));
     if (children.length) {
@@ -247,7 +247,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
       children.filter((child) => child.schedule_inherit).forEach((child) => schedulesChanged.forEach(async (schedule) => await db.update(object_schedule).set({...schedule, object_id: undefined, day_num: undefined}).where(and(eq(object_schedule.object_id, child.object_id), eq(object_schedule.day_num, schedule.day_num)))))
     }
   }
-  const schedulesDeleted = init.schedules?.filter((initDay) => !state.schedules.some((stateDay) => initDay.day_num === stateDay.day_num) || state.schedules?.some((stateDay) => initDay.day_num === stateDay.day_num && initDay.time && !stateDay.time));
+  const schedulesDeleted = init.schedules?.filter((initDay) => !state.schedules.some((stateDay) => initDay.day_num === stateDay.day_num) || state.schedules?.some((stateDay) => initDay.day_num === stateDay.day_num && !stateDay.time));
   if (schedulesDeleted.length) {
     schedulesDeleted.forEach(async (schedule) => await db.delete(object_schedule).where(and(eq(object_schedule.object_id, upsertedObject.object_id), eq(object_schedule.day_num, schedule.day_num))));
     if (children.length) {

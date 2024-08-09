@@ -25,6 +25,7 @@ export const getEmptySection = async ():Promise<UISection> => {
 export const getAllSections = async ():Promise<UISection[]> => {
   const dbData = await db.query.section.findMany({
     with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
+    orderBy: [section.name_public_plural]
   })
   const processed = dbData.map((section) => sectionReadProcessing(section));
   return processed;

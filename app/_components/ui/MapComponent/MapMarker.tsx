@@ -6,7 +6,7 @@ import { MapContext } from "./MapComponent";
 
 
 export default function MapMarker(props:Props) {
-  const { draggable, onDragEnd=(e=>e) } = props;
+  const { draggable, onDragEnd=(e=>e), onClick=(e=>e), popup } = props;
   const coord = (props.coord?.[0] && props.coord?.[1] ? props.coord : [0, 0]) as [number, number];
   const mapContext = useContext(MapContext);
   const { L, map } = mapContext;
@@ -16,6 +16,8 @@ export default function MapMarker(props:Props) {
     if (!L || !map) return;
     const marker = L.marker(coord, { draggable }).addTo(map);
     marker.on("dragend", onDragEnd);
+    marker.on("click", onClick);
+    if (popup) marker.bindPopup(popup);
     setMarker(marker);
     return () => {marker.remove()};
   }, [L, map, draggable])
@@ -30,6 +32,8 @@ export default function MapMarker(props:Props) {
 
 interface Props {
   draggable?: boolean;
+  coord?: [number|undefined|null, number|undefined|null];
   onDragEnd?: (e:Leaflet.DragEndEvent) => void;
-  coord?: [number|undefined|null, number|undefined|null]
+  onClick?: (e:Leaflet.LeafletMouseEvent) => void;
+  popup?: string;
 }

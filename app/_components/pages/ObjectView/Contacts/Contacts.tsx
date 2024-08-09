@@ -5,7 +5,6 @@ import { MapComponent, MapMarker } from "@/app/_components/ui/MapComponent";
 
 export default function Contacts() {
   const { state } = useContext(ObjectViewContext);
-  console.log( state.links )
 
   return (
     <Card>
@@ -16,15 +15,15 @@ export default function Contacts() {
         <p style={{color: "var(--fontColor-light)", marginBlockStart: "10px", fontSize: "0.8em"}}>{state.city?.country.concat(state.city?.admin1 ? `, ${state.city?.admin1}` : "").concat(state.city?.admin2 ? `, ${state.city?.admin2}` : "")}</p>
       </Card.Section>
 
-      {state.phones?.length && (
+      {state.phones?.length ? (
         <Card.Section>
           {state.phones?.map((phone) => (
             <p key={phone.uiID}>{phone.value}</p>
           ))}
         </Card.Section>
-      )}
+      ) : null}
 
-      {state.links?.length && (
+      {state.links?.length ? (
         <Card.Section>
           {state.links.map((link) => (
             <p key={link.uiID}>
@@ -32,7 +31,7 @@ export default function Contacts() {
             </p>
           ))}
         </Card.Section>
-      )}
+      ) : null}
 
       <Card.Section style={{blockSize: "300px"}}>
         <MapComponent center={[state.coord_lat, state.coord_lon]} zoom={17} zoomControl={false}>

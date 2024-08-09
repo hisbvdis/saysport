@@ -11,6 +11,7 @@ import { Select } from "@/app/_components/ui/Select";
 import { Textarea } from "@/app/_components/ui/Input";
 // -----------------------------------------------------------------------------
 import { getSectionsByFilters } from "@/app/_db/section";
+import { RequiredInput } from "@/app/_components/ui/RequiredInput";
 
 
 export default function Usages() {
@@ -46,6 +47,7 @@ export default function Usages() {
               .map((section) => ({id: section.section_id, label: section.name_service, data: section}))
           }
         />
+        <RequiredInput isValidIf={Boolean(state.sections.filter((section) => section.section_type === sectionTypeEnum.usage).length > 0)}/>
       </Card.Section>
     </Card>
   )

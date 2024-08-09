@@ -20,7 +20,7 @@ export default function SectionItem(props:{section:UISection, delFunc:(section:U
         <span>{section?.name_public_singular}</span>
       </FieldSet.Legend>
       <FieldSet.Section  style={{display: "flex", gap: "10px"}}>
-        {section?.specs?.map((spec) => (
+        {section?.specs?.toSorted((a, b) => a.order - b.order).map((spec) => (
           <Control key={spec.spec_id}>
             <Control.Label>{spec.name_public}</Control.Label>
             <Control.Section>
