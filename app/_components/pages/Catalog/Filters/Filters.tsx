@@ -108,6 +108,7 @@ export default function Filters(props:Props) {
       </Card.Section>
     </Card>
 
+    {/* Usages */}
     {section?.usages.map((usage) => (
       <Card key={usage.section_id} style={{marginBlockStart: "10px"}}>
         <Card.Heading>{usage.name_public_singular}</Card.Heading>

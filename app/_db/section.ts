@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, ilike, inArray } from "drizzle-orm";
 import { objectTypeEnum, type objectTypeUnion, section, section_on_spec, section_on_usage, sectionTypeEnum, type sectionTypeUnion, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBSection, UISection } from "@/app/_types/types";
@@ -30,11 +30,13 @@ export const getAllSections = async ():Promise<UISection[]> => {
   return processed;
 }
 
-export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion,sectionType?:sectionTypeUnion}):Promise<UISection[]> => {
+export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion,sectionType?:sectionTypeUnion,name_service?:string}):Promise<UISection[]> => {
   const objectType = filters.objectType;
   const sectionType = filters.sectionType;
+  const name_service = filters.name_service;
   const dbData = await db.query.section.findMany({
     where: and(
+      name_service ? ilike(section.name_service, name_service) : undefined,
       objectType ? eq(section.object_type, objectType) : undefined,
       sectionType ? eq(section.section_type, sectionType) : undefined,
     ),

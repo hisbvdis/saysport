@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { ObjectEdit } from "@/app/_components/pages/ObjectEdit/";
 // -----------------------------------------------------------------------------
 import { getEmptyObject, getObjectById } from "@/app/_db/object";
-import { getSectionById, getSectionsByFilters } from "@/app/_db/section";
+import { getSectionsByFilters } from "@/app/_db/section";
 
 
 export default async function AddObjectPage({params, searchParams}:Props) {

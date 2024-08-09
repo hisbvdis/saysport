@@ -36,9 +36,9 @@ export default function MapComponent(props:Props) {
   })()}, [])
 
   useEffect(() => {
-    if (!map || !fitBoundsArray || fitBoundsArray.length === 0) return;
+    if (!map || !fitBoundsArray?.length) return;
     map.fitBounds(fitBoundsArray);
-  }, [fitBoundsArray])
+  }, [map, fitBoundsArray])
 
   // useEffect(() => {
   //   if (!map || !center[0] || !center[1]) return;

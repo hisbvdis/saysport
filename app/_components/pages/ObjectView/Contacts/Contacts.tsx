@@ -5,6 +5,7 @@ import { MapComponent, MapMarker } from "@/app/_components/ui/MapComponent";
 
 export default function Contacts() {
   const { state } = useContext(ObjectViewContext);
+  console.log( state.links )
 
   return (
     <Card>
@@ -15,13 +16,23 @@ export default function Contacts() {
         <p style={{color: "var(--fontColor-light)", marginBlockStart: "10px", fontSize: "0.8em"}}>{state.city?.country.concat(state.city?.admin1 ? `, ${state.city?.admin1}` : "").concat(state.city?.admin2 ? `, ${state.city?.admin2}` : "")}</p>
       </Card.Section>
 
-      {state.phones?.length ?
-        <Card.Section>{state.phones[0].value}</Card.Section>
-      : null}
+      {state.phones?.length && (
+        <Card.Section>
+          {state.phones?.map((phone) => (
+            <p key={phone.uiID}>{phone.value}</p>
+          ))}
+        </Card.Section>
+      )}
 
-      {state.links?.length ?
-        <Card.Section>{state.links.map((link) => <a key={link.order} href={link.value}>{link.value.match(/^(https?:\/\/)?(www.)?(.*?(?=\/))/)?.[3]}</a>)}</Card.Section>
-      : null}
+      {state.links?.length && (
+        <Card.Section>
+          {state.links.map((link) => (
+            <p key={link.uiID}>
+              <a href={link.value}>{link.value.match(/^(https?:\/\/)?(www.)?(.*?(?=\/))/)?.[3]}</a>
+            </p>
+          ))}
+        </Card.Section>
+      )}
 
       <Card.Section style={{blockSize: "300px"}}>
         <MapComponent center={[state.coord_lat, state.coord_lon]} zoom={17} zoomControl={false}>
