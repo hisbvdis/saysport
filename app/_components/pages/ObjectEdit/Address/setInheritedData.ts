@@ -3,7 +3,6 @@ import { create } from "mutative";
 import type { SetStateAction } from "react";
 
 export const setInheritedData = (parent:UIObject|null, setState:React.Dispatch<SetStateAction<UIObject>>) => {
-  console.log( parent )
   if (parent) {
     setState((prevState) => create(prevState, (draft) => {
       draft.status_inherit = true;

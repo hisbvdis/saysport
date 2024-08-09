@@ -9,7 +9,7 @@ export interface DBSpec extends Spec {
 }
 
 export interface DBSection extends Section {
-  sectionOnSpec: (SectionOnSpec & { spec: DBSpec })[];
+  sectionOnSpec?: (SectionOnSpec & { spec: DBSpec })[];
   sectionOnUsage?: (SectionOnUsage & { usage: DBSection })[];
   description?:string|null;
 }
