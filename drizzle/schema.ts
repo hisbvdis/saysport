@@ -84,7 +84,7 @@ export const section = pgTable("section", {
 export const sectionRelations = relations(section, ({ many }) => ({
   objectOnSection: many(object_on_section),
   sectionOnSpec: many(section_on_spec),
-  sectionOnusage: many(section_on_usage, {relationName:"section_on_usage"}),
+  sectionOnUsage: many(section_on_usage, {relationName:"section_on_usage"}),
 }))
 
 export type Section = typeof section.$inferSelect;
