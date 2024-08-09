@@ -1,9 +1,9 @@
 import { relations } from "drizzle-orm";
 import { type AnyPgColumn, boolean, doublePrecision, integer, pgEnum, pgTable, primaryKey, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 
-export enum objectTypeEnum {org="org", place="place"};
-export type objectTypeUnion = "org" | "place";
-export const objectTypeColumnType = pgEnum("objectType", ["org", "place"]);
+export enum objectTypeEnum {org="org", place="place", class="class"};
+export type objectTypeUnion = "org" | "place" | "class";
+export const objectTypeColumnType = pgEnum("objectType", ["org", "place", "class"]);
 
 export enum optionsNumberEnum {many="many", one="one"};
 export const optionsNumberColumnType = pgEnum("optionsNumber", ["many", "one"]);

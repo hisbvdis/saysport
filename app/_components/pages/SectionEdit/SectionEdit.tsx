@@ -156,6 +156,7 @@ export default function SectionEdit(props:{init:UISection}) {
               >
                 <Radio value="org">Организация</Radio>
                 <Radio value="place">Место</Radio>
+                <Radio value="class">Секция</Radio>
               </RadioGroup>
             </Control.Section>
           </Control>
@@ -187,7 +188,7 @@ export default function SectionEdit(props:{init:UISection}) {
         </Card.Section>
       </Card>
 
-      {state.object_type === objectTypeEnum.place && state.section_type !== sectionTypeEnum.usage ? (
+      {state.object_type !== objectTypeEnum.org && state.section_type !== sectionTypeEnum.usage ? (
         <Card style={{marginBlockStart: "10px"}}>
           <Card.Heading>Использование</Card.Heading>
           <Card.Section>

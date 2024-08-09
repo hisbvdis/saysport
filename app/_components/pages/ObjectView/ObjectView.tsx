@@ -17,7 +17,7 @@ export default function ObjectView(props:{init:UIObject}) {
         <article className={styles["objectView__article"]}>
           <Gallery/>
           {props.init.description ? <Description/> : null}
-          <Children/>
+          {props.init.type === objectTypeEnum.org ? <Children/> : null}
           {props.init.type === objectTypeEnum.place ? <Usages/> : null}
           <Specs/>
         </article>

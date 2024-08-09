@@ -7,14 +7,14 @@ import { type ChangeEvent, type ChangeEventHandler, type SetStateAction, type Sy
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
-import { NameOrg, NamePlace, Address, Contacts, Specs, Description, Schedule, Photos, Usages } from "./"
+import { NameOrg, NamePlace, Address, Contacts, Specs, Description, Schedule, Photos, Usages, NameClass } from "./"
 // -----------------------------------------------------------------------------
 import { syncPhotos } from "./Photos/syncPhotos";
 import { setInheritedData } from "./Address/setInheritedData";
 import { deleteObjectById, upsertObject } from "@/app/_db/object";
 
 
-export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, commonPlaceSections?: UISection[]}) {
+export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, commonSections?: UISection[]}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -70,11 +70,11 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
 
   useEffect(() => {
     if (state.object_id) return;
-    if (state.type === objectTypeEnum.place) {
+    if (state.type === objectTypeEnum.place || state.type === objectTypeEnum.class) {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.sections) draft.sections = [];
-        if (!props.commonPlaceSections?.length) return;
-        draft.sections = draft.sections.concat(props.commonPlaceSections);
+        if (!props.commonSections?.length) return;
+        draft.sections = draft.sections.concat(props.commonSections);
       }))
     }
     if (!props.parent) return;
@@ -97,12 +97,14 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
   return (
     <ObjectEditContext.Provider value={{ state, setState, handleStateChange, handleSections, handleOptions }}>
       <Form onSubmit={handleFormSubmit}>
-        {state.type === objectTypeEnum.org ? <NameOrg/> : <NamePlace/>}
+        {state.type === objectTypeEnum.org ? <NameOrg/> : null}
+        {state.type === objectTypeEnum.place ? <NamePlace/> : null}
+        {state.type === objectTypeEnum.class ? <NameClass/> : null}
         <Address/>
         <Contacts/>
         <Specs/>
         <Description/>
-        {props.init.type === objectTypeEnum.place ? <Usages/> : null}
+        {props.init.type === objectTypeEnum.org ? null : <Usages/>}
         <Schedule/>
         <Photos/>
         <EditBottomPanel

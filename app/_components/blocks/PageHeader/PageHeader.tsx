@@ -15,6 +15,7 @@ export default function PageHeader() {
         <Link className={styles["pageHeader__link"]} href="/admin">Админ</Link>
         <Link className={styles["pageHeader__link"]} href="/object/add/org">Орг</Link>
         <Link className={styles["pageHeader__link"]} href="/object/add/place">Место</Link>
+        <Link className={styles["pageHeader__link"]} href="/object/add/class">Секция</Link>
       </div>
     </header>
   )

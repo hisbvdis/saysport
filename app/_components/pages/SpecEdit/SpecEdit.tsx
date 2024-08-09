@@ -123,6 +123,7 @@ export default function SpecEdit(props:{init:UISpec}) {
             >
               <Radio value="org">Организация</Radio>
               <Radio value="place">Место</Radio>
+              <Radio value="class">Секция</Radio>
             </RadioGroup>
           </Control>
         </Card.Section>
