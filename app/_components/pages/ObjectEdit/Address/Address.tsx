@@ -2,8 +2,8 @@
 import Link from "next/link";
 import { create } from "mutative";
 import type * as Leaflet from "leaflet";
-import { objectTypeEnum } from "@/drizzle/schema";
-import type { DBObject } from "@/app/_types/types";
+import { Object_, objectTypeEnum } from "@/drizzle/schema";
+import type { DBObject, UIObject } from "@/app/_types/types";
 import { useContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
@@ -13,11 +13,11 @@ import { Button } from "@/app/_components/ui/Button";
 import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
-import { MapComponent, MapMarker, MapButton } from "@/app/_components/ui/MapComponent";
+import { MapComponent, MapMarker, MapControl } from "@/app/_components/ui/MapComponent";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import { setInheritedData } from "./setInheritedData";
-import { getObjectsByFilters } from "@/app/_db/object";
+import { getObjectsByArea, getObjectsByFilters } from "@/app/_db/object";
 import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
@@ -26,7 +26,8 @@ import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominat
 export default function Address() {
   const { state, setState, handleStateChange } = useContext(ObjectEditContext);
   const [ mapInstance, setMapInstance ] = useState<Leaflet.Map>();
-  const [ liveMap, setLiveMap ] = useState<{lat: number, lon: number, zoom: number}>({lat: state.coord_lat, lon: state.coord_lon, zoom: 17});
+  const [ liveMap, setLiveMap ] = useState<{lat: number, lon: number, zoom: number, bounds: Leaflet.LatLngBounds|undefined}>({lat: state.coord_lat, lon: state.coord_lon, zoom: 17, bounds: mapInstance?.getBounds()});
+  const [ nearestObjects, setNearestObjects ] = useState<Object_[]>();
 
   const handleMap = {
     getCoordFromAddress: async () => {
@@ -83,6 +84,14 @@ export default function Address() {
       draft.coord_lon = draft.parent?.coord_lon;
     }))
   }, [state.coord_inherit])
+
+  useEffect(() => {(async () => {
+    setLiveMap((prevState) => create(prevState, (draft) => {
+      draft.bounds = mapInstance?.getBounds();
+    }))
+    if (!mapInstance) return;
+    setNearestObjects(await getObjectsByArea(mapInstance.getBounds().getSouth(), mapInstance.getBounds().getNorth(), mapInstance.getBounds().getWest(), mapInstance.getBounds().getEast()));
+  })()}, [mapInstance])
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
@@ -174,16 +183,29 @@ export default function Address() {
             zoom={17}
             liftMapInstance={setMapInstance}
             onMapRightClick={handleMap.rightClick}
-            onMapDrag={(e) => setLiveMap({lat: e.target.getCenter().lat, lon: e.target.getCenter().lng, zoom: e.target.getZoom()})}
+            onMapDrag={(e) => setLiveMap((prevState) => create(prevState, (draft) => {
+              draft.lat = e.target.getCenter().lat;
+              draft.lon = e.target.getCenter().lng;
+              draft.zoom = e.target.getZoom();
+            }))}
           >
             <MapMarker
               coord={[state.coord_lat, state.coord_lon]}
               draggable={Boolean(!state.coord_inherit)}
               onDragEnd={handleMap.markerDragEnd}
+              zIndexOffset={1}
             />
-            <MapButton html={`<a href='https://www.google.com/maps/@${liveMap.lat},${liveMap.lon},${liveMap.zoom}z' target='blank'>Google<a/>`}/>
-            <MapButton html={`<a href='https://yandex.ru/maps/?ll=${liveMap.lon}%2C${liveMap.lat}&z=${liveMap.zoom}' target='blank'>Яндекс<a/>`}/>
-            <MapButton html={`<a href='https://2gis.ru/?m=${liveMap.lon}%2C${liveMap.lat}%2F${liveMap.zoom}' target='blank'>2Гис<a/>`}/>
+            {nearestObjects?.map((object) => (
+              <MapMarker
+                key={object.object_id}
+                coord={[object.coord_lat, object.coord_lon]}
+                popup={`<a href="object/${object.object_id}">${object.name_type} ${object.name_title ?? ""}${object.name_where ?? ""}</a>`}
+                iconUrl="/map/marker-icon-secondary.png"
+              />
+            ))}
+            <MapControl html={`<a href='https://www.google.com/maps/@${liveMap.lat},${liveMap.lon},${liveMap.zoom}z' target='blank'>Google<a/>`}/>
+            <MapControl html={`<a href='https://yandex.ru/maps/?ll=${liveMap.lon}%2C${liveMap.lat}&z=${liveMap.zoom}' target='blank'>Яндекс<a/>`}/>
+            <MapControl html={`<a href='https://2gis.ru/?m=${liveMap.lon}%2C${liveMap.lat}%2F${liveMap.zoom}' target='blank'>2Гис<a/>`}/>
           </MapComponent>
         </div>
       </Card.Section>
