@@ -95,7 +95,7 @@ export default function CategoryEdit(props:{init:UICategory}) {
           <Select
             isAutocomplete
             onChangeData={handleSections.add}
-            placeholder="Добавить характеристику"
+            placeholder="Добавить раздел"
             requestItemsOnFirstTouch={async () =>
               (await getSectionsByFilters({sectionType: sectionTypeEnum.section}))
                 ?.map((section) => ({id: section.section_id, label: section.name_service, data: section}))

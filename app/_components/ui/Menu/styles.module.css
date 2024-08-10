@@ -30,7 +30,7 @@
 }
 
 .menu__item--focus {
-  background-color: var(--control-hovered-bgColor);
+  background-color: var(--control-hovered-backgroundColor);
 }
 
 .menu__item--placeholder {

@@ -42,7 +42,7 @@
 }
 
 .select__btn:disabled {
-  background: var(--control-disabled-bgColor);
+  background: var(--control-disabled-backgroundColor);
   cursor: default;
 }
 

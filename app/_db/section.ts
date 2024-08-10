@@ -31,13 +31,13 @@ export const getAllSections = async ():Promise<UISection[]> => {
   return processed;
 }
 
-export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion,sectionType?:sectionTypeUnion,name_service?:string}):Promise<UISection[]> => {
+export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion;sectionType?:sectionTypeUnion;name_service?:string;name_public_plural?:string}):Promise<UISection[]> => {
   const objectType = filters.objectType;
   const sectionType = filters.sectionType;
-  const name_service = filters.name_service;
+  const name_public_plural = filters.name_public_plural;
   const dbData = await db.query.section.findMany({
     where: and(
-      name_service ? ilike(section.name_service, name_service) : undefined,
+      name_public_plural ? ilike(section.name_public_plural, `%${name_public_plural}%`) : undefined,
       objectType ? eq(section.object_type, objectType) : undefined,
       sectionType ? eq(section.section_type, sectionType) : undefined,
     ),

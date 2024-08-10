@@ -6,7 +6,7 @@
   font-size: var(--textfield-fontSize);
   color: var(--control-disabled-fontColor);
 
-  background: var(--control-disabled-bgColor);
+  background: var(--control-disabled-backgroundColor);
   border: 1px solid var(--textField-borderColor);
   cursor: default;
 }

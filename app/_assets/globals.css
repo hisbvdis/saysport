@@ -21,9 +21,9 @@
   --textfield-fontSize: 0.8125rem;
   --textField-placeholder-fontColor: #BBBBBB;
 
-  --control-disabled-bgColor: #F8F8F8;
+  --control-disabled-backgroundColor: #F8F8F8;
   --control-disabled-fontColor: #cccccc;
-  --control-hovered-bgColor: #F5F6F8;
+  --control-hovered-backgroundColor: #F5F6F8;
 
   --controls-gap: 20px;
   --sections-gap: 10px;
