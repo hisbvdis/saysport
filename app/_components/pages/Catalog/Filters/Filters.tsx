@@ -18,7 +18,7 @@ export default function Filters(props:Props) {
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
   const [ andSpecs, setAndSpecs ] = useState<number[]>([]);
-  const { searchParams, section, sectionList } = useContext(CatalogContext);
+  const { searchParams, section, categories } = useContext(CatalogContext);
 
   const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:UISpec) => {
     if (e.target.checked) {
@@ -45,7 +45,7 @@ export default function Filters(props:Props) {
         </a>
       </Card.Heading>
       {section?.specs
-        .concat(section.object_type === objectTypeEnum.place ? sectionList.filter((section) => section.section_type === sectionTypeEnum.common && section.object_type === objectTypeEnum.place).flatMap((section) => section.specs) : [])
+        .concat(section.object_type === objectTypeEnum.place ? categories.filter((section) => section.section_type === sectionTypeEnum.common && section.object_type === objectTypeEnum.place).flatMap((section) => section.specs) : [])
         .toSorted((a, b) => a.order - b.order).map((spec) => (
           <Card.Section key={spec.spec_id}>
             <Control>

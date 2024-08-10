@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
+import type { UISection, UISpec } from "@/app/_types/types";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
@@ -15,7 +16,6 @@ import { Radio, RadioGroup } from "@/app/_components/ui/Choice";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { getSpecsByFilters } from "@/app/_db/spec";
-import type { UISection, UISpec } from "@/app/_types/types";
 import { deleteSectionById, getSectionsByFilters, upsertSection } from "@/app/_db/section";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 

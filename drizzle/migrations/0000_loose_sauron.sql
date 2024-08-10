@@ -5,7 +5,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "public"."objectType" AS ENUM('org', 'place');
+ CREATE TYPE "public"."objectType" AS ENUM('org', 'place', 'class');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -21,6 +21,17 @@ DO $$ BEGIN
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "category" (
+	"category_id" serial PRIMARY KEY NOT NULL,
+	"name" varchar NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "category_on_section" (
+	"category_id" integer NOT NULL,
+	"section_id" integer NOT NULL,
+	CONSTRAINT "category_on_section_category_id_section_id_pk" PRIMARY KEY("category_id","section_id")
+);
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "city" (
 	"city_id" serial PRIMARY KEY NOT NULL,
@@ -144,6 +155,18 @@ CREATE TABLE IF NOT EXISTS "spec" (
 	"order" integer NOT NULL,
 	"is_and_in_search" boolean
 );
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "category_on_section" ADD CONSTRAINT "category_on_section_category_id_category_category_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."category"("category_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "category_on_section" ADD CONSTRAINT "category_on_section_section_id_section_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "public"."section"("section_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "object" ADD CONSTRAINT "object_status_instead_id_object_object_id_fk" FOREIGN KEY ("status_instead_id") REFERENCES "public"."object"("object_id") ON DELETE restrict ON UPDATE no action;

@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import { Card } from "../../ui/Card";
 import { Select } from "../../ui/Select";
 import { Control } from "../../ui/Control";
-import { Sections, Filters, Results } from ".";
+import { Filters, Results, Categories } from ".";
 import { Pagination } from "../../ui/Pagination";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
-import type { DBObject, UISection } from "@/app/_types/types"
+import type { DBObject, UICategory, UISection } from "@/app/_types/types"
 import { MapComponent, MapMarker } from "../../ui/MapComponent";
 import type { SearchParamsType } from "@/app/(router)/catalog/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
@@ -20,12 +20,12 @@ import styles from "./styles.module.css";
 
 
 export default function Catalog(props:Props) {
-  const { searchParams, resultsLimited, resultsAll, sectionList, section, city, resultsCount } = props;
+  const { searchParams, resultsLimited, resultsAll, categories, section, city, resultsCount } = props;
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
 
   return (
-    <CatalogContext.Provider value={{searchParams, resultsLimited, sectionList, section, city, resultsCount, resultsAll}}>
+    <CatalogContext.Provider value={{searchParams, resultsLimited, categories, section, city, resultsCount, resultsAll}}>
       <div className={clsx(styles["catalog"], !searchParams.map && "container", "page")}>
         <aside>
           <Card>
@@ -44,7 +44,7 @@ export default function Catalog(props:Props) {
               />
             </Control>
           </Card>
-          {searchParams.section ? <Filters className="mt10"/> : <Sections className="mt10"/>}
+          {searchParams.section ? <Filters className="mt10"/> : <Categories className="mt10"/>}
         </aside>
         <main className={styles["catalog__main"]}>
           <Results/>
@@ -71,7 +71,7 @@ export const CatalogContext = createContext<CatalogContextType>({} as CatalogCon
 interface Props {
   resultsLimited: DBObject[];
   resultsAll: DBObject[];
-  sectionList: UISection[];
+  categories: UICategory[];
   searchParams: SearchParamsType;
   city?: City;
   section?: UISection;
@@ -83,7 +83,7 @@ interface CatalogContextType {
   resultsAll: DBObject[];
   resultsCount: number;
   searchParams: SearchParamsType;
-  sectionList: UISection[];
+  categories: UICategory[];
   section?: UISection;
   city?: City;
 }

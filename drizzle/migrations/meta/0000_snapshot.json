@@ -1,9 +1,88 @@
 {
-  "id": "cdeeca6a-ed89-4d68-8e86-ff4fe3675651",
+  "id": "98e67671-ae75-4e70-8c72-f083526c9731",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.category": {
+      "name": "category",
+      "schema": "",
+      "columns": {
+        "category_id": {
+          "name": "category_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.category_on_section": {
+      "name": "category_on_section",
+      "schema": "",
+      "columns": {
+        "category_id": {
+          "name": "category_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "section_id": {
+          "name": "section_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "category_on_section_category_id_category_category_id_fk": {
+          "name": "category_on_section_category_id_category_category_id_fk",
+          "tableFrom": "category_on_section",
+          "tableTo": "category",
+          "columnsFrom": [
+            "category_id"
+          ],
+          "columnsTo": [
+            "category_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "category_on_section_section_id_section_section_id_fk": {
+          "name": "category_on_section_section_id_section_section_id_fk",
+          "tableFrom": "category_on_section",
+          "tableTo": "section",
+          "columnsFrom": [
+            "section_id"
+          ],
+          "columnsTo": [
+            "section_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "category_on_section_category_id_section_id_pk": {
+          "name": "category_on_section_category_id_section_id_pk",
+          "columns": [
+            "category_id",
+            "section_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "public.city": {
       "name": "city",
       "schema": "",
@@ -896,7 +975,8 @@
       "schema": "public",
       "values": [
         "org",
-        "place"
+        "place",
+        "class"
       ]
     },
     "public.optionsNumber": {

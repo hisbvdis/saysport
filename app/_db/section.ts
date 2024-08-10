@@ -10,7 +10,7 @@ import { sectionReadProcessing } from "./section.processing";
 
 export const getEmptySection = async ():Promise<UISection> => {
   return {
-    section_id: 0,
+    section_id: -1,
     section_type: sectionTypeEnum.section,
     object_type: objectTypeEnum.org,
     name_service: "",
@@ -67,7 +67,7 @@ export const deleteSectionById = async (id:number):Promise<void> => {
 
 export const upsertSection = async (state:UISection, init: UISection) => {
   const fields = {
-    section_id: state.section_id || undefined,
+    section_id: state.section_id > 0 ? state.section_id : undefined,
     section_type: state.section_type,
     name_service: state.name_service,
     name_public_plural: state.name_public_plural,

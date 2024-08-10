@@ -11,6 +11,9 @@ export default async function AdminPage() {
       <Card style={{marginBlockStart: "10px"}}>
         <ul>
           <li>
+            <Link href="/admin/categories">Категории</Link>
+          </li>
+          <li>
             <Link href="/admin/sections">Разделы</Link>
           </li>
           <li>

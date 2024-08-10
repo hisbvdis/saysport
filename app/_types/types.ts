@@ -1,17 +1,21 @@
-import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectSchedule, ObjectPhoto, SectionOnUsage } from "@/drizzle/schema";
+import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectSchedule, ObjectPhoto, SectionOnUsage, Category, CategoryOnSection } from "@/drizzle/schema";
 
 
 // =============================================================================
 // DB TYPES
 // =============================================================================
-export interface DBSpec extends Spec {
-  options: Option[];
+export interface DBCategory extends Category {
+  categoryOnSection?: (CategoryOnSection & {section: Section})[];
 }
 
 export interface DBSection extends Section {
   sectionOnSpec?: (SectionOnSpec & { spec: DBSpec })[];
   sectionOnUsage?: (SectionOnUsage & { usage: DBSection })[];
   description?:string|null;
+}
+
+export interface DBSpec extends Spec {
+  options: Option[];
 }
 
 export interface DBObject extends Object_ {
@@ -47,6 +51,10 @@ export interface UISection extends Section {
   usages: UISection[];
   description?:string|null;
   uiID: string;
+}
+
+export interface UICategory extends Category {
+  sections: Section[];
 }
 
 export interface UIScheduleDay extends ObjectSchedule {

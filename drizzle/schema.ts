@@ -85,6 +85,7 @@ export const sectionRelations = relations(section, ({ many }) => ({
   objectOnSection: many(object_on_section),
   sectionOnSpec: many(section_on_spec),
   sectionOnUsage: many(section_on_usage, {relationName:"section_on_usage"}),
+  categoryOnSection: many(category_on_section),
 }))
 
 export type Section = typeof section.$inferSelect;
@@ -306,3 +307,39 @@ export const objectOnOptionRelations = relations(object_on_option, ({ one }) => 
 }))
 
 export type ObjectOnOption = typeof object_on_option.$inferSelect;
+
+
+
+// ===========================================================================
+// CATEGORY
+// ===========================================================================
+export const category = pgTable("category", {
+  category_id: serial("category_id").primaryKey(),
+  name: varchar("name").notNull(),
+  order: integer("order").notNull(),
+})
+
+export const categoryRelations = relations(category, ({ many }) => ({
+  categoryOnSection: many(category_on_section),
+}))
+
+export type Category = typeof category.$inferSelect;
+
+
+
+// ===========================================================================
+// CATEGORY_ON_SECTION
+// ===========================================================================
+export const category_on_section = pgTable("category_on_section", {
+  category_id: integer("category_id").notNull().references(() => category.category_id, {onDelete: "cascade"}),
+  section_id: integer("section_id").notNull().references(() => section.section_id, {onDelete: "cascade"}),
+}, (table) => ({
+  pk: primaryKey({columns: [table.category_id, table.section_id]})
+}))
+
+export const categoryOnSectionRelations = relations(category_on_section, ({ one }) => ({
+  category: one(category, {fields: [category_on_section.category_id], references: [category.category_id]}),
+  section: one(section, {fields: [category_on_section.section_id], references: [section.section_id]}),
+}))
+
+export type CategoryOnSection = typeof category_on_section.$inferSelect;

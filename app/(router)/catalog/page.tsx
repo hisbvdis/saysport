@@ -1,4 +1,5 @@
 import { Catalog } from "@/app/_components/pages/Catalog";
+import { getAllCategories } from "@/app/_db/category";
 import { getCityById } from "@/app/_db/city";
 import { getObjectsCountByFilters, getObjectsByFilters } from "@/app/_db/object"
 import { getAllSections, getSectionById } from "@/app/_db/section";
@@ -6,7 +7,7 @@ import { getAllSections, getSectionById } from "@/app/_db/section";
 export default async function CatalogPage({searchParams}:{searchParams:SearchParamsType}) {
   const city = searchParams.city ? await getCityById(Number(searchParams.city)) : undefined;
   const section = searchParams.section ? await getSectionById(Number(searchParams.section)) : undefined;
-  const sectionList = await getAllSections();
+  const categories = await getAllCategories();
   const resultsLimited = await getObjectsByFilters({...searchParams, limit: 10});
   const resultsAll = await getObjectsByFilters(searchParams);
   const resultsCount = (await getObjectsCountByFilters(searchParams))[0].count;
@@ -15,7 +16,7 @@ export default async function CatalogPage({searchParams}:{searchParams:SearchPar
     <Catalog
       searchParams={searchParams}
       city={city}
-      sectionList={sectionList}
+      categories={categories}
       resultsLimited={resultsLimited}
       resultsAll={resultsAll}
       resultsCount={resultsCount}
