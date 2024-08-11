@@ -1,16 +1,16 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import type { UISpec } from "@/app/_types/types";
 import { type ChangeEvent, useContext, useState } from "react";
+import { objectStatusEnum, objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
-import type { UISpec } from "@/app/_types/types";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
-import { objectStatusEnum, objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 
 
 export default function Filters(props:Props) {
@@ -18,7 +18,7 @@ export default function Filters(props:Props) {
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
   const [ andSpecs, setAndSpecs ] = useState<number[]>([]);
-  const { searchParams, section, categories } = useContext(CatalogContext);
+  const { searchParams, section, categories, commonSections } = useContext(CatalogContext);
 
   const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:UISpec) => {
     if (e.target.checked) {
@@ -45,7 +45,7 @@ export default function Filters(props:Props) {
         </a>
       </Card.Heading>
       {section?.specs
-        .concat(section.object_type === objectTypeEnum.place ? categories.filter((section) => section.section_type === sectionTypeEnum.common && section.object_type === objectTypeEnum.place).flatMap((section) => section.specs) : [])
+        .concat(section.object_type !== objectTypeEnum.org ? commonSections.filter((section) => section.section_type === sectionTypeEnum.common && section.object_type !== objectTypeEnum.org).flatMap((section) => section.specs) : [])
         .toSorted((a, b) => a.order - b.order).map((spec) => (
           <Card.Section key={spec.spec_id}>
             <Control>

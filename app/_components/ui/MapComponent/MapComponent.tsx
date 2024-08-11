@@ -6,7 +6,7 @@ import { type RefObject, createContext, useEffect, useRef, useState } from "reac
 import { TileLayer } from ".";
 // -----------------------------------------------------------------------------
 import "leaflet/dist/leaflet.css";
-import styles from "./MapComponent.module.css"
+import styles from "./styles.module.css"
 
 
 export default function MapComponent(props:Props) {

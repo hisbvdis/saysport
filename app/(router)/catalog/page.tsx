@@ -2,7 +2,9 @@ import { Catalog } from "@/app/_components/pages/Catalog";
 import { getAllCategories } from "@/app/_db/category";
 import { getCityById } from "@/app/_db/city";
 import { getObjectsCountByFilters, getObjectsByFilters } from "@/app/_db/object"
-import { getAllSections, getSectionById } from "@/app/_db/section";
+import { getSectionById, getSectionsByFilters } from "@/app/_db/section";
+import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
+
 
 export default async function CatalogPage({searchParams}:{searchParams:SearchParamsType}) {
   const city = searchParams.city ? await getCityById(Number(searchParams.city)) : undefined;
@@ -11,6 +13,7 @@ export default async function CatalogPage({searchParams}:{searchParams:SearchPar
   const resultsLimited = await getObjectsByFilters({...searchParams, limit: 10});
   const resultsAll = await getObjectsByFilters(searchParams);
   const resultsCount = (await getObjectsCountByFilters(searchParams))[0].count;
+  const commonSections = section?.object_type === objectTypeEnum.place ? await getSectionsByFilters({objectType: objectTypeEnum.place, sectionType: sectionTypeEnum.common}) : await getSectionsByFilters({objectType: objectTypeEnum.class, sectionType: sectionTypeEnum.common});
 
   return (
     <Catalog
@@ -21,6 +24,7 @@ export default async function CatalogPage({searchParams}:{searchParams:SearchPar
       resultsAll={resultsAll}
       resultsCount={resultsCount}
       section={section}
+      commonSections={commonSections}
     />
   )
 }

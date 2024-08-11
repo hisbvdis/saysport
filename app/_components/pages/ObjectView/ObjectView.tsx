@@ -18,7 +18,7 @@ export default function ObjectView(props:{init:UIObject}) {
           <Gallery/>
           {props.init.description ? <Description/> : null}
           {props.init.type === objectTypeEnum.org ? <Children/> : null}
-          {props.init.type === objectTypeEnum.place ? <Usages/> : null}
+          {props.init.type !== objectTypeEnum.org ? <Usages/> : null}
           <Specs/>
         </article>
         <aside className={styles["objectView__aside"]}>

@@ -14,13 +14,14 @@ import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 import styles from "./style.module.css";
 
 
-export default function Categories() {
+export default function Categories(props:Props) {
   const { categories } = useContext(CatalogContext);
   const manageSearchParams = useManageSearchParams();
   const router = useRouter();
+  const { className, style } = props;
 
   return (
-    <Card className="mt10">
+    <Card className={className} style={style}>
       <Card.Heading>Категории</Card.Heading>
       <Card.Section style={{padding: 0}}>
         <Select
@@ -74,4 +75,9 @@ export default function Categories() {
       </Card.Section>
     </Card>
   )
+}
+
+interface Props {
+  style?: React.CSSProperties;
+  className?: string;
 }
