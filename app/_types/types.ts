@@ -1,6 +1,5 @@
 import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectSchedule, ObjectPhoto, SectionOnUsage, Category, CategoryOnSection } from "@/drizzle/schema";
 
-
 // =============================================================================
 // DB TYPES
 // =============================================================================

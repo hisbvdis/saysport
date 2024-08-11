@@ -21,6 +21,7 @@ import { getObjectsByArea, getObjectsByFilters } from "@/app/_db/object";
 import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
+import MapCluster from "@/app/_components/ui/MapComponent/MapCluster";
 
 
 export default function Address() {
@@ -28,6 +29,7 @@ export default function Address() {
   const [ mapInstance, setMapInstance ] = useState<Leaflet.Map>();
   const [ liveMap, setLiveMap ] = useState<{lat: number, lon: number, zoom: number, bounds: Leaflet.LatLngBounds|undefined}>({lat: state.coord_lat, lon: state.coord_lon, zoom: 17, bounds: mapInstance?.getBounds()});
   const [ nearestObjects, setNearestObjects ] = useState<Object_[]>();
+  console.log( nearestObjects )
 
   const handleMap = {
     getCoordFromAddress: async () => {
@@ -44,6 +46,8 @@ export default function Address() {
       }));
       mapInstance?.setView([result.lat, result.lon]);
       mapInstance?.setZoom(17);
+      if (!mapInstance) return;
+      setNearestObjects(await getObjectsByArea(mapInstance.getBounds().getSouth(), mapInstance.getBounds().getNorth(), mapInstance.getBounds().getWest(), mapInstance.getBounds().getEast(), state.object_id));
     },
     getAddressFromCoord: async () => {
       if (!state.coord_lat || !state.coord_lon) return;
@@ -90,7 +94,7 @@ export default function Address() {
       draft.bounds = mapInstance?.getBounds();
     }))
     if (!mapInstance) return;
-    setNearestObjects(await getObjectsByArea(mapInstance.getBounds().getSouth(), mapInstance.getBounds().getNorth(), mapInstance.getBounds().getWest(), mapInstance.getBounds().getEast()));
+    setNearestObjects(await getObjectsByArea(mapInstance.getBounds().getSouth(), mapInstance.getBounds().getNorth(), mapInstance.getBounds().getWest(), mapInstance.getBounds().getEast(), state.object_id));
   })()}, [mapInstance])
 
   return (
@@ -189,20 +193,10 @@ export default function Address() {
               draft.zoom = e.target.getZoom();
             }))}
           >
-            <MapMarker
-              coord={[state.coord_lat, state.coord_lon]}
-              draggable={Boolean(!state.coord_inherit)}
-              onDragEnd={handleMap.markerDragEnd}
-              zIndexOffset={1}
-            />
-            {nearestObjects?.map((object) => (
-              <MapMarker
-                key={object.object_id}
-                coord={[object.coord_lat, object.coord_lon]}
-                popup={`<a href="object/${object.object_id}">${object.name_type} ${object.name_title ?? ""}${object.name_where ?? ""}</a>`}
-                iconUrl="/map/marker-icon-secondary.png"
-              />
-            ))}
+            <MapCluster markersData={nearestObjects
+              ?.map((object) => ({coord: [object.coord_lat, object.coord_lon] as Leaflet.LatLngTuple, popup: `<a href="object/${object.object_id}">${object.name_type} ${object.name_title ?? ""}${object.name_where ?? ""}</a>`, iconUrl: "/map/marker-icon-secondary.png", draggable: false, onDragEnd: handleMap.markerDragEnd}))
+              .concat({coord: [state.coord_lat, state.coord_lon] as Leaflet.LatLngTuple, popup: "Текущий объект", iconUrl: "", draggable: Boolean(!state.coord_inherit), onDragEnd: handleMap.markerDragEnd})
+               ?? []}/>
             <MapControl html={`<a href='https://www.google.com/maps/@${liveMap.lat},${liveMap.lon},${liveMap.zoom}z' target='blank'>Google<a/>`}/>
             <MapControl html={`<a href='https://yandex.ru/maps/?ll=${liveMap.lon}%2C${liveMap.lat}&z=${liveMap.zoom}' target='blank'>Яндекс<a/>`}/>
             <MapControl html={`<a href='https://2gis.ru/?m=${liveMap.lon}%2C${liveMap.lat}%2F${liveMap.zoom}' target='blank'>2Гис<a/>`}/>

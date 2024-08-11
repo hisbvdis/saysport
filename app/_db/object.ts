@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
-import { and, between, count, desc, eq, exists, ilike, inArray, isNull, notExists, sql } from "drizzle-orm";
+import { and, between, count, desc, eq, exists, ilike, inArray, isNull, ne, notExists, sql } from "drizzle-orm";
 import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_schedule } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBObject, UIObject } from "../_types/types";
@@ -273,12 +273,13 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
   return upsertedObject;
 }
 
-export const getObjectsByArea = async (latMin:number, latMax:number, lonMin:number, lonMax:number):Promise<Object_[]> => {
+export const getObjectsByArea = async (latMin:number, latMax:number, lonMin:number, lonMax:number, currentObjectId?:number):Promise<Object_[]> => {
   const dbData:Object_[]|undefined = await db.query.object.findMany({
     where: and(
       between(object.coord_lat, latMin, latMax),
       between(object.coord_lon, lonMin, lonMax),
-      isNull(object.parent_id)
+      isNull(object.parent_id),
+      currentObjectId ? ne(object.object_id, currentObjectId) : undefined,
     )
   });
   if (dbData === undefined) throw new Error("getObjectsByArea returned undefined");

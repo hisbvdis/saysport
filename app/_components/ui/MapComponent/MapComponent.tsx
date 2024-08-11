@@ -19,7 +19,9 @@ export default function MapComponent(props:Props) {
   const [ L, setL ] = useState<typeof Leaflet>();
 
   useEffect(() => {(async () => {
-    const L = await import("leaflet");
+    let L = await import("leaflet");
+    const markerClusterPlugin = await import("leaflet.markercluster/dist/leaflet.markercluster-src.js" as any);
+    L = markerClusterPlugin.func(L);
     if (!mapContainerRef.current) return;
     if (mapContainerRef.current.children.length > 0) return;
     const map = L.map(mapContainerRef.current, { center, zoom, zoomControl });

@@ -12,11 +12,12 @@ import { Filters, Results, Categories } from ".";
 import { Pagination } from "../../ui/Pagination";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
-import { MapComponent, MapMarker } from "../../ui/MapComponent";
+import { MapComponent } from "../../ui/MapComponent";
 import type { SearchParamsType } from "@/app/(router)/catalog/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
+import MapCluster from "../../ui/MapComponent/MapCluster";
 
 
 export default function Catalog(props:Props) {
@@ -52,13 +53,7 @@ export default function Catalog(props:Props) {
         </main>
         {searchParams.map &&
           <MapComponent className={styles["catalog__map"]} fitBoundsArray={resultsAll.map((object) => [object.coord_lat, object.coord_lon])}>
-            {resultsAll.map((object) => (
-              <MapMarker
-                key={object.object_id}
-                coord={[object.coord_lat, object.coord_lon]}
-                popup={`<a href="object/${object.object_id}">${object.name_type} ${object.name_title ?? ""}${object.name_where ?? ""}</a>`}
-              />
-            ))}
+            <MapCluster markersData={resultsAll?.map((object) => ({coord: [object.coord_lat, object.coord_lon], popup: `<a href="object/${object.object_id}">${object.name_type} ${object.name_title ?? ""}${object.name_where ?? ""}</a>`}))}/>
           </MapComponent>
         }
       </div>
