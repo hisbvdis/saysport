@@ -1,0 +1,1 @@
+ALTER TABLE "section" ADD COLUMN "name_public_categories_pane" varchar NOT NULL;

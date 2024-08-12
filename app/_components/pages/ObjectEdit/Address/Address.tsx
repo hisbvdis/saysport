@@ -3,7 +3,7 @@ import Link from "next/link";
 import { create } from "mutative";
 import type * as Leaflet from "leaflet";
 import { Object_, objectTypeEnum } from "@/drizzle/schema";
-import type { DBObject, UIObject } from "@/app/_types/types";
+import type { DBObject } from "@/app/_types/types";
 import { useContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
@@ -13,7 +13,7 @@ import { Button } from "@/app/_components/ui/Button";
 import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
-import { MapComponent, MapMarker, MapControl } from "@/app/_components/ui/MapComponent";
+import { MapComponent, MapControl } from "@/app/_components/ui/MapComponent";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import { setInheritedData } from "./setInheritedData";
@@ -29,7 +29,6 @@ export default function Address() {
   const [ mapInstance, setMapInstance ] = useState<Leaflet.Map>();
   const [ liveMap, setLiveMap ] = useState<{lat: number, lon: number, zoom: number, bounds: Leaflet.LatLngBounds|undefined}>({lat: state.coord_lat, lon: state.coord_lon, zoom: 17, bounds: mapInstance?.getBounds()});
   const [ nearestObjects, setNearestObjects ] = useState<Object_[]>();
-  console.log( nearestObjects )
 
   const handleMap = {
     getCoordFromAddress: async () => {
@@ -47,7 +46,7 @@ export default function Address() {
       mapInstance?.setView([result.lat, result.lon]);
       mapInstance?.setZoom(17);
       if (!mapInstance) return;
-      setNearestObjects(await getObjectsByArea(mapInstance.getBounds().getSouth(), mapInstance.getBounds().getNorth(), mapInstance.getBounds().getWest(), mapInstance.getBounds().getEast(), state.object_id));
+      setNearestObjects(await getObjectsByArea(mapInstance.getBounds().getSouth(), mapInstance.getBounds().getNorth(), mapInstance.getBounds().getWest(), mapInstance.getBounds().getEast(), state.object_id, state.parent_id));
     },
     getAddressFromCoord: async () => {
       if (!state.coord_lat || !state.coord_lon) return;
@@ -94,7 +93,7 @@ export default function Address() {
       draft.bounds = mapInstance?.getBounds();
     }))
     if (!mapInstance) return;
-    setNearestObjects(await getObjectsByArea(mapInstance.getBounds().getSouth(), mapInstance.getBounds().getNorth(), mapInstance.getBounds().getWest(), mapInstance.getBounds().getEast(), state.object_id));
+    setNearestObjects(await getObjectsByArea(mapInstance.getBounds().getSouth(), mapInstance.getBounds().getNorth(), mapInstance.getBounds().getWest(), mapInstance.getBounds().getEast(), state.object_id, state.parent_id));
   })()}, [mapInstance])
 
   return (

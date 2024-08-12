@@ -1,0 +1,1 @@
+ALTER TABLE "section" DROP COLUMN IF EXISTS "name_public_categories_pane";

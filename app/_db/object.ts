@@ -273,13 +273,14 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
   return upsertedObject;
 }
 
-export const getObjectsByArea = async (latMin:number, latMax:number, lonMin:number, lonMax:number, currentObjectId?:number):Promise<Object_[]> => {
+export const getObjectsByArea = async (latMin:number, latMax:number, lonMin:number, lonMax:number, currentObjectId?:number, parentObjectId?:number|null):Promise<Object_[]> => {
   const dbData:Object_[]|undefined = await db.query.object.findMany({
     where: and(
       between(object.coord_lat, latMin, latMax),
       between(object.coord_lon, lonMin, lonMax),
       isNull(object.parent_id),
       currentObjectId ? ne(object.object_id, currentObjectId) : undefined,
+      parentObjectId ? ne(object.object_id, parentObjectId) : undefined,
     )
   });
   if (dbData === undefined) throw new Error("getObjectsByArea returned undefined");

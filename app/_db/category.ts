@@ -53,7 +53,6 @@ export const upsertCategory = async (state:UICategory, init: UICategory) => {
     await db.insert(category_on_section).values(sectionsAdded.map((section) => ({category_id: upsertedCategory.category_id, section_id: section.section_id})));
   }
   const sectionsDeleted = init.sections?.filter((initSection) => !state.sections?.some((stateSection) => initSection.section_id === stateSection.section_id));
-  console.log( sectionsDeleted )
   if (sectionsDeleted.length) {
     await db.delete(category_on_section).where(and(eq(category_on_section.category_id, upsertedCategory.category_id), inArray(category_on_section.section_id, sectionsDeleted.map((section) => section.section_id))));
   }

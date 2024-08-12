@@ -41,11 +41,6 @@ export default function Results() {
             <Link href={`object/${object.object_id}`}>{object.name_type} {object.name_title} {object.name_where}</Link>
             <p>{object.city?.name}, {object.address}</p>
             <hr/>
-            {/* <ul style={{display: "flex", gap: "10px", flexWrap: "wrap", listStyle: "none", paddingInlineStart: 0}}>
-              {object.objectOnOption?.map(({option}) => (
-                <li key={option?.option_id}>{option?.name}</li>
-              ))}
-            </ul> */}
           </div>
         </Card.Section>
       ))}
