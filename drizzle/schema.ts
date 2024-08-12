@@ -119,7 +119,7 @@ export type Spec = typeof spec.$inferSelect;
 // ===========================================================================
 export const section_on_spec = pgTable("section_on_spec", {
   section_id: integer("section_id").notNull().references(() => section.section_id, {onDelete: "cascade"}),
-  spec_id: integer("spec_id").notNull().references(() => spec.spec_id, { onDelete: "restrict" }),
+  spec_id: integer("spec_id").notNull().references(() => spec.spec_id, { onDelete: "cascade" }),
 }, (table) => ({
   pk: primaryKey({columns: [table.section_id, table.spec_id]})
 }))
@@ -296,7 +296,7 @@ export type ObjectOnSection = typeof object_on_section.$inferSelect;
 // ===========================================================================
 export const object_on_option = pgTable("object_on_option", {
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
-  option_id: integer("option_id").notNull().references(() => option.option_id, {onDelete: "restrict"})
+  option_id: integer("option_id").notNull().references(() => option.option_id, {onDelete: "cascade"})
 }, (table) => ({
   pk: primaryKey({columns: [table.object_id, table.option_id]})
 }))

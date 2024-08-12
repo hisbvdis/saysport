@@ -89,7 +89,12 @@ export default function SpecEdit(props:{init:UISpec}) {
           <Control className="mt15">
             <Control.Label>Order</Control.Label>
             <Control.Section>
-              <Input value={state?.order} disabled/>
+            <Input
+                name="order"
+                value={state?.order}
+                onChange={handleStateChange.value}
+                required
+              />
             </Control.Section>
           </Control>
           <Control className="mt15">

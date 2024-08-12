@@ -18,7 +18,7 @@ export default function Filters(props:Props) {
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
   const [ andSpecs, setAndSpecs ] = useState<number[]>([]);
-  const { searchParams, section, categories, commonSections } = useContext(CatalogContext);
+  const { searchParams, section, commonSections } = useContext(CatalogContext);
 
   const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:UISpec) => {
     if (e.target.checked) {
