@@ -1,14 +1,16 @@
 import { ObjectView } from "@/app/_components/pages/ObjectView";
 // -----------------------------------------------------------------------------
 import { getObjectById } from "@/app/_db/object"
+import { auth } from "@/auth";
 // -----------------------------------------------------------------------------
 
 
 export default async function ObjectViewPage({params}:Props) {
   const object = await getObjectById(Number(params.id));
+  const session = await auth();
 
   return (
-    <ObjectView init={object}/>
+    <ObjectView init={object} session={session}/>
   )
 }
 

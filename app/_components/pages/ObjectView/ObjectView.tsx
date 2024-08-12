@@ -7,11 +7,12 @@ import type { UIObject } from "@/app/_types/types";
 import { Children, Contacts, Description, Header, Specs, Usages, Gallery } from ".";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
+import type { Session } from "next-auth";
 
 
-export default function ObjectView(props:{init:UIObject}) {
+export default function ObjectView(props:{init:UIObject, session:Session}) {
   return (
-    <ObjectViewContext.Provider value={{state: props.init}}>
+    <ObjectViewContext.Provider value={{state: props.init, session: props.session}}>
       <main className={clsx(styles["objectView"], "container", "page")}>
         <Header className={styles["objectView__header"]}/>
         <article className={styles["objectView__article"]}>
@@ -33,4 +34,5 @@ export const ObjectViewContext = createContext<ObjectViewContextType>({} as Obje
 
 interface ObjectViewContextType {
   state: UIObject;
+  session:Session;
 }
