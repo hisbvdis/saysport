@@ -28,7 +28,7 @@ export default function Menu(props:Props) {
         break;
       }
       case "Enter": {
-        onSelect(focusIndex);
+        if (onSelect) onSelect(focusIndex);
         break;
       }
     }
@@ -45,7 +45,7 @@ export default function Menu(props:Props) {
 
   const handlePointerDown = (e:React.PointerEvent<HTMLLIElement>) => {
     if (e.pointerId !== 1) return;
-    onSelect(focusIndex);
+    if (onSelect) onSelect(focusIndex);
   }
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function Menu(props:Props) {
     <ul className={clsx(styles["menu"], className)} style={style} ref={itemsListRef}>
       {items?.map((item, i) => (
         <li key={i} className={clsx(styles["menu__item"], i === focusIndex && styles["menu__item--focus"])} onPointerDown={handlePointerDown} onPointerEnter={() => setFocusIndex(i)}>
-          <p style={{whiteSpace: "pre-wrap"}}>{item.label}</p>
+          <a className={styles["menu__link"]} href={item.href ?? ""} style={{whiteSpace: "pre-wrap"}}>{item.label}</a>
         </li>
       ))}
     </ul>
@@ -79,14 +79,15 @@ export default function Menu(props:Props) {
 
 interface Props {
   isShowMenu: boolean;
-  items?: Item[];
+  items?: MenuItem[];
   value?: string | number;
   className?: string;
   style?: React.CSSProperties;
-  onSelect: (index:number) => void;
+  onSelect?: (index:number) => void;
 }
 
-interface Item {
+export interface MenuItem {
   id: string | number;
   label: string | null;
+  href?:string;
 }

@@ -2,10 +2,6 @@
   --gap: 1.5em;
 }
 
-.breadcrumbs--small {
-  font-size: 0.8125rem;
-}
-
 .breadcrumbs__list {
   display: flex;
   padding-inline-start: 0;

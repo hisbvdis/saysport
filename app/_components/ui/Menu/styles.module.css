@@ -3,7 +3,7 @@
   inset-block-start: 100%;
   z-index: 1;
 
-  inline-size: 100%;
+  min-inline-size: max(100%, 150px);
   max-block-size: 500px;
   padding-inline-start: 0;
 
@@ -17,22 +17,22 @@
 }
 
 .menu__item {
+
+}
+
+.menu__link {
   display: block;
-  inline-size: 100%;
+  min-inline-size: 100%;
   min-block-size: 25px;
   padding: 5px;
 
   text-align: start;
 
-  cursor: pointer;
   border: none;
   background: none;
+  cursor: pointer;
 }
 
-.menu__item--focus {
+.menu__item--focus .menu__link {
   background-color: var(--control-hovered-backgroundColor);
-}
-
-.menu__item--placeholder {
-  color: #999;
 }
