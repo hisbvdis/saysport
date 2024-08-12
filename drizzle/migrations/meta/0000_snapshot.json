@@ -1,5 +1,5 @@
 {
-  "id": "98e67671-ae75-4e70-8c72-f083526c9731",
+  "id": "76699938-e476-4a3d-a4b6-d1860c290759",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -17,6 +17,12 @@
         "name": {
           "name": "name",
           "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         }
@@ -261,36 +267,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "schedule_inherit": {
-          "name": "schedule_inherit",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "schedule_date": {
-          "name": "schedule_date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "schedule_source": {
-          "name": "schedule_source",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "schedule_comment": {
-          "name": "schedule_comment",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "schedule_24_7": {
-          "name": "schedule_24_7",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
         "created": {
           "name": "created",
           "type": "timestamp",
@@ -448,7 +424,7 @@
           "columnsTo": [
             "option_id"
           ],
-          "onDelete": "restrict",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -639,60 +615,6 @@
       },
       "uniqueConstraints": {}
     },
-    "public.object_schedule": {
-      "name": "object_schedule",
-      "schema": "",
-      "columns": {
-        "object_id": {
-          "name": "object_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "day_num": {
-          "name": "day_num",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "time": {
-          "name": "time",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "from": {
-          "name": "from",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "to": {
-          "name": "to",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "object_schedule_object_id_object_object_id_fk": {
-          "name": "object_schedule_object_id_object_object_id_fk",
-          "tableFrom": "object_schedule",
-          "tableTo": "object",
-          "columnsFrom": [
-            "object_id"
-          ],
-          "columnsTo": [
-            "object_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.option": {
       "name": "option",
       "schema": "",
@@ -831,7 +753,7 @@
           "columnsTo": [
             "spec_id"
           ],
-          "onDelete": "restrict",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },

@@ -1,0 +1,1 @@
+ALTER TABLE "spec" DROP COLUMN IF EXISTS "is_required";

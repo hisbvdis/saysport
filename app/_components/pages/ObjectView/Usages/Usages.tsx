@@ -4,7 +4,7 @@ import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectViewContext } from "../ObjectView";
-import { sectionTypeEnum } from "@/drizzle/schema";
+import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 
 
 export default function Usages() {
@@ -12,7 +12,7 @@ export default function Usages() {
 
   return (
     <Card>
-      <Card.Heading>Использование</Card.Heading>
+      <Card.Heading>{state.type === objectTypeEnum.place ? "Использование" : "Занятия"}</Card.Heading>
       {state.sections?.filter((section) => section.section_type === sectionTypeEnum.usage).map((section) => (
         <Card.Section key={section.section_id}>
           <p>{section.name_public_singular}</p>

@@ -94,7 +94,7 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
       // phones: {orderBy: (phones, { asc }) => [asc(phones.order)]},
       // links: {orderBy: (links, { asc }) => [asc(links.order)]},
       objectOnOption: {with: {option: true}},
-      photos: true,
+      photos: {orderBy: (photos, { asc }) => [asc(photos.order)]},
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
     },
     orderBy: [desc(object.created)],
@@ -119,10 +119,13 @@ export const getObjectById = async (id:number) => {
       phones: {orderBy: (phones, { asc }) => [asc(phones.order)]},
       links: {orderBy: (links, { asc }) => [asc(links.order)]},
       objectOnOption: {with: {option: true}},
-      photos: true,
+      photos: {orderBy: (photos, { asc }) => [asc(photos.order)]},
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
       // -----------------------------------------------------------------------------
-      children: {with: {photos: true, phones: true, links: true}},
+      children: {
+        orderBy: (child, {asc}) => [asc(child.name_type)],
+        with: {photos: true, phones: true, links: true}
+      },
     }
   });
   if (dbData === undefined) throw new Error("getObjectById returned undefined");
@@ -229,7 +232,11 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
 
   const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));
   if (photosAdded?.length) {
-    await db.insert(object_photo).values(photosAdded.map((photo) => ({...photo, name: photo.name.replace("ID", String(upsertedObject.object_id)), object_id: upsertedObject.object_id})));
+    await db.insert(object_photo).values(photosAdded.map((photo) => ({...photo, photo_id:undefined, name: photo.name.replace("ID", String(upsertedObject.object_id)), object_id: upsertedObject.object_id})));
+  }
+  const photosChanged = state.photos?.filter((statePhoto) => init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID && statePhoto.order !== initPhoto.order));
+  if (photosChanged?.length) {
+    photosChanged.forEach(async (photo) => await db.update(object_photo).set({order: photo.order}).where(eq(object_photo.photo_id, photo.photo_id)));
   }
   const photosDeleted = init.photos?.filter((initPhoto) => !state.photos?.some((statePhoto) => initPhoto.uiID === statePhoto.uiID));
   if (photosDeleted?.length) {

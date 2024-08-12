@@ -44,10 +44,10 @@ export default function Usages() {
           placeholder="Добавить использование"
           requestItemsOnFirstTouch={async () =>
             (await getSectionsByFilters({objectType: state.type, sectionType: sectionTypeEnum.usage}))
-              .map((section) => ({id: section.section_id, label: section.name_service, data: section}))
+              .map((section) => ({id: section.section_id, label: section.name_public_singular, data: section}))
           }
         />
-        <RequiredInput isValidIf={Boolean(state.sections.filter((section) => section.section_type === sectionTypeEnum.usage).length > 0)}/>
+        {/* <RequiredInput isValidIf={Boolean(state.sections.filter((section) => section.section_type === sectionTypeEnum.usage).length > 0)}/> */}
       </Card.Section>
     </Card>
   )

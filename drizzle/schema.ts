@@ -230,13 +230,12 @@ export type ObjectLink = typeof object_link.$inferSelect;
 // OBJECT_PHOTO
 // ===========================================================================
 export const object_photo = pgTable("object_photo", {
+  photo_id: serial("photo_id").primaryKey(),
   object_id: integer("object_id").notNull().references(() => object.object_id),
   order: integer("order").notNull(),
   name: varchar("name").notNull(),
   uploaded: timestamp("uploaded").notNull().defaultNow(),
-}, (table) => ({
-  pk: primaryKey({columns: [table.object_id, table.order]})
-}))
+})
 
 export const objectPhotoRelations = relations(object_photo, ({ one }) => ({
   object: one(object, {fields: [object_photo.object_id], references: [object.object_id]}),

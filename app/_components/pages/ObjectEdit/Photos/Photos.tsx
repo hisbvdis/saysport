@@ -5,6 +5,7 @@ import { Card } from "@/app/_components/ui/Card";
 import { Button } from "@/app/_components/ui/Button";
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit"
+import { Input } from "@/app/_components/ui/Input";
 
 
 export default function Photos() {
@@ -28,6 +29,13 @@ export default function Photos() {
     },
     deleteAll: () => {
       setState((prevState) => create(prevState, (draft) => {draft.photos = []}))
+    },
+    changeOrder: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const photo = draft.photos?.find((photo) => photo.uiID === uiID);
+        if (!photo) return;
+        photo.order = Number(e.target.value);
+      }))
     }
   }
   return (
@@ -39,9 +47,10 @@ export default function Photos() {
       <Card.Section>
         <input type="file" onChange={handlePhotos.add} multiple/>
         <ul style={{display: "grid", gap: "15px", gridTemplateColumns: "repeat(5, 1fr)", listStyle: "none", paddingInlineStart: 0}}>
-          {state.photos?.map((photo, i) => (
-            <li key={photo.uiID}  style={{border: "1px solid black"}}>
+          {state.photos?.toSorted((a, b) => a.order - b.order).map((photo, i) => (
+            <li key={photo.uiID}  style={{position: "relative",  border: "1px solid black"}}>
               <Button onClick={() => handlePhotos.delete(photo.uiID)} style={{position: "absolute"}}>X</Button>
+              <Input value={photo.order} onChange={(e) => handlePhotos.changeOrder(e, photo.uiID)} style={{position: "absolute", insetInlineStart: "20px", inlineSize: "30px"}}/>
               <img src={photo.blob ?? `/photos/${photo.name}`} style={{width: "100%", aspectRatio: "1/1", objectFit: "contain"}} alt=""/>
             </li>
           ))}

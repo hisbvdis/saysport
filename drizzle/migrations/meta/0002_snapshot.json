@@ -1,6 +1,6 @@
 {
-  "id": "4a00659f-c287-4b28-a1b9-29408f5f2089",
-  "prevId": "c94dc061-c1d5-4b83-8da6-97912793185d",
+  "id": "2f08019e-9085-4815-afbc-02a7db86c9d7",
+  "prevId": "c6511d1b-e1d8-433a-97b9-fba02ed7bf66",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -267,36 +267,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "schedule_inherit": {
-          "name": "schedule_inherit",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "schedule_date": {
-          "name": "schedule_date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "schedule_source": {
-          "name": "schedule_source",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "schedule_comment": {
-          "name": "schedule_comment",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "schedule_24_7": {
-          "name": "schedule_24_7",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
         "created": {
           "name": "created",
           "type": "timestamp",
@@ -454,7 +424,7 @@
           "columnsTo": [
             "option_id"
           ],
-          "onDelete": "restrict",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -592,6 +562,12 @@
       "name": "object_photo",
       "schema": "",
       "columns": {
+        "photo_id": {
+          "name": "photo_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "object_id": {
           "name": "object_id",
           "type": "integer",
@@ -631,68 +607,6 @@
             "object_id"
           ],
           "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "object_photo_object_id_order_pk": {
-          "name": "object_photo_object_id_order_pk",
-          "columns": [
-            "object_id",
-            "order"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "public.object_schedule": {
-      "name": "object_schedule",
-      "schema": "",
-      "columns": {
-        "object_id": {
-          "name": "object_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "day_num": {
-          "name": "day_num",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "time": {
-          "name": "time",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "from": {
-          "name": "from",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "to": {
-          "name": "to",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "object_schedule_object_id_object_object_id_fk": {
-          "name": "object_schedule_object_id_object_object_id_fk",
-          "tableFrom": "object_schedule",
-          "tableTo": "object",
-          "columnsFrom": [
-            "object_id"
-          ],
-          "columnsTo": [
-            "object_id"
-          ],
-          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -837,7 +751,7 @@
           "columnsTo": [
             "spec_id"
           ],
-          "onDelete": "restrict",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -953,6 +867,12 @@
         },
         "is_and_in_search": {
           "name": "is_and_in_search",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_required": {
+          "name": "is_required",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false

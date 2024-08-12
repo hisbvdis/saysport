@@ -24,7 +24,8 @@ END $$;
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "category" (
 	"category_id" serial PRIMARY KEY NOT NULL,
-	"name" varchar NOT NULL
+	"name" varchar NOT NULL,
+	"order" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "category_on_section" (
@@ -64,11 +65,6 @@ CREATE TABLE IF NOT EXISTS "object" (
 	"coord_lat" double precision NOT NULL,
 	"coord_lon" double precision NOT NULL,
 	"description" varchar,
-	"schedule_inherit" boolean,
-	"schedule_date" timestamp,
-	"schedule_source" varchar,
-	"schedule_comment" varchar,
-	"schedule_24_7" boolean,
 	"created" timestamp NOT NULL,
 	"modified" timestamp DEFAULT now() NOT NULL
 );
@@ -108,14 +104,6 @@ CREATE TABLE IF NOT EXISTS "object_photo" (
 	"name" varchar NOT NULL,
 	"uploaded" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "object_photo_object_id_order_pk" PRIMARY KEY("object_id","order")
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "object_schedule" (
-	"object_id" integer NOT NULL,
-	"day_num" integer NOT NULL,
-	"time" varchar NOT NULL,
-	"from" integer NOT NULL,
-	"to" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "option" (
@@ -199,7 +187,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "object_on_option" ADD CONSTRAINT "object_on_option_option_id_option_option_id_fk" FOREIGN KEY ("option_id") REFERENCES "public"."option"("option_id") ON DELETE restrict ON UPDATE no action;
+ ALTER TABLE "object_on_option" ADD CONSTRAINT "object_on_option_option_id_option_option_id_fk" FOREIGN KEY ("option_id") REFERENCES "public"."option"("option_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -229,12 +217,6 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "object_schedule" ADD CONSTRAINT "object_schedule_object_id_object_object_id_fk" FOREIGN KEY ("object_id") REFERENCES "public"."object"("object_id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
  ALTER TABLE "option" ADD CONSTRAINT "option_spec_id_spec_spec_id_fk" FOREIGN KEY ("spec_id") REFERENCES "public"."spec"("spec_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -247,7 +229,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "section_on_spec" ADD CONSTRAINT "section_on_spec_spec_id_spec_spec_id_fk" FOREIGN KEY ("spec_id") REFERENCES "public"."spec"("spec_id") ON DELETE restrict ON UPDATE no action;
+ ALTER TABLE "section_on_spec" ADD CONSTRAINT "section_on_spec_spec_id_spec_spec_id_fk" FOREIGN KEY ("spec_id") REFERENCES "public"."spec"("spec_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

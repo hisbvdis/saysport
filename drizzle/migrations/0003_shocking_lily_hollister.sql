@@ -1,0 +1,1 @@
+ALTER TABLE "spec" ALTER COLUMN "is_required" SET DEFAULT true;

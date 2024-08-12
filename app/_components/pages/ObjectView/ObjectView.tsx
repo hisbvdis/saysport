@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { createContext } from "react";
-import { objectTypeEnum } from "@/drizzle/schema";
+import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 import type { UIObject } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
 import { Children, Contacts, Description, Header, Specs, Usages, Gallery } from ".";
@@ -18,7 +18,7 @@ export default function ObjectView(props:{init:UIObject}) {
           <Gallery/>
           {props.init.description ? <Description/> : null}
           {props.init.type === objectTypeEnum.org ? <Children/> : null}
-          {props.init.type !== objectTypeEnum.org ? <Usages/> : null}
+          {props.init.sections.filter((section) => section.section_type === sectionTypeEnum.usage).length ? <Usages/> : null}
           <Specs/>
         </article>
         <aside className={styles["objectView__aside"]}>
