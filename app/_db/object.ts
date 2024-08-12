@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, between, count, desc, eq, exists, ilike, inArray, isNull, ne, notExists, sql } from "drizzle-orm";
-import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_schedule } from "@/drizzle/schema";
+import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBObject, UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -20,7 +20,6 @@ export const getEmptyObject = async ():Promise<UIObject> => {
     type: objectTypeEnum.org,
     sections: [],
     status: objectStatusEnum.works,
-    schedules: [],
   }
 }
 
@@ -116,14 +115,13 @@ export const getObjectById = async (id:number) => {
     with: {
       statusInstead: true,
       city: true,
-      parent: {with: {schedules: true}},
+      parent: true,
       phones: {orderBy: (phones, { asc }) => [asc(phones.order)]},
       links: {orderBy: (links, { asc }) => [asc(links.order)]},
       objectOnOption: {with: {option: true}},
       photos: true,
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
       // -----------------------------------------------------------------------------
-      schedules: true,
       children: {with: {photos: true, phones: true, links: true}},
     }
   });
@@ -158,11 +156,6 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     coord_lat: state.coord_lat,
     coord_lon: state.coord_lon,
     description: state.description || null,
-    schedule_inherit: state.schedule_inherit || null,
-    schedule_date: state.schedule_date || null,
-    schedule_source: state.schedule_source || null,
-    schedule_comment: state.schedule_comment || null,
-    schedule_24_7: state.schedule_24_7 || null,
     created: state.created ? state.created : new Date(),
   };
 
@@ -232,32 +225,6 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
   const optionsDeleted = init.options?.filter((initOption) => !state.options?.some((stateOption) => initOption.option_id === stateOption.option_id));
   if (optionsDeleted?.length) {
     await db.delete(object_on_option).where(and(eq(object_on_option.object_id, upsertedObject.object_id), inArray(object_on_option.option_id, optionsDeleted.map((opt) => opt.option_id))));
-  }
-
-  const schedulesAdded = state.schedules?.filter((stateDay) => !init.schedules.some((initDay) => stateDay.day_num === initDay.day_num && stateDay.time !== ""));
-  if (schedulesAdded.length) {
-    await db.insert(object_schedule).values(schedulesAdded.map((schedule) => ({...schedule, object_id: upsertedObject.object_id})));
-    if (children.length) {
-      children.filter((child) => child.schedule_inherit).forEach(async (child) => await db.insert(object_schedule).values(schedulesAdded.map((schedule) => ({...schedule, object_id: child.object_id}))))
-    }
-  }
-  const schedulesChanged = state.schedules?.filter((stateDay) => init.schedules?.some((initDay) => stateDay.day_num === initDay.day_num && stateDay.time && stateDay.time !== initDay.time));
-  if (schedulesChanged.length) {
-    schedulesChanged.forEach(async (schedule) => await db.update(object_schedule).set({...schedule, object_id: undefined, day_num: undefined}).where(and(eq(object_schedule.object_id, upsertedObject.object_id), eq(object_schedule.day_num, schedule.day_num))));
-    if (children.length) {
-      children.filter((child) => child.schedule_inherit).forEach((child) => schedulesChanged.forEach(async (schedule) => await db.update(object_schedule).set({...schedule, object_id: undefined, day_num: undefined}).where(and(eq(object_schedule.object_id, child.object_id), eq(object_schedule.day_num, schedule.day_num)))))
-    }
-  }
-  const schedulesDeleted = init.schedules?.filter((initDay) => !state.schedules.some((stateDay) => initDay.day_num === stateDay.day_num) || state.schedules?.some((stateDay) => initDay.day_num === stateDay.day_num && !stateDay.time));
-  if (schedulesDeleted.length) {
-    schedulesDeleted.forEach(async (schedule) => await db.delete(object_schedule).where(and(eq(object_schedule.object_id, upsertedObject.object_id), eq(object_schedule.day_num, schedule.day_num))));
-    if (children.length) {
-      children.filter((child) => child.schedule_inherit).forEach(async (child) => await db.delete(object_schedule).where(and(eq(object_schedule.object_id, child.object_id), inArray(object_schedule.day_num, schedulesDeleted.map((schedule) => schedule.day_num)))));
-    }
-  }
-  const scheduleParamsIsChanged = state.schedule_24_7 !== init.schedule_24_7 || state.schedule_date !== init.schedule_date || state.schedule_comment !== init.schedule_comment || state.schedule_source !== init.schedule_source;
-  if (scheduleParamsIsChanged) {
-    children.forEach(async (child) => await db.update(object).set({schedule_24_7: state.schedule_24_7, schedule_date: state.schedule_date, schedule_comment: state.schedule_comment, schedule_source: state.schedule_source}).where(eq(object.object_id, child.object_id)));
   }
 
   const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));

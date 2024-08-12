@@ -7,7 +7,6 @@ import Address from "./Address/Address";
 import Contacts from "./Contacts/Contacts";
 import Specs from "./Specs/Specs";
 import Description from "./Description/Description";
-import Schedule from "./Schedule/Schedule";
 import Photos from "./Photos/Photos";
 import SectionItem from "./SectionItem/SectionItem";
 import Usages from "./Usages/Usages";
@@ -22,7 +21,6 @@ export {
 	Contacts,
 	Specs,
 	Description,
-  Schedule,
   Photos,
 	SectionItem,
 	Usages,

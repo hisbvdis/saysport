@@ -7,7 +7,7 @@ import { type ChangeEvent, type ChangeEventHandler, type SetStateAction, type Sy
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
-import { NameOrg, NamePlace, Address, Contacts, Specs, Description, Schedule, Photos, Usages, NameClass } from "./"
+import { NameOrg, NamePlace, Address, Contacts, Specs, Description, Photos, Usages, NameClass } from "./"
 // -----------------------------------------------------------------------------
 import { syncPhotos } from "./Photos/syncPhotos";
 import { setInheritedData } from "./Address/setInheritedData";
@@ -105,7 +105,6 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
         <Specs/>
         <Description/>
         {props.init.type === objectTypeEnum.org ? null : <Usages/>}
-        <Schedule/>
         <Photos/>
         <EditBottomPanel
           id={state.object_id}

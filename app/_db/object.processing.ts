@@ -11,7 +11,6 @@ export const objectReadProcessing = (dbData: DBObject): UIObject => {
     sections: dbData.objectOnSection?.map((objectOnSection) => sectionReadProcessing({...objectOnSection.section, description: objectOnSection.description})) ?? [],
     options: dbData.objectOnOption?.map(({ option }) => ({...option, uiID: crypto.randomUUID()})),
     photos: dbData.photos?.map((photo) => ({...photo, uiID: crypto.randomUUID()})) ?? [],
-    schedules: dbData.schedules?.map((day) => ({...day, isWork: Boolean(day.time)})) ?? [],
     parent: dbData.parent ? objectReadProcessing(dbData.parent) : null
   }
 }
