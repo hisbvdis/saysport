@@ -51,7 +51,7 @@ export default function Photos() {
             <li key={photo.uiID}  style={{position: "relative",  border: "1px solid black"}}>
               <Button onClick={() => handlePhotos.delete(photo.uiID)} style={{position: "absolute"}}>X</Button>
               <Input value={photo.order} onChange={(e) => handlePhotos.changeOrder(e, photo.uiID)} style={{position: "absolute", insetInlineStart: "20px", inlineSize: "30px"}}/>
-              <img src={photo.blob ?? `/photos/${photo.name}`} style={{width: "100%", aspectRatio: "1/1", objectFit: "contain"}} alt=""/>
+              <img src={photo.blob ?? `https://sgowovgzmzoyktqflswl.supabase.co/storage/v1/object/public/saysport/${photo.name}`} style={{width: "100%", aspectRatio: "1/1", objectFit: "contain"}} alt=""/>
             </li>
           ))}
         </ul>
