@@ -4,7 +4,7 @@ import { create } from "mutative";
 import type * as Leaflet from "leaflet";
 import type { DBObject } from "@/app/_types/types";
 import { useContext, useEffect, useState } from "react";
-import type { Object_, objectTypeEnum } from "@/drizzle/schema";
+import { type Object_, objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
