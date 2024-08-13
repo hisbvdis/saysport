@@ -1,3 +1,4 @@
+"use client";
 import { useContext, useEffect } from "react";
 // -----------------------------------------------------------------------------
 import { MapContext } from "./MapComponent";

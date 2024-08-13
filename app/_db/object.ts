@@ -6,7 +6,7 @@ import { type Object_, object_link, object, objectStatusEnum, type objectStatusU
 // -----------------------------------------------------------------------------
 import type { DBObject, UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
-import type { SearchParamsType } from "../(router)/catalog/page";
+import type { SearchParamsType } from "../(router)/page";
 import type { LatLngBounds } from "leaflet";
 
 

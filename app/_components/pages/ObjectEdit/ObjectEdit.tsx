@@ -110,7 +110,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
           id={state.object_id}
           delFunc={deleteObjectById}
           exitRedirectPath="./"
-          delRedirectPath="/catalog"
+          delRedirectPath="/"
         />
       </Form>
     </ObjectEditContext.Provider>

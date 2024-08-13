@@ -13,11 +13,11 @@ import { Pagination } from "../../ui/Pagination";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import { MapComponent } from "../../ui/MapComponent";
-import type { SearchParamsType } from "@/app/(router)/catalog/page";
+import type { SearchParamsType } from "@/app/(router)/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import MapCluster from "../../ui/MapComponent/MapCluster";
+import { MapCluster } from "../../ui/MapComponent";
 
 
 export default function Catalog(props:Props) {

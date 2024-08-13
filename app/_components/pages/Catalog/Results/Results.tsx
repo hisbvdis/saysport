@@ -2,12 +2,12 @@ import Link from "next/link";
 import { useContext } from "react";
 import { objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
+import { CatalogContext } from "../Catalog";
 import { Card } from "@/app/_components/ui/Card";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
+import { SearchPanel } from "@/app/_components/blocks/SearchPanel";
 // -----------------------------------------------------------------------------
-import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
-import SearchPanel from "@/app/_components/blocks/SearchPanel/SearchPanel";
 
 
 export default function Results() {
@@ -18,12 +18,12 @@ export default function Results() {
     <Card>
       <Card.Heading>
         <Breadcrumbs style={{fontSize: "0.85em", marginBlockEnd: "5px"}} items={[
-          {label: "Каталог", href: city || section ? "/catalog" : null},
-          {label: city?.name ?? "", href: section?.section_id ? `/catalog?city=${city?.city_id}` : null},
+          {label: "Каталог", href: city || section ? "/" : null},
+          {label: city?.name ?? "", href: section?.section_id ? `?city=${city?.city_id}` : null},
           {label: section?.name_public_plural ?? ""}
         ]}/>
         <h1 style={{fontWeight: "400"}}>
-          <span>{section?.name_public_plural ?? "Все спортивные объекты"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
+          <span>{section?.name_public_plural ?? "Спортивные объекты и секции"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
           <sup style={{fontSize: "0.5em"}}>{resultsCount}</sup>
         </h1>
         <SearchPanel/>

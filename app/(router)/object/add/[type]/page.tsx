@@ -15,7 +15,7 @@ export default async function AddObjectPage({params, searchParams}:Props) {
   return (
     <main className="container  page">
       <Breadcrumbs items={[
-        { label: "Каталог", href: "/catalog" },
+        { label: "Каталог", href: "/" },
         { label: `Добавить ${params.type === objectTypeEnum.org ? "организацию" : params.type === objectTypeEnum.place  ? "место" : "секцию"}` },
       ]}/>
       <ObjectEdit init={{...emptyObject, type: params.type as objectTypeEnum}} parent={parentObject} commonSections={commonSections}/>

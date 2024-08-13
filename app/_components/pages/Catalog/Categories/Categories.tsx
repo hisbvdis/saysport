@@ -43,7 +43,7 @@ export default function Categories(props:Props) {
                   <ul>
                     {category.sections.filter((section) => section.object_type === objectTypeEnum.org).map((section) => (
                       <li key={section.section_id}>
-                        <Link href={`/catalog/?section=${section.section_id}`}>{section.name_public_plural}</Link>
+                        <Link href={`?section=${section.section_id}`}>{section.name_public_plural}</Link>
                       </li>
                     ))}
                   </ul>
@@ -53,7 +53,7 @@ export default function Categories(props:Props) {
                   <ul>
                   {category.sections.filter((section) => section.object_type === objectTypeEnum.place).map((section) => (
                       <li key={section.section_id}>
-                        <Link href={`/catalog/?section=${section.section_id}`}>{section.name_public_plural}</Link>
+                        <Link href={`?section=${section.section_id}`}>{section.name_public_plural}</Link>
                       </li>
                     ))}
                   </ul>
@@ -63,7 +63,7 @@ export default function Categories(props:Props) {
                   <ul>
                   {category.sections.filter((section) => section.object_type === objectTypeEnum.class).map((section) => (
                       <li key={section.section_id}>
-                        <Link href={`/catalog/?section=${section.section_id}`}>{section.name_public_plural}</Link>
+                        <Link href={`?section=${section.section_id}`}>{section.name_public_plural}</Link>
                       </li>
                     ))}
                   </ul>

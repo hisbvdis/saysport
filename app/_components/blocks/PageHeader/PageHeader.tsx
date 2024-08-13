@@ -1,10 +1,10 @@
 import clsx from "clsx";
 import Link from "next/link";
+import { auth, signOut } from "@/auth";
 // -----------------------------------------------------------------------------
 import { Logo } from "@/app/_components/blocks/Logo/";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import { auth, signOut } from "@/auth";
 
 
 export default async function PageHeader() {
@@ -14,7 +14,6 @@ export default async function PageHeader() {
     <header className={styles["pageHeader"]}>
       <div className={clsx("container", styles["pageHeader__container"])}>
         <Logo/>
-        <Link className={styles["pageHeader__link"]} href="/catalog">Catalog</Link>
         {session ? (
           <>
             <Link className={styles["pageHeader__link"]} href="/admin">Админ</Link>

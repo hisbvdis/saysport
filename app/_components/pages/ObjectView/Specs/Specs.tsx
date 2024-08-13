@@ -15,7 +15,7 @@ export default function Specs() {
       <Card.Heading>Характеристики</Card.Heading>
       {state.sections?.filter((section) => section.section_type === sectionTypeEnum.section || section.section_type === sectionTypeEnum.common).map((section) => (
         <Card.Section key={section.section_id}>
-          <Link href={`/catalog?city=${state.city_id}&section=${section.section_id}`}>
+          <Link href={`/?city=${state.city_id}&section=${section.section_id}`}>
             {section.name_public_singular}
           </Link>
           {section.specs.map((spec) => (
@@ -24,7 +24,7 @@ export default function Specs() {
               <ul style={{display: "flex", gap: "10px"}}>
                 {state.options?.filter((option) => option.spec_id === spec.spec_id).map((option) => (
                   <li key={option.option_id}>
-                    <Link href={`/catalog?city=${state.city_id}&section=${section?.section_id}&options=${option.spec_id}:${option.option_id}`}>{option.name}</Link>
+                    <Link href={`/?city=${state.city_id}&section=${section?.section_id}&options=${option.spec_id}:${option.option_id}`}>{option.name}</Link>
                   </li>
                 ))}
               </ul>

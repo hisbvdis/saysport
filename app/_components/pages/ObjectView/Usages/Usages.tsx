@@ -22,7 +22,7 @@ export default function Usages() {
               <ul style={{display: "flex", gap: "10px"}}>
                 {state.options?.filter((option) => option.spec_id === spec.spec_id).map((option) => (
                   <li key={option.option_id}>
-                    <Link href={`/catalog?city=${state.city_id}&section=${section?.section_id}&options=${option.spec_id}:${option.option_id}`}>{option.name}</Link>
+                    <Link href={`/?city=${state.city_id}&section=${section?.section_id}&options=${option.spec_id}:${option.option_id}`}>{option.name}</Link>
                   </li>
                 ))}
               </ul>

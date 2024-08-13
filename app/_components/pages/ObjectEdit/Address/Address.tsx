@@ -2,9 +2,9 @@
 import Link from "next/link";
 import { create } from "mutative";
 import type * as Leaflet from "leaflet";
-import { Object_, objectTypeEnum } from "@/drizzle/schema";
 import type { DBObject } from "@/app/_types/types";
 import { useContext, useEffect, useState } from "react";
+import type { Object_, objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
@@ -13,15 +13,14 @@ import { Button } from "@/app/_components/ui/Button";
 import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
-import { MapComponent, MapControl } from "@/app/_components/ui/MapComponent";
+import { MapComponent, MapControl, MapCluster } from "@/app/_components/ui/MapComponent";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import { setInheritedData } from "./setInheritedData";
-import { getObjectsByArea, getObjectsByFilters } from "@/app/_db/object";
 import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { objectReadProcessing } from "@/app/_db/object.processing";
+import { getObjectsByArea, getObjectsByFilters } from "@/app/_db/object";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
-import MapCluster from "@/app/_components/ui/MapComponent/MapCluster";
 
 
 export default function Address() {
