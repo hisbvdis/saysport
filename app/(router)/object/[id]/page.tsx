@@ -1,7 +1,7 @@
+import { auth } from "@/auth";
 import { ObjectView } from "@/app/_components/pages/ObjectView";
 // -----------------------------------------------------------------------------
 import { getObjectById } from "@/app/_db/object"
-import { auth } from "@/auth";
 // -----------------------------------------------------------------------------
 
 

@@ -10,7 +10,7 @@ import styles from "./styles.module.css";
 import type { Session } from "next-auth";
 
 
-export default function ObjectView(props:{init:UIObject, session:Session}) {
+export default function ObjectView(props:{init:UIObject, session:Session|null}) {
   return (
     <ObjectViewContext.Provider value={{state: props.init, session: props.session}}>
       <main className={clsx(styles["objectView"], "container", "page")}>
@@ -34,5 +34,5 @@ export const ObjectViewContext = createContext<ObjectViewContextType>({} as Obje
 
 interface ObjectViewContextType {
   state: UIObject;
-  session:Session;
+  session:Session|null;
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useContext } from "react";
+import { objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
@@ -7,7 +8,6 @@ import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 import SearchPanel from "@/app/_components/blocks/SearchPanel/SearchPanel";
-import { objectTypeEnum } from "@/drizzle/schema";
 
 
 export default function Results() {
@@ -39,8 +39,8 @@ export default function Results() {
         <Card.Section key={object.object_id} style={{display: "grid", gap: "15px", gridTemplateColumns: "1fr 1.5fr"}}>
           <img src={object.photos?.length ? `/photos/${object.photos[0].name}` : "/photos/no-photo.svg"} width="250" height="210" alt="" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
           <div>
-            {object.type === objectTypeEnum.org ? (
-              <Link href={`object/${object.object_id}`}>{object.name_type} {object.name_title} {object.name_where}</Link>
+            {object.type === objectTypeEnum.org || (object.type === objectTypeEnum.place && !object.parent_id) ? (
+              <h4><Link href={`object/${object.object_id}`}>{object.name_type} {object.name_title} {object.name_where}</Link></h4>
             ) : (
               <>
                 <h4><Link href={`object/${object.object_id}`}>{object.name_type}</Link></h4>
