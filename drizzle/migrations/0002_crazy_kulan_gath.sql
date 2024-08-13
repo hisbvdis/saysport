@@ -1,1 +1,0 @@
-ALTER TABLE "spec" ADD COLUMN "is_required" boolean;

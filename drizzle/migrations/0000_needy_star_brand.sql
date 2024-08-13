@@ -99,11 +99,11 @@ CREATE TABLE IF NOT EXISTS "object_phone" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_photo" (
+	"photo_id" serial PRIMARY KEY NOT NULL,
 	"object_id" integer NOT NULL,
 	"order" integer NOT NULL,
 	"name" varchar NOT NULL,
-	"uploaded" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "object_photo_object_id_order_pk" PRIMARY KEY("object_id","order")
+	"uploaded" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "option" (

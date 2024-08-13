@@ -1,5 +1,5 @@
 {
-  "id": "76699938-e476-4a3d-a4b6-d1860c290759",
+  "id": "3629b129-b1b4-4921-aa6b-3aef5490788f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -562,6 +562,12 @@
       "name": "object_photo",
       "schema": "",
       "columns": {
+        "photo_id": {
+          "name": "photo_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "object_id": {
           "name": "object_id",
           "type": "integer",
@@ -604,15 +610,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "object_photo_object_id_order_pk": {
-          "name": "object_photo_object_id_order_pk",
-          "columns": [
-            "object_id",
-            "order"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "public.option": {
