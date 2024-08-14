@@ -6,7 +6,6 @@ import { Input } from "@/app/_components/ui/Input";
 import { Control } from "@/app/_components/ui/Control";
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit";
-import { handleQuotes } from "@/app/_utils/handleQuotes";
 
 
 export default function NameClass() {
@@ -23,7 +22,7 @@ export default function NameClass() {
               <Input
                 name="name_type"
                 value={state?.name_type}
-                onChange={(e) => handleStateChange?.value(handleQuotes(e))}
+                onChange={(e) => handleStateChange?.value(e)}
                 placeholder="Футбол"
                 required
               />
@@ -35,7 +34,7 @@ export default function NameClass() {
               <Input
                 name="name_where"
                 value={state?.name_where}
-                onChange={(e) => handleStateChange?.value(handleQuotes(e))}
+                onChange={(e) => handleStateChange?.value(e)}
                 disabled={Boolean(state?.parent_id)}
                 placeholder="в Школе №38"
                 required

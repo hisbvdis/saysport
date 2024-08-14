@@ -1,9 +1,10 @@
 "use client";
 import { create } from "mutative";
+import type * as Leaflet from "leaflet";
 import { useRouter } from "next/navigation";
 import { objectTypeEnum } from "@/drizzle/schema";
 import type { UIObject, UIOption, UISection, UISpec } from "@/app/_types/types";
-import { type ChangeEvent, type ChangeEventHandler, type SetStateAction, type SyntheticEvent, createContext, useEffect, useState } from "react";
+import { type ChangeEvent, type ChangeEventHandler, type Dispatch, type SetStateAction, type SyntheticEvent, createContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
@@ -18,6 +19,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
+  const [ mapInstance, setMapInstance ] = useState<Leaflet.Map>();
 
   const handleStateChange = {
     value: (e:ChangeEvent<HTMLInputElement>) => {
@@ -81,6 +83,11 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
     setInheritedData(props.parent, setState);
   }, [])
 
+  useEffect(() => {
+    if (!state.parent) return;
+    mapInstance?.setView([state.coord_lat, state.coord_lon]);
+  }, [mapInstance])
+
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
     const stateWithoutFiles = {...state, photos: state.photos?.map((photo) => ({...photo, file: undefined}))};
@@ -95,7 +102,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
   }
 
   return (
-    <ObjectEditContext.Provider value={{ state, setState, handleStateChange, handleSections, handleOptions }}>
+    <ObjectEditContext.Provider value={{ state, setState, handleStateChange, handleSections, handleOptions, mapInstance, setMapInstance }}>
       <Form onSubmit={handleFormSubmit}>
         {state.type === objectTypeEnum.org ? <NameOrg/> : null}
         {state.type === objectTypeEnum.place ? <NamePlace/> : null}
@@ -135,4 +142,6 @@ interface ObjectEditContextType {
     changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: UIOption) => void,
     changeRadio: (spec:UISpec, opt:UIOption) => void,
   },
+  mapInstance?: Leaflet.Map;
+  setMapInstance: Dispatch<SetStateAction<Leaflet.Map | undefined>>;
 }

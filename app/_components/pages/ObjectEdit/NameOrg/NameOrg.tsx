@@ -6,8 +6,7 @@ import { Input } from "@/app/_components/ui/Input";
 import { Control } from "@/app/_components/ui/Control";
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit";
-import { handleQuotes } from "@/app/_utils/handleQuotes";
-import { InputAddon } from "@/app/_components/ui/InputAddon";
+ import { InputAddon } from "@/app/_components/ui/InputAddon";
 
 
 export default function NameOrg() {
@@ -62,7 +61,7 @@ export default function NameOrg() {
               required
               style={{flex: "1"}}
             />
-            <InputAddon style={{flex: "4"}}>{state.name_title} {state.name_where}</InputAddon>
+            <InputAddon style={{flex: "4"}}>«{state.name_title}» {state.name_where}</InputAddon>
           </Control.Section>
         </Control>
         <Status className="mt15"/>

@@ -1,0 +1,31 @@
+.results__link {
+  display: block;
+
+  /* font-size: 1.125em; */
+  color: #0088CF;
+  text-decoration: none;
+}
+
+.results__link:hover {
+  text-decoration: underline;
+}
+
+.results__linkParent {
+  display: block;
+  margin-block-start: 5px;
+
+  font-size: 0.95em;
+  color: #646464;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.results__linkParent:hover {
+  text-decoration: underline;
+}
+
+.results__address {
+  margin-block-start: 5px;
+
+  font-size: 0.95em;
+}

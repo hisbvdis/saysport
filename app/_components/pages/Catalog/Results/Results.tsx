@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { SearchPanel } from "@/app/_components/blocks/SearchPanel";
 // -----------------------------------------------------------------------------
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import styles from "./styles.module.css";
 
 
 export default function Results() {
@@ -40,14 +41,14 @@ export default function Results() {
           <img src={object.photos?.length ? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${object.photos[0].name}` : `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/no-photo.svg`} width="250" height="210" alt="" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
           <div>
             {object.type === objectTypeEnum.org || (object.type === objectTypeEnum.place && !object.parent_id) ? (
-              <h4><Link href={`object/${object.object_id}`}>{object.name_type} {object.name_title} {object.name_where}</Link></h4>
+              <h4><Link className={styles["results__link"]} href={`object/${object.object_id}`}>{object.name_type} «{object.name_title}» {object.name_where}</Link></h4>
             ) : (
               <>
-                <h4><Link href={`object/${object.object_id}`}>{object.name_type}</Link></h4>
-                <p><Link href={`object/${object.object_id}`}>{object.name_where}</Link></p>
+                <h4><Link className={styles["results__link"]} href={`object/${object.object_id}`}>{object.name_type}</Link></h4>
+                <p><Link className={styles["results__linkParent"]} href={`object/${object.parent_id}`}>{object.name_where}</Link></p>
               </>
             )}
-            <p>{object.city?.name}, {object.address}</p>
+            <p className={styles["results__address"]}>{object.city?.name}, {object.address}</p>
             <hr/>
           </div>
         </Card.Section>

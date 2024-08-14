@@ -53,7 +53,7 @@ export default function Catalog(props:Props) {
         </main>
         {searchParams.map &&
           <MapComponent className={styles["catalog__map"]} fitBoundsArray={resultsAll.map((object) => [object.coord_lat, object.coord_lon])}>
-            <MapCluster markersData={resultsAll?.map((object) => ({coord: [object.coord_lat, object.coord_lon], popup: `<a href="object/${object.object_id}">${object.name_type} ${object.name_title ?? ""}${object.name_where ?? ""}</a>`}))}/>
+            <MapCluster markersData={resultsAll?.map((object) => ({coord: [object.coord_lat, object.coord_lon], popup: `<a href="object/${object.object_id}">${object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</a>`}))}/>
           </MapComponent>
         }
       </div>

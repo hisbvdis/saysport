@@ -22,8 +22,7 @@ export default function MapComponent(props:Props) {
     let L = await import("leaflet");
     const MarkerClusterGroup = await import("/app/_utils/leaflet.markercluster-src.js" as any);
     L = MarkerClusterGroup.func(L);
-    if (!mapContainerRef.current) return;
-    if (mapContainerRef.current.children.length > 0) return;
+    if (!mapContainerRef.current || mapContainerRef.current.children.length > 0) return;
     const map = L.map(mapContainerRef.current, { center, zoom, zoomControl });
     L.Icon.Default.imagePath = "/map/";
     map.on("contextmenu", onMapRightClick);

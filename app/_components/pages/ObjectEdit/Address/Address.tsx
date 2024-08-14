@@ -17,15 +17,13 @@ import { MapComponent, MapControl, MapCluster } from "@/app/_components/ui/MapCo
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import { setInheritedData } from "./setInheritedData";
-import { handleQuotes } from "@/app/_utils/handleQuotes";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { getObjectsByArea, getObjectsByFilters } from "@/app/_db/object";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
 
 
 export default function Address() {
-  const { state, setState, handleStateChange } = useContext(ObjectEditContext);
-  const [ mapInstance, setMapInstance ] = useState<Leaflet.Map>();
+  const { state, setState, handleStateChange, mapInstance, setMapInstance } = useContext(ObjectEditContext);
   const [ liveMap, setLiveMap ] = useState<{lat: number, lon: number, zoom: number, bounds: Leaflet.LatLngBounds|undefined}>({lat: state.coord_lat, lon: state.coord_lon, zoom: 17, bounds: mapInstance?.getBounds()});
   const [ nearestObjects, setNearestObjects ] = useState<Object_[]>();
 
@@ -106,7 +104,7 @@ export default function Address() {
               <Select
                 name="city_id"
                 value={state.city_id}
-                label={state.city?.city_id ? `${state.city?.name}, ${state.city?.country}` : ""}
+                label={state.city?.name.concat(state.city.admin1 ? `, ${state.city.admin1}` : "").concat(state.city.country ? `, ${state.city.country}` : "") ?? ""}
                 onChange={handleStateChange.valueAsNumber}
                 onChangeData={(data) => setState((prevState) => create(prevState, (draft) => {draft.city = data}))}
                 isAutocomplete
@@ -115,7 +113,7 @@ export default function Address() {
                 required
                 requestItemsOnInputChange={async (inputValue) => (
                   await getCitiesByFilters({name: inputValue})).map((city) => ({
-                    id: city.city_id, label: `${city.name}, ${city.country}`, data: city
+                    id: city.city_id, label: `${city.name.concat(city.admin1 ? `, ${city.admin1}` : "").concat(city.country ? `, ${city.country}` : "")}`, data: city
                 }))}
               />
             </Control.Section>
@@ -129,9 +127,13 @@ export default function Address() {
               <Select
                 name="parent_id"
                 value={state.parent_id}
-                label={state.parent?.name_type?.concat(state.parent.name_title ? ` ${state.parent.name_title}` : "").concat(state.parent.name_where ? ` ${state.parent.name_where}` : "")}
+                label={state.parent?.name_type?.concat(state.parent.name_title ? ` «${state.parent.name_title}»` : "").concat(state.parent.name_where ? ` ${state.parent.name_where}` : "")}
                 onChange={handleStateChange?.valueAsNumber}
-                onChangeData={(parent:DBObject) => setInheritedData(parent.object_id ? objectReadProcessing(parent) : null, setState)}
+                onChangeData={(parent:DBObject) => {
+                  setInheritedData(parent.object_id ? objectReadProcessing(parent) : null, setState);
+                  if (!parent.object_id) return;
+                  mapInstance?.setView([parent.coord_lat, parent.coord_lon])
+                }}
                 isAutocomplete
                 placeholder="Введите название"
                 disabled={!state.city_id}
@@ -185,19 +187,19 @@ export default function Address() {
             zoom={17}
             liftMapInstance={setMapInstance}
             onMapRightClick={handleMap.rightClick}
-            onMapDrag={(e) => setLiveMap((prevState) => create(prevState, (draft) => {
-              draft.lat = e.target.getCenter().lat;
-              draft.lon = e.target.getCenter().lng;
-              draft.zoom = e.target.getZoom();
-            }))}
+            onMapDrag={async (e) => {
+              setLiveMap((prevState) => create(prevState, (draft) => {
+                draft.lat = e.target.getCenter().lat;
+                draft.lon = e.target.getCenter().lng;
+                draft.zoom = e.target.getZoom();
+              }));
+              setNearestObjects(await getObjectsByArea(e.target.getBounds().getSouth(), e.target.getBounds().getNorth(), e.target.getBounds().getWest(), e.target.getBounds().getEast(), state.object_id, state.parent_id));
+            }}
           >
-            <MapCluster markersData={nearestObjects
-              ?.map((object) => ({coord: [object.coord_lat, object.coord_lon] as Leaflet.LatLngTuple, popup: `<a href="object/${object.object_id}">${object.name_type} ${object.name_title ?? ""}${object.name_where ?? ""}</a>`, iconUrl: "/map/marker-icon-secondary.png", draggable: false, onDragEnd: handleMap.markerDragEnd}))
-              .concat({coord: [state.coord_lat, state.coord_lon] as Leaflet.LatLngTuple, popup: "Текущий объект", iconUrl: "", draggable: Boolean(!state.coord_inherit), onDragEnd: handleMap.markerDragEnd})
-               ?? []}/>
-            <MapControl html={`<a href='https://www.google.com/maps/@${liveMap.lat},${liveMap.lon},${liveMap.zoom}z' target='blank'>Google<a/>`}/>
+            <MapCluster markersData={nearestObjects?.map((object) => ({coord: [object.coord_lat, object.coord_lon] as Leaflet.LatLngTuple, popup: `<a href="object/${object.object_id}">${object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</a>`, iconUrl: "/map/marker-icon-secondary.png", draggable: false, onDragEnd: handleMap.markerDragEnd})).concat({coord: [state.coord_lat, state.coord_lon] as Leaflet.LatLngTuple, popup: "Текущий объект", iconUrl: "", draggable: Boolean(!state.coord_inherit), onDragEnd: handleMap.markerDragEnd}) ?? []}/>
+            <MapControl html={`<a href='https://www.google.com/maps/search/${liveMap.lat},${liveMap.lon}/@${liveMap.lat},${liveMap.lon},${liveMap.zoom}z' target='blank'>Google<a/>`}/>
             <MapControl html={`<a href='https://yandex.ru/maps/?ll=${liveMap.lon}%2C${liveMap.lat}&z=${liveMap.zoom}' target='blank'>Яндекс<a/>`}/>
-            <MapControl html={`<a href='https://2gis.ru/?m=${liveMap.lon}%2C${liveMap.lat}%2F${liveMap.zoom}' target='blank'>2Гис<a/>`}/>
+            <MapControl html={`<a href='https://2gis.ru/?m=${liveMap.lon}%2C${liveMap.lat}/${liveMap.zoom}' target='blank'>2Гис<a/>`}/>
           </MapComponent>
         </div>
       </Card.Section>

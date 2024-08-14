@@ -39,7 +39,7 @@ export const getObjectsCountByFilters = async (filters?:Filters) => {
     : {}
   )
   const dbData = await db.select({count: count()}).from(object).where(and(
-    query ? ilike(sql`TRIM(CONCAT(${object.name_type}, COALESCE(NULLIF(CONCAT(' ', ${object.name_title}), ' '), ''), COALESCE(NULLIF(CONCAT(' ', ${object.name_where}), ' '), '')))` as any, `%${query}%`) : undefined,
+    query ? ilike(sql`TRIM(CONCAT(${object.name_type}, COALESCE(NULLIF(CONCAT(' ', '«' || ${object.name_title} || '»'), ' '), ''), COALESCE(NULLIF(CONCAT(' ', ${object.name_where}), ' '), '')))` as any, `%${query}%`) : undefined,
     cityId ? eq(object.city_id, cityId) : undefined,
     type ? eq(object.type, type) : undefined,
     sectionId ? exists(db.select().from(object_on_section).where(and(eq(object.object_id, object_on_section.object_id), eq(object_on_section.section_id, sectionId)))) : undefined,
@@ -74,7 +74,7 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
   )
   const dbData = await db.query.object.findMany({
     where: and(
-      query ? ilike(sql`TRIM(CONCAT(${object.name_type}, COALESCE(NULLIF(CONCAT(' ', ${object.name_title}), ' '), ''), COALESCE(NULLIF(CONCAT(' ', ${object.name_where}), ' '), '')))` as any, `%${query}%`) : undefined,
+      query ? ilike(sql`TRIM(CONCAT(${object.name_type}, COALESCE(NULLIF(CONCAT(' ', '«' || ${object.name_title} || '»'), ' '), ''), COALESCE(NULLIF(CONCAT(' ', ${object.name_where}), ' '), '')))` as any, `%${query}%`) : undefined,
       cityId ? eq(object.city_id, cityId) : undefined,
       type ? eq(object.type, type) : undefined,
       sectionId ? exists(db.select().from(object_on_section).where(and(eq(object.object_id, object_on_section.object_id), eq(object_on_section.section_id, sectionId)))) : undefined,
@@ -202,7 +202,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     linksChanged.forEach(async (changedLink) => await db.update(object_link).set({...changedLink, object_id: undefined}).where(and(eq(object_link.object_id, upsertedObject.object_id), eq(object_link.order, changedLink.order))));
     children.length && children.forEach(async (child) => linksChanged.forEach(async (changedLink) => await db.update(object_link).set({...changedLink, object_id: undefined}).where(and(eq(object_link.object_id, child.object_id), eq(object_link.order, changedLink.order)))));
   }
-  const linksDeleted = init.links?.filter((initLink) => !state.links?.some((stateLink) => initLink.order === stateLink.order));
+  const linksDeleted = init.links?.filter((initLink) => !initLink.value || !state.links?.some((stateLink) => initLink.order === stateLink.order));
   if (linksDeleted?.length) {
     await db.delete(object_link).where(and(eq(object_link.object_id, upsertedObject.object_id), inArray(object_link.order, linksDeleted.map((deletedLink) => deletedLink.order))));
     children.length && children.forEach(async (child) => linksDeleted.forEach(async () => await db.delete(object_link).where(and(eq(object_link.object_id, child.object_id), inArray(object_link.order, linksDeleted.map((deletedLink) => deletedLink.order))))));

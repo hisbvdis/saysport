@@ -18,6 +18,8 @@ export default function MapCluster(props:{markersData:MapMarkerProps[]}) {
     props.markersData?.forEach((markerData) => {
       const markerIcon = L.icon({iconUrl: markerData.iconUrl ? markerData.iconUrl : "/map/marker-icon.png", iconSize: [25, 41], iconAnchor: [12, 40], popupAnchor: [0, -40], shadowUrl: "/map/marker-shadow.png", shadowSize: [41, 41], shadowAnchor: [13, 40], });
       const marker = L.marker(markerData.coord, { draggable: markerData.draggable, icon: markerIcon, zIndexOffset: markerData.zIndexOffset });
+      if (markerData.onDragEnd) marker.on("dragend", markerData.onDragEnd);
+      if (markerData.onClick) marker.on("click", markerData.onClick);
       if (markerData.popup) marker.bindPopup(markerData.popup);
       markerClusterGroup.addLayer(marker);
     })
