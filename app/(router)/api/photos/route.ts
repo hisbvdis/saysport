@@ -28,7 +28,7 @@ export async function POST(request:NextRequest) {
       .toBuffer();
       // .toFile(`./public/photos/${name}`);
     const uploadCommand = new PutObjectCommand({
-      Bucket: 'saysport',
+      Bucket: 'photos',
       Key: name,
       Body: compressedFile,
       ContentType: 'image/webp',
@@ -45,7 +45,7 @@ export async function DELETE(request:NextRequest) {
     // if (existsSync(`./public/photos/${name}`)) unlinkSync(`./public/photos/${name}`);
   // }
   s3Client.send(new DeleteObjectsCommand({
-    Bucket: 'saysport',
+    Bucket: 'photos',
     Delete: {
       Objects: names.map((name) => ({Key: name as string})),
     },

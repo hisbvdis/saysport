@@ -21,7 +21,7 @@ export default function Children() {
             {state.children?.filter((child) => child.type === objectTypeEnum.place).map((child) => (
               <li key={child.object_id}>
                 <Link href={`/object/${child.object_id}`} style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "5px"}}>
-                  <img src={child.photos?.length ? `https://sgowovgzmzoyktqflswl.supabase.co/storage/v1/object/public/saysport/${child.photos[0].name}` : "https://sgowovgzmzoyktqflswl.supabase.co/storage/v1/object/public/saysport/no-photo.svg"} width="178" height="120" style={{width: "178px", height: "120px", objectFit: "cover"}} alt="" loading="lazy"/>
+                  <img src={child.photos?.length ? `${process.env.PHOTOS_PATH}/${child.photos[0].name}` : `${process.env.PHOTOS_PATH}/no-photo.svg`} width="178" height="120" style={{width: "178px", height: "120px", objectFit: "cover"}} alt="" loading="lazy"/>
                   <span style={{textAlign: "center"}}>{child.name_type}</span>
                 </Link>
               </li>
@@ -40,7 +40,7 @@ export default function Children() {
             {state.children?.filter((child) => child.type === objectTypeEnum.class).map((child) => (
               <li key={child.object_id}>
                 <Link href={`/object/${child.object_id}`} style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "5px"}}>
-                  <img src={child.photos?.length ? `https://sgowovgzmzoyktqflswl.supabase.co/storage/v1/object/public/saysport/${child.photos[0].name}` : "https://sgowovgzmzoyktqflswl.supabase.co/storage/v1/object/public/saysport/no-photo.svg"} width="178" height="120" style={{width: "178px", height: "120px", objectFit: "cover"}} alt="" loading="lazy"/>
+                  <img src={child.photos?.length ? `${process.env.PHOTOS_PATH}/${child.photos[0].name}` : `${process.env.PHOTOS_PATH}/no-photo.svg`} width="178" height="120" style={{width: "178px", height: "120px", objectFit: "cover"}} alt="" loading="lazy"/>
                   <span style={{textAlign: "center"}}>{child.name_type}</span>
                 </Link>
               </li>
