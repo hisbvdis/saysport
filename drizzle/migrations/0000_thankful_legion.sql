@@ -128,12 +128,6 @@ CREATE TABLE IF NOT EXISTS "section_on_spec" (
 	CONSTRAINT "section_on_spec_section_id_spec_id_pk" PRIMARY KEY("section_id","spec_id")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "section_on_usage" (
-	"section_id" integer NOT NULL,
-	"usage_id" integer NOT NULL,
-	CONSTRAINT "section_on_usage_section_id_usage_id_pk" PRIMARY KEY("section_id","usage_id")
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "spec" (
 	"spec_id" serial PRIMARY KEY NOT NULL,
 	"name_service" varchar NOT NULL,
@@ -230,18 +224,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "section_on_spec" ADD CONSTRAINT "section_on_spec_spec_id_spec_spec_id_fk" FOREIGN KEY ("spec_id") REFERENCES "public"."spec"("spec_id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "section_on_usage" ADD CONSTRAINT "section_on_usage_section_id_section_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "public"."section"("section_id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "section_on_usage" ADD CONSTRAINT "section_on_usage_usage_id_section_section_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."section"("section_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

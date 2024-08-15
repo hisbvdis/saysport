@@ -1,5 +1,5 @@
 {
-  "id": "d258895a-4295-4c7a-bdd7-ae1c8208a932",
+  "id": "36e39187-75d1-4e3b-bea4-ad8fdc7ea5fc",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -761,63 +761,6 @@
           "columns": [
             "section_id",
             "spec_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "public.section_on_usage": {
-      "name": "section_on_usage",
-      "schema": "",
-      "columns": {
-        "section_id": {
-          "name": "section_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "usage_id": {
-          "name": "usage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "section_on_usage_section_id_section_section_id_fk": {
-          "name": "section_on_usage_section_id_section_section_id_fk",
-          "tableFrom": "section_on_usage",
-          "tableTo": "section",
-          "columnsFrom": [
-            "section_id"
-          ],
-          "columnsTo": [
-            "section_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "section_on_usage_usage_id_section_section_id_fk": {
-          "name": "section_on_usage_usage_id_section_section_id_fk",
-          "tableFrom": "section_on_usage",
-          "tableTo": "section",
-          "columnsFrom": [
-            "usage_id"
-          ],
-          "columnsTo": [
-            "section_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "section_on_usage_section_id_usage_id_pk": {
-          "name": "section_on_usage_section_id_usage_id_pk",
-          "columns": [
-            "section_id",
-            "usage_id"
           ]
         }
       },
