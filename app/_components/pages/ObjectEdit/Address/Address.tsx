@@ -42,8 +42,10 @@ export default function Address() {
       }));
       mapInstance?.setView([result.lat, result.lon]);
       mapInstance?.setZoom(17);
-      if (!mapInstance) return;
-      setNearestObjects(await getObjectsByArea(mapInstance.getBounds().getSouth(), mapInstance.getBounds().getNorth(), mapInstance.getBounds().getWest(), mapInstance.getBounds().getEast(), state.object_id, state.parent_id));
+      setLiveMap((prevState) => create(prevState, (draft) => {
+        draft.lat = result.lat;
+        draft.lon = result.lng;
+      }));
     },
     getAddressFromCoord: async () => {
       if (!state.coord_lat || !state.coord_lon) return;
@@ -91,7 +93,7 @@ export default function Address() {
     }))
     if (!mapInstance) return;
     setNearestObjects(await getObjectsByArea(mapInstance.getBounds().getSouth(), mapInstance.getBounds().getNorth(), mapInstance.getBounds().getWest(), mapInstance.getBounds().getEast(), state.object_id, state.parent_id));
-  })()}, [mapInstance])
+  })()}, [mapInstance, liveMap.lat])
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
@@ -193,7 +195,6 @@ export default function Address() {
                 draft.lon = e.target.getCenter().lng;
                 draft.zoom = e.target.getZoom();
               }));
-              setNearestObjects(await getObjectsByArea(e.target.getBounds().getSouth(), e.target.getBounds().getNorth(), e.target.getBounds().getWest(), e.target.getBounds().getEast(), state.object_id, state.parent_id));
             }}
           >
             <MapCluster markersData={nearestObjects?.map((object) => ({coord: [object.coord_lat, object.coord_lon] as Leaflet.LatLngTuple, popup: `<a href="object/${object.object_id}">${object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</a>`, iconUrl: "/map/marker-icon-secondary.png", draggable: false, onDragEnd: handleMap.markerDragEnd})).concat({coord: [state.coord_lat, state.coord_lon] as Leaflet.LatLngTuple, popup: "Текущий объект", iconUrl: "", draggable: Boolean(!state.coord_inherit), onDragEnd: handleMap.markerDragEnd}) ?? []}/>

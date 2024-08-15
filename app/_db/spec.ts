@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/drizzle/client";
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { type Spec, objectTypeEnum, type objectTypeUnion, option, optionsNumberEnum, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
@@ -23,15 +23,17 @@ export const getEmptySpec = async ():Promise<UISpec> => {
 }
 
 export const getAllSpecs = async ():Promise<Spec[]> => {
-  const dbData = await db.select().from(spec);
+  const dbData = await db.query.spec.findMany();
   return dbData;
 }
 
 export const getSpecsByFilters = async (filters:{objectType?:objectTypeUnion}):Promise<Spec[]> => {
   const objectType = filters.objectType;
-  const dbData = await db.select().from(spec).where(
-    objectType ? eq(spec.object_type, objectType) : undefined
-  );
+  const dbData = await db.query.spec.findMany({
+    where: and(
+      objectType ? eq(spec.object_type, objectType) : undefined
+    )
+  })
   return dbData;
 }
 

@@ -46,11 +46,11 @@ export default function SectionEdit(props:{init:UISection}) {
         draft.specs = draft.specs?.filter((spec) => spec.spec_id !== id);
       }))
     },
-    changeOrder: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
+    changeOrder: (e:ChangeEvent<HTMLInputElement>, spec:UISpec) => {
       setState((prevState) => create(prevState, (draft) => {
-        const spec = draft.specs?.find((spec) => spec.uiID === uiID);
-        if (!spec) return;
-        spec.order = Number(e.target.value);
+        const specItem = draft.specs?.find((draftSpec) => draftSpec.spec_id === spec?.spec_id);
+        if (!specItem) return;
+        specItem.order = Number(e.target.value);
       }))
     },
   }
@@ -180,7 +180,7 @@ export default function SectionEdit(props:{init:UISection}) {
               <li key={spec.spec_id} style={{display: "flex"}}>
                 <Button onClick={() => handleSpecs.delete(spec.spec_id)}>X</Button>
                 <InputAddon>{spec.spec_id}</InputAddon>
-                <Input value={spec.order} onChange={(e) => handleSpecs.changeOrder(e, spec.uiID)} required style={{flex: "0 1 40px"}}/>
+                <Input value={spec.order} onChange={(e) => handleSpecs.changeOrder(e, spec)} required style={{flex: "0 1 40px"}}/>
                 <Link href={`/admin/specs/${spec.spec_id}`} style={{alignSelf: "center"}}>{spec.name_service}</Link>
               </li>
             ))}
@@ -207,7 +207,7 @@ export default function SectionEdit(props:{init:UISection}) {
                   <Button onClick={() => handleUsages.delete(section.section_id)}>X</Button>
                   <InputAddon>{section.section_id}</InputAddon>
                   {/* <Input value={section.order} onChange={(e) => handleSpecs.changeOrder(e, section.uiID)} required style={{flex: "0 1 40px"}}/> */}
-                  <Link href={`/admin/specs/${section.section_id}`} style={{alignSelf: "center"}}>{section.name_service}</Link>
+                  <Link href={`/admin/sections/${section.section_id}`} style={{alignSelf: "center"}}>{section.name_service}</Link>
                 </li>
               ))}
             </ul>

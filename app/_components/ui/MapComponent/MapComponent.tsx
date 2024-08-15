@@ -26,13 +26,13 @@ export default function MapComponent(props:Props) {
     const map = L.map(mapContainerRef.current, { center, zoom, zoomControl });
     L.Icon.Default.imagePath = "/map/";
     map.on("contextmenu", onMapRightClick);
-    map.on("moveend", onMapDrag);
+    map.on("dragend", onMapDrag);
     setL(L);
     setMap(map);
     liftMapInstance(map);
     return (() => {
       map.off("contextmenu");
-      map.off("moveend");
+      map.off("dragend");
     })
   })()}, [])
 
