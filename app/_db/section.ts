@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, eq, ilike, inArray } from "drizzle-orm";
-import { objectTypeEnum, type objectTypeUnion, section, section_on_spec, section_on_usage, sectionTypeEnum, type sectionTypeUnion, spec } from "@/drizzle/schema";
+import { objectTypeEnum, type objectTypeUnion, section, section_on_spec, sectionTypeEnum, type sectionTypeUnion, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBSection, UISection } from "@/app/_types/types";
 import { sectionReadProcessing } from "./section.processing";
@@ -17,7 +17,6 @@ export const getEmptySection = async ():Promise<UISection> => {
     name_public_plural: "",
     name_public_singular: "",
     specs: [],
-    usages: [],
     uiID: crypto.randomUUID(),
   }
 }
@@ -52,11 +51,12 @@ export const getSectionById = async (id:number):Promise<UISection> => {
     where: eq(section.section_id, id),
     with: {
       sectionOnSpec: {with: {spec: {with: {options: true}}}},
-      sectionOnUsage: {with: {usage: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}}
+      sectionOnUsage: {with: {usage: true}},
     },
   }) satisfies DBSection|undefined;
   if (dbData === undefined) throw new Error("getSectionById returned undefined");
   const processed = sectionReadProcessing(dbData);
+  console.log( processed )
   return processed;
 }
 
@@ -88,15 +88,6 @@ export const upsertSection = async (state:UISection, init: UISection) => {
   const specsChanged = state.specs?.filter((stateSpec) => init.specs?.some((initSpec) => stateSpec.uiID === initSpec.uiID && (stateSpec.order !== initSpec.order)));
   if (specsChanged.length) {
     specsChanged?.forEach(async (item) => await db.update(spec).set(item).where(eq(spec.spec_id, item.spec_id)));
-  }
-
-  const usagesAdded = state.usages?.filter((stateUsage) => !init.usages?.some((initUsages) => stateUsage.section_id === initUsages.section_id));
-  if (usagesAdded.length) {
-    await db.insert(section_on_usage).values(usagesAdded.map((usage) => ({section_id: upsertedSection.section_id, usage_id: usage.section_id})));
-  }
-  const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.section_id === stateUsage.section_id));
-  if (usagesDeleted.length) {
-    await db.delete(section_on_usage).where(and(eq(section_on_usage.section_id, upsertedSection.section_id), inArray(section_on_usage.usage_id, usagesDeleted.map((usage) => usage.section_id))));
   }
 
   revalidatePath("/admin/sections");

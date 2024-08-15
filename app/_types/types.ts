@@ -1,4 +1,4 @@
-import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectPhoto, Category, CategoryOnSection } from "@/drizzle/schema";
+import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectPhoto, Category, CategoryOnSection, ObjectOnUsage, Usage, SectionOnUsage, costTypeEnum, costTypeUnion } from "@/drizzle/schema";
 
 // =============================================================================
 // DB TYPES
@@ -9,7 +9,7 @@ export interface DBCategory extends Category {
 
 export interface DBSection extends Section {
   sectionOnSpec?: (SectionOnSpec & { spec: DBSpec })[];
-  description?:string|null;
+  sectionOnUsage?: (SectionOnUsage & {usage: Usage})[]
 }
 
 export interface DBSpec extends Spec {
@@ -26,6 +26,7 @@ export interface DBObject extends Object_ {
   links?: ObjectLink[],
   objectOnSection?: (ObjectOnSection & {section: Section & {sectionOnSpec: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}, description:string|null})[];
   objectOnOption?: (ObjectOnOption & {option: Option})[];
+  objectOnUsage?: (ObjectOnUsage & {usage: Usage})[];
   photos?: ObjectPhoto[];
   children?: DBObject[];
 }
@@ -45,8 +46,13 @@ export interface UISpec extends Spec {
 
 export interface UISection extends Section {
   specs: UISpec[];
-  description?:string|null;
+  usages: Usage[];
   uiID: string;
+}
+
+export interface UIUsage extends Usage {
+  cost: costTypeUnion;
+  description: string|null;
 }
 
 export interface UICategory extends Category {
@@ -63,10 +69,11 @@ export interface UIObject extends Partial<Object_> {
   statusInstead?: Object_ | null;
   city?: City;
   parent?: UIObject | null;
-  phones?: (ObjectPhone & {uiID: string})[];
-  links?: (ObjectLink & {uiID: string})[];
+  phones: (ObjectPhone & {uiID: string})[];
+  links: (ObjectLink & {uiID: string})[];
   sections: UISection[];
-  options?: UIOption[];
+  options: UIOption[];
+  usages: UIUsage[];
   photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
 }

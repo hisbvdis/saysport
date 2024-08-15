@@ -4,8 +4,8 @@ import { Card } from "@/app/_components/ui/Card";
 import { DelBtn } from "@/app/_components/ui/DelBtn";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 // -----------------------------------------------------------------------------
-import { deleteSectionById, getAllSections } from "@/app/_db/section";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
+import { deleteSectionById, getAllSections } from "@/app/_db/section";
 
 
 export default async function SectionListPage() {
@@ -58,17 +58,6 @@ export default async function SectionListPage() {
           <h3>Общие разделы</h3>
           <ul>
             {sections.filter(({section_type}) => section_type === sectionTypeEnum.common).map((section) => (
-              <li key={section.section_id} style={{display: "flex", gap: "10px"}}>
-                <DelBtn id={section.section_id} delFunc={deleteSectionById}/>
-                <Link href={`/admin/sections/${section.section_id}`}>{section.name_service}</Link>
-              </li>
-            ))}
-          </ul>
-        </Card.Section>
-        <Card.Section>
-          <h3>Использования</h3>
-          <ul>
-            {sections.filter(({section_type}) => section_type === sectionTypeEnum.usage).map((section) => (
               <li key={section.section_id} style={{display: "flex", gap: "10px"}}>
                 <DelBtn id={section.section_id} delFunc={deleteSectionById}/>
                 <Link href={`/admin/sections/${section.section_id}`}>{section.name_service}</Link>

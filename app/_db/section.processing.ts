@@ -6,7 +6,7 @@ export const sectionReadProcessing = (dbData:DBSection):UISection => {
   return {
     ...dbData,
     specs: dbData.sectionOnSpec?.map(({spec}) => specReadProcessing(spec)) ?? [],
-    usages: dbData.sectionOnUsage?.map(({usage}) => sectionReadProcessing(usage)) ?? [],
+    usages: dbData.sectionOnUsage?.map(({usage}) => usage) ?? [],
     uiID: crypto.randomUUID()
   }
 }

@@ -24,6 +24,9 @@ export default async function AdminPage() {
           <li>
             <Link href="/admin/specs">Характеристики</Link>
           </li>
+          <li>
+            <Link href="/admin/usages">Использование</Link>
+          </li>
         </ul>
       </Card>
     </div>

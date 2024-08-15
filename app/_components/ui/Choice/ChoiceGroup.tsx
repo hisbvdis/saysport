@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { type ReactEventHandler, createContext, useContext, useId, useRef } from "react"
+import { ChangeEvent, type ReactEventHandler, createContext, useContext, useId, useRef } from "react"
 import { ControlContext } from "../Control";
 import styles from "./styles.module.css";
 
@@ -39,7 +39,7 @@ interface Props {
   name?: string;
   valueToCompareWith?: string | boolean;
   arrayToCompareWith?: string[];
-  onChange?: ReactEventHandler;
+  onChange?: (e:ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;

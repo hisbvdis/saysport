@@ -1,5 +1,5 @@
 {
-  "id": "36e39187-75d1-4e3b-bea4-ad8fdc7ea5fc",
+  "id": "db5fc70d-dceb-40d9-b62e-e9d49a50816d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -439,6 +439,74 @@
       },
       "uniqueConstraints": {}
     },
+    "public.object_on_schedule": {
+      "name": "object_on_schedule",
+      "schema": "",
+      "columns": {
+        "object_id": {
+          "name": "object_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "usage_id": {
+          "name": "usage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "schedule_id": {
+          "name": "schedule_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "object_on_schedule_object_id_object_object_id_fk": {
+          "name": "object_on_schedule_object_id_object_object_id_fk",
+          "tableFrom": "object_on_schedule",
+          "tableTo": "object",
+          "columnsFrom": [
+            "object_id"
+          ],
+          "columnsTo": [
+            "object_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "object_on_schedule_usage_id_usage_usage_id_fk": {
+          "name": "object_on_schedule_usage_id_usage_usage_id_fk",
+          "tableFrom": "object_on_schedule",
+          "tableTo": "usage",
+          "columnsFrom": [
+            "usage_id"
+          ],
+          "columnsTo": [
+            "usage_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "object_on_schedule_schedule_id_schedule_schedule_id_fk": {
+          "name": "object_on_schedule_schedule_id_schedule_schedule_id_fk",
+          "tableFrom": "object_on_schedule",
+          "tableTo": "schedule",
+          "columnsFrom": [
+            "schedule_id"
+          ],
+          "columnsTo": [
+            "schedule_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.object_on_section": {
       "name": "object_on_section",
       "schema": "",
@@ -500,6 +568,98 @@
           ]
         }
       },
+      "uniqueConstraints": {}
+    },
+    "public.object_on_usage": {
+      "name": "object_on_usage",
+      "schema": "",
+      "columns": {
+        "object_id": {
+          "name": "object_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "usage_id": {
+          "name": "usage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cost": {
+          "name": "cost",
+          "type": "costTYpe",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "schedule_inherit": {
+          "name": "schedule_inherit",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_date": {
+          "name": "schedule_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_source": {
+          "name": "schedule_source",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_comment": {
+          "name": "schedule_comment",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_24_7": {
+          "name": "schedule_24_7",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "object_on_usage_object_id_object_object_id_fk": {
+          "name": "object_on_usage_object_id_object_object_id_fk",
+          "tableFrom": "object_on_usage",
+          "tableTo": "object",
+          "columnsFrom": [
+            "object_id"
+          ],
+          "columnsTo": [
+            "object_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "object_on_usage_usage_id_usage_usage_id_fk": {
+          "name": "object_on_usage_usage_id_usage_usage_id_fk",
+          "tableFrom": "object_on_usage",
+          "tableTo": "usage",
+          "columnsFrom": [
+            "usage_id"
+          ],
+          "columnsTo": [
+            "usage_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "public.object_phone": {
@@ -661,6 +821,46 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.schedule": {
+      "name": "schedule",
+      "schema": "",
+      "columns": {
+        "schedule_id": {
+          "name": "schedule_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "day_num": {
+          "name": "day_num",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "time": {
+          "name": "time",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "from": {
+          "name": "from",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "to": {
+          "name": "to",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.section": {
       "name": "section",
       "schema": "",
@@ -766,6 +966,55 @@
       },
       "uniqueConstraints": {}
     },
+    "public.section_on_usage": {
+      "name": "section_on_usage",
+      "schema": "",
+      "columns": {
+        "section_id": {
+          "name": "section_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "usage_id": {
+          "name": "usage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "section_on_usage_section_id_section_section_id_fk": {
+          "name": "section_on_usage_section_id_section_section_id_fk",
+          "tableFrom": "section_on_usage",
+          "tableTo": "section",
+          "columnsFrom": [
+            "section_id"
+          ],
+          "columnsTo": [
+            "section_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "section_on_usage_usage_id_usage_usage_id_fk": {
+          "name": "section_on_usage_usage_id_usage_usage_id_fk",
+          "tableFrom": "section_on_usage",
+          "tableTo": "usage",
+          "columnsFrom": [
+            "usage_id"
+          ],
+          "columnsTo": [
+            "usage_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.spec": {
       "name": "spec",
       "schema": "",
@@ -819,9 +1068,52 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
+    },
+    "public.usage": {
+      "name": "usage",
+      "schema": "",
+      "columns": {
+        "usage_id": {
+          "name": "usage_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name_service": {
+          "name": "name_service",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name_public": {
+          "name": "name_public",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "object_type": {
+          "name": "object_type",
+          "type": "objectType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     }
   },
   "enums": {
+    "public.costTYpe": {
+      "name": "costTYpe",
+      "schema": "public",
+      "values": [
+        "paid",
+        "free"
+      ]
+    },
     "public.objectStatus": {
       "name": "objectStatus",
       "schema": "public",
@@ -855,8 +1147,7 @@
       "schema": "public",
       "values": [
         "section",
-        "common",
-        "usage"
+        "common"
       ]
     }
   },

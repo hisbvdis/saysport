@@ -2,12 +2,11 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, between, count, desc, eq, exists, ilike, inArray, isNull, ne, notExists, sql } from "drizzle-orm";
-import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo } from "@/drizzle/schema";
+import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBObject, UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
 import type { SearchParamsType } from "../(router)/page";
-import type { LatLngBounds } from "leaflet";
 
 
 export const getEmptyObject = async ():Promise<UIObject> => {
@@ -19,6 +18,7 @@ export const getEmptyObject = async ():Promise<UIObject> => {
     coord_lon: 0,
     type: objectTypeEnum.org,
     sections: [],
+    usages: [],
     status: objectStatusEnum.works,
   }
 }
@@ -121,6 +121,7 @@ export const getObjectById = async (id:number) => {
       objectOnOption: {with: {option: true}},
       photos: {orderBy: (photos, { asc }) => [asc(photos.order)]},
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
+      objectOnUsage: {with: {usage: true}},
       // -----------------------------------------------------------------------------
       children: {
         orderBy: (child, {asc}) => [asc(child.name_type)],
@@ -212,10 +213,6 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
   if (sectionsAdded?.length) {
     await db.insert(object_on_section).values(sectionsAdded.map((section) => ({...section, object_id: upsertedObject.object_id})));
   }
-  const sectionsChanged = state.sections?.filter((stateSection) => init.sections?.some((initSection) => stateSection.section_id === initSection.section_id && stateSection.description !== initSection.description));
-  if (sectionsChanged?.length) {
-    sectionsChanged.forEach(async (section) => await db.update(object_on_section).set({description: section.description}).where(and(eq(object_on_section.object_id, upsertedObject.object_id), eq(object_on_section.section_id, section.section_id))));
-  }
   const sectionsDeleted = init.sections?.filter((initSection) => !state.sections?.some((stateSection) => initSection.section_id === stateSection.section_id));
   if (sectionsDeleted?.length) {
     await db.delete(object_on_section).where(and(eq(object_on_section.object_id, upsertedObject.object_id), inArray(object_on_section.section_id, sectionsDeleted.map((section) => section.section_id))));
@@ -228,6 +225,19 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
   const optionsDeleted = init.options?.filter((initOption) => !state.options?.some((stateOption) => initOption.option_id === stateOption.option_id));
   if (optionsDeleted?.length) {
     await db.delete(object_on_option).where(and(eq(object_on_option.object_id, upsertedObject.object_id), inArray(object_on_option.option_id, optionsDeleted.map((opt) => opt.option_id))));
+  }
+
+  const usagesAdded = state.usages?.filter((stateUsage) => !init?.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id));
+  if (usagesAdded.length) {
+    await db.insert(object_on_usage).values(usagesAdded.map((usage) => ({...usage, object_id: upsertedObject.object_id})));
+  }
+  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id && (stateUsage.description !== initUsage.description || stateUsage.cost !== initUsage.cost)));
+  if (usagesChanged?.length) {
+    usagesChanged.forEach(async (usage) => await db.update(object_on_usage).set({description: usage.description, cost: usage.cost}).where(and(eq(object_on_usage.object_id, upsertedObject.object_id), eq(object_on_usage.usage_id, usage.usage_id))));
+  }
+  const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.usage_id === stateUsage.usage_id));
+  if (usagesDeleted.length) {
+    await db.delete(object_on_usage).where(and(eq(object_on_usage.object_id, upsertedObject.object_id), inArray(object_on_usage.usage_id, usagesDeleted.map((usage) => usage.usage_id))));
   }
 
   const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));

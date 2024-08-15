@@ -1,8 +1,8 @@
 "use client";
 import { create } from "mutative";
-import { sectionTypeEnum } from "@/drizzle/schema";
-import type { UISection } from "@/app/_types/types";
-import React, { type ChangeEvent, useContext } from "react";
+import { costTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
+import type { UISection, UIUsage } from "@/app/_types/types";
+import React, { type ChangeEvent, SyntheticEvent, useContext } from "react";
 // -----------------------------------------------------------------------------
 import { SectionItem } from "../";
 import { Card } from "@/app/_components/ui/Card";
@@ -11,28 +11,74 @@ import { Select } from "@/app/_components/ui/Select";
 import { Textarea } from "@/app/_components/ui/Input";
 // -----------------------------------------------------------------------------
 import { getSectionsByFilters } from "@/app/_db/section";
-import { RequiredInput } from "@/app/_components/ui/RequiredInput";
+import { FieldSet } from "@/app/_components/ui/FieldSet";
+import { Button } from "@/app/_components/ui/Button";
+import { Control } from "@/app/_components/ui/Control";
+import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@/app/_components/ui/Choice";
+import { getUsagesByFilters } from "@/app/_db/usage";
 
 
 export default function Usages() {
-  const { state, setState, handleSections } = useContext(ObjectEditContext);
+  const { state, setState } = useContext(ObjectEditContext);
 
-  const handleDescription = (e:ChangeEvent<HTMLInputElement>, section:UISection) => {
-    setState((prevState) => create(prevState, (draft) => {
-      const sectionItem = draft.sections?.find((stateSection) => stateSection.section_id === section.section_id);
-      if (!sectionItem) return;
-      sectionItem.description = e.target.value;
-    }))
+  const handleUsages = {
+    add: (usage:UIUsage) => {
+      if (!usage.usage_id || state.usages?.some((stateUsage) => stateUsage.usage_id === usage.usage_id)) return;
+      setState((prevState) => create(prevState, (draft) => {
+        if (!draft.usages) draft.usages = [];
+        draft.usages.push(usage);
+      }))
+    },
+    delete: (usage:UIUsage) => {
+      setState((prevState) => create(prevState, (draft) => {
+        draft.usages = draft.usages?.filter((draftUsage) => draftUsage.usage_id !== usage.usage_id);
+      }));
+    },
+    description: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
+        if (!usageItem) return;
+        usageItem.description = e.target.value;
+      }));
+    },
+    cost: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
+        if (!usageItem) return;
+        usageItem.cost = e.target.value as costTypeEnum;
+      }));
+    },
   }
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Использование</Card.Heading>
       <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
-        {state.sections?.filter((section) => section.section_type === sectionTypeEnum.usage).map((section) => (
-          <React.Fragment key={section.section_id}>
-            <SectionItem section={section} delFunc={(section) => handleSections.delete(section)}/>
-            <Textarea name="description" value={section.description} onChange={(e) => handleDescription(e, section)} maxLength="2000" />
+        {state.usages?.map((usage) => (
+          <React.Fragment key={usage.usage_id}>
+            <FieldSet key={usage?.usage_id} style={{display: "flex", gap: "20px"}}>
+              <FieldSet.Legend style={{inlineSize: "200px"}}>
+                <Button onClick={() => handleUsages.delete(usage)}>X</Button>
+                <span>{usage?.name_public}</span>
+              </FieldSet.Legend>
+              <FieldSet.Section style={{display: "flex", gap: "10px"}}>
+              <Control>
+                <Control.Label>Стоимость</Control.Label>
+                <Control.Section>
+                  <RadioGroup
+                    name="cost"
+                    valueToCompareWith={usage.cost}
+                    onChange={(e) => handleUsages.cost(e, usage)}
+                    required
+                  >
+                    <Radio value={costTypeEnum.paid}>Платно</Radio>
+                    <Radio value={costTypeEnum.free}>Бесплатно</Radio>
+                  </RadioGroup>
+                </Control.Section>
+              </Control>
+              </FieldSet.Section>
+            </FieldSet>
+            <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.description(e, usage)} maxLength="2000" />
           </React.Fragment>
         ))}
       </Card.Section>
@@ -40,11 +86,11 @@ export default function Usages() {
         <Select
           isAutocomplete
           value=""
-          onChangeData={handleSections.add}
+          onChangeData={handleUsages.add}
           placeholder="Добавить использование"
           requestItemsOnFirstTouch={async () =>
-            (await getSectionsByFilters({objectType: state.type, sectionType: sectionTypeEnum.usage}))
-              .map((section) => ({id: section.section_id, label: section.name_service, data: section}))
+            (await getUsagesByFilters({objectType: state.type}))
+              .map((usage) => ({id: usage.usage_id, label: usage.name_service, data: usage}))
           }
         />
         {/* <RequiredInput isValidIf={Boolean(state.sections.filter((section) => section.section_type === sectionTypeEnum.usage).length > 0)}/> */}

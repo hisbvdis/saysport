@@ -1,4 +1,10 @@
 DO $$ BEGIN
+ CREATE TYPE "public"."costTYpe" AS ENUM('paid', 'free');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  CREATE TYPE "public"."objectStatus" AS ENUM('works', 'open_soon', 'might_closed', 'closed_temp', 'closed_forever');
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -17,7 +23,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "public"."sectionType" AS ENUM('section', 'common', 'usage');
+ CREATE TYPE "public"."sectionType" AS ENUM('section', 'common');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -83,11 +89,29 @@ CREATE TABLE IF NOT EXISTS "object_on_option" (
 	CONSTRAINT "object_on_option_object_id_option_id_pk" PRIMARY KEY("object_id","option_id")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "object_on_schedule" (
+	"object_id" integer NOT NULL,
+	"usage_id" integer NOT NULL,
+	"schedule_id" integer NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_on_section" (
 	"object_id" integer NOT NULL,
 	"section_id" integer NOT NULL,
 	"description" varchar,
 	CONSTRAINT "object_on_section_object_id_section_id_pk" PRIMARY KEY("object_id","section_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "object_on_usage" (
+	"object_id" integer NOT NULL,
+	"usage_id" integer NOT NULL,
+	"description" varchar,
+	"cost" "costTYpe" NOT NULL,
+	"schedule_inherit" boolean,
+	"schedule_date" timestamp,
+	"schedule_source" varchar,
+	"schedule_comment" varchar,
+	"schedule_24_7" boolean
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_phone" (
@@ -113,6 +137,14 @@ CREATE TABLE IF NOT EXISTS "option" (
 	"spec_id" integer NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "schedule" (
+	"schedule_id" serial PRIMARY KEY NOT NULL,
+	"day_num" integer NOT NULL,
+	"time" varchar NOT NULL,
+	"from" integer NOT NULL,
+	"to" integer NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "section" (
 	"section_id" serial PRIMARY KEY NOT NULL,
 	"section_type" "sectionType" NOT NULL,
@@ -128,6 +160,11 @@ CREATE TABLE IF NOT EXISTS "section_on_spec" (
 	CONSTRAINT "section_on_spec_section_id_spec_id_pk" PRIMARY KEY("section_id","spec_id")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "section_on_usage" (
+	"section_id" integer,
+	"usage_id" integer
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "spec" (
 	"spec_id" serial PRIMARY KEY NOT NULL,
 	"name_service" varchar NOT NULL,
@@ -136,6 +173,13 @@ CREATE TABLE IF NOT EXISTS "spec" (
 	"options_number" "optionsNumber" NOT NULL,
 	"order" integer NOT NULL,
 	"is_and_in_search" boolean
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "usage" (
+	"usage_id" serial PRIMARY KEY NOT NULL,
+	"name_service" varchar NOT NULL,
+	"name_public" varchar NOT NULL,
+	"object_type" "objectType" NOT NULL
 );
 --> statement-breakpoint
 DO $$ BEGIN
@@ -187,6 +231,24 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "object_on_schedule" ADD CONSTRAINT "object_on_schedule_object_id_object_object_id_fk" FOREIGN KEY ("object_id") REFERENCES "public"."object"("object_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "object_on_schedule" ADD CONSTRAINT "object_on_schedule_usage_id_usage_usage_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."usage"("usage_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "object_on_schedule" ADD CONSTRAINT "object_on_schedule_schedule_id_schedule_schedule_id_fk" FOREIGN KEY ("schedule_id") REFERENCES "public"."schedule"("schedule_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "object_on_section" ADD CONSTRAINT "object_on_section_object_id_object_object_id_fk" FOREIGN KEY ("object_id") REFERENCES "public"."object"("object_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -194,6 +256,18 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "object_on_section" ADD CONSTRAINT "object_on_section_section_id_section_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "public"."section"("section_id") ON DELETE restrict ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "object_on_usage" ADD CONSTRAINT "object_on_usage_object_id_object_object_id_fk" FOREIGN KEY ("object_id") REFERENCES "public"."object"("object_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "object_on_usage" ADD CONSTRAINT "object_on_usage_usage_id_usage_usage_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."usage"("usage_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -224,6 +298,18 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "section_on_spec" ADD CONSTRAINT "section_on_spec_spec_id_spec_spec_id_fk" FOREIGN KEY ("spec_id") REFERENCES "public"."spec"("spec_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "section_on_usage" ADD CONSTRAINT "section_on_usage_section_id_section_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "public"."section"("section_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "section_on_usage" ADD CONSTRAINT "section_on_usage_usage_id_usage_usage_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."usage"("usage_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

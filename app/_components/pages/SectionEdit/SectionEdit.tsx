@@ -16,8 +16,8 @@ import { Radio, RadioGroup } from "@/app/_components/ui/Choice";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { getSpecsByFilters } from "@/app/_db/spec";
-import { deleteSectionById, getSectionsByFilters, upsertSection } from "@/app/_db/section";
-import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
+import { deleteSectionById, upsertSection } from "@/app/_db/section";
+import { sectionTypeEnum, type Usage } from "@/drizzle/schema";
 
 
 export default function SectionEdit(props:{init:UISection}) {
@@ -55,26 +55,19 @@ export default function SectionEdit(props:{init:UISection}) {
     },
   }
 
-  const handleUsages = {
-    add: (section:UISection) => {
-      if (state.usages?.some((stateUsage) => stateUsage.section_id === section.section_id)) return;
+  const handleUsage = {
+    add: (usage:Usage) => {
+      if (!usage.usage_id || state.usages?.some((stateUsage) => stateUsage.usage_id === usage.usage_id)) return;
       setState((prevState) => create(prevState, (draft) => {
-        if (!draft.usages) draft.usages = [];
-        draft.usages.push(section);
+        if (!draft.specs) draft.specs = [];
+        draft.specs.push(spec);
       }))
     },
     delete: (id:number) => {
       setState((prevState) => create(prevState, (draft) => {
-        draft.usages = draft.usages?.filter((usage) => usage.section_id !== id);
+        draft.specs = draft.specs?.filter((spec) => spec.spec_id !== id);
       }))
     },
-    // changeOrder: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
-    //   setState((prevState) => create(prevState, (draft) => {
-    //     const spec = draft.specs?.find((spec) => spec.uiID === uiID);
-    //     if (!spec) return;
-    //     spec.order = Number(e.target.value);
-    //   }))
-    // },
   }
 
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
@@ -141,7 +134,6 @@ export default function SectionEdit(props:{init:UISection}) {
               >
                 <Radio value={sectionTypeEnum.section}>Обычный раздел</Radio>
                 <Radio value={sectionTypeEnum.common}>Общий раздел</Radio>
-                <Radio value={sectionTypeEnum.usage}>Использование</Radio>
               </RadioGroup>
             </Control.Section>
           </Control>
@@ -188,32 +180,30 @@ export default function SectionEdit(props:{init:UISection}) {
         </Card.Section>
       </Card>
 
-      {state.object_type !== objectTypeEnum.org && state.section_type !== sectionTypeEnum.usage ? (
-        <Card style={{marginBlockStart: "10px"}}>
-          <Card.Heading>Использование</Card.Heading>
-          <Card.Section>
-            <Select
-              isAutocomplete
-              onChangeData={handleUsages.add}
-              placeholder="Добавить характеристику"
-              requestItemsOnFirstTouch={async () =>
-                (await getSectionsByFilters({objectType: state.object_type, sectionType: sectionTypeEnum.usage}))
-                  .map((section) => ({id: section.section_id, label: section.name_service, data: section}))
-              }
-            />
-            <ul style={{marginBlockStart: "5px"}}>
-              {state?.usages?.map((section) => (
-                <li key={section.section_id} style={{display: "flex"}}>
-                  <Button onClick={() => handleUsages.delete(section.section_id)}>X</Button>
-                  <InputAddon>{section.section_id}</InputAddon>
-                  {/* <Input value={section.order} onChange={(e) => handleSpecs.changeOrder(e, section.uiID)} required style={{flex: "0 1 40px"}}/> */}
-                  <Link href={`/admin/sections/${section.section_id}`} style={{alignSelf: "center"}}>{section.name_service}</Link>
-                </li>
-              ))}
-            </ul>
-          </Card.Section>
-        </Card>
-      ) : null}
+      <Card style={{marginBlockStart: "10px"}}>
+        <Card.Heading>Использование</Card.Heading>
+        <Card.Section>
+          <Select
+            isAutocomplete
+            onChangeData={handleUsage.add}
+            placeholder="Добавить характеристику"
+            requestItemsOnFirstTouch={async () =>
+              (await getSpecsByFilters({objectType: state.object_type}))
+                ?.map((spec) => ({id: spec.spec_id, label: spec.name_service, data: spec}))
+            }
+          />
+          <ul style={{marginBlockStart: "5px"}}>
+            {state?.usages?.map((usage) => (
+              <li key={usage.usage_id} style={{display: "flex"}}>
+                <Button onClick={() => handleUsage.delete(usage.usage_id)}>X</Button>
+                <InputAddon>{usage.usage_id}</InputAddon>
+                {/* <Input value={spec.order} onChange={(e) => handleUsage.changeOrder(e, spec)} required style={{flex: "0 1 40px"}}/> */}
+                <Link href={`/admin/usages/${usage.usage_id}`} style={{alignSelf: "center"}}>{usage.name_service}</Link>
+              </li>
+            ))}
+          </ul>
+        </Card.Section>
+      </Card>
 
       <EditBottomPanel
         id={state?.section_id}

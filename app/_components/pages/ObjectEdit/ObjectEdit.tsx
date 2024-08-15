@@ -2,7 +2,7 @@
 import { create } from "mutative";
 import type * as Leaflet from "leaflet";
 import { useRouter } from "next/navigation";
-import { objectTypeEnum } from "@/drizzle/schema";
+import { objectTypeEnum, Usage } from "@/drizzle/schema";
 import type { UIObject, UIOption, UISection, UISpec } from "@/app/_types/types";
 import { type ChangeEvent, type ChangeEventHandler, type Dispatch, type SetStateAction, type SyntheticEvent, createContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
