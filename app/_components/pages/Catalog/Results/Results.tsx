@@ -41,7 +41,7 @@ export default function Results() {
           <img src={object.photos?.length ? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${object.photos[0].name}` : `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/no-photo.svg`} width="250" height="210" alt="" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
           <div>
             {object.type === objectTypeEnum.org || (object.type === objectTypeEnum.place && !object.parent_id) ? (
-              <h4><Link className={styles["results__link"]} href={`object/${object.object_id}`}>{object.name_type} «{object.name_title}» {object.name_where}</Link></h4>
+              <h4><Link className={styles["results__link"]} href={`object/${object.object_id}`}>{object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</Link></h4>
             ) : (
               <>
                 <h4><Link className={styles["results__link"]} href={`object/${object.object_id}`}>{object.name_type}</Link></h4>

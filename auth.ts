@@ -10,7 +10,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (credentials.email === "hisbvdis@gmail.com" && credentials.password === "Lucypass123") {
           user = {id: "1"}
         }
-        console.log( "test" )
         return user;
       }
     })

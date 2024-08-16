@@ -1,6 +1,6 @@
 {
-  "id": "69dc1097-0097-43ca-9639-8040fdcad03d",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "d7a60c1a-271e-4dc7-b4de-6bc4079bcbb3",
+  "prevId": "9b85f0e7-ed1d-4b71-a40b-55850b8cf92c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -523,7 +523,7 @@
           "type": "costTYpe",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "description": {
           "name": "description",
@@ -723,6 +723,12 @@
         },
         "day_num": {
           "name": "day_num",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
           "type": "integer",
           "primaryKey": false,
           "notNull": true

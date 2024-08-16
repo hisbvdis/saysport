@@ -34,8 +34,8 @@ export default function Header(props:Props) {
             </div>
           ) : null}
         </div>
-        <h1>{state.name_type} {state.type === objectTypeEnum.org ? `«${state.name_title}»` : ""} {state.name_where}</h1>
-        {state.parent_id ? <Link href={`/object/${state.parent_id}`}>&lt; {state.parent?.name_type} {state.parent?.name_title ? `«${state.parent?.name_title}»` : ""} {state.parent?.name_where}</Link> : null}
+        {<h1>{state.name_type.concat(state.name_title ? ` «${state.name_title}»` : "").concat(state.name_where ? ` ${state.name_where}` : "")}</h1>}
+        {state.parent_id ? <Link href={`/object/${state.parent_id}`}>&lt; {state.parent?.name_type.concat(state.parent?.name_title ? ` «${state.parent?.name_title}»` : "").concat(state.parent?.name_where ? ` ${state.parent?.name_where}` : "")}</Link> : null}
       </Card>
     </header>
   )

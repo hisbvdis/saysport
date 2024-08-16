@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, between, count, desc, eq, exists, ilike, inArray, isNull, ne, notExists, sql } from "drizzle-orm";
-import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage } from "@/drizzle/schema";
+import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage, object_schedule } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBObject, UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -17,9 +17,10 @@ export const getEmptyObject = async ():Promise<UIObject> => {
     coord_lat: 0,
     coord_lon: 0,
     type: objectTypeEnum.org,
+    status: objectStatusEnum.works,
+    schedules: [],
     sections: [],
     usages: [],
-    status: objectStatusEnum.works,
   }
 }
 
@@ -109,26 +110,41 @@ interface Filters extends SearchParamsType {
   limit?:number;
 }
 
-export const getObjectById = async (id:number) => {
+export const getObjectsByArea = async (latMin:number, latMax:number, lonMin:number, lonMax:number, currentObjectId?:number, parentObjectId?:number|null):Promise<Object_[]> => {
+  const dbData:Object_[]|undefined = await db.query.object.findMany({
+    where: and(
+      between(object.coord_lat, latMin, latMax),
+      between(object.coord_lon, lonMin, lonMax),
+      isNull(object.parent_id),
+      currentObjectId ? ne(object.object_id, currentObjectId) : undefined,
+      parentObjectId ? ne(object.object_id, parentObjectId) : undefined,
+    )
+  });
+  if (dbData === undefined) throw new Error("getObjectsByArea returned undefined");
+  return dbData;
+}
+
+export const getObjectById = async (id:number):Promise<UIObject> => {
   const dbData = await db.query.object.findFirst({
     where: eq(object.object_id, id),
     with: {
       statusInstead: true,
       city: true,
-      parent: true,
+      parent: {with: {objectOnUsage: {with: {usage: true}}}},
       phones: {orderBy: (phones, { asc }) => [asc(phones.order)]},
       links: {orderBy: (links, { asc }) => [asc(links.order)]},
       objectOnOption: {with: {option: true}},
       photos: {orderBy: (photos, { asc }) => [asc(photos.order)]},
       objectOnSection: {with: {section: {with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}}}}},
       objectOnUsage: {with: {usage: true}},
+      objectSchedule: {orderBy: (schedule, {asc}) => [asc(schedule.order)],},
       // -----------------------------------------------------------------------------
       children: {
         orderBy: (child, {asc}) => [asc(child.name_type)],
-        with: {photos: true, phones: true, links: true}
+        with: {photos: true, phones: true, links: true, objectOnUsage: {with: {usage: true}}}
       },
     }
-  });
+  }) satisfies DBObject|undefined;
   if (dbData === undefined) throw new Error("getObjectById returned undefined");
   const processed = objectReadProcessing(dbData);
   return processed;
@@ -231,13 +247,38 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
   if (usagesAdded.length) {
     await db.insert(object_on_usage).values(usagesAdded.map((usage) => ({...usage, object_id: upsertedObject.object_id})));
   }
-  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id && (stateUsage.description !== initUsage.description || stateUsage.cost !== initUsage.cost)));
+  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id && (stateUsage.description !== initUsage.description || stateUsage.cost !== initUsage.cost || stateUsage.schedule_inherit !== initUsage.schedule_inherit || stateUsage.schedule_date !== initUsage.schedule_date || stateUsage.schedule_source !== initUsage.schedule_source || stateUsage.schedule_comment !== initUsage.schedule_comment || stateUsage.schedule_24_7 !== initUsage.schedule_24_7)));
   if (usagesChanged?.length) {
     usagesChanged.forEach(async (usage) => await db.update(object_on_usage).set({description: usage.description, cost: usage.cost}).where(and(eq(object_on_usage.object_id, upsertedObject.object_id), eq(object_on_usage.usage_id, usage.usage_id))));
   }
   const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.usage_id === stateUsage.usage_id));
   if (usagesDeleted.length) {
     await db.delete(object_on_usage).where(and(eq(object_on_usage.object_id, upsertedObject.object_id), inArray(object_on_usage.usage_id, usagesDeleted.map((usage) => usage.usage_id))));
+    await db.delete(object_schedule).where(and(eq(object_schedule.object_id, upsertedObject.object_id), inArray(object_schedule.usage_id, usagesDeleted.map((usage) => usage.usage_id))));
+  }
+
+  const initSchedules = init.objectSchedule;
+  const stateSchedules = state.schedules.flatMap((schedule) => schedule.times.map((time, i) => ({object_id: upsertedObject.object_id, usage_id: schedule.usage_id, day_num: schedule.day_num, time: schedule.times[i], from: schedule.froms[i], to: schedule.tos[i], order: i})));
+  const schedulesAdded = stateSchedules.filter((stateSchedule) => !initSchedules?.some((initSchedule) => stateSchedule.usage_id === initSchedule.usage_id && stateSchedule.day_num === initSchedule.day_num && stateSchedule.order === initSchedule.order));
+  if (schedulesAdded.length) {
+    await db.insert(object_schedule).values(schedulesAdded);
+    if (children.length) {
+      children.filter((child) => child.objectOnUsage?.map((objectOnUsage) => objectOnUsage.schedule_inherit)).forEach(async (child) => await db.insert(object_schedule).values(schedulesAdded.map((schedule) => ({...schedule, object_id: child.object_id}))));
+    }
+  }
+  const schedulesChanged = stateSchedules.filter((stateSchedule) => initSchedules?.some((initSchedule) => stateSchedule.usage_id === initSchedule.usage_id && stateSchedule.day_num === initSchedule.day_num && stateSchedule.order === initSchedule.order && stateSchedule.time !== initSchedule.time));
+  if (schedulesChanged.length) {
+    schedulesChanged.forEach(async (schedule) => await db.update(object_schedule).set({...schedule, object_id: undefined, usage_id: undefined, day_num: undefined, order: undefined}).where(and(eq(object_schedule.object_id, schedule.object_id), eq(object_schedule.usage_id, schedule.usage_id), eq(object_schedule.day_num, schedule.day_num), eq(object_schedule.order, schedule.order))));
+    if (children.length) {
+      children.filter((child) => child.objectOnUsage?.map((objectOnUsage) => objectOnUsage.schedule_inherit)).forEach((child) => schedulesChanged.forEach(async (schedule) => await db.update(object_schedule).set({...schedule, object_id: undefined, usage_id: undefined, day_num: undefined, order: undefined}).where(and(eq(object_schedule.object_id, child.object_id), eq(object_schedule.usage_id, schedule.usage_id), eq(object_schedule.day_num, schedule.day_num), eq(object_schedule.order, schedule.order)))));
+    }
+  }
+  const schedulesDeleted = initSchedules?.filter((initSchedule) => !initSchedule.time || !stateSchedules.some((stateSchedule) => initSchedule.object_id === stateSchedule.object_id && initSchedule.usage_id === stateSchedule.usage_id && initSchedule.day_num === stateSchedule.day_num && initSchedule.order === stateSchedule.order));
+  if (schedulesDeleted?.length) {
+    schedulesDeleted.forEach(async (schedule) => await db.delete(object_schedule).where(and(eq(object_schedule.object_id, schedule.object_id), eq(object_schedule.usage_id, schedule.usage_id), eq(object_schedule.day_num, schedule.day_num), eq(object_schedule.order, schedule.order))));
+    if (children.length) {
+      children.filter((child) => child.objectOnUsage?.map((objectOnUsage) => objectOnUsage.schedule_inherit)).forEach((child) => schedulesDeleted.forEach(async (schedule) => await db.delete(object_schedule).where(and(eq(object_schedule.object_id, child.object_id), eq(object_schedule.usage_id, schedule.usage_id), eq(object_schedule.day_num, schedule.day_num), eq(object_schedule.order, schedule.order)))));
+    }
   }
 
   const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));
@@ -255,18 +296,4 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
 
   revalidatePath(`object/${upsertedObject.object_id}`, "page");
   return upsertedObject;
-}
-
-export const getObjectsByArea = async (latMin:number, latMax:number, lonMin:number, lonMax:number, currentObjectId?:number, parentObjectId?:number|null):Promise<Object_[]> => {
-  const dbData:Object_[]|undefined = await db.query.object.findMany({
-    where: and(
-      between(object.coord_lat, latMin, latMax),
-      between(object.coord_lon, lonMin, lonMax),
-      isNull(object.parent_id),
-      currentObjectId ? ne(object.object_id, currentObjectId) : undefined,
-      parentObjectId ? ne(object.object_id, parentObjectId) : undefined,
-    )
-  });
-  if (dbData === undefined) throw new Error("getObjectsByArea returned undefined");
-  return dbData;
 }

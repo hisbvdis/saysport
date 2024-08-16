@@ -56,7 +56,6 @@ export const getSectionById = async (id:number):Promise<UISection> => {
   }) satisfies DBSection|undefined;
   if (dbData === undefined) throw new Error("getSectionById returned undefined");
   const processed = sectionReadProcessing(dbData);
-  console.log( processed )
   return processed;
 }
 

@@ -1,10 +1,10 @@
 "use client";
 import { create } from "mutative";
-import { costTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
+import { costTypeEnum, objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 import type { UISection, UIUsage } from "@/app/_types/types";
 import React, { type ChangeEvent, SyntheticEvent, useContext } from "react";
 // -----------------------------------------------------------------------------
-import { SectionItem } from "../";
+import { SectionItem, Schedule } from "../";
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
 import { Select } from "@/app/_components/ui/Select";
@@ -53,7 +53,7 @@ export default function Usages() {
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Использование</Card.Heading>
-      <Card.Section style={{display: "flex", flexDirection: "column", gap: "20px"}}>
+      <Card.Section style={{display: "flex", flexDirection: "column", gap: "15px"}}>
         {state.usages?.map((usage) => (
           <React.Fragment key={usage.usage_id}>
             <FieldSet key={usage?.usage_id} style={{display: "flex", gap: "20px"}}>
@@ -62,23 +62,26 @@ export default function Usages() {
                 <span>{usage?.name_public}</span>
               </FieldSet.Legend>
               <FieldSet.Section style={{display: "flex", gap: "10px"}}>
-              <Control>
-                <Control.Label>Стоимость</Control.Label>
-                <Control.Section>
-                  <RadioGroup
-                    name="cost"
-                    valueToCompareWith={usage.cost}
-                    onChange={(e) => handleUsages.cost(e, usage)}
-                    required
-                  >
-                    <Radio value={costTypeEnum.paid}>Платно</Radio>
-                    <Radio value={costTypeEnum.free}>Бесплатно</Radio>
-                  </RadioGroup>
-                </Control.Section>
-              </Control>
+              {state.type !== objectTypeEnum.org && (
+                <Control>
+                  <Control.Label>Стоимость</Control.Label>
+                  <Control.Section>
+                    <RadioGroup
+                      name="cost"
+                      valueToCompareWith={usage.cost ?? undefined}
+                      onChange={(e) => handleUsages.cost(e, usage)}
+                      required
+                    >
+                      <Radio value={costTypeEnum.paid}>Платно</Radio>
+                      <Radio value={costTypeEnum.free}>Бесплатно</Radio>
+                    </RadioGroup>
+                  </Control.Section>
+                </Control>
+              )}
               </FieldSet.Section>
             </FieldSet>
             <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.description(e, usage)} maxLength="2000" />
+            <Schedule usage={usage}/>
           </React.Fragment>
         ))}
       </Card.Section>

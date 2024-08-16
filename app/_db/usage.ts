@@ -40,8 +40,6 @@ export const getUsageById = async (id:number):Promise<Usage> => {
     where: eq(usage.usage_id, id)
   }) satisfies Usage|undefined;
   if (dbData === undefined) throw new Error("getUsageById returned undefined");
-  // const processed = sectionReadProcessing(dbData);
-  // return processed;
   return dbData;
 }
 

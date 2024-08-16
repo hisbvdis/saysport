@@ -1,6 +1,6 @@
 {
-  "id": "69dc1097-0097-43ca-9639-8040fdcad03d",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "b8599302-7f35-4f7d-9bf5-d5d59fbdd1d7",
+  "prevId": "d7a60c1a-271e-4dc7-b4de-6bc4079bcbb3",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -523,7 +523,7 @@
           "type": "costTYpe",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "description": {
           "name": "description",
@@ -727,6 +727,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "time": {
           "name": "time",
           "type": "varchar",
@@ -775,7 +781,17 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "object_schedule_object_id_usage_id_day_num_order_pk": {
+          "name": "object_schedule_object_id_usage_id_day_num_order_pk",
+          "columns": [
+            "object_id",
+            "usage_id",
+            "day_num",
+            "order"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.option": {

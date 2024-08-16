@@ -111,7 +111,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
         <Contacts/>
         <Specs/>
         <Description/>
-        {props.init.type === objectTypeEnum.org ? null : <Usages/>}
+        <Usages/>
         <Photos/>
         <EditBottomPanel
           id={state.object_id}
