@@ -30,7 +30,7 @@ export default function Schedule(props:{usage:UIUsage}) {
           schedule.isWork = e.target.checked;
           if (!e.target.checked) draft.schedules = draft.schedules.filter((draftSchedule) => draftSchedule.usage_id !== schedule.usage_id || (draftSchedule.usage_id === schedule.usage_id && draftSchedule.day_num !== schedule.day_num));
         } else {
-          draft.schedules.push({object_id: -1, usage_id: props.usage.usage_id ?? -1, day_num: dayNum, time: "", from: 0, to: 0, isWork: true, times: [""], froms: [], tos: [], order: 0})
+          draft.schedules.push({schedule_id: -1, object_id: -1, usage_id: props.usage.usage_id ?? -1, day_num: dayNum, time: "", from: 0, to: 0, isWork: true, times: [""], froms: [], tos: [], order: 0})
         }
       }))
     },
@@ -103,7 +103,7 @@ export default function Schedule(props:{usage:UIUsage}) {
         if (!usage) return;
         usage.schedule_24_7 = e.target.checked;
         if (e.target.checked) {
-          draft.schedules = draft.schedules.filter((schedule) => schedule.usage_id !== props.usage.usage_id).concat(Array(7).fill(null).map((_, i) => ({object_id: -1, day_num: i, usage_id: props.usage.usage_id, isWork: true, time: "", from: 0, to: 1440, times: ["0:00 - 24:00"], froms: [0], tos: [1440], order: i})))
+          draft.schedules = draft.schedules.filter((schedule) => schedule.usage_id !== props.usage.usage_id).concat(Array(7).fill(null).map((_, i) => ({schedule_id: -1, object_id: -1, day_num: i, usage_id: props.usage.usage_id, isWork: true, time: "", from: 0, to: 1440, times: ["0:00 - 24:00"], froms: [0], tos: [1440], order: i})))
         }
       }));
     },

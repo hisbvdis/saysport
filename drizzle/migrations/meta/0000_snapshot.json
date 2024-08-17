@@ -1,5 +1,5 @@
 {
-  "id": "69dc1097-0097-43ca-9639-8040fdcad03d",
+  "id": "c87415e4-e164-419e-95c1-94e8f955f836",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -506,6 +506,12 @@
       "name": "object_on_usage",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "object_id": {
           "name": "object_id",
           "type": "integer",
@@ -523,7 +529,7 @@
           "type": "costTYpe",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "description": {
           "name": "description",
@@ -709,6 +715,12 @@
       "name": "object_schedule",
       "schema": "",
       "columns": {
+        "schedule_id": {
+          "name": "schedule_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
         "object_id": {
           "name": "object_id",
           "type": "integer",
@@ -723,6 +735,12 @@
         },
         "day_num": {
           "name": "day_num",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -775,7 +793,17 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "object_schedule_object_id_usage_id_day_num_order_pk": {
+          "name": "object_schedule_object_id_usage_id_day_num_order_pk",
+          "columns": [
+            "object_id",
+            "usage_id",
+            "day_num",
+            "order"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.option": {
@@ -929,55 +957,6 @@
           ]
         }
       },
-      "uniqueConstraints": {}
-    },
-    "public.section_on_usage": {
-      "name": "section_on_usage",
-      "schema": "",
-      "columns": {
-        "section_id": {
-          "name": "section_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "usage_id": {
-          "name": "usage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "section_on_usage_section_id_section_section_id_fk": {
-          "name": "section_on_usage_section_id_section_section_id_fk",
-          "tableFrom": "section_on_usage",
-          "tableTo": "section",
-          "columnsFrom": [
-            "section_id"
-          ],
-          "columnsTo": [
-            "section_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "section_on_usage_usage_id_usage_usage_id_fk": {
-          "name": "section_on_usage_usage_id_usage_usage_id_fk",
-          "tableFrom": "section_on_usage",
-          "tableTo": "usage",
-          "columnsFrom": [
-            "usage_id"
-          ],
-          "columnsTo": [
-            "usage_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "public.spec": {

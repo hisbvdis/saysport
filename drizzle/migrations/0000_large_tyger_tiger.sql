@@ -97,9 +97,10 @@ CREATE TABLE IF NOT EXISTS "object_on_section" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_on_usage" (
+	"id" serial PRIMARY KEY NOT NULL,
 	"object_id" integer NOT NULL,
 	"usage_id" integer NOT NULL,
-	"cost" "costTYpe" NOT NULL,
+	"cost" "costTYpe",
 	"description" varchar,
 	"schedule_inherit" boolean,
 	"schedule_date" timestamp,
@@ -125,12 +126,15 @@ CREATE TABLE IF NOT EXISTS "object_photo" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_schedule" (
+	"schedule_id" serial NOT NULL,
 	"object_id" integer NOT NULL,
 	"usage_id" integer NOT NULL,
 	"day_num" integer NOT NULL,
+	"order" integer NOT NULL,
 	"time" varchar NOT NULL,
 	"from" integer NOT NULL,
-	"to" integer NOT NULL
+	"to" integer NOT NULL,
+	CONSTRAINT "object_schedule_object_id_usage_id_day_num_order_pk" PRIMARY KEY("object_id","usage_id","day_num","order")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "option" (
@@ -153,11 +157,6 @@ CREATE TABLE IF NOT EXISTS "section_on_spec" (
 	"section_id" integer NOT NULL,
 	"spec_id" integer NOT NULL,
 	CONSTRAINT "section_on_spec_section_id_spec_id_pk" PRIMARY KEY("section_id","spec_id")
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "section_on_usage" (
-	"section_id" integer,
-	"usage_id" integer
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "spec" (
@@ -287,18 +286,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "section_on_spec" ADD CONSTRAINT "section_on_spec_spec_id_spec_spec_id_fk" FOREIGN KEY ("spec_id") REFERENCES "public"."spec"("spec_id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "section_on_usage" ADD CONSTRAINT "section_on_usage_section_id_section_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "public"."section"("section_id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "section_on_usage" ADD CONSTRAINT "section_on_usage_usage_id_usage_usage_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."usage"("usage_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

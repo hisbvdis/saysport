@@ -18,7 +18,7 @@ export const getEmptyCategory = async ():Promise<UICategory> => {
 
 export const getAllCategories = async ():Promise<UICategory[]> => {
   const dbData:DBCategory[] = await db.query.category.findMany({
-    with: {categoryOnSection: {with: {section: true}}},
+    with: {categoryOnSections: {with: {section: true}}},
     orderBy: [category.order]
   });
   const processed = dbData.map((category) => categoryReadProcessing(category));
@@ -28,7 +28,7 @@ export const getAllCategories = async ():Promise<UICategory[]> => {
 export const getCategoryById = async (id:number):Promise<UICategory> => {
   const dbData:DBCategory|undefined = await db.query.category.findFirst({
     where: eq(category.category_id, id),
-    with: {categoryOnSection: {with: {section: true}}},
+    with: {categoryOnSections: {with: {section: true}}},
   });
   if (dbData === undefined) throw new Error("getSectionById returned undefined");
   const processed = categoryReadProcessing(dbData);

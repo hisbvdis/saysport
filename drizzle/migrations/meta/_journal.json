@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1723820601604,
-      "tag": "0000_futuristic_sentinels",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1723823998441,
-      "tag": "0001_wooden_sunfire",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1723824301331,
-      "tag": "0002_equal_adam_destine",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1723824553598,
-      "tag": "0003_heavy_hawkeye",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1723826108440,
-      "tag": "0004_motionless_domino",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1723828603762,
-      "tag": "0005_parched_angel",
+      "when": 1723902509575,
+      "tag": "0000_large_tyger_tiger",
       "breakpoints": true
     }
   ]

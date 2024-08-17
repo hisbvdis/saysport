@@ -23,7 +23,7 @@ export const getEmptySection = async ():Promise<UISection> => {
 
 export const getAllSections = async ():Promise<UISection[]> => {
   const dbData = await db.query.section.findMany({
-    with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
+    with: {sectionOnSpecs: {with: {spec: {with: {options: true}}}}},
     orderBy: [section.name_public_plural]
   })
   const processed = dbData.map((section) => sectionReadProcessing(section));
@@ -40,7 +40,7 @@ export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion;
       objectType ? eq(section.object_type, objectType) : undefined,
       sectionType ? eq(section.section_type, sectionType) : undefined,
     ),
-    with: {sectionOnSpec: {with: {spec: {with: {options: true}}}}},
+    with: {sectionOnSpecs: {with: {spec: {with: {options: true}}}}},
   })
   const processed = dbData.map((section) => sectionReadProcessing(section));
   return processed;
@@ -50,8 +50,7 @@ export const getSectionById = async (id:number):Promise<UISection> => {
   const dbData = await db.query.section.findFirst({
     where: eq(section.section_id, id),
     with: {
-      sectionOnSpec: {with: {spec: {with: {options: true}}}},
-      sectionOnUsage: {with: {usage: true}},
+      sectionOnSpecs: {with: {spec: {with: {options: true}}}}
     },
   }) satisfies DBSection|undefined;
   if (dbData === undefined) throw new Error("getSectionById returned undefined");

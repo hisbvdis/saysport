@@ -8,12 +8,12 @@ export const objectReadProcessing = (dbData: DBObject): UIObject => {
     ...dbData,
     phones: dbData.phones?.map((phone) => ({...phone, uiID: crypto.randomUUID()})) ?? [],
     links: dbData.links?.map((link) => ({...link, uiID: crypto.randomUUID()})) ?? [],
-    sections: dbData.objectOnSection?.map(({section}) => sectionReadProcessing(section)) ?? [],
-    options: dbData.objectOnOption?.map(({ option }) => ({...option, uiID: crypto.randomUUID()})) ?? [],
+    sections: dbData.objectOnSections?.map(({section}) => sectionReadProcessing(section)) ?? [],
+    options: dbData.objectOnOptions?.map(({ option }) => ({...option, uiID: crypto.randomUUID()})) ?? [],
     photos: dbData.photos?.map((photo) => ({...photo, uiID: crypto.randomUUID()})) ?? [],
     parent: dbData.parent ? objectReadProcessing(dbData.parent) : null,
-    usages: dbData.objectOnUsage?.map((objectOnUsage) => ({...objectOnUsage, ...objectOnUsage.usage})) ?? [],
-    schedules: dbData.objectSchedule
+    usages: dbData.objectUsages?.map((objectOnUsage) => ({...objectOnUsage, ...objectOnUsage.usage})) ?? [],
+    schedules: dbData.objectSchedules
       ?.map((objectSchedule) => ({...objectSchedule, times: []}))
       .reduce((accum, schedule) => {
         const scheduleItem = accum.find((accumSchedule) => accumSchedule.usage_id === schedule.usage_id && accumSchedule.day_num === schedule.day_num);

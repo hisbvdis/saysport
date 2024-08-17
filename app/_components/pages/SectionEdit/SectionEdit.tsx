@@ -55,21 +55,6 @@ export default function SectionEdit(props:{init:UISection}) {
     },
   }
 
-  const handleUsage = {
-    add: (usage:Usage) => {
-      if (!usage.usage_id || state.usages?.some((stateUsage) => stateUsage.usage_id === usage.usage_id)) return;
-      setState((prevState) => create(prevState, (draft) => {
-        if (!draft.specs) draft.specs = [];
-        draft.specs.push(spec);
-      }))
-    },
-    delete: (id:number) => {
-      setState((prevState) => create(prevState, (draft) => {
-        draft.specs = draft.specs?.filter((spec) => spec.spec_id !== id);
-      }))
-    },
-  }
-
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
     const { section_id } = await upsertSection(state, props.init);
@@ -174,31 +159,6 @@ export default function SectionEdit(props:{init:UISection}) {
                 <InputAddon>{spec.spec_id}</InputAddon>
                 <Input value={spec.order} onChange={(e) => handleSpecs.changeOrder(e, spec)} required style={{flex: "0 1 40px"}}/>
                 <Link href={`/admin/specs/${spec.spec_id}`} style={{alignSelf: "center"}}>{spec.name_service}</Link>
-              </li>
-            ))}
-          </ul>
-        </Card.Section>
-      </Card>
-
-      <Card style={{marginBlockStart: "10px"}}>
-        <Card.Heading>Использование</Card.Heading>
-        <Card.Section>
-          <Select
-            isAutocomplete
-            onChangeData={handleUsage.add}
-            placeholder="Добавить характеристику"
-            requestItemsOnFirstTouch={async () =>
-              (await getSpecsByFilters({objectType: state.object_type}))
-                ?.map((spec) => ({id: spec.spec_id, label: spec.name_service, data: spec}))
-            }
-          />
-          <ul style={{marginBlockStart: "5px"}}>
-            {state?.usages?.map((usage) => (
-              <li key={usage.usage_id} style={{display: "flex"}}>
-                <Button onClick={() => handleUsage.delete(usage.usage_id)}>X</Button>
-                <InputAddon>{usage.usage_id}</InputAddon>
-                {/* <Input value={spec.order} onChange={(e) => handleUsage.changeOrder(e, spec)} required style={{flex: "0 1 40px"}}/> */}
-                <Link href={`/admin/usages/${usage.usage_id}`} style={{alignSelf: "center"}}>{usage.name_service}</Link>
               </li>
             ))}
           </ul>

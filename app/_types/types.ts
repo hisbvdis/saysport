@@ -1,16 +1,15 @@
-import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectPhoto, Category, CategoryOnSection, ObjectOnUsage, Usage, SectionOnUsage, ObjectSchedule } from "@/drizzle/schema";
+import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectPhoto, Category, CategoryOnSection, ObjectOnUsage, Usage, ObjectSchedule } from "@/drizzle/schema";
 
 
 // =============================================================================
 // DB TYPES
 // =============================================================================
 export interface DBCategory extends Category {
-  categoryOnSection?: (CategoryOnSection & {section: Section})[];
+  categoryOnSections?: (CategoryOnSection & {section: Section})[];
 }
 
 export interface DBSection extends Section {
-  sectionOnSpec?: (SectionOnSpec & { spec: DBSpec })[];
-  sectionOnUsage?: (SectionOnUsage & {usage: Usage})[]
+  sectionOnSpecs?: (SectionOnSpec & { spec: DBSpec })[];
 }
 
 export interface DBSpec extends Spec {
@@ -25,10 +24,10 @@ export interface DBObject extends Object_ {
   parent?: Object_ | null;
   phones?: ObjectPhone[],
   links?: ObjectLink[],
-  objectOnSection?: (ObjectOnSection & {section: Section & {sectionOnSpec: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}, description:string|null})[];
-  objectOnOption?: (ObjectOnOption & {option: Option})[];
-  objectOnUsage?: (ObjectOnUsage & {usage: Usage})[];
-  objectSchedule?: ObjectSchedule[]
+  objectOnSections?: (ObjectOnSection & {section: Section & {sectionOnSpecs: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}, description:string|null})[];
+  objectOnOptions?: (ObjectOnOption & {option: Option})[];
+  objectUsages?: (ObjectOnUsage & {usage: Usage})[];
+  objectSchedules?: ObjectSchedule[]
   photos?: ObjectPhoto[];
   children?: DBObject[];
 }
@@ -48,7 +47,6 @@ export interface UISpec extends Spec {
 
 export interface UISection extends Section {
   specs: UISpec[];
-  usages: Usage[];
   uiID: string;
 }
 
@@ -87,7 +85,7 @@ export interface UIObject extends Partial<Object_> {
   schedules: UISchedule[];
   photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
-  objectSchedule?: ObjectSchedule[];
+  objectSchedules?: ObjectSchedule[];
 }
 
 export enum UIContactTypeEnum {

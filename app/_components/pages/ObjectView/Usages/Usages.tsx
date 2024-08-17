@@ -13,7 +13,7 @@ export default function Usages() {
   return (
     <Card>
       <Card.Heading>{state.type === objectTypeEnum.place ? "Использование" : "Занятия"}</Card.Heading>
-      {state.sections?.filter((section) => section.section_type === sectionTypeEnum.usage).map((section) => (
+      {state.sections.map((section) => (
         <Card.Section key={section.section_id}>
           <p>{section.name_public_singular}</p>
           {section.specs.map((spec) => (
@@ -28,7 +28,6 @@ export default function Usages() {
               </ul>
             </div>
           ))}
-          {section.description ? <p>{section.description}</p> : null}
         </Card.Section>
       ))}
     </Card>

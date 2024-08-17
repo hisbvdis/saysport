@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { type AnyPgColumn, boolean, doublePrecision, integer, pgEnum, pgTable, primaryKey, serial, timestamp, varchar } from "drizzle-orm/pg-core";
+import { type AnyPgColumn, boolean, doublePrecision, integer, pgEnum, pgTable, primaryKey, serial, timestamp, unique, varchar } from "drizzle-orm/pg-core";
 
 export enum objectTypeEnum {org="org", place="place", class="class"};
 export type objectTypeUnion = "org" | "place" | "class";
@@ -50,10 +50,10 @@ export const object = pgTable("object", {
 })
 
 export const objectRelations = relations(object, ({ one, many }) => ({
-  objectOnSection: many(object_on_section),
-  objectOnOption: many(object_on_option),
-  objectOnUsage: many(object_on_usage),
-  objectSchedule: many(object_schedule),
+  objectOnSections: many(object_on_section),
+  objectOnOptions: many(object_on_option),
+  objectUsages: many(object_on_usage),
+  objectSchedules: many(object_schedule),
   // --------------------------
   statusInstead: one(object, {fields: [object.status_instead_id], references: [object.object_id]}),
   parent: one(object, {relationName:"object_parent", fields: [object.parent_id], references: [object.object_id]}),
@@ -82,10 +82,9 @@ export const section = pgTable("section", {
 })
 
 export const sectionRelations = relations(section, ({ many }) => ({
-  objectOnSection: many(object_on_section),
-  sectionOnSpec: many(section_on_spec),
-  categoryOnSection: many(category_on_section),
-  sectionOnUsage: many(section_on_usage),
+  objectOnSections: many(object_on_section),
+  sectionOnSpecs: many(section_on_spec),
+  categoryOnSections: many(category_on_section),
 }))
 
 export type Section = typeof section.$inferSelect;
@@ -107,7 +106,7 @@ export const spec = pgTable("spec", {
 
 export const specRelations = relations(spec, ({ many }) => ({
   options: many(option),
-  sectionOnSpec: many(section_on_spec),
+  sectionOnSpecs: many(section_on_spec),
 }))
 
 export type Spec = typeof spec.$inferSelect;
@@ -281,7 +280,7 @@ export const category = pgTable("category", {
 })
 
 export const categoryRelations = relations(category, ({ many }) => ({
-  categoryOnSection: many(category_on_section),
+  categoryOnSections: many(category_on_section),
 }))
 
 export type Category = typeof category.$inferSelect;
@@ -322,26 +321,10 @@ export type Usage = typeof usage.$inferSelect;
 
 
 // ===========================================================================
-// SECTION_ON_USAGE
-// ===========================================================================
-export const section_on_usage = pgTable("section_on_usage", {
-  section_id: integer("section_id").references(() => section.section_id, {onDelete: "cascade"}),
-  usage_id: integer("usage_id").references(() => usage.usage_id, {onDelete: "cascade"}),
-})
-
-export const sectionOnUsageRelations = relations(section_on_usage, ({ one }) => ({
-  section: one(section, {fields: [section_on_usage.section_id], references: [section.section_id]}),
-  usage: one(usage, {fields: [section_on_usage.usage_id], references: [usage.usage_id]}),
-}))
-
-export type SectionOnUsage = typeof section_on_usage.$inferSelect;
-
-
-
-// ===========================================================================
 // OBJECT_ON_USAGE
 // ===========================================================================
 export const object_on_usage = pgTable("object_on_usage", {
+  id: serial("id").primaryKey(),
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   usage_id: integer("usage_id").notNull().references(() => usage.usage_id, {onDelete: "cascade"}),
   cost: costTypeColumnType("cost"),
@@ -366,6 +349,7 @@ export type ObjectOnUsage = typeof object_on_usage.$inferSelect;
 // OBJECT_ON_SCHEDULE
 // ===========================================================================
 export const object_schedule = pgTable("object_schedule", {
+  schedule_id: serial("schedule_id"),
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   usage_id: integer("usage_id").notNull().references(() => usage.usage_id, {onDelete: "cascade"}),
   day_num: integer("day_num").notNull(),
@@ -374,7 +358,7 @@ export const object_schedule = pgTable("object_schedule", {
   from: integer("from").notNull(),
   to: integer("to").notNull(),
 }, (table) => ({
-  pk: primaryKey({columns: [table.object_id, table.usage_id, table.day_num, table.order]})
+  unique: primaryKey({columns: [table.object_id, table.usage_id, table.day_num, table.order]})
 }))
 
 export const objectScheduleRelations = relations(object_schedule, ({ one }) => ({
