@@ -2,60 +2,59 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, eq, ilike } from "drizzle-orm";
-import type { UIUsage } from "../_types/types";
-import { objectTypeEnum, type objectTypeUnion, usage, type Usage } from "@/drizzle/schema";
+import { objectTypeEnum, usage_name, type UsageName, type objectTypeUnion } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 
 
-export const getEmptyUsage = async ():Promise<Usage> => {
+export const getEmptyUsage = async ():Promise<UsageName> => {
   return {
-    usage_id: -1,
-    object_type: objectTypeEnum.org,
+    usage_name_id: -1,
     name_service: "",
     name_public: "",
+    object_type: objectTypeEnum.org
   }
 }
 
-export const getAllUsages = async ():Promise<Usage[]> => {
-  const dbData = await db.query.usage.findMany()
+export const getAllUsages = async ():Promise<UsageName[]> => {
+  const dbData = await db.query.usage_name.findMany()
   return dbData;
 }
 
-export const getUsagesByFilters = async (filters:{objectType?:objectTypeUnion;name_service?:string;name_public?:string}):Promise<Usage[]> => {
+export const getUsagesByFilters = async (filters:{objectType?:objectTypeUnion;name_service?:string;name_public?:string}):Promise<UsageName[]> => {
   const objectType = filters.objectType;
   const name_service = filters.name_service;
   const name_public = filters.name_public;
-  const dbData = await db.query.usage.findMany({
+  const dbData = await db.query.usage_name.findMany({
     where: and(
-      name_service ? ilike(usage.name_service, `%${name_service}%`) : undefined,
-      name_public ? ilike(usage.name_public, `%${name_public}%`) : undefined,
-      objectType ? eq(usage.object_type, objectType) : undefined,
+      name_service ? ilike(usage_name.name_service, `%${name_service}%`) : undefined,
+      name_public ? ilike(usage_name.name_public, `%${name_public}%`) : undefined,
+      objectType ? eq(usage_name.object_type, objectType) : undefined,
     )
   })
   return dbData;
 }
 
-export const getUsageById = async (id:number):Promise<Usage> => {
-  const dbData = await db.query.usage.findFirst({
-    where: eq(usage.usage_id, id)
-  }) satisfies Usage|undefined;
+export const getUsageById = async (id:number):Promise<UsageName> => {
+  const dbData = await db.query.usage_name.findFirst({
+    where: eq(usage_name.usage_name_id, id)
+  }) satisfies UsageName|undefined;
   if (dbData === undefined) throw new Error("getUsageById returned undefined");
   return dbData;
 }
 
 export const deleteUsageById = async (id:number):Promise<void> => {
-  await db.delete(usage).where(eq(usage.usage_id, id));
+  await db.delete(usage_name).where(eq(usage_name.usage_name_id, id));
   revalidatePath("/admin/usages");
 }
 
-export const upsertUsage = async (state:Usage, init: Usage) => {
+export const upsertUsage = async (state:UsageName, init: UsageName) => {
   const fields = {
-    usage_id: state.usage_id > 0 ? state.usage_id : undefined,
+    usage_name_id: state.usage_name_id > 0 ? state.usage_name_id : undefined,
     name_service: state.name_service,
     name_public: state.name_public,
     object_type: state.object_type,
   }
-  const [upsertedUsage] = await db.insert(usage).values(fields).onConflictDoUpdate({target: usage.usage_id, set: fields}).returning();
+  const [upsertedUsage] = await db.insert(usage_name).values(fields).onConflictDoUpdate({target: usage_name.usage_name_id, set: fields}).returning();
 
   revalidatePath("/admin/usages");
   return upsertedUsage;

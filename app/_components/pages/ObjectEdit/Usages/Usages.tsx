@@ -23,10 +23,9 @@ export default function Usages() {
 
   const handleUsages = {
     add: (usage:UIUsage) => {
-      if (!usage.usage_id || state.usages?.some((stateUsage) => stateUsage.usage_id === usage.usage_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages.push(usage);
+        draft.usages.push({...usage, order: draft.usages.length, uiID: crypto.randomUUID()});
       }))
     },
     delete: (usage:UIUsage) => {
@@ -53,38 +52,35 @@ export default function Usages() {
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Использование</Card.Heading>
-      <Card.Section style={{display: "flex", flexDirection: "column", gap: "15px"}}>
-        {state.usages?.map((usage) => (
-          <React.Fragment key={usage.usage_id}>
-            <FieldSet key={usage?.usage_id} style={{display: "flex", gap: "20px"}}>
-              <FieldSet.Legend style={{inlineSize: "200px"}}>
-                <Button onClick={() => handleUsages.delete(usage)}>X</Button>
-                <span>{usage?.name_public}</span>
-              </FieldSet.Legend>
-              <FieldSet.Section style={{display: "flex", gap: "10px"}}>
-              {state.type !== objectTypeEnum.org && (
-                <Control>
-                  <Control.Label>Стоимость</Control.Label>
-                  <Control.Section>
-                    <RadioGroup
-                      name="cost"
-                      valueToCompareWith={usage.cost ?? undefined}
-                      onChange={(e) => handleUsages.cost(e, usage)}
-                      required
-                    >
-                      <Radio value={costTypeEnum.paid}>Платно</Radio>
-                      <Radio value={costTypeEnum.free}>Бесплатно</Radio>
-                    </RadioGroup>
-                  </Control.Section>
-                </Control>
-              )}
-              </FieldSet.Section>
-            </FieldSet>
-            <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.description(e, usage)} maxLength="2000" />
-            <Schedule usage={usage}/>
-          </React.Fragment>
-        ))}
-      </Card.Section>
+      {state.usages?.map((usage, i) => ({...usage, order: i})).map((usage) => (
+        <Card.Section key={usage.uiID} style={{display: "flex", flexDirection: "column", gap: "15px"}}>
+          <FieldSet style={{display: "flex", gap: "20px"}}>
+            <FieldSet.Legend style={{inlineSize: "200px"}}>
+              <Button onClick={() => handleUsages.delete(usage)}>X</Button>
+              <span>{usage?.name_public}</span>
+            </FieldSet.Legend>
+            <FieldSet.Section style={{display: "flex", gap: "10px"}}>
+            {state.type !== objectTypeEnum.org && (
+              <Control>
+                <Control.Label>Стоимость</Control.Label>
+                <Control.Section>
+                  <RadioGroup
+                    valueToCompareWith={usage.cost ?? undefined}
+                    onChange={(e) => handleUsages.cost(e, usage)}
+                    required
+                  >
+                    <Radio value={costTypeEnum.paid}>Платно</Radio>
+                    <Radio value={costTypeEnum.free}>Бесплатно</Radio>
+                  </RadioGroup>
+                </Control.Section>
+              </Control>
+            )}
+            </FieldSet.Section>
+          </FieldSet>
+          <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.description(e, usage)} maxLength="2000" />
+          <Schedule usage={usage}/>
+        </Card.Section>
+      ))}
       <Card.Section>
         <Select
           isAutocomplete
@@ -93,7 +89,7 @@ export default function Usages() {
           placeholder="Добавить использование"
           requestItemsOnFirstTouch={async () =>
             (await getUsagesByFilters({objectType: state.type}))
-              .map((usage) => ({id: usage.usage_id, label: usage.name_service, data: usage}))
+              .map((usage) => ({id: usage.usage_name_id, label: usage.name_service, data: usage}))
           }
         />
         {/* <RequiredInput isValidIf={Boolean(state.sections.filter((section) => section.section_type === sectionTypeEnum.usage).length > 0)}/> */}

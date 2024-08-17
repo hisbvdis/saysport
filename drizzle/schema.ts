@@ -52,7 +52,7 @@ export const object = pgTable("object", {
 export const objectRelations = relations(object, ({ one, many }) => ({
   objectOnSections: many(object_on_section),
   objectOnOptions: many(object_on_option),
-  objectUsages: many(object_on_usage),
+  objectUsages: many(object_usage),
   objectSchedules: many(object_schedule),
   // --------------------------
   statusInstead: one(object, {fields: [object.status_instead_id], references: [object.object_id]}),
@@ -307,26 +307,27 @@ export type CategoryOnSection = typeof category_on_section.$inferSelect;
 
 
 // ===========================================================================
-// USAGE
+// USAGE_NAME
 // ===========================================================================
-export const usage = pgTable("usage", {
-  usage_id: serial("usage_id").primaryKey(),
+export const usage_name = pgTable("usage_name", {
+  usage_name_id: serial("usage_name_id").primaryKey(),
   name_service: varchar("name_service").notNull(),
   name_public: varchar("name_public").notNull(),
   object_type: objectTypeColumnType("object_type").notNull(),
 })
 
-export type Usage = typeof usage.$inferSelect;
+export type UsageName = typeof usage_name.$inferSelect;
 
 
 
 // ===========================================================================
-// OBJECT_ON_USAGE
+// OBJECT_USAGE
 // ===========================================================================
-export const object_on_usage = pgTable("object_on_usage", {
-  id: serial("id").primaryKey(),
+export const object_usage = pgTable("object_usage", {
+  usage_id: serial("usage_id").primaryKey(),
+  usage_name_id: integer("usage_name_id").notNull().references(() => usage_name.usage_name_id, {onDelete: "restrict"}),
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
-  usage_id: integer("usage_id").notNull().references(() => usage.usage_id, {onDelete: "cascade"}),
+  order: integer("order").notNull(),
   cost: costTypeColumnType("cost"),
   description: varchar("description"),
   schedule_inherit: boolean("schedule_inherit"),
@@ -336,12 +337,12 @@ export const object_on_usage = pgTable("object_on_usage", {
   schedule_24_7: boolean("schedule_24_7"),
 })
 
-export const objectOnUsageRelations = relations(object_on_usage, ({ one }) => ({
-  object: one(object, {fields: [object_on_usage.object_id], references: [object.object_id]}),
-  usage: one(usage, {fields: [object_on_usage.usage_id], references: [usage.usage_id]}),
+export const objectUsageRelations = relations(object_usage, ({ one }) => ({
+  object: one(object, {fields: [object_usage.object_id], references: [object.object_id]}),
+  usageName: one(usage_name, {fields: [object_usage.usage_name_id], references: [usage_name.usage_name_id]}),
 }))
 
-export type ObjectOnUsage = typeof object_on_usage.$inferSelect;
+export type ObjectUsage = typeof object_usage.$inferSelect;
 
 
 
@@ -351,19 +352,20 @@ export type ObjectOnUsage = typeof object_on_usage.$inferSelect;
 export const object_schedule = pgTable("object_schedule", {
   schedule_id: serial("schedule_id"),
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
-  usage_id: integer("usage_id").notNull().references(() => usage.usage_id, {onDelete: "cascade"}),
+  usage_id: integer("usage_id").notNull().references(() => object_usage.usage_id, {onDelete: "cascade"}),
+  usage_name_id: integer("usage_name_id").notNull().references(() => usage_name.usage_name_id, {onDelete: "restrict"}),
   day_num: integer("day_num").notNull(),
   order: integer("order").notNull(),
   time: varchar("time").notNull(),
   from: integer("from").notNull(),
   to: integer("to").notNull(),
 }, (table) => ({
-  unique: primaryKey({columns: [table.object_id, table.usage_id, table.day_num, table.order]})
+  pk: primaryKey({columns: [table.schedule_id, table.object_id, table.usage_id, table.day_num, table.order]})
 }))
 
 export const objectScheduleRelations = relations(object_schedule, ({ one }) => ({
   object: one(object, {fields: [object_schedule.object_id], references: [object.object_id]}),
-  usage: one(usage, {fields: [object_schedule.usage_id], references: [usage.usage_id]}),
+  usage: one(object_usage, {fields: [object_schedule.usage_id], references: [object_usage.usage_id]}),
 }))
 
 export type ObjectSchedule = typeof object_schedule.$inferSelect;

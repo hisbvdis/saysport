@@ -96,19 +96,6 @@ CREATE TABLE IF NOT EXISTS "object_on_section" (
 	CONSTRAINT "object_on_section_object_id_section_id_pk" PRIMARY KEY("object_id","section_id")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "object_on_usage" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"object_id" integer NOT NULL,
-	"usage_id" integer NOT NULL,
-	"cost" "costTYpe",
-	"description" varchar,
-	"schedule_inherit" boolean,
-	"schedule_date" timestamp,
-	"schedule_source" varchar,
-	"schedule_comment" varchar,
-	"schedule_24_7" boolean
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_phone" (
 	"object_id" integer NOT NULL,
 	"order" integer NOT NULL,
@@ -129,12 +116,27 @@ CREATE TABLE IF NOT EXISTS "object_schedule" (
 	"schedule_id" serial NOT NULL,
 	"object_id" integer NOT NULL,
 	"usage_id" integer NOT NULL,
+	"usage_name_id" integer NOT NULL,
 	"day_num" integer NOT NULL,
 	"order" integer NOT NULL,
 	"time" varchar NOT NULL,
 	"from" integer NOT NULL,
 	"to" integer NOT NULL,
 	CONSTRAINT "object_schedule_object_id_usage_id_day_num_order_pk" PRIMARY KEY("object_id","usage_id","day_num","order")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "object_usage" (
+	"usage_id" serial PRIMARY KEY NOT NULL,
+	"usage_name_id" integer NOT NULL,
+	"object_id" integer NOT NULL,
+	"order" integer NOT NULL,
+	"cost" "costTYpe",
+	"description" varchar,
+	"schedule_inherit" boolean,
+	"schedule_date" timestamp,
+	"schedule_source" varchar,
+	"schedule_comment" varchar,
+	"schedule_24_7" boolean
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "option" (
@@ -169,8 +171,8 @@ CREATE TABLE IF NOT EXISTS "spec" (
 	"is_and_in_search" boolean
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "usage" (
-	"usage_id" serial PRIMARY KEY NOT NULL,
+CREATE TABLE IF NOT EXISTS "usage_name" (
+	"usage_name_id" serial PRIMARY KEY NOT NULL,
 	"name_service" varchar NOT NULL,
 	"name_public" varchar NOT NULL,
 	"object_type" "objectType" NOT NULL
@@ -237,18 +239,6 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "object_on_usage" ADD CONSTRAINT "object_on_usage_object_id_object_object_id_fk" FOREIGN KEY ("object_id") REFERENCES "public"."object"("object_id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "object_on_usage" ADD CONSTRAINT "object_on_usage_usage_id_usage_usage_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."usage"("usage_id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
  ALTER TABLE "object_phone" ADD CONSTRAINT "object_phone_object_id_object_object_id_fk" FOREIGN KEY ("object_id") REFERENCES "public"."object"("object_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -267,7 +257,25 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "object_schedule" ADD CONSTRAINT "object_schedule_usage_id_usage_usage_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."usage"("usage_id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "object_schedule" ADD CONSTRAINT "object_schedule_usage_id_object_usage_usage_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."object_usage"("usage_id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "object_schedule" ADD CONSTRAINT "object_schedule_usage_name_id_usage_name_usage_name_id_fk" FOREIGN KEY ("usage_name_id") REFERENCES "public"."usage_name"("usage_name_id") ON DELETE restrict ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "object_usage" ADD CONSTRAINT "object_usage_usage_name_id_usage_name_usage_name_id_fk" FOREIGN KEY ("usage_name_id") REFERENCES "public"."usage_name"("usage_name_id") ON DELETE restrict ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "object_usage" ADD CONSTRAINT "object_usage_object_id_object_object_id_fk" FOREIGN KEY ("object_id") REFERENCES "public"."object"("object_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

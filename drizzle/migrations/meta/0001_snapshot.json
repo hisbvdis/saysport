@@ -1,6 +1,6 @@
 {
-  "id": "b27a4bbf-2387-409d-a338-bf68230d9f2d",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "f176b3d5-c891-4548-8a68-a985d8d69d44",
+  "prevId": "b27a4bbf-2387-409d-a338-bf68230d9f2d",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -715,9 +715,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "object_schedule_object_id_usage_id_day_num_order_pk": {
-          "name": "object_schedule_object_id_usage_id_day_num_order_pk",
+        "object_schedule_schedule_id_object_id_usage_id_day_num_order_pk": {
+          "name": "object_schedule_schedule_id_object_id_usage_id_day_num_order_pk",
           "columns": [
+            "schedule_id",
             "object_id",
             "usage_id",
             "day_num",

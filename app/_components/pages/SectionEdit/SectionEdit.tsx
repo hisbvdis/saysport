@@ -17,7 +17,7 @@ import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { getSpecsByFilters } from "@/app/_db/spec";
 import { deleteSectionById, upsertSection } from "@/app/_db/section";
-import { sectionTypeEnum, type Usage } from "@/drizzle/schema";
+import { sectionTypeEnum, type UsageName } from "@/drizzle/schema";
 
 
 export default function SectionEdit(props:{init:UISection}) {
