@@ -12,7 +12,7 @@ export const objectReadProcessing = (dbData: DBObject): UIObject => {
     options: dbData.objectOnOption?.map(({ option }) => ({...option, uiID: crypto.randomUUID()})) ?? [],
     photos: dbData.photos?.map((photo) => ({...photo, uiID: crypto.randomUUID()})) ?? [],
     parent: dbData.parent ? objectReadProcessing(dbData.parent) : null,
-    usages: dbData.objectOnUsage?.map((objectOnUsage) => ({...objectOnUsage, ...objectOnUsage.usage, uiID: crypto.randomUUID()})) ?? [],
+    usages: dbData.objectOnUsage?.map((objectOnUsage) => ({...objectOnUsage, ...objectOnUsage.usage})) ?? [],
     schedules: dbData.objectSchedule
       ?.map((objectSchedule) => ({...objectSchedule, times: []}))
       .reduce((accum, schedule) => {

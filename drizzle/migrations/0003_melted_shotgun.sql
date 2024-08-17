@@ -1,1 +1,0 @@
-ALTER TABLE "object_on_usage" RENAME COLUMN "id" TO "object_on_usage_id";

@@ -76,12 +76,11 @@ CREATE TABLE IF NOT EXISTS "object" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_link" (
-	"link_id" serial NOT NULL,
 	"object_id" integer NOT NULL,
 	"order" integer NOT NULL,
 	"value" varchar NOT NULL,
 	"comment" varchar,
-	CONSTRAINT "object_link_link_id_object_id_order_pk" PRIMARY KEY("link_id","object_id","order")
+	CONSTRAINT "object_link_object_id_order_pk" PRIMARY KEY("object_id","order")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_on_option" (
@@ -93,13 +92,14 @@ CREATE TABLE IF NOT EXISTS "object_on_option" (
 CREATE TABLE IF NOT EXISTS "object_on_section" (
 	"object_id" integer NOT NULL,
 	"section_id" integer NOT NULL,
+	"description" varchar,
 	CONSTRAINT "object_on_section_object_id_section_id_pk" PRIMARY KEY("object_id","section_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_on_usage" (
 	"object_id" integer NOT NULL,
 	"usage_id" integer NOT NULL,
-	"cost" "costTYpe",
+	"cost" "costTYpe" NOT NULL,
 	"description" varchar,
 	"schedule_inherit" boolean,
 	"schedule_date" timestamp,
@@ -109,12 +109,11 @@ CREATE TABLE IF NOT EXISTS "object_on_usage" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_phone" (
-	"phone_id" serial NOT NULL,
 	"object_id" integer NOT NULL,
 	"order" integer NOT NULL,
 	"value" varchar NOT NULL,
 	"comment" varchar,
-	CONSTRAINT "object_phone_phone_id_object_id_order_pk" PRIMARY KEY("phone_id","object_id","order")
+	CONSTRAINT "object_phone_object_id_order_pk" PRIMARY KEY("object_id","order")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_photo" (
@@ -126,15 +125,12 @@ CREATE TABLE IF NOT EXISTS "object_photo" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_schedule" (
-	"schedule_id" serial NOT NULL,
 	"object_id" integer NOT NULL,
 	"usage_id" integer NOT NULL,
 	"day_num" integer NOT NULL,
-	"order" integer NOT NULL,
 	"time" varchar NOT NULL,
 	"from" integer NOT NULL,
-	"to" integer NOT NULL,
-	CONSTRAINT "object_schedule_schedule_id_object_id_usage_id_day_num_order_pk" PRIMARY KEY("schedule_id","object_id","usage_id","day_num","order")
+	"to" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "option" (

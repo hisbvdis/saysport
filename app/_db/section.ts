@@ -18,7 +18,6 @@ export const getEmptySection = async ():Promise<UISection> => {
     name_public_singular: "",
     specs: [],
     uiID: crypto.randomUUID(),
-    usages: [],
   }
 }
 

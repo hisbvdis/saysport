@@ -177,13 +177,12 @@ export type City = typeof city.$inferSelect;
 // OBJECT_PHONE
 // ===========================================================================
 export const object_phone = pgTable("object_phone", {
-  phone_id: serial("phone_id"),
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   order: integer("order").notNull(),
   value: varchar("value").notNull(),
   comment: varchar("comment"),
 }, (table) => ({
-  pk: primaryKey({columns: [table.phone_id, table.object_id, table.order]})
+  pk: primaryKey({columns: [table.object_id, table.order]})
 }))
 
 export const objectPhoneRelations = relations(object_phone, ({ one }) => ({
@@ -198,13 +197,12 @@ export type ObjectPhone = typeof object_phone.$inferSelect;
 // OBJECT_LINK
 // ===========================================================================
 export const object_link = pgTable("object_link", {
-  link_id: serial("link_id"),
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   order: integer("order").notNull(),
   value: varchar("value").notNull(),
   comment: varchar("comment"),
 }, (table) => ({
-  pk: primaryKey({columns: [table.link_id, table.object_id, table.order]})
+  pk: primaryKey({columns: [table.object_id, table.order]})
 }))
 
 export const objectLinkRelations = relations(object_link, ({ one }) => ({
@@ -240,6 +238,7 @@ export type ObjectPhoto = typeof object_photo.$inferSelect;
 export const object_on_section = pgTable("object_on_section", {
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   section_id: integer("section_id").notNull().references(() => section.section_id, {onDelete: "restrict"}),
+  description: varchar("description"),
 }, (table) => ({
   pk: primaryKey({columns: [table.object_id, table.section_id]})
 }))
@@ -343,10 +342,8 @@ export type SectionOnUsage = typeof section_on_usage.$inferSelect;
 // OBJECT_ON_USAGE
 // ===========================================================================
 export const object_on_usage = pgTable("object_on_usage", {
-  object_on_usage_id: serial("object_on_usage_id"),
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   usage_id: integer("usage_id").notNull().references(() => usage.usage_id, {onDelete: "cascade"}),
-  order: integer("order").notNull(),
   cost: costTypeColumnType("cost"),
   description: varchar("description"),
   schedule_inherit: boolean("schedule_inherit"),
@@ -369,7 +366,6 @@ export type ObjectOnUsage = typeof object_on_usage.$inferSelect;
 // OBJECT_ON_SCHEDULE
 // ===========================================================================
 export const object_schedule = pgTable("object_schedule", {
-  schedule_id: serial("schedule_id"),
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   usage_id: integer("usage_id").notNull().references(() => usage.usage_id, {onDelete: "cascade"}),
   day_num: integer("day_num").notNull(),
@@ -378,7 +374,7 @@ export const object_schedule = pgTable("object_schedule", {
   from: integer("from").notNull(),
   to: integer("to").notNull(),
 }, (table) => ({
-  pk: primaryKey({columns: [table.schedule_id, table.object_id, table.usage_id, table.day_num, table.order]})
+  pk: primaryKey({columns: [table.object_id, table.usage_id, table.day_num, table.order]})
 }))
 
 export const objectScheduleRelations = relations(object_schedule, ({ one }) => ({
