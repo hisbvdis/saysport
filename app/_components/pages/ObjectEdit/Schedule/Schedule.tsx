@@ -88,9 +88,8 @@ export default function Schedule(props:{usage:UIUsage}) {
     changeInherit: (e:ChangeEvent<HTMLInputElement>) => {
       setState((prevState) => create(prevState, (draft) => {
         const usage = draft.usages.find((draftUsage) => draftUsage.usage_id === props.usage.usage_id);
-        if (!usage) return;
-        if (!draft.parent) return;
-        usage.schedule_inherit = true;
+        if (!usage || !draft.parent) return;
+        usage.schedule_inherit = e.target.checked;
         usage.schedule_24_7 = draft.parent.usages[0].schedule_24_7;
         usage.schedule_date = draft.parent.usages[0].schedule_date;
         usage.schedule_source = draft.parent.usages[0].schedule_source;
@@ -167,12 +166,12 @@ export default function Schedule(props:{usage:UIUsage}) {
           <Checkbox name={String(i)} checked={Boolean(day?.isWork)} onChange={(e) => handleSchedule.changeIsWork(e)} tabIndex={-1} disabled={Boolean(props.usage.schedule_24_7 || props.usage.schedule_inherit)} style={{alignSelf: "stretch", display: "flex", justifyContent: "center"}}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</Checkbox>
           {day.times?.map((time, i) => (
             <p key={i} style={{display: "flex"}}>
-              <Button onClick={(e) => handleSchedule.deleteDayTime(day.day_num, i)}>X</Button>
-              <Input name={String(day.day_num)} value={day?.isWork ? time : "Не работает"} onChange={(e) => handleSchedule.changeTime(e, i)} onBlurIfChanged={(e) => handleSchedule.formatTime(e, i)} disabled={Boolean(!day?.isWork) || Boolean(props.usage.schedule_24_7) || Boolean(props.usage.schedule_inherit)}  pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d" style={{inlineSize: "100%"}}/>
+              <Button onClick={(e) => handleSchedule.deleteDayTime(day.day_num, i)} disabled={Boolean(props.usage.schedule_24_7 || props.usage.schedule_inherit)}>X</Button>
+              <Input name={String(day.day_num)} value={day?.isWork ? time : "Не работает"} onChange={(e) => handleSchedule.changeTime(e, i)} onBlurIfChanged={(e) => handleSchedule.formatTime(e, i)} disabled={Boolean(!day?.isWork) || Boolean(props.usage.schedule_24_7) || Boolean(props.usage.schedule_inherit)} pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d" style={{inlineSize: "100%"}}/>
             </p>
           ))}
           <p style={{display: "flex"}}>
-            <Button onClick={() => handleSchedule.addDayTime(day.day_num)} disabled={Boolean(!day.isWork)}>+</Button>
+            <Button onClick={() => handleSchedule.addDayTime(day.day_num)} disabled={Boolean(!day?.isWork || props.usage.schedule_24_7 || props.usage.schedule_inherit)}>+</Button>
             <Button onClick={(e) => handleSchedule.copyToAll(day)} disabled={Boolean(!day?.isWork || props.usage.schedule_24_7 || props.usage.schedule_inherit)}>Copy</Button>
           </p>
         </div>
