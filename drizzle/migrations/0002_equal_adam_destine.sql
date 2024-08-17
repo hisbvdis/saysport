@@ -1,1 +1,0 @@
-ALTER TABLE "object_schedule" DROP CONSTRAINT "object_schedule_object_id_usage_id_day_num_pk";

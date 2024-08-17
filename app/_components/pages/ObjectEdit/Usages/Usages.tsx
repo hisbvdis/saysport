@@ -1,6 +1,6 @@
 "use client";
 import { create } from "mutative";
-import { costTypeEnum, objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
+import { costTypeEnum, objectTypeEnum, sectionTypeEnum, usage } from "@/drizzle/schema";
 import type { UISection, UIUsage } from "@/app/_types/types";
 import React, { type ChangeEvent, SyntheticEvent, useContext } from "react";
 // -----------------------------------------------------------------------------
@@ -23,27 +23,26 @@ export default function Usages() {
 
   const handleUsages = {
     add: (usage:UIUsage) => {
-      if (!usage.usage_id || state.usages?.some((stateUsage) => stateUsage.usage_id === usage.usage_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages.push(usage);
+        draft.usages.push({...usage, uiID: crypto.randomUUID(), order: draft.usages.length});
       }))
     },
-    delete: (usage:UIUsage) => {
+    delete: (uiID:string) => {
       setState((prevState) => create(prevState, (draft) => {
-        draft.usages = draft.usages?.filter((draftUsage) => draftUsage.usage_id !== usage.usage_id);
+        draft.usages = draft.usages?.filter((draftUsage) => draftUsage.uiID !== uiID);
       }));
     },
-    description: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
+    value: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
       setState((prevState) => create(prevState, (draft) => {
-        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === uiID);
         if (!usageItem) return;
-        usageItem.description = e.target.value;
+        usageItem[e.target.name as keyof typeof usageItem] = e.target.value as never;
       }));
     },
-    cost: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
+    cost: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
       setState((prevState) => create(prevState, (draft) => {
-        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === uiID);
         if (!usageItem) return;
         usageItem.cost = e.target.value as costTypeEnum;
       }));
@@ -53,38 +52,35 @@ export default function Usages() {
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Использование</Card.Heading>
-      <Card.Section style={{display: "flex", flexDirection: "column", gap: "15px"}}>
-        {state.usages?.map((usage) => (
-          <React.Fragment key={usage.usage_id}>
-            <FieldSet key={usage?.usage_id} style={{display: "flex", gap: "20px"}}>
-              <FieldSet.Legend style={{inlineSize: "200px"}}>
-                <Button onClick={() => handleUsages.delete(usage)}>X</Button>
-                <span>{usage?.name_public}</span>
-              </FieldSet.Legend>
-              <FieldSet.Section style={{display: "flex", gap: "10px"}}>
-              {state.type !== objectTypeEnum.org && (
-                <Control>
-                  <Control.Label>Стоимость</Control.Label>
-                  <Control.Section>
-                    <RadioGroup
-                      name="cost"
-                      valueToCompareWith={usage.cost ?? undefined}
-                      onChange={(e) => handleUsages.cost(e, usage)}
-                      required
-                    >
-                      <Radio value={costTypeEnum.paid}>Платно</Radio>
-                      <Radio value={costTypeEnum.free}>Бесплатно</Radio>
-                    </RadioGroup>
-                  </Control.Section>
-                </Control>
-              )}
-              </FieldSet.Section>
-            </FieldSet>
-            <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.description(e, usage)} maxLength="2000" />
-            <Schedule usage={usage}/>
-          </React.Fragment>
-        ))}
-      </Card.Section>
+      {state.usages?.map((usage, i) => ({...usage, order: i})).map((usage) => (
+        <Card.Section key={usage.uiID} style={{display: "flex", flexDirection: "column", gap: "15px"}}>
+          <FieldSet style={{display: "flex", gap: "20px"}}>
+            <FieldSet.Legend style={{inlineSize: "200px"}}>
+              <Button onClick={() => handleUsages.delete(usage.uiID)}>X</Button>
+              <span>{usage.name_public}</span>
+            </FieldSet.Legend>
+            <FieldSet.Section style={{display: "flex", gap: "10px"}}>
+            {state.type !== objectTypeEnum.org && (
+              <Control>
+                <Control.Label>Стоимость</Control.Label>
+                <Control.Section>
+                  <RadioGroup
+                    valueToCompareWith={usage.cost}
+                    onChange={(e) => handleUsages.cost(e, usage.uiID)}
+                    required
+                  >
+                    <Radio value={costTypeEnum.paid}>Платно</Radio>
+                    <Radio value={costTypeEnum.free}>Бесплатно</Radio>
+                  </RadioGroup>
+                </Control.Section>
+              </Control>
+            )}
+            </FieldSet.Section>
+          </FieldSet>
+          <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.value(e, usage.uiID)} maxLength="2000" />
+          <Schedule usage={usage}/>
+        </Card.Section>
+      ))}
       <Card.Section>
         <Select
           isAutocomplete

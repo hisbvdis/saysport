@@ -1,0 +1,1 @@
+ALTER TABLE "object_on_usage" ADD COLUMN "order" integer NOT NULL;

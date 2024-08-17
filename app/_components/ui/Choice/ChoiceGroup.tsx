@@ -37,7 +37,7 @@ export const ChoiceGroupContext = createContext<ChoiceGroupContextType>({} as Ch
 
 interface Props {
   name?: string;
-  valueToCompareWith?: string | boolean;
+  valueToCompareWith?: string | boolean | null;
   arrayToCompareWith?: string[];
   onChange?: (e:ChangeEvent<HTMLInputElement>) => void;
   className?: string;

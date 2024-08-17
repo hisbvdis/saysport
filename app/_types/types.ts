@@ -53,7 +53,7 @@ export interface UISection extends Section {
 }
 
 export interface UIUsage extends ObjectOnUsage, Usage {
-
+  uiID:string;
 }
 
 export interface UICategory extends Category {

@@ -243,21 +243,21 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     await db.delete(object_on_option).where(and(eq(object_on_option.object_id, upsertedObject.object_id), inArray(object_on_option.option_id, optionsDeleted.map((opt) => opt.option_id))));
   }
 
-  const usagesAdded = state.usages?.filter((stateUsage) => !init?.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id));
+  const usagesAdded = state.usages?.filter((stateUsage) => !init?.usages?.some((initUsage) => stateUsage.uiID === initUsage.uiID));
   if (usagesAdded.length) {
     await db.insert(object_on_usage).values(usagesAdded.map((usage) => ({...usage, object_id: upsertedObject.object_id})));
   }
-  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id && (stateUsage.description !== initUsage.description || stateUsage.cost !== initUsage.cost || stateUsage.schedule_inherit !== initUsage.schedule_inherit || stateUsage.schedule_date !== initUsage.schedule_date || stateUsage.schedule_source !== initUsage.schedule_source || stateUsage.schedule_comment !== initUsage.schedule_comment || stateUsage.schedule_24_7 !== initUsage.schedule_24_7)));
+  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.object_on_usage_id === initUsage.object_on_usage_id && (stateUsage.description !== initUsage.description || stateUsage.cost !== initUsage.cost || stateUsage.schedule_inherit !== initUsage.schedule_inherit || stateUsage.schedule_date !== initUsage.schedule_date || stateUsage.schedule_source !== initUsage.schedule_source || stateUsage.schedule_comment !== initUsage.schedule_comment || stateUsage.schedule_24_7 !== initUsage.schedule_24_7)));
   if (usagesChanged?.length) {
-    usagesChanged.forEach(async (usage) => await db.update(object_on_usage).set(usage).where(and(eq(object_on_usage.object_id, upsertedObject.object_id), eq(object_on_usage.usage_id, usage.usage_id))));
+    usagesChanged.forEach(async (usage) => await db.update(object_on_usage).set(usage).where(eq(object_on_usage.object_on_usage_id, usage.object_on_usage_id)));
     if (children.length) {
       const inheritingUsages = children.flatMap((child) => child.objectOnUsage?.filter((objectOnUsage) => objectOnUsage.schedule_inherit).map((objectOnUsage) => objectOnUsage) ?? []);
-      inheritingUsages.forEach(async (inheritingUsage) => usagesChanged.forEach(async (usage) => await db.update(object_on_usage).set({schedule_date: usage.schedule_date, schedule_source: usage.schedule_source, schedule_comment: usage.schedule_comment, schedule_24_7: usage.schedule_24_7}).where(and(eq(object_on_usage.object_id, inheritingUsage.object_id), eq(object_on_usage.usage_id, inheritingUsage.usage_id)))));
+      inheritingUsages.forEach(async (inheritingUsage) => usagesChanged.forEach(async (usage) => await db.update(object_on_usage).set({schedule_date: usage.schedule_date, schedule_source: usage.schedule_source, schedule_comment: usage.schedule_comment, schedule_24_7: usage.schedule_24_7}).where(eq(object_on_usage.object_on_usage_id, inheritingUsage.object_on_usage_id))));
     }
   }
   const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.usage_id === stateUsage.usage_id));
   if (usagesDeleted.length) {
-    await db.delete(object_on_usage).where(and(eq(object_on_usage.object_id, upsertedObject.object_id), inArray(object_on_usage.usage_id, usagesDeleted.map((usage) => usage.usage_id))));
+    await db.delete(object_on_usage).where(inArray(object_on_usage.object_on_usage_id, usagesDeleted.map((usage) => usage.object_on_usage_id)));
     await db.delete(object_schedule).where(and(eq(object_schedule.object_id, upsertedObject.object_id), inArray(object_schedule.usage_id, usagesDeleted.map((usage) => usage.usage_id))));
     if (children.length) {
       const inheritingUsages = children.flatMap((child) => child.objectOnUsage?.filter((objectOnUsage) => objectOnUsage.schedule_inherit).map((objectOnUsage) => objectOnUsage) ?? []);

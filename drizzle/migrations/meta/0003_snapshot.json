@@ -1,6 +1,6 @@
 {
-  "id": "9b85f0e7-ed1d-4b71-a40b-55850b8cf92c",
-  "prevId": "cc0fdfd0-2b72-4632-bfa0-a10facf9e02f",
+  "id": "013de704-42b5-40c4-b2ca-94b7db5330e1",
+  "prevId": "aa27fa36-affa-4887-892b-e759ee0dd8f1",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -330,6 +330,12 @@
       "name": "object_link",
       "schema": "",
       "columns": {
+        "link_id": {
+          "name": "link_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
         "object_id": {
           "name": "object_id",
           "type": "integer",
@@ -372,9 +378,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "object_link_object_id_order_pk": {
-          "name": "object_link_object_id_order_pk",
+        "object_link_link_id_object_id_order_pk": {
+          "name": "object_link_link_id_object_id_order_pk",
           "columns": [
+            "link_id",
             "object_id",
             "order"
           ]
@@ -454,12 +461,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -506,6 +507,12 @@
       "name": "object_on_usage",
       "schema": "",
       "columns": {
+        "object_on_usage_id": {
+          "name": "object_on_usage_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
         "object_id": {
           "name": "object_id",
           "type": "integer",
@@ -514,6 +521,12 @@
         },
         "usage_id": {
           "name": "usage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -598,6 +611,12 @@
       "name": "object_phone",
       "schema": "",
       "columns": {
+        "phone_id": {
+          "name": "phone_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
         "object_id": {
           "name": "object_id",
           "type": "integer",
@@ -640,9 +659,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "object_phone_object_id_order_pk": {
-          "name": "object_phone_object_id_order_pk",
+        "object_phone_phone_id_object_id_order_pk": {
+          "name": "object_phone_phone_id_object_id_order_pk",
           "columns": [
+            "phone_id",
             "object_id",
             "order"
           ]
@@ -709,6 +729,12 @@
       "name": "object_schedule",
       "schema": "",
       "columns": {
+        "schedule_id": {
+          "name": "schedule_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
         "object_id": {
           "name": "object_id",
           "type": "integer",
@@ -723,6 +749,12 @@
         },
         "day_num": {
           "name": "day_num",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -775,7 +807,18 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "object_schedule_schedule_id_object_id_usage_id_day_num_order_pk": {
+          "name": "object_schedule_schedule_id_object_id_usage_id_day_num_order_pk",
+          "columns": [
+            "schedule_id",
+            "object_id",
+            "usage_id",
+            "day_num",
+            "order"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.option": {

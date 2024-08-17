@@ -19,7 +19,7 @@ export default function ObjectView(props:{init:UIObject, session:Session|null}) 
           <Gallery/>
           {props.init.description ? <Description/> : null}
           {props.init.type === objectTypeEnum.org ? <Children/> : null}
-          {props.init.sections.filter((section) => section.section_type === sectionTypeEnum.usage).length ? <Usages/> : null}
+          {/* {props.init.usages.length ? <Usages/> : null} */}
           <Specs/>
         </article>
         <aside className={styles["objectView__aside"]}>

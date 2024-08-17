@@ -1,1 +1,0 @@
-ALTER TABLE "object_schedule" ADD CONSTRAINT "object_schedule_object_id_usage_id_day_num_order_pk" PRIMARY KEY("object_id","usage_id","day_num","order");
