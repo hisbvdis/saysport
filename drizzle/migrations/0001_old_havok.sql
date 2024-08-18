@@ -1,0 +1,2 @@
+ALTER TABLE "object_schedule" DROP CONSTRAINT "object_schedule_schedule_id_object_id_object_usage_id_usage_id_day_num_pk";--> statement-breakpoint
+ALTER TABLE "object_schedule" ADD PRIMARY KEY ("schedule_id");

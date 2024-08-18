@@ -1,7 +1,7 @@
 "use client";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
-import type { UsageName } from "@/drizzle/schema";
+import type { Usage } from "@/drizzle/schema";
 import { type SyntheticEvent, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Form } from "../../ui/Form";
@@ -14,7 +14,7 @@ import { EditBottomPanel } from "../../blocks/EditBottomPanel";
 import { deleteUsageById, upsertUsage } from "@/app/_db/usage";
 
 
-export default function UsageEdit(props:{init:UsageName}) {
+export default function UsageEdit(props:{init:Usage}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -29,12 +29,12 @@ export default function UsageEdit(props:{init:UsageName}) {
 
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
-    const { usage_name_id } = await upsertUsage(state, props.init);
+    const { usage_id } = await upsertUsage(state, props.init);
     if (e.nativeEvent.submitter?.dataset?.leavePage) {
       router.push("/admin/usages");
       router.refresh();
     } else {
-      router.replace(`/admin/usages/${usage_name_id}`, {scroll: false});
+      router.replace(`/admin/usages/${usage_id}`, {scroll: false});
       router.refresh();
     }
   }
@@ -47,7 +47,7 @@ export default function UsageEdit(props:{init:UsageName}) {
           <Control>
             <Control.Label>ID</Control.Label>
             <Control.Section>
-              <Input value={state?.usage_name_id} disabled/>
+              <Input value={state?.usage_id} disabled/>
             </Control.Section>
           </Control>
           <Control className="mt15">
@@ -91,7 +91,7 @@ export default function UsageEdit(props:{init:UsageName}) {
       </Card>
 
       <EditBottomPanel
-        id={state?.usage_name_id}
+        id={state?.usage_id}
         delFunc={deleteUsageById}
         delRedirectPath="/admin/sections"
         exitRedirectPath="./"

@@ -1,4 +1,4 @@
-import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectPhoto, Category, CategoryOnSection, ObjectSchedule, ObjectUsage, UsageName } from "@/drizzle/schema";
+import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectPhoto, Category, CategoryOnSection, ObjectSchedule, ObjectUsage, Usage } from "@/drizzle/schema";
 
 
 // =============================================================================
@@ -26,7 +26,7 @@ export interface DBObject extends Object_ {
   links?: ObjectLink[],
   objectOnSections?: (ObjectOnSection & {section: Section & {sectionOnSpecs: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}, description:string|null})[];
   objectOnOptions?: (ObjectOnOption & {option: Option})[];
-  objectUsages?: (ObjectUsage & {usageName: UsageName})[];
+  objectUsages?: (ObjectUsage & {usage: Usage})[];
   objectSchedules?: ObjectSchedule[]
   photos?: ObjectPhoto[];
   children?: DBObject[];
@@ -50,7 +50,7 @@ export interface UISection extends Section {
   uiID: string;
 }
 
-export interface UIUsage extends ObjectUsage, UsageName {
+export interface UIUsage extends ObjectUsage, Usage {
   uiID: string;
 }
 
@@ -59,9 +59,7 @@ export interface UICategory extends Category {
 }
 
 export interface UISchedule extends ObjectSchedule {
-  object_id: number;
-  usage_id: number;
-  uiID: string;
+
 }
 
 export interface UIObject extends Partial<Object_> {
@@ -82,7 +80,6 @@ export interface UIObject extends Partial<Object_> {
   schedules: UISchedule[];
   photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
-  objectSchedules?: ObjectSchedule[];
 }
 
 export enum UIContactTypeEnum {

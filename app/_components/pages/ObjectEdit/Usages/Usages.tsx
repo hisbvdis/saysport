@@ -89,7 +89,7 @@ export default function Usages() {
           placeholder="Добавить использование"
           requestItemsOnFirstTouch={async () =>
             (await getUsagesByFilters({objectType: state.type}))
-              .map((usage) => ({id: usage.usage_name_id, label: usage.name_service, data: usage}))
+              .map((usage) => ({id: usage.usage_id, label: usage.name_service, data: usage}))
           }
         />
         {/* <RequiredInput isValidIf={Boolean(state.sections.filter((section) => section.section_type === sectionTypeEnum.usage).length > 0)}/> */}
