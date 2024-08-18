@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
+import { sectionTypeEnum } from "@/drizzle/schema";
 import type { UISection, UISpec } from "@/app/_types/types";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
@@ -17,7 +18,6 @@ import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { getSpecsByFilters } from "@/app/_db/spec";
 import { deleteSectionById, upsertSection } from "@/app/_db/section";
-import { sectionTypeEnum, type UsageName } from "@/drizzle/schema";
 
 
 export default function SectionEdit(props:{init:UISection}) {

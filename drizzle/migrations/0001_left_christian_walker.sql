@@ -1,2 +1,0 @@
-ALTER TABLE "object_schedule" DROP CONSTRAINT "object_schedule_object_id_usage_id_day_num_order_pk";--> statement-breakpoint
-ALTER TABLE "object_schedule" ADD CONSTRAINT "object_schedule_schedule_id_object_id_usage_id_day_num_order_pk" PRIMARY KEY("schedule_id","object_id","usage_id","day_num","order");

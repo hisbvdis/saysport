@@ -12,7 +12,7 @@ export default async function UsageEditPage({params}:{params:{id:string}}) {
       <Breadcrumbs items={[
         { label: "Админка", href: "/admin" },
         { label: "Использование", href: "/admin/usages" },
-        { label: usage?.usage_name_id ? "Редактировать" : "Создать" },
+        { label: usage?.usage_id ? "Редактировать" : "Создать" },
       ]}/>
       <UsageEdit init={usage}/>
     </main>

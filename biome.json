@@ -16,6 +16,12 @@
 			},
 			"correctness": {
 				"useExhaustiveDependencies": "off"
+			},
+			"style": {
+				"noUselessElse": "off"
+			},
+			"performance": {
+				"noAccumulatingSpread": "off"
 			}
 		}
 	}
