@@ -137,7 +137,10 @@ export const getObjectById = async (id:number):Promise<UIObject> => {
       photos: {orderBy: (photos, { asc }) => [asc(photos.order)]},
       objectOnSections: {with: {section: {with: {sectionOnSpecs: {with: {spec: {with: {options: true}}}}}}}},
       objectUsages: {with: {usage: true}},
+<<<<<<< HEAD
       objectSchedules: true,
+=======
+>>>>>>> 096ca48aea6721653fd3645b3d2880700f76546e
       // -----------------------------------------------------------------------------
       children: {
         orderBy: (child, {asc}) => [asc(child.name_type)],
