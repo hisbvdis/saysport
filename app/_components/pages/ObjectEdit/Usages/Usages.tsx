@@ -25,24 +25,24 @@ export default function Usages() {
     add: (usage:UIUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages.push({...usage, order: draft.usages.length, uiID: crypto.randomUUID()});
+        draft.usages = draft.usages.concat({...usage, uiID: crypto.randomUUID()}).map((usage, i) => ({...usage, order: i}));
       }))
     },
     delete: (usage:UIUsage) => {
       setState((prevState) => create(prevState, (draft) => {
-        draft.usages = draft.usages?.filter((draftUsage) => draftUsage.usage_id !== usage.usage_id);
+        draft.usages = draft.usages?.filter((draftUsage) => draftUsage.uiID !== usage.uiID).map((usage, i) => ({...usage, order: i}));
       }));
     },
     description: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
       setState((prevState) => create(prevState, (draft) => {
-        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
         usageItem.description = e.target.value;
       }));
     },
     cost: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
       setState((prevState) => create(prevState, (draft) => {
-        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
         usageItem.cost = e.target.value as costTypeEnum;
       }));
@@ -52,7 +52,7 @@ export default function Usages() {
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Использование</Card.Heading>
-      {state.usages?.map((usage, i) => ({...usage, order: i})).map((usage) => (
+      {state.usages?.map((usage) => (
         <Card.Section key={usage.uiID} style={{display: "flex", flexDirection: "column", gap: "15px"}}>
           <FieldSet style={{display: "flex", gap: "20px"}}>
             <FieldSet.Legend style={{inlineSize: "200px"}}>

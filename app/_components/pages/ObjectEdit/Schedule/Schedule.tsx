@@ -1,5 +1,5 @@
 import { create } from "mutative";
-import { closestTo, format } from "date-fns";
+import { format } from "date-fns";
 import { type ChangeEvent, useContext } from "react";
 import type { UISchedule, UIUsage } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
@@ -16,36 +16,35 @@ export default function Schedule(props:{usage:UIUsage}) {
   const { state, setState } = useContext(ObjectEditContext);
 
   const handleSchedule = {
-    value: (e:ChangeEvent<HTMLInputElement>) => {
-      setState((prevState) => create(prevState, (draft) => {
-        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
-        if (!usageItem) return;
-        usageItem[e.target.name as keyof typeof usageItem] = e.target.value as never;
-      }))
-    },
     changeIsWork: (e:React.ChangeEvent<HTMLInputElement>) => {
       const dayNum = Number(e.target.name);
       setState((prevState) => create(prevState, (draft) => {
-        const schedule = draft.schedules?.find((draftSchedule) => draftSchedule.usage_id === usage.usage_id && draftSchedule.day_num === dayNum);
-        if (schedule) {
-          schedule.isWork = e.target.checked;
-          if (!e.target.checked) draft.schedules = draft.schedules.filter((draftSchedule) => draftSchedule.usage_id !== schedule.usage_id || (draftSchedule.usage_id === schedule.usage_id && draftSchedule.day_num !== schedule.day_num));
+        if (e.target.checked) {
+          draft.schedules = draft.schedules.concat({object_id: -1, usage_id: usage.usage_id, day_num: dayNum, uiID: crypto.randomUUID(), schedule_id: -1, order: 0, usage_name_id: usage.usage_name_id, time: "", from: 0, to: 0});
         } else {
-          draft.schedules.push({usage_name_id: usage.usage_name_id, schedule_id: -1, object_id: -1, usage_id: usage.usage_id, day_num: dayNum, time: "", from: 0, to: 0, isWork: true, times: [""], froms: [], tos: [], order: 0, scheduleIds: []})
+          draft.schedules = draft.schedules.filter((schedule) => schedule.day_num !== dayNum);
         }
       }))
     },
-    changeTime: (e:React.ChangeEvent<HTMLInputElement>, inputNum:number) => {
-      const dayNum = Number(e.target.name);
+    addTime: (dayNum:number, daySchedules:UISchedule[]) => {
       setState((prevState) => create(prevState, (draft) => {
-        const schedule = draft.schedules.find((draftSchedule) => draftSchedule.usage_id === usage.usage_id && draftSchedule.day_num === dayNum);
-        if (!schedule) return;
-        schedule.times[inputNum] = e.target.value;
+        draft.schedules = draft.schedules.concat({object_id: -1, usage_id: usage.usage_id, day_num: dayNum, uiID: crypto.randomUUID(), schedule_id: -1, order: daySchedules.length, usage_name_id: usage.usage_name_id, time: "", from: 0, to: 0});
       }));
     },
-    formatTime: (e:React.FocusEvent<HTMLInputElement>, inputNum:number) => {
+    deleteTime: (schedule:UISchedule) => {
+      setState((prevState) => create(prevState, (draft) => {
+        draft.schedules = draft.schedules.filter((draftSchedule) => draftSchedule.uiID !== schedule.uiID);
+      }));
+    },
+    changeTime: (e:React.ChangeEvent<HTMLInputElement>, schedule:UISchedule) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const scheduleItem = draft.schedules.find((draftSchedule) => draftSchedule.uiID === schedule.uiID);
+        if (!scheduleItem) return;
+        scheduleItem.time = e.target.value;
+      }));
+    },
+    formatTime: (e:React.FocusEvent<HTMLInputElement>, schedule:UISchedule) => {
       if (!e.target.value) return;
-      const dayNum = Number(e.target.name);
       const [from, to] = e.target.value.split("-").map((value) => {
         const matching = value.trim().match(/(\d+?)\s?[:.]?\s?(\d{2})?$/);
         if (!matching) return;
@@ -57,60 +56,30 @@ export default function Schedule(props:{usage:UIUsage}) {
       });
       if (!from || !to) return;
       setState((prevState) => create(prevState, (draft) => {
-        const schedule = draft.schedules.find((draftSchedule) => draftSchedule.usage_id === usage.usage_id && draftSchedule.day_num === dayNum);
-        if (!schedule) return;
-        schedule.times[inputNum] = [from.string, to.string].join(" - ");
-        schedule.froms[inputNum] = from.min;
-        schedule.tos[inputNum] = to.min;
+        const scheduleItem = draft.schedules.find((draftSchedule) => draftSchedule.uiID === schedule.uiID);
+        if (!scheduleItem) return;
+        scheduleItem.time = [from.string, to.string].join(" - ");
+        scheduleItem.from = from.min;
+        scheduleItem.to = to.min;
       }));
     },
-    addDayTime: (dayNum:number) => {
+    value: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
       setState((prevState) => create(prevState, (draft) => {
-        const schedule = draft.schedules.find((draftSchedule) => draftSchedule.usage_id === usage.usage_id && draftSchedule.day_num === dayNum);
-        if (!schedule) return;
-        schedule.times = schedule.times.concat("");
-      }));
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
+        if (!usageItem) return;
+        usageItem[e.target.name as keyof typeof usageItem] = e.target.value as never;
+      }))
     },
-    deleteDayTime: (dayNum:number, inputNum:number) => {
-      setState((prevState) => create(prevState, (draft) => {
-        const schedule = draft.schedules.find((draftSchedule) => draftSchedule.usage_id === usage.usage_id && draftSchedule.day_num === dayNum);
-        if (!schedule) return;
-        if (schedule.times.length > 1) {
-          schedule.times = schedule.times.filter((_, i) => i !== inputNum);
-          schedule.froms = schedule.froms.filter((_, i) => i !== inputNum);
-          schedule.tos = schedule.tos.filter((_, i) => i !== inputNum);
-        } else {
-          schedule.times = [""];
-          schedule.froms = [0];
-          schedule.tos = [0];
-        }
-      }));
-    },
-    changeInherit: (e:ChangeEvent<HTMLInputElement>) => {
-      setState((prevState) => create(prevState, (draft) => {
-        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
-        if (!usageItem || !draft.parent) return;
-        usageItem.schedule_inherit = e.target.checked;
-        usageItem.schedule_24_7 = draft.parent.usages[0]?.schedule_24_7;
-        usageItem.schedule_date = draft.parent.usages[0]?.schedule_date;
-        usageItem.schedule_source = draft.parent.usages[0]?.schedule_source;
-        usageItem.schedule_comment = draft.parent.usages[0]?.schedule_comment;
-        draft.schedules = draft.parent?.schedules.map((schedule) => ({...schedule, object_id: -1, usage_id: usageItem.usage_id, isWork: Boolean(schedule.times.length)}));
-      }));
-    },
-    change24_7: (e:React.ChangeEvent<HTMLInputElement>) => {
+    setDate: (date:Date|null) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
         if (!usageItem) return;
-        usageItem.schedule_24_7 = e.target.checked;
-        if (e.target.checked) {
-          draft.schedules = draft.schedules.filter((schedule) => schedule.usage_id !== usage.usage_id).concat(Array(7).fill(null).map((_, i) => ({schedule_id: -1, object_id: -1, day_num: i, usage_id: -1, usage_name_id: usage.usage_id, isWork: true, time: "", from: 0, to: 1440, times: ["0:00 - 24:00"], froms: [0], tos: [1440], order: i, scheduleIds: [-1]})))
-        }
+        usageItem.schedule_date = date;
       }));
     },
     clearAll: () => {
       setState((prevState) => create(prevState, (draft) => {
-        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
         usageItem.schedule_inherit = null;
         usageItem.schedule_24_7 = null;
@@ -120,18 +89,31 @@ export default function Schedule(props:{usage:UIUsage}) {
         draft.schedules = draft.schedules.filter((schedule) => schedule.usage_id !== usage.usage_id);
       }));
     },
-    copyToAll: (dayParam:UISchedule) => {
+    changeInherit: (e:ChangeEvent<HTMLInputElement>) => {
       setState((prevState) => create(prevState, (draft) => {
-        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
-        if (!usageItem) return;
-        draft.schedules = Array(7).fill(null).map((_,i) => ({...dayParam, day_num: i}));
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
+        if (!usageItem || !draft.parent) return;
+        usageItem.schedule_inherit = e.target.checked;
+        usageItem.schedule_24_7 = draft.parent.usages[0]?.schedule_24_7;
+        usageItem.schedule_date = draft.parent.usages[0]?.schedule_date;
+        usageItem.schedule_source = draft.parent.usages[0]?.schedule_source;
+        usageItem.schedule_comment = draft.parent.usages[0]?.schedule_comment;
+        draft.schedules = draft.parent?.schedules.map((schedule) => ({...schedule, object_id: -1, usage_id: usageItem.usage_id}));
       }));
     },
-    setDate: (date:Date|null) => {
+    change24_7: (e:React.ChangeEvent<HTMLInputElement>) => {
       setState((prevState) => create(prevState, (draft) => {
-        const usageItem = draft.usages.find((draftUsage) => draftUsage.usage_id === usage.usage_id);
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.schedule_date = date;
+        usageItem.schedule_24_7 = e.target.checked;
+        if (e.target.checked) {
+          draft.schedules = draft.schedules.filter((schedule) => schedule.usage_id !== usage.usage_id).concat(Array(7).fill(null).map((_, i) => ({schedule_id: -1, object_id: -1, day_num: i, usage_id: usage.usage_id, usage_name_id: usage.usage_name_id, time: "0:00 - 24:00", from: 0, to: 1440, order: 0, uiID: crypto.randomUUID()})));
+        }
+      }));
+    },
+    copyToAll: (daySchedules:UISchedule[]) => {
+      setState((prevState) => create(prevState, (draft) => {
+        draft.schedules = draft.schedules.filter((schedule) => schedule.usage_id !== usage.usage_id).concat(Array(7).fill(null).flatMap((_, i) => daySchedules.map((schedule) => ({...schedule, day_num: i}))));
       }));
     },
   }
@@ -158,25 +140,24 @@ export default function Schedule(props:{usage:UIUsage}) {
       >Очистить</Button>
     </div>
     <div style={{display: "flex"}}>
-      {Array(7).fill(null)
-        .map((_,i) => ({ object_id: -1, usage_id: -1, usage_name_id: -1, schedule_id: -1, day_num: i, time: "", from: 0, to: 0, uiID: crypto.randomUUID(), isWork: false, times: [], froms: [], tos: [], order: i, scheduleIds: [] }) as UISchedule)
-        .map((localDay) => state.schedules.find((dbDay) => dbDay.usage_id === usage.usage_id && dbDay.day_num === localDay.day_num) ?? localDay)
-        .map((day) => ({...day, isWork: Boolean(day.times.length)}))
-        .map((day, i) => (
-        <div key={i} style={{display: "flex", flexDirection: "column", alignItems: "center", flexGrow: 1, flexBasis: 0, border: "1px solid #eee"}}>
-          <Checkbox name={String(i)} checked={Boolean(day.isWork)} onChange={(e) => handleSchedule.changeIsWork(e)} tabIndex={-1} disabled={Boolean(usage.schedule_24_7 || usage.schedule_inherit)} style={{alignSelf: "stretch", display: "flex", justifyContent: "center"}}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</Checkbox>
-          {day.times?.map((time, i) => (
-            <p key={i} style={{display: "flex"}}>
-              <Button onClick={(e) => handleSchedule.deleteDayTime(day.day_num, i)} disabled={Boolean(usage.schedule_24_7 || usage.schedule_inherit)}>X</Button>
-              <Input name={String(day.day_num)} value={day?.isWork ? time : "Не работает"} onChange={(e) => handleSchedule.changeTime(e, i)} onBlurIfChanged={(e) => handleSchedule.formatTime(e, i)} disabled={Boolean(!day?.isWork) || Boolean(usage.schedule_24_7) || Boolean(usage.schedule_inherit)} pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d" style={{inlineSize: "100%"}}/>
+      {Array(7).fill(null).map((_, i) => ({object_id: -1, usage_id: usage.usage_id, day_num: i})).map((day) => {
+        const daySchedules = state.schedules.filter((schedule) => schedule.usage_id === usage.usage_id && schedule.day_num === day.day_num).toSorted((a, b) => a.order - b.order);
+        return (
+          <div key={day.day_num} style={{display: "flex", flexDirection: "column", alignItems: "center", flexGrow: 1, flexBasis: 0, border: "1px solid #eee"}}>
+            <Checkbox name={String(day.day_num)} checked={Boolean(daySchedules.length)} onChange={(e) => handleSchedule.changeIsWork(e)} tabIndex={-1} disabled={Boolean(usage.schedule_24_7 || usage.schedule_inherit)} style={{alignSelf: "stretch", display: "flex", justifyContent: "center"}}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][day.day_num]}</Checkbox>
+            {daySchedules.map((schedule, scheduleIndex) => (
+              <p key={scheduleIndex} style={{display: "flex"}}>
+                <Button onClick={() => handleSchedule.deleteTime(schedule)} disabled={Boolean(usage.schedule_24_7 || usage.schedule_inherit)}>X</Button>
+                <Input name={String(schedule.day_num)} value={schedule.time} onChange={(e) => handleSchedule.changeTime(e, schedule)} onBlurIfChanged={(e) => handleSchedule.formatTime(e, schedule)} disabled={Boolean(!daySchedules.length) || Boolean(usage.schedule_24_7) || Boolean(usage.schedule_inherit)} pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d" style={{inlineSize: "100%"}}/>
+              </p>
+            ))}
+            <p style={{display: "flex"}}>
+              <Button onClick={() => handleSchedule.addTime(day.day_num, daySchedules)} disabled={Boolean(!daySchedules?.length || usage.schedule_24_7 || usage.schedule_inherit)}>+</Button>
+              <Button onClick={(e) => handleSchedule.copyToAll(daySchedules)} disabled={Boolean(!daySchedules?.length || usage.schedule_24_7 || usage.schedule_inherit)}>Copy</Button>
             </p>
-          ))}
-          <p style={{display: "flex"}}>
-            <Button onClick={() => handleSchedule.addDayTime(day.day_num)} disabled={Boolean(!day?.isWork || usage.schedule_24_7 || usage.schedule_inherit)}>+</Button>
-            <Button onClick={(e) => handleSchedule.copyToAll(day)} disabled={Boolean(!day?.isWork || usage.schedule_24_7 || usage.schedule_inherit)}>Copy</Button>
-          </p>
-        </div>
-      ))}
+          </div>
+        )
+      })}
     </div>
     <div style={{display: "flex"}}>
       <Control>
@@ -190,13 +171,13 @@ export default function Schedule(props:{usage:UIUsage}) {
       <Control>
         <Control.Label>Комментарий</Control.Label>
         <Control.Section>
-          <Input name="schedule_comment" value={usage.schedule_comment} onChange={(e) => handleSchedule.value(e)} disabled={Boolean(usage.schedule_inherit)}/>
+          <Input name="schedule_comment" value={usage.schedule_comment} onChange={(e) => handleSchedule.value(e, usage)} disabled={Boolean(usage.schedule_inherit)}/>
         </Control.Section>
       </Control>
       <Control>
         <Control.Label>Источник</Control.Label>
         <Control.Section>
-          <Input name="schedule_source" value={usage.schedule_source} onChange={(e) => handleSchedule.value(e)} disabled={Boolean(usage.schedule_inherit)}/>
+          <Input name="schedule_source" value={usage.schedule_source} onChange={(e) => handleSchedule.value(e, usage)} disabled={Boolean(usage.schedule_inherit)}/>
         </Control.Section>
       </Control>
     </div>

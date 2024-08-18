@@ -59,13 +59,9 @@ export interface UICategory extends Category {
 }
 
 export interface UISchedule extends ObjectSchedule {
-  times: string[];
-  froms: number[];
-  tos: number[];
   object_id: number;
   usage_id: number;
-  isWork: boolean;
-  scheduleIds: number[];
+  uiID: string;
 }
 
 export interface UIObject extends Partial<Object_> {

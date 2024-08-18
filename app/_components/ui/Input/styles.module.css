@@ -24,7 +24,6 @@
 
 .input--textarea {
   max-inline-size: none;
-  min-block-size: 43px;
   field-sizing: content;
 }
 
