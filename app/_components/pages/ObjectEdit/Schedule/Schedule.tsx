@@ -14,26 +14,19 @@ export default function Schedule(props:{usage:UIUsage}) {
   const { usage } = props;
   const { state, setState } = useContext(ObjectEditContext);
 
-  const usageSchedules = state.schedules
-    .filter((schedule) => schedule.usageUIID === usage.uiID)
-    .reduce((accum, schedule) => {
-      let newAccum = structuredClone(accum);
-      const accumDay = newAccum.find((day) => day.day_num === schedule.day_num);
-      if (accumDay) {
-        accumDay.time = `${accumDay.time}\n${schedule.time}`;
-      } else {
-        newAccum = [...newAccum, {...schedule, usageUIID: usage.uiID}];
-      }
-      return newAccum;
-    }, [] as UISchedule[])
-
   const handleSchedule = {
     changeTime: (e:React.ChangeEvent<HTMLInputElement>) => {
       const dayNum = Number(e.target.name);
       setState((prevState) => create(prevState, (draft) => {
-        draft.schedules = draft.schedules
-          .filter((schedule) => schedule.usageUIID !== usage.uiID || (schedule.usageUIID === usage.uiID && schedule.day_num !== dayNum))
-          .concat(e.target.value.split("\n").map((time) => ({usage_id: usage.usage_id, object_usage_id: usage.object_usage_id, day_num: dayNum, uiID: crypto.randomUUID(), object_id: state.object_id ?? -1, schedule_id: -1, time: time, from: 0, to: 0, usageUIID: usage.uiID})));
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
+        if (!usageItem) return;
+        if (!usageItem.schedules) usage.schedules = [];
+        const scheduleItem = usageItem?.schedules?.find((draftSchedule) => draftSchedule.day_num === dayNum);
+        if (scheduleItem) {
+          scheduleItem.time = e.target.value;
+        } else {
+          usageItem.schedules = usageItem?.schedules?.concat({day_num: dayNum, time: e.target.value, uiID: crypto.randomUUID(), object_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0})
+        }
       }))
     },
     formatTime: (e:React.FocusEvent<HTMLInputElement>) => {
@@ -48,9 +41,12 @@ export default function Schedule(props:{usage:UIUsage}) {
         })
         .join("\n");
       setState((prevState) => create(prevState, (draft) => {
-        draft.schedules = draft.schedules
-          .filter((schedule) => schedule.usageUIID !== usage.uiID || (schedule.usageUIID === usage.uiID && schedule.day_num !== dayNum))
-          .concat(times.split("\n").map((time) => ({usage_id: usage.usage_id, object_usage_id: usage.object_usage_id, day_num: dayNum, uiID: crypto.randomUUID(), object_id: state.object_id ?? -1, schedule_id: -1, time: time, from: 0, to: 0, usageUIID: usage.uiID})));
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
+        if (!usageItem) return;
+        if (!usageItem.schedules) usage.schedules = [];
+        const scheduleItem = usageItem?.schedules?.find((draftSchedule) => draftSchedule.day_num === dayNum);
+        if (!scheduleItem) return;
+        scheduleItem.time = times;
       }));
     },
     clearAll: () => {
@@ -94,8 +90,7 @@ export default function Schedule(props:{usage:UIUsage}) {
       >Очистить</Button>
     </div>
     <div style={{display: "flex"}}>
-      {Array(7).fill(null)
-        .map((localDay, i) => usageSchedules?.find((dbDay) => dbDay.day_num === i) ?? localDay).map((day, i) => (
+      {Array(7).fill(null).map((localDay, i) => usage.schedules?.find((dbDay) => dbDay.day_num === i) ?? localDay).map((day, i) => (
         <div key={i} style={{display: "flex", flexDirection: "column", alignItems: "center", flexGrow: 1, flexBasis: 0, border: "1px solid #eee"}}>
           <p >{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</p>
           <Textarea name={String(i)} value={day?.time} onChange={(e) => handleSchedule.changeTime(e)} onBlurIfChanged={(e) => handleSchedule.formatTime(e)} pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d" style={{inlineSize: "100%"}}/>
