@@ -52,7 +52,7 @@ export default function Usages() {
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Использование</Card.Heading>
-      {state.usages?.map((usage) => (
+      {state.usages?.toSorted((a, b) => a.order - b.order).map((usage) => (
         <Card.Section key={usage.uiID} style={{display: "flex", flexDirection: "column", gap: "15px"}}>
           <FieldSet style={{display: "flex", gap: "20px"}}>
             <FieldSet.Legend style={{inlineSize: "200px"}}>
