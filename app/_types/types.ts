@@ -1,4 +1,4 @@
-import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectPhoto, Category, CategoryOnSection, ObjectSchedule, ObjectUsage, Usage } from "@/drizzle/schema";
+import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectPhoto, Category, CategoryOnSection, ObjectUsage, Usage, ObjectSchedule } from "@/drizzle/schema";
 
 
 // =============================================================================
@@ -27,9 +27,9 @@ export interface DBObject extends Object_ {
   objectOnSections?: (ObjectOnSection & {section: Section & {sectionOnSpecs: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}, description:string|null})[];
   objectOnOptions?: (ObjectOnOption & {option: Option})[];
   objectUsages?: (ObjectUsage & {usage: Usage})[];
-  objectSchedules?: ObjectSchedule[]
   photos?: ObjectPhoto[];
   children?: DBObject[];
+  objectSchedules?: ObjectSchedule[];
 }
 
 
@@ -54,12 +54,13 @@ export interface UIUsage extends ObjectUsage, Usage {
   uiID: string;
 }
 
-export interface UICategory extends Category {
-  sections: Section[];
+export interface UISchedule extends ObjectSchedule {
+  uiID: string;
+  usageUIID: string;
 }
 
-export interface UISchedule extends ObjectSchedule {
-
+export interface UICategory extends Category {
+  sections: Section[];
 }
 
 export interface UIObject extends Partial<Object_> {
@@ -77,9 +78,9 @@ export interface UIObject extends Partial<Object_> {
   sections: UISection[];
   options?: UIOption[];
   usages: UIUsage[];
-  schedules: UISchedule[];
   photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
+  schedules: UISchedule[];
 }
 
 export enum UIContactTypeEnum {

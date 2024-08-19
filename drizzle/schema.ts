@@ -336,6 +336,7 @@ export const object_usage = pgTable("object_usage", {
 export const objectUsageRelations = relations(object_usage, ({ one, many }) => ({
   object: one(object, {fields: [object_usage.object_id], references: [object.object_id]}),
   usage: one(usage, {fields: [object_usage.usage_id], references: [usage.usage_id]}),
+  schedules: many(object_schedule),
 }))
 
 export type ObjectUsage = typeof object_usage.$inferSelect;
@@ -349,7 +350,6 @@ export const object_schedule = pgTable("object_schedule", {
   schedule_id: serial("schedule_id").primaryKey(),
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   object_usage_id: integer("object_usage_id").notNull().references(() => object_usage.object_usage_id, {onDelete: "cascade"}),
-  usage_id: integer("usage_id").notNull().references(() => usage.usage_id, {onDelete: "cascade"}),
   day_num: integer("day_num").notNull(),
   time: varchar("time").notNull(),
   from: integer("from").notNull(),
