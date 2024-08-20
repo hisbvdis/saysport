@@ -1,5 +1,5 @@
 {
-  "id": "11d92ca6-aa23-43be-9094-33e4dffbe49c",
+  "id": "0a06b557-64f2-4d64-8eac-0485371e39aa",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -620,7 +620,7 @@
         "schedule_id": {
           "name": "schedule_id",
           "type": "serial",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
         "object_id": {
@@ -631,12 +631,6 @@
         },
         "object_usage_id": {
           "name": "object_usage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "usage_id": {
-          "name": "usage_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -693,33 +687,9 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
-        },
-        "object_schedule_usage_id_usage_usage_id_fk": {
-          "name": "object_schedule_usage_id_usage_usage_id_fk",
-          "tableFrom": "object_schedule",
-          "tableTo": "usage",
-          "columnsFrom": [
-            "usage_id"
-          ],
-          "columnsTo": [
-            "usage_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "object_schedule_schedule_id_object_id_object_usage_id_usage_id_day_num_pk": {
-          "name": "object_schedule_schedule_id_object_id_object_usage_id_usage_id_day_num_pk",
-          "columns": [
-            "schedule_id",
-            "object_id",
-            "object_usage_id",
-            "usage_id",
-            "day_num"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "public.object_usage": {

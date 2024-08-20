@@ -113,15 +113,13 @@ CREATE TABLE IF NOT EXISTS "object_photo" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_schedule" (
-	"schedule_id" serial NOT NULL,
+	"schedule_id" serial PRIMARY KEY NOT NULL,
 	"object_id" integer NOT NULL,
 	"object_usage_id" integer NOT NULL,
-	"usage_id" integer NOT NULL,
 	"day_num" integer NOT NULL,
 	"time" varchar NOT NULL,
 	"from" integer NOT NULL,
-	"to" integer NOT NULL,
-	CONSTRAINT "object_schedule_schedule_id_object_id_object_usage_id_usage_id_day_num_pk" PRIMARY KEY("schedule_id","object_id","object_usage_id","usage_id","day_num")
+	"to" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "object_usage" (
@@ -253,12 +251,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "object_schedule" ADD CONSTRAINT "object_schedule_object_usage_id_object_usage_object_usage_id_fk" FOREIGN KEY ("object_usage_id") REFERENCES "public"."object_usage"("object_usage_id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "object_schedule" ADD CONSTRAINT "object_schedule_usage_id_usage_usage_id_fk" FOREIGN KEY ("usage_id") REFERENCES "public"."usage"("usage_id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

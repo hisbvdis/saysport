@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1723983136040,
-      "tag": "0000_striped_phil_sheldon",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1723984123631,
-      "tag": "0001_old_havok",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1724075626181,
-      "tag": "0002_clumsy_mercury",
+      "when": 1724145199140,
+      "tag": "0000_violet_jean_grey",
       "breakpoints": true
     }
   ]
