@@ -1,10 +1,8 @@
-"use client";
-import Link from "next/link";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectViewContext } from "../ObjectView";
-import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
+import { objectTypeEnum } from "@/drizzle/schema";
 
 
 export default function Usages() {
@@ -13,21 +11,27 @@ export default function Usages() {
   return (
     <Card>
       <Card.Heading>{state.type === objectTypeEnum.place ? "Использование" : "Занятия"}</Card.Heading>
-      {state.sections.map((section) => (
-        <Card.Section key={section.section_id}>
-          <p>{section.name_public_singular}</p>
-          {section.specs.map((spec) => (
-            <div key={spec.spec_id} style={{display: "flex", gap: "10px"}}>
-              <p>{spec.name_public}</p>
-              <ul style={{display: "flex", gap: "10px"}}>
-                {state.options?.filter((option) => option.spec_id === spec.spec_id).map((option) => (
-                  <li key={option.option_id}>
-                    <Link href={`/?city=${state.city_id}&section=${section?.section_id}&options=${option.spec_id}:${option.option_id}`}>{option.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+      {state.usages.toSorted((a, b) => a.order - b.order).map((usage) => (
+        <Card.Section key={usage.usage_id}>
+          <p>{usage.name_public}</p>
+          <div>
+            {usage.cost ? <p>Стоимость: {{paid: "Платно", free: "Бесплатно"}[usage.cost]}</p> : null}
+            <p>{usage.description}</p>
+            <table style={{inlineSize: "100%", borderCollapse: "collapse"}}>
+              <tbody>
+                <tr>
+                  {Array(7).fill(null).map((_, i) => (
+                    <td key={i} style={{textAlign: "center", fontSize: "0.9em", border: "1px solid #eee", backgroundColor: "#fafafa"}}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</td>
+                  ))}
+                </tr>
+                <tr>
+                  {Array(7).fill(null).map((localDay, i) => usage.schedules.find((schedule) => schedule.day_num === i) ?? localDay).map((day, i) => (
+                    <td key={i} style={{whiteSpace: "pre-wrap", textAlign: "center", fontSize: "0.8em", border: "1px solid #eee"}}>{day?.time}</td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </Card.Section>
       ))}
     </Card>

@@ -181,11 +181,14 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
   const [ upsertedObject ] = await db.insert(object).values(fields).onConflictDoUpdate({target: object.object_id, set: {...fields}}).returning();
   const children:DBObject[] = await db.query.object.findMany({where: eq(object.parent_id, upsertedObject.object_id), with: {objectUsages: {with: {usage: true, schedules: true}}}});
 
+  const nameTitleIsChanged = state.name_title !== init.name_title;
+  if (nameTitleIsChanged) {
+    children.length && children.forEach(async (child) => await db.update(object).set({name_where: state.name_locative?.concat(state.name_title ? ` «${state.name_title}»` : "")}).where(eq(object.object_id, child.object_id)));
+  }
   const coordsIsChanged = state.coord_lat !== init.coord_lat || state.coord_lon !== init.coord_lon;
   if (coordsIsChanged) {
     children.length && children.filter((child) => child.coord_inherit).forEach(async (child) => await db.update(object).set({coord_lat: upsertedObject.coord_lat, coord_lon: upsertedObject.coord_lon}).where(eq(object.object_id, child.object_id)));
   }
-
   const statusIsChanged = state.status !== init.status || state.status_comment !== init.status_comment || state.status_source !== init.status_source || state.status_instead_id !== init.status_instead_id;
   if (statusIsChanged) {
     children.length && children.filter((child) => child.status_inherit).forEach(async (child) => await db.update(object).set({status: state.status, status_comment: state.status_comment, status_source: state.status_source, status_instead_id: state.status_instead_id}).where(eq(object.object_id, child.object_id)));
@@ -250,7 +253,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
       }
     })
   }
-  const usagesChanged = state.usages?.filter((stateUsage) => init.usages?.some((initUsage) => stateUsage.uiID === initUsage.uiID && (stateUsage.description !== initUsage.description || stateUsage.cost !== initUsage.cost || stateUsage.schedule_inherit !== initUsage.schedule_inherit || stateUsage.schedules.some((stateSchedule) => !initUsage.schedules.some((initSchedule) => stateSchedule.time === initSchedule.time)))));
+  const usagesChanged = state.usages.filter((stateUsage) => init.usages.some((initUsage) => stateUsage.uiID === initUsage.uiID && (stateUsage.description !== initUsage.description || stateUsage.cost !== initUsage.cost || stateUsage.schedule_inherit !== initUsage.schedule_inherit)));
   if (usagesChanged.length) {
     usagesChanged.forEach(async (changedUsage) => {
       await db.update(object_usage).set(changedUsage).where(eq(object_usage.object_usage_id, changedUsage.object_usage_id));

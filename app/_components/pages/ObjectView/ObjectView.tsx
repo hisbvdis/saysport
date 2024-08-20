@@ -1,13 +1,13 @@
 "use client";
 import clsx from "clsx";
 import { createContext } from "react";
-import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
+import type { Session } from "next-auth";
+import { objectTypeEnum } from "@/drizzle/schema";
 import type { UIObject } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
 import { Children, Contacts, Description, Header, Specs, Usages, Gallery } from ".";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import type { Session } from "next-auth";
 
 
 export default function ObjectView(props:{init:UIObject, session:Session|null}) {

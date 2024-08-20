@@ -33,7 +33,7 @@ export default function Specs() {
               .map((section) => ({id: section.section_id, label: section.name_service, data: section}))
           }
         />
-        <RequiredInput isValidIf={state.type === objectTypeEnum.org ? Boolean(state.sections.length > 0) : Boolean(state.sections.length > 1)}/>
+        <RequiredInput isValidIf={state.type === objectTypeEnum.place ? Boolean(state.sections.length > 1) : Boolean(state.sections.length > 0) }/>
       </Card.Section>
     </Card>
   )

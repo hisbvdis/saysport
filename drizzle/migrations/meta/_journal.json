@@ -8,6 +8,34 @@
       "when": 1724145199140,
       "tag": "0000_violet_jean_grey",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1724150455016,
+      "tag": "0001_flat_forge",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1724150474478,
+      "tag": "0002_greedy_franklin_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1724150542323,
+      "tag": "0003_faithful_gorgon",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1724152122721,
+      "tag": "0004_skinny_millenium_guard",
+      "breakpoints": true
     }
   ]
 }
