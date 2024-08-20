@@ -77,7 +77,6 @@ export default function Usages() {
             )}
             </FieldSet.Section>
           </FieldSet>
-          <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.description(e, usage)} maxLength="2000" />
           <Schedule usage={usage}/>
         </Card.Section>
       ))}

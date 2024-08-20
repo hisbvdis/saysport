@@ -14,24 +14,35 @@ export default function Usages() {
       {state.usages.toSorted((a, b) => a.order - b.order).map((usage) => (
         <Card.Section key={usage.usage_id}>
           <p>{usage.name_public}</p>
-          <div>
-            {usage.cost ? <p>Стоимость: {{paid: "Платно", free: "Бесплатно"}[usage.cost]}</p> : null}
+          <div style={{marginBlockStart: "5px"}}>
+            {usage.cost ? <p>
+              <span style={{color: "#808080"}}>Стоимость:</span>
+              <span>{{paid: "Платно", free: "Бесплатно"}[usage.cost]}</span>
+            </p> : null}
             <p>{usage.description}</p>
-            <table style={{inlineSize: "100%", borderCollapse: "collapse"}}>
-              <tbody>
-                <tr>
-                  {Array(7).fill(null).map((_, i) => (
-                    <td key={i} style={{textAlign: "center", fontSize: "0.9em", border: "1px solid #eee", backgroundColor: "#fafafa"}}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</td>
-                  ))}
-                </tr>
-                <tr>
-                  {Array(7).fill(null).map((localDay, i) => usage.schedules.find((schedule) => schedule.day_num === i) ?? localDay).map((day, i) => (
-                    <td key={i} style={{whiteSpace: "pre-wrap", textAlign: "center", fontSize: "0.8em", border: "1px solid #eee"}}>{day?.time}</td>
-                  ))}
-                </tr>
-              </tbody>
-            </table>
           </div>
+          {usage.schedules.filter((schedule) => schedule.time).length > 0 ? (
+            <div style={{marginBlockStart: "5px"}}>
+              {usage.schedules.every((schedule, i, arr) => schedule.time === arr[0].time) ? (
+                <p>Ежедневно: {usage.schedules[0].time}</p>
+              ) : (
+                <table style={{marginBlockStart: "5px", inlineSize: "100%", borderCollapse: "collapse"}}>
+                  <tbody>
+                    <tr>
+                      {usage.schedules.filter((schedule) => schedule?.time).map((day, i) => (
+                        <td key={i} style={{textAlign: "center", fontSize: "0.9em", border: "1px solid #eee", backgroundColor: "#fafafa"}}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][day.day_num]}</td>
+                      ))}
+                    </tr>
+                    <tr>
+                      {usage.schedules.filter((schedule) => schedule?.time).map((localDay, i) => usage.schedules.find((schedule) => schedule.day_num === localDay.day_num) ?? localDay).map((day, i) => (
+                        <td key={i} style={{whiteSpace: "pre-wrap", textAlign: "center", fontSize: "0.8em", border: "1px solid #eee"}}>{day?.time}</td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              )}
+            </div>
+          ) : null}
         </Card.Section>
       ))}
     </Card>

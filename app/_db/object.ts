@@ -249,19 +249,24 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     usagesAdded.forEach(async (usage) => {
       const [upsertedUsage] = await db.insert(object_usage).values({...usage, object_id: upsertedObject.object_id}).returning({object_usage_id: object_usage.object_usage_id});
       if (usage.schedules?.length) {
-        await db.insert(object_schedule).values(usage.schedules.flatMap((schedule, i) => schedule.time.split("\n").map((time) => ({object_id: upsertedObject.object_id, object_usage_id: upsertedUsage.object_usage_id, day_num: i, time: time, from: 0, to: 1}))));
+        await db.insert(object_schedule).values(usage.schedules.flatMap((schedule, i) => schedule.time.split("\n").map((time) => ({object_id: upsertedObject.object_id, object_usage_id: upsertedUsage.object_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 1}))));
       }
     })
   }
-  const usagesChanged = state.usages.filter((stateUsage) => init.usages.some((initUsage) => stateUsage.uiID === initUsage.uiID && (stateUsage.description !== initUsage.description || stateUsage.cost !== initUsage.cost || stateUsage.schedule_inherit !== initUsage.schedule_inherit)));
-  if (usagesChanged.length) {
-    usagesChanged.forEach(async (changedUsage) => {
-      await db.update(object_usage).set(changedUsage).where(eq(object_usage.object_usage_id, changedUsage.object_usage_id));
-      const schedulesChanged = changedUsage.schedules.filter((stateSchedule) => !init.usages.find((initUsage) => initUsage.uiID === changedUsage.uiID)?.schedules.some((initSchedule) => stateSchedule.time === initSchedule.time));
-      await db.delete(object_schedule).where(and(eq(object_schedule.object_usage_id, changedUsage.object_usage_id), inArray(object_schedule.day_num, schedulesChanged.map((schedule) => schedule.day_num))));
-      await db.insert(object_schedule).values(schedulesChanged.filter((schedule) => schedule.time).flatMap((schedule, i) => schedule.time.split("\n").map((time) => ({object_id: upsertedObject.object_id, object_usage_id: changedUsage.object_usage_id, day_num: i, time: time, from: 0, to: 1}))));
-    });
-  }
+  state.usages.forEach(async (stateUsage) => {
+    const initUsage = init.usages.find((initUsage) => initUsage.uiID === stateUsage.uiID);
+    if (!initUsage) return;
+    const usagesDataChanged = state.usages.filter((stateUsage) => init.usages.some((initUsage) => stateUsage.uiID === initUsage.uiID && (stateUsage.description !== initUsage.description || stateUsage.cost !== initUsage.cost || stateUsage.schedule_inherit !== initUsage.schedule_inherit)));
+    if (usagesDataChanged.length)  {
+      await db.update(object_usage).set(stateUsage).where(eq(object_usage.object_usage_id, stateUsage.object_usage_id));
+    }
+    const usageScheduleChanged = stateUsage.schedules.filter((stateSchedule) => initUsage.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num && stateSchedule.time !== initSchedule.time));
+    console.log( usageScheduleChanged )
+    await db.delete(object_schedule).where(and(eq(object_schedule.object_usage_id, stateUsage.object_usage_id), inArray(object_schedule.day_num, usageScheduleChanged.map((schedule) => schedule.day_num))));
+    if (usageScheduleChanged.filter((schedule) => schedule.time).length) {
+      await db.insert(object_schedule).values(usageScheduleChanged.filter((schedule) => schedule.time).flatMap((schedule, i) => schedule.time.split("\n").map((time) => ({object_id: upsertedObject.object_id, object_usage_id: stateUsage.object_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 1}))));
+    }
+  })
   const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.uiID === stateUsage.uiID));
   if (usagesDeleted.length) {
     await db.delete(object_usage).where(inArray(object_usage.object_usage_id, usagesDeleted.map((deletedUsage) => deletedUsage.object_usage_id)));
