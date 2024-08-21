@@ -34,7 +34,7 @@ export default function Catalog(props:Props) {
               <Control.Label>Город</Control.Label>
               <Select
                 isAutocomplete
-                value={city?.city_id ? Number(city?.city_id) : ""}
+                value={city?.city_id ? String(city?.city_id) : ""}
                 label={city?.name}
                 onChange={(id) => {id ? router.push(manageSearchParams.set("city", id)) : router.push(manageSearchParams.delete(["city"]))}}
                 placeholder="Введите название"

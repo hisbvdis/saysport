@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 
 
 export default function Menu(props:Props) {
-  const { isShowMenu=false, items, value, onSelect } = props;
+  const { isShowMenu=false, value, onSelect, items } = props;
   const { className, style } = props;
   const [ focusIndex, setFocusIndex ] = useState(0);
   const itemsListRef = useRef<HTMLUListElement>(null);
@@ -62,7 +62,7 @@ export default function Menu(props:Props) {
 
   useEffect(() => {
     setFocusIndex(items?.length && items.some((item) => item.id === value) ? items.findIndex((item) => item.id === value) : 0);
-    items?.length && focusItemByIndex(0);
+    // items?.length && focusItemByIndex(0);
   }, [items])
 
   if (!isShowMenu) return null;

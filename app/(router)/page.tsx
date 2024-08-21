@@ -55,6 +55,7 @@ export interface SearchParamsType {
   days?:string;
   from?:string;
   to?:string;
+  cost?:string;
 }
 
 interface Props {

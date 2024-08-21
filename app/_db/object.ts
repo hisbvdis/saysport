@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte, ne, notExists, sql } from "drizzle-orm";
-import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_usage, object_schedule } from "@/drizzle/schema";
+import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_usage, object_schedule, costTypeUnion } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBObject, UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -34,6 +34,7 @@ export const getObjectsCountByFilters = async (filters?:Filters) => {
   const days = filters?.days?.split(",").map((day) => Number(day)) ?? [];
   const from = filters?.from;
   const to = filters?.to;
+  const cost = filters?.cost?.split(",").map((value) => String(value)) as costTypeUnion[];
   const groupedOptions = Object.entries(optionIds
     ? optionIds /* "1:1,1:2,!2:3" */
       .split(",") /* ["1:1"],["1:2"],["!2:3"] */
@@ -54,7 +55,7 @@ export const getObjectsCountByFilters = async (filters?:Filters) => {
     })) : undefined,
     status ? inArray(object.status, status) : undefined,
     photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined,
-    days.length || from || to ? exists(db.select().from(object_schedule).where(and(eq(object_schedule.object_id, object.object_id), days.length ? inArray(object_schedule.day_num, days) : undefined, from ? gte(object_schedule.from, Number(from)) : undefined, to ? lte(object_schedule.to, Number(to)) : undefined))) : undefined,
+    days.length || from || to || cost?.length ? exists(db.select().from(object_schedule).leftJoin(object_usage, eq(object_schedule.object_usage_id, object_usage.object_usage_id)).where(and(eq(object_schedule.object_id, object.object_id), days.length ? inArray(object_schedule.day_num, days) : undefined, from ? lte(object_schedule.from, Number(from)) : undefined, to ? gte(object_schedule.to, Number(to)) : undefined, cost?.length ? inArray(object_usage.cost, cost) : undefined))) : undefined,
   ))
   return dbData;
 }
@@ -72,6 +73,7 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
   const days = filters?.days?.split(",").map((day) => Number(day)) ?? [];
   const from = filters?.from;
   const to = filters?.to;
+  const cost = filters?.cost?.split(",").map((value) => String(value)) as costTypeUnion[] ?? [];
   const groupedOptions = Object.entries(optionIds
     ? optionIds /* "1:1,1:2,!2:3" */
       .split(",") /* ["1:1"],["1:2"],["!2:3"] */
@@ -93,7 +95,13 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
       })) : undefined,
       status ? inArray(object.status, status) : undefined,
       photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined,
-      days.length || from || to ? exists(db.select().from(object_schedule).where(and(eq(object_schedule.object_id, object.object_id), days.length ? inArray(object_schedule.day_num, days) : undefined, from ? gte(object_schedule.from, Number(from)) : undefined, to ? lte(object_schedule.to, Number(to)) : undefined))) : undefined,
+      days.length || from || to || cost?.length ? exists(db.select().from(object_schedule).innerJoin(object_usage, eq(object_schedule.object_usage_id, object_usage.object_usage_id)).where(and(
+        eq(object_schedule.object_id, object.object_id),
+        days.length ? inArray(object_schedule.day_num, days) : undefined,
+        from ? and(lte(object_schedule.from, Number(from)), gte(object_schedule.to, Number(from))) : undefined,
+        to ? gte(object_schedule.to, Number(to)) : undefined,
+        cost?.length ? inArray(object_usage.cost, cost) : undefined
+      ))) : undefined,
     ),
     with: {
       // statusInstead: true,
@@ -258,7 +266,16 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     usagesAdded.forEach(async (usage) => {
       const [upsertedUsage] = await db.insert(object_usage).values({...usage, object_id: upsertedObject.object_id}).returning({object_usage_id: object_usage.object_usage_id});
       if (usage.schedules?.length) {
-        await db.insert(object_schedule).values(usage.schedules.flatMap((schedule, i) => schedule.time.split("\n").map((time) => ({object_id: upsertedObject.object_id, object_usage_id: upsertedUsage.object_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 1}))));
+        // await db.insert(object_schedule).values(usage.schedules.flatMap((schedule, i) => schedule.time.split("\n").map((time) => ({object_id: upsertedObject.object_id, object_usage_id: upsertedUsage.object_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 1}))));
+        await db.insert(object_schedule).values(usage.schedules.flatMap((schedule, i) => schedule.time.split("\n").map((time) => {
+          const resultObject = {object_id: upsertedObject.object_id, object_usage_id: upsertedUsage.object_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 0};
+          const matching = time.trim().match(/(\d{1,2}):?(\d{2})?\s?-\s?(\d{1,2}):?(\d{2})?$/);
+          if (!matching) return resultObject;
+          const [_, hoursFrom, minutesFrom, hoursTo, minutesTo] = matching;
+          resultObject.from = Number(hoursFrom) * 60 + Number(minutesFrom);
+          resultObject.to = Number(hoursTo) * 60 + Number(minutesTo);
+          return resultObject;
+        })));
       }
     })
   }
@@ -272,7 +289,15 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     const usageScheduleChanged = stateUsage.schedules.filter((stateSchedule) => !stateSchedule.time || initUsage.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num && stateSchedule.time !== initSchedule.time));
     await db.delete(object_schedule).where(and(eq(object_schedule.object_usage_id, stateUsage.object_usage_id), inArray(object_schedule.day_num, usageScheduleChanged.map((schedule) => schedule.day_num))));
     if (usageScheduleChanged.filter((schedule) => schedule.time).length) {
-      await db.insert(object_schedule).values(usageScheduleChanged.filter((schedule) => schedule.time).flatMap((schedule, i) => schedule.time.split("\n").map((time) => ({object_id: upsertedObject.object_id, object_usage_id: stateUsage.object_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 1}))));
+      await db.insert(object_schedule).values(usageScheduleChanged.filter((schedule) => schedule.time).flatMap((schedule, i) => schedule.time.split("\n").map((time) => {
+        const resultObject = {object_id: upsertedObject.object_id, object_usage_id: stateUsage.object_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 0};
+          const matching = time.trim().match(/(\d{1,2}):?(\d{2})?\s?-\s?(\d{1,2}):?(\d{2})?$/);
+          if (!matching) return resultObject;
+          const [_, hoursFrom, minutesFrom, hoursTo, minutesTo] = matching;
+          resultObject.from = Number(hoursFrom) * 60 + Number(minutesFrom);
+          resultObject.to = Number(hoursTo) * 60 + Number(minutesTo);
+          return resultObject;
+      })));
     }
   })
   const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.uiID === stateUsage.uiID));

@@ -4,7 +4,7 @@
   z-index: 1;
 
   min-inline-size: max(100%, 150px);
-  max-block-size: 500px;
+  max-block-size: 250px;
   padding-inline-start: 0;
 
   font-size: var(--textField-fontSize, 0.8125rem);

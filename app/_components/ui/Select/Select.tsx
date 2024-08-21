@@ -193,6 +193,6 @@ interface Props {
 interface Item {
   id: string | number;
   label: string | null;
-  index?: number;
+  // index?: number;
   data?: any;
 }

@@ -117,7 +117,22 @@ export default function Filters(props:Props) {
       <Card.Section>
         <Control>
           <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
-            <span>График работы</span>
+            <span>Стоимость</span>
+          </Control.Label>
+          <CheckboxGroup arrayToCompareWith={searchParams.cost?.split(",")}>
+            <Link href={manageSearchParams.appendOrClear("cost", "paid")}>
+              <Checkbox value="paid" tabIndex={-1}>Платно</Checkbox>
+            </Link>
+            <Link href={manageSearchParams.appendOrClear("cost", "free")}>
+              <Checkbox value="free" tabIndex={-1}>Бесплатно</Checkbox>
+            </Link>
+          </CheckboxGroup>
+        </Control>
+      </Card.Section>
+      <Card.Section>
+        <Control>
+          <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+            <span>Время</span>
           </Control.Label>
           <CheckboxGroup arrayToCompareWith={searchParams.days?.split(",")} style={{display: "flex", flexDirection: "row"}}>
             {Array(7).fill(null).map((_, i) => (
