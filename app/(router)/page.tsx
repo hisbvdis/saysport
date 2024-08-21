@@ -52,6 +52,9 @@ export interface SearchParamsType {
   status?:string;
   query:string;
   page?:string;
+  days?:string;
+  from?:string;
+  to?:string;
 }
 
 interface Props {

@@ -79,6 +79,7 @@ export default function Select(props:Props) {
   const handleMenuSelect = (index:number) => {
     const item = suggestions?.[index];
     setSelectedItem(item);
+    onChange(String(item.id));
     onChangeData(item?.data);
     setSuggestions(localItems ?? []);
     setIsShowMenu(false);
@@ -160,7 +161,7 @@ export default function Select(props:Props) {
           </Button>
         : null}
       </p>
-      <select className={styles["select__nativeSelect"]} name={props.name} value={props.value || ""} onChange={onChange} ref={selectRef} tabIndex={-1}>
+      <select className={styles["select__nativeSelect"]} name={props.name} value={props.value || ""} onChange={(e) => e} ref={selectRef} tabIndex={-1}>
         <option value={selectedItem?.id ?? ""}/>
       </select>
       <Menu
@@ -176,13 +177,13 @@ export default function Select(props:Props) {
 interface Props {
   isAutocomplete?: boolean;
   name?: string;
-  value?: string | number | null;
+  value?: string | null;
   label?: string | null;
   items?: Item[];
   requestItemsOnInputChange?: (value:string) => Promise<Item[]>;
   requestItemsOnFirstTouch?: (value:string) => Promise<Item[]>;
   requestMinInputLenght?: number;
-  onChange?: ChangeEventHandler<HTMLSelectElement>;
+  onChange?: (id:string) => void;
   onChangeData?: (data: any) => any;
   placeholder?: string;
   disabled?: boolean;

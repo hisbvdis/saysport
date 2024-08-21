@@ -1,7 +1,5 @@
 import "dotenv/config";
-import sharp from "sharp";
 import { type NextRequest, NextResponse } from "next/server";
-import { existsSync, mkdirSync } from "node:fs";
 import { S3Client, PutObjectCommand, DeleteObjectsCommand } from '@aws-sdk/client-s3';
 
 const s3Client = new S3Client({

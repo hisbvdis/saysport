@@ -11,6 +11,7 @@ import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import { Select } from "@/app/_components/ui/Select";
 
 
 export default function Filters(props:Props) {
@@ -104,6 +105,41 @@ export default function Filters(props:Props) {
               <Checkbox value="false" tabIndex={-1}>Без фото</Checkbox>
             </Link>
           </CheckboxGroup>
+        </Control>
+      </Card.Section>
+    </Card>
+
+    {/* Usage */}
+    <Card className={className} style={style}>
+      <Card.Heading style={{display: "flex", alignItems: "center"}}>
+        <span style={{marginInlineEnd: "auto", paddingInlineEnd: "20px"}}>Использование</span>
+      </Card.Heading>
+      <Card.Section>
+        <Control>
+          <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+            <span>График работы</span>
+          </Control.Label>
+          <CheckboxGroup arrayToCompareWith={searchParams.days?.split(",")} style={{display: "flex", flexDirection: "row"}}>
+            {Array(7).fill(null).map((_, i) => (
+              <Link key={i} href={manageSearchParams.appendOrClear("days", String(i))}>
+                <Checkbox value={String(i)} tabIndex={-1} style={{display: "flex", flexDirection: "column-reverse"}}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</Checkbox>
+              </Link>
+            ))}
+          </CheckboxGroup>
+          <div style={{display: "flex", gap: "10px", marginBlockStart: "10px"}}>
+            <Select
+              value={searchParams.from ? searchParams.from : ""}
+              onChange={(id) => {id ? router.push(manageSearchParams.set("from", id)) : router.push(manageSearchParams.delete(["from"]))}}
+              placeholder="с"
+              items={[{id: "", label: ""}].concat(Array(48).fill(null).map((_, i) => ({id: String(i * 30), label: `${Math.floor(i / 2)}:${i % 2 === 0 ? "00" : "30"}`})))}
+            />
+            <Select
+              value={searchParams.to ? searchParams.to : ""}
+              onChange={(id) => {id ? router.push(manageSearchParams.set("to", id)) : router.push(manageSearchParams.delete(["to"]))}}
+              placeholder="до"
+              items={[{id: "", label: ""}].concat(Array(48).fill(null).map((_, i) => ({id: String(i * 30), label: `${Math.floor(i / 2)}:${i % 2 === 0 ? "00" : "30"}`})))}
+            />
+          </div>
         </Control>
       </Card.Section>
     </Card>

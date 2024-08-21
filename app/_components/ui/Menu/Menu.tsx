@@ -37,10 +37,10 @@ export default function Menu(props:Props) {
   const focusItemByIndex = (index:number) => {
     if (!isShowMenu || !itemsListRef.current) return;
     const itemElem = itemsListRef.current.children[index] as HTMLLIElement;
-    const itemRect = itemsListRef.current.children[index].getBoundingClientRect();
+    const itemRect = itemsListRef.current.children[index]?.getBoundingClientRect();
     const listRect = itemsListRef.current.getBoundingClientRect();
-    if (itemRect.top < listRect.top) itemsListRef.current.scrollTo({top: itemElem.offsetTop});
-    if (itemRect.bottom > listRect.bottom) itemsListRef.current.scrollTo({top: itemElem.offsetTop + itemRect.height - listRect.height});
+    if (itemRect?.top < listRect.top) itemsListRef.current.scrollTo({top: itemElem.offsetTop});
+    if (itemRect?.bottom > listRect.bottom) itemsListRef.current.scrollTo({top: itemElem.offsetTop + itemRect.height - listRect.height});
   }
 
   const handlePointerDown = (e:React.PointerEvent<HTMLLIElement>) => {

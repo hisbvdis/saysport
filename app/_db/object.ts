@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
-import { and, between, count, desc, eq, exists, ilike, inArray, isNull, ne, notExists, sql } from "drizzle-orm";
+import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte, ne, notExists, sql } from "drizzle-orm";
 import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_usage, object_schedule } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBObject, UIObject } from "../_types/types";
@@ -31,6 +31,9 @@ export const getObjectsCountByFilters = async (filters?:Filters) => {
   const photo = filters?.photo?.split(",");
   const sectionId = filters?.section ? Number(filters.section) : undefined;
   const optionIds = filters?.options ?? undefined;
+  const days = filters?.days?.split(",").map((day) => Number(day)) ?? [];
+  const from = filters?.from;
+  const to = filters?.to;
   const groupedOptions = Object.entries(optionIds
     ? optionIds /* "1:1,1:2,!2:3" */
       .split(",") /* ["1:1"],["1:2"],["!2:3"] */
@@ -47,10 +50,11 @@ export const getObjectsCountByFilters = async (filters?:Filters) => {
       if (specId.startsWith("!")) {
         return inArray(object.object_id, db.select({object_id: object_on_option.object_id}).from(object_on_option).where(inArray(object_on_option.option_id, optionIdArr)).groupBy(object_on_option.object_id).having(eq(sql`COUNT(DISTINCT ${object_on_option.option_id})`, optionIdArr.length)))
       }
-      return exists(db.select().from(object_on_option).where(and(eq(object.object_id, object_on_option.object_id), inArray(object_on_option.option_id, optionIdArr))))
+      return exists(db.select().from(object_on_option).where(and(eq(object_on_option.object_id, object.object_id), inArray(object_on_option.option_id, optionIdArr))))
     })) : undefined,
     status ? inArray(object.status, status) : undefined,
-    photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined
+    photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined,
+    days.length || from || to ? exists(db.select().from(object_schedule).where(and(eq(object_schedule.object_id, object.object_id), days.length ? inArray(object_schedule.day_num, days) : undefined, from ? gte(object_schedule.from, Number(from)) : undefined, to ? lte(object_schedule.to, Number(to)) : undefined))) : undefined,
   ))
   return dbData;
 }
@@ -65,6 +69,9 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
   const limit = filters?.limit;
   const sectionId = filters?.section ? Number(filters.section) : undefined;
   const optionIds = filters?.options ?? undefined;
+  const days = filters?.days?.split(",").map((day) => Number(day)) ?? [];
+  const from = filters?.from;
+  const to = filters?.to;
   const groupedOptions = Object.entries(optionIds
     ? optionIds /* "1:1,1:2,!2:3" */
       .split(",") /* ["1:1"],["1:2"],["!2:3"] */
@@ -82,10 +89,11 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
         if (specId.startsWith("!")) {
           return inArray(object.object_id, db.select({object_id: object_on_option.object_id}).from(object_on_option).where(inArray(object_on_option.option_id, optionIdArr)).groupBy(object_on_option.object_id).having(eq(sql`COUNT(DISTINCT ${object_on_option.option_id})`, optionIdArr.length)))
         }
-        return exists(db.select().from(object_on_option).where(and(eq(object.object_id, object_on_option.object_id), inArray(object_on_option.option_id, optionIdArr))))
+        return exists(db.select().from(object_on_option).where(and(eq(object_on_option.object_id, object.object_id), inArray(object_on_option.option_id, optionIdArr))))
       })) : undefined,
       status ? inArray(object.status, status) : undefined,
-      photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined
+      photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined,
+      days.length || from || to ? exists(db.select().from(object_schedule).where(and(eq(object_schedule.object_id, object.object_id), days.length ? inArray(object_schedule.day_num, days) : undefined, from ? gte(object_schedule.from, Number(from)) : undefined, to ? lte(object_schedule.to, Number(to)) : undefined))) : undefined,
     ),
     with: {
       // statusInstead: true,
@@ -96,6 +104,7 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
       objectOnOptions: {with: {option: true}},
       photos: {orderBy: (photos, { asc }) => [asc(photos.order)]},
       objectOnSections: {with: {section: {with: {sectionOnSpecs: {with: {spec: {with: {options: true}}}}}}}},
+      // objectSchedules: true,
     },
     orderBy: [desc(object.created)],
     limit: limit,
@@ -260,7 +269,7 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     if (usagesDataChanged.length)  {
       await db.update(object_usage).set(stateUsage).where(eq(object_usage.object_usage_id, stateUsage.object_usage_id));
     }
-    const usageScheduleChanged = stateUsage.schedules.filter((stateSchedule) => initUsage.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num && stateSchedule.time !== initSchedule.time));
+    const usageScheduleChanged = stateUsage.schedules.filter((stateSchedule) => !stateSchedule.time || initUsage.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num && stateSchedule.time !== initSchedule.time));
     await db.delete(object_schedule).where(and(eq(object_schedule.object_usage_id, stateUsage.object_usage_id), inArray(object_schedule.day_num, usageScheduleChanged.map((schedule) => schedule.day_num))));
     if (usageScheduleChanged.filter((schedule) => schedule.time).length) {
       await db.insert(object_schedule).values(usageScheduleChanged.filter((schedule) => schedule.time).flatMap((schedule, i) => schedule.time.split("\n").map((time) => ({object_id: upsertedObject.object_id, object_usage_id: stateUsage.object_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 1}))));
