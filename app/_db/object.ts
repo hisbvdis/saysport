@@ -261,7 +261,6 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
       await db.update(object_usage).set(stateUsage).where(eq(object_usage.object_usage_id, stateUsage.object_usage_id));
     }
     const usageScheduleChanged = stateUsage.schedules.filter((stateSchedule) => initUsage.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num && stateSchedule.time !== initSchedule.time));
-    console.log( usageScheduleChanged )
     await db.delete(object_schedule).where(and(eq(object_schedule.object_usage_id, stateUsage.object_usage_id), inArray(object_schedule.day_num, usageScheduleChanged.map((schedule) => schedule.day_num))));
     if (usageScheduleChanged.filter((schedule) => schedule.time).length) {
       await db.insert(object_schedule).values(usageScheduleChanged.filter((schedule) => schedule.time).flatMap((schedule, i) => schedule.time.split("\n").map((time) => ({object_id: upsertedObject.object_id, object_usage_id: stateUsage.object_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 1}))));
