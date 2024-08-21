@@ -26,9 +26,9 @@ export default function Categories(props:Props) {
       <Card.Section style={{padding: 0}}>
         <Select
           isAutocomplete
-          onChange={(id) => {
+          onChange={(e) => {
             const paramsWithoutPageParam = manageSearchParams.delete(["page"]);
-            router.push(manageSearchParams.set("section", id, paramsWithoutPageParam))
+            router.push(manageSearchParams.set("section", e.target.value, paramsWithoutPageParam))
           }}
           placeholder="Найти раздел"
           requestItemsOnInputChange={async (name) =>

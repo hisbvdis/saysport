@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { type ChangeEvent, type ChangeEventHandler, useEffect, useRef, useState } from "react";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Menu } from "@/app/_components/ui/Menu";
 import { Input } from "@/app/_components/ui/Input/";
@@ -73,13 +73,14 @@ export default function Select(props:Props) {
     setInputValue("");
     setSelectedItem({id: "", label: ""});
     onChangeData({});
+    onChange({target:{name: props.name ?? "", value: ""}});
     inputRef.current?.focus();
   }
 
   const handleMenuSelect = (index:number) => {
     const item = suggestions?.[index];
     setSelectedItem(item);
-    onChange(String(item.id));
+    onChange({target:{name: props.name ?? "", value: String(item.id)}});
     onChangeData(item?.data);
     setSuggestions(localItems ?? []);
     setIsShowMenu(false);
@@ -104,20 +105,26 @@ export default function Select(props:Props) {
         if (isAutocomplete) return;
         if (isShowMenu) return;
         e.preventDefault();
-        if (localItems?.length === 0 || !selectedItem || !selectedItem.index || selectedItem?.index === 0) return;
-        const item = localItems?.[selectedItem?.index - 1];
+        if (localItems?.length === 0 || !selectedItem) return;
+        const selectedItemIndex = localItems.findIndex((item) => item.id === selectedItem?.id);
+        if (selectedItemIndex === 0) return;
+        const item = localItems?.[selectedItemIndex - 1];
         setSelectedItem(item);
         onChangeData(item?.data);
+        onChange({target:{name: props.name ?? "", value: String(item.id)}});
         break;
       }
       case "ArrowDown" : {
         if (isAutocomplete) return;
         if (isShowMenu) return;
         e.preventDefault();
-        if (localItems?.length === 0 || !selectedItem || !selectedItem.index || selectedItem?.index === localItems?.length - 1) return;
-        const item = localItems?.[selectedItem?.index + 1];
+        if (localItems?.length === 0 || !selectedItem) return;
+        const selectedItemIndex = localItems.findIndex((item) => item.id === selectedItem.id);
+        if (selectedItemIndex === localItems?.length - 1) return;
+        const item = localItems?.[selectedItemIndex + 1];
         setSelectedItem(item);
         onChangeData(item?.data);
+        onChange({target:{name: props.name ?? "", value: String(item.id)}});
         break;
       }
     }
@@ -183,8 +190,8 @@ interface Props {
   requestItemsOnInputChange?: (value:string) => Promise<Item[]>;
   requestItemsOnFirstTouch?: (value:string) => Promise<Item[]>;
   requestMinInputLenght?: number;
-  onChange?: (id:string) => void;
-  onChangeData?: (data: any) => any;
+  onChange?: (e:{target:{name:string, value:string}}) => void;
+  onChangeData?: (data: unknown) => void;
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
@@ -193,6 +200,5 @@ interface Props {
 interface Item {
   id: string | number;
   label: string | null;
-  // index?: number;
-  data?: any;
+  data?: unknown;
 }
