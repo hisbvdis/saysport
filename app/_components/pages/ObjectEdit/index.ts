@@ -10,7 +10,6 @@ import Description from "./Description/Description";
 import Photos from "./Photos/Photos";
 import SectionItem from "./SectionItem/SectionItem";
 import Usages from "./Usages/Usages";
-import Schedule from "./Schedule/Schedule";
 
 export {
 	ObjectEdit,
@@ -24,6 +23,5 @@ export {
 	Description,
   Photos,
 	SectionItem,
-	Usages,
-	Schedule
+	Usages
 };

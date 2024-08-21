@@ -25,7 +25,7 @@ export default function Dropdown(props:Props) {
 
   return (
     <div className={styles["dropdown"]} style={style}>
-      <button className={styles["dropdown__button"]} onClick={() => setIsShowMenu(!isShowMenu)}>ещё {items.length}</button>
+      <button type="button" className={styles["dropdown__button"]} onClick={() => setIsShowMenu(!isShowMenu)}>ещё {items.length}</button>
       <ArrowDownIcon/>
       <Menu
         isShowMenu={isShowMenu}

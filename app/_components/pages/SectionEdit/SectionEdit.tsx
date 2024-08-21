@@ -38,7 +38,7 @@ export default function SectionEdit(props:{init:UISection}) {
       if (!spec.spec_id || state.specs?.some((stateSpec) => stateSpec.spec_id === spec.spec_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.specs) draft.specs = [];
-        draft.specs.push(spec);
+        draft.specs.push({...spec, order: draft.specs.length});
       }))
     },
     delete: (id:number) => {

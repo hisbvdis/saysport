@@ -22,15 +22,15 @@ export async function POST(request:NextRequest) {
   const photos = files.reduce<{file:File; name:string}[]>((acc, file, i) => acc.concat({file: file, name: names[i]}), []);
   for (const {file, name} of photos) {
     const buffer = Buffer.from(await file.arrayBuffer());
-    const compressedFile = await sharp(buffer)
-      .resize({ width: 2560, height: 2560, fit: "inside", withoutEnlargement: true })
-      .webp({quality: 70})
-      .toBuffer();
+    // const compressedFile = await sharp(buffer)
+    //   .resize({ width: 2560, height: 2560, fit: "inside", withoutEnlargement: true })
+    //   .webp({quality: 70})
+    //   .toBuffer();
       // .toFile(`./public/photos/${name}`);
     const uploadCommand = new PutObjectCommand({
       Bucket: 'photos',
       Key: name,
-      Body: compressedFile,
+      Body: buffer,
       ContentType: 'image/webp',
     })
     await s3Client.send(uploadCommand)

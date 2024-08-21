@@ -19,12 +19,12 @@ export default function Usages() {
               <span style={{color: "#808080"}}>Стоимость:</span>
               <span>{{paid: "Платно", free: "Бесплатно"}[usage.cost]}</span>
             </p> : null}
-            <p>{usage.description}</p>
+            <p style={{marginBlockStart: "5px"}}>{usage.description}</p>
           </div>
           {usage.schedules.filter((schedule) => schedule.time).length > 0 ? (
             <div style={{marginBlockStart: "5px"}}>
-              {usage.schedules.every((schedule, i, arr) => schedule.time === arr[0].time) ? (
-                <p>Ежедневно: {usage.schedules[0].time}</p>
+              {usage.schedules.every((schedule, _, arr) => schedule.time === arr[0].time) ? (
+                <p style={{marginBlockStart: "5px"}}>Ежедневно: {usage.schedules[0].time.split("\n").join(", ")}</p>
               ) : (
                 <table style={{marginBlockStart: "5px", inlineSize: "100%", borderCollapse: "collapse"}}>
                   <tbody>
