@@ -18,17 +18,17 @@ export default function Select(props:Props) {
   const { placeholder, disabled, isAutocomplete, required } = props;
   const [ localItems, setLocalItems ] = useState(props.items ?? []);
   const [ suggestions, setSuggestions ] = useState(localItems);
-  const [ selectedItem, setSelectedItem ] = useState<Item | undefined>(isAutocomplete ? {id: props.value ?? "", label: props.label ?? ""} : localItems?.find((item) => item.id === props.value));
+  const [ selectedItem, setSelectedItem ] = useState<Item | undefined>(props.items?.length ? localItems?.find((item) => item.id === props.value) : {id: props.value ?? "", label: props.label ?? ""});
   const [ inputValue, setInputValue ] = useState(selectedItem?.label);
   const [ isShowMenu, setIsShowMenu ] = useState(false);
   const debounce = useDebounce();
   const divRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
-  useEffect(() => {isAutocomplete ? null : setSelectedItem(localItems?.find((item) => item.id === props.value))}, [props.value]);
+  useEffect(() => {!props.items?.length ? null : setSelectedItem(localItems?.find((item) => item.id === props.value))}, [props.value]);
   useEffect(() => {selectRef.current?.dispatchEvent(new Event("change", {bubbles: true}))}, [selectedItem]);
-  useEffect(() => {isAutocomplete ? null : setInputValue(selectedItem?.label)}, [selectedItem]);
-  useEffect(() => {isAutocomplete ? setInputValue(props.label) : null}, [props.label]);
+  useEffect(() => {!props.items?.length ? null : setInputValue(selectedItem?.label)}, [selectedItem]);
+  useEffect(() => {!props.items?.length ? setInputValue(props.label) : null}, [props.label]);
 
   const handleInputClick = async () => {
     isAutocomplete ? setIsShowMenu(true) : setIsShowMenu(!isShowMenu);
@@ -39,7 +39,8 @@ export default function Select(props:Props) {
     }
   }
 
-  const handleInputFocus = async () => {
+  const handleInputFocus = async (e:React.FocusEvent) => {
+    if (e.relatedTarget && inputRef.current && e.relatedTarget !== inputRef.current) return;
     isAutocomplete && setIsShowMenu(true);
     if (requestItemsOnFirstTouch) {
       const newItems = await requestItemsOnFirstTouch("");
@@ -66,7 +67,7 @@ export default function Select(props:Props) {
     if ((e.target as HTMLElement).closest(`.${styles["select"]}`) === divRef.current) return;
     setIsShowMenu(false);
     setSuggestions(localItems ?? []);
-    isAutocomplete ? setInputValue(props.label) : setInputValue(selectedItem?.label);
+    !props.items?.length ? setInputValue(props.label) : setInputValue(selectedItem?.label);
   }
 
   const handleClearBtnClick = () => {
@@ -84,7 +85,7 @@ export default function Select(props:Props) {
     onChangeData(item?.data);
     setSuggestions(localItems ?? []);
     setIsShowMenu(false);
-    isAutocomplete ? setInputValue(props.label) : setInputValue(selectedItem?.label);
+    !props.items?.length ? setInputValue(props.label) : setInputValue(selectedItem?.label);
   }
 
   const handleInputKeydown = (e:React.KeyboardEvent<HTMLElement>) => {
@@ -92,7 +93,7 @@ export default function Select(props:Props) {
     switch (e.code) {
       case "Escape":
       case "Tab": {
-        isAutocomplete ? setInputValue(props.label) : setInputValue(selectedItem?.label);
+        !props.items?.length ? setInputValue(props.label) : setInputValue(selectedItem?.label);
         setSuggestions(localItems ?? []);
         setIsShowMenu(false);
         break;
@@ -157,13 +158,13 @@ export default function Select(props:Props) {
           readOnly={!isAutocomplete}
           required={required}
         />
-        {isAutocomplete ? null :
-          <Button className={clsx(styles["select__btn"], styles["select__btn--arrow"])} disabled={disabled} tabIndex={-1}>
+        {props.items?.length && !props.value ?
+          <Button className={clsx(styles["select__button"], styles["select__button--arrow"])} disabled={disabled} tabIndex={-1}>
             <ArrowDownIcon className={clsx("icon", disabled && "disabled")}/>
           </Button>
-        }
+        : null}
         {isAutocomplete && props.value ?
-          <Button className={styles["select__btn"]} onClick={handleClearBtnClick} disabled={disabled}>
+          <Button className={styles["select__button"]} onClick={handleClearBtnClick} disabled={disabled}>
             <CloseIcon className={clsx("icon", disabled && "disabled")}/>
           </Button>
         : null}

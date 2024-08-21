@@ -35,8 +35,8 @@ export default function Filters(props:Props) {
     <Card className={className} style={style}>
       <Card.Heading style={{display: "flex", alignItems: "center"}}>
         <span style={{marginInlineEnd: "auto", paddingInlineEnd: "20px"}}>{section?.name_public_plural}</span>
-        {Object.keys(searchParams).filter((paramName) => paramName !== "section" && paramName !== "city" && paramName !== "map" ).length
-          ? <Link href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => paramName !== "section" && paramName !== "city" && paramName !== "map" ))} style={{display: "flex", alignItems: "center"}}>
+        {Object.keys(searchParams).filter((paramName) => !["section", "city", "map"].includes(paramName) ).length
+          ? <Link href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => !["section", "city", "map"].includes(paramName)))} style={{display: "flex", alignItems: "center"}}>
               <img src="/icons/bin.svg" width={24} height={24} alt="Map Pin" style={{inlineSize: "19px", blockSize: "19px"}}/>
             </Link>
           : null
@@ -109,6 +109,7 @@ export default function Filters(props:Props) {
       </Card.Section>
     </Card>
 
+    {/* Usage */}
     {section?.object_type === objectTypeEnum.place ? (
       <Card className={className} style={style}>
         <Card.Heading style={{display: "flex", alignItems: "center"}}>
@@ -143,12 +144,15 @@ export default function Filters(props:Props) {
             </CheckboxGroup>
             <div style={{display: "flex", gap: "10px", marginBlockStart: "10px"}}>
               <Select
+                isAutocomplete
+                name="test"
                 value={searchParams.from ? searchParams.from : ""}
                 onChange={(e) => {e.target.value ? router.push(manageSearchParams.set("from", e.target.value)) : router.push(manageSearchParams.delete(["from"]))}}
                 placeholder="с"
                 items={[{id: "", label: ""}].concat(Array(48).fill(null).map((_, i) => ({id: String(i * 30), label: `${Math.floor(i / 2)}:${i % 2 === 0 ? "00" : "30"}`})))}
               />
               <Select
+                isAutocomplete
                 value={searchParams.to ? searchParams.to : ""}
                 onChange={(e) => {e.target.value ? router.push(manageSearchParams.set("to", e.target.value)) : router.push(manageSearchParams.delete(["to"]))}}
                 placeholder="до"

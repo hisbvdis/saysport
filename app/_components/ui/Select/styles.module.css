@@ -23,7 +23,7 @@
   cursor: default;
 }
 
-.select__btn {
+.select__button {
   position: absolute;
   inset-block: 2px;
   inset-inline-end: 0;
@@ -41,12 +41,12 @@
   border-inline-end: 1px solid var(--textField-borderColor);
 }
 
-.select__btn:disabled {
+.select__button:disabled {
   background: var(--control-disabled-backgroundColor);
   cursor: default;
 }
 
-.select__btn--arrow {
+.select__button--arrow {
   pointer-events: none;
 }
 
