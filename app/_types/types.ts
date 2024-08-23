@@ -1,4 +1,4 @@
-import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectPhoto, Category, CategoryOnSection, ObjectUsage, Usage, ObjectSchedule } from "@/drizzle/schema";
+import type { City, ObjectOnOption, Object_, Option, SectionOnSpec, Section, Spec, ObjectOnSection, objectTypeUnion, objectStatusUnion, ObjectPhone, ObjectLink, ObjectPhoto, Category, CategoryOnSection, ObjectOnUsage, Usage, ObjectSchedule } from "@/drizzle/schema";
 
 
 // =============================================================================
@@ -24,9 +24,9 @@ export interface DBObject extends Object_ {
   parent?: Object_ | null;
   phones?: ObjectPhone[],
   links?: ObjectLink[],
-  objectOnSections?: (ObjectOnSection & {section: Section & {sectionOnSpecs: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}, description:string|null})[];
+  objectOnSections?: (ObjectOnSection & {section: Section & {sectionOnSpecs: (SectionOnSpec & {spec: Spec & {options: Option[]}})[]}})[];
   objectOnOptions?: (ObjectOnOption & {option: Option})[];
-  objectUsages?: (ObjectUsage & {usage: Usage, schedules: ObjectSchedule[]})[];
+  objectOnUsages?: (ObjectOnUsage & {usage: Usage, schedules: ObjectSchedule[]})[];
   photos?: ObjectPhoto[];
   children?: DBObject[];
 }
@@ -49,7 +49,7 @@ export interface UISection extends Section {
   uiID: string;
 }
 
-export interface UIUsage extends ObjectUsage, Usage {
+export interface UIUsage extends ObjectOnUsage, Usage {
   uiID: string;
   schedules: UISchedule[];
 }

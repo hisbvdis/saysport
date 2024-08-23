@@ -22,15 +22,12 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
   const [ mapInstance, setMapInstance ] = useState<Leaflet.Map>();
 
   const handleStateChange = {
-    value: (e:ChangeEvent<HTMLInputElement>) => {
-      setState((prevState) => create(prevState, (draft) => {draft[e.target.name as keyof typeof draft] = e.target.value as never}));
+    value: ({name, value}:{name:string, value:string}) => {
+      setState((prevState) => create(prevState, (draft) => {draft[name as keyof typeof draft] = value as never}));
     },
     checked: (e:ChangeEvent<HTMLInputElement>) => {
       setState((prevState) => create(prevState, (draft) => {draft[e.target.name as keyof typeof draft] = e.target.checked as never}));
-    },
-    valueAsNumber: (e:ChangeEvent<HTMLInputElement>) => {
-      setState((prevState) => create(prevState, (draft) => {draft[e.target.name as keyof typeof draft] = Number(e.target.value) as never || null}));
-    },
+    }
   }
 
   const handleSections = {
@@ -130,9 +127,8 @@ interface ObjectEditContextType {
   state: UIObject;
   setState: React.Dispatch<SetStateAction<UIObject>>;
   handleStateChange: {
-    value: ChangeEventHandler,
+    value: (data:{name:string, value:string}) => void,
     checked: ChangeEventHandler,
-    valueAsNumber: ChangeEventHandler,
   },
   handleSections: {
     add: (section:UISection) => void,

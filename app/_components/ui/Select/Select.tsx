@@ -74,14 +74,14 @@ export default function Select(props:Props) {
     setInputValue("");
     setSelectedItem({id: "", label: ""});
     onChangeData({});
-    onChange({target:{name: props.name ?? "", value: ""}});
+    onChange({name: props.name ?? "", value: ""});
     inputRef.current?.focus();
   }
 
   const handleMenuSelect = (index:number) => {
     const item = suggestions?.[index];
     setSelectedItem(item);
-    onChange({target:{name: props.name ?? "", value: String(item.id)}});
+    onChange({name: props.name ?? "", value: String(item.id)});
     onChangeData(item?.data);
     setSuggestions(localItems ?? []);
     setIsShowMenu(false);
@@ -112,7 +112,7 @@ export default function Select(props:Props) {
         const item = localItems?.[selectedItemIndex - 1];
         setSelectedItem(item);
         onChangeData(item?.data);
-        onChange({target:{name: props.name ?? "", value: String(item.id)}});
+        onChange({name: props.name ?? "", value: String(item.id)});
         break;
       }
       case "ArrowDown" : {
@@ -125,7 +125,7 @@ export default function Select(props:Props) {
         const item = localItems?.[selectedItemIndex + 1];
         setSelectedItem(item);
         onChangeData(item?.data);
-        onChange({target:{name: props.name ?? "", value: String(item.id)}});
+        onChange({name: props.name ?? "", value: String(item.id)});
         break;
       }
     }
@@ -191,8 +191,8 @@ interface Props {
   requestItemsOnInputChange?: (value:string) => Promise<Item[]>;
   requestItemsOnFirstTouch?: (value:string) => Promise<Item[]>;
   requestMinInputLenght?: number;
-  onChange?: (e:{target:{name:string, value:string}}) => void;
-  onChangeData?: (data: unknown) => void;
+  onChange?: (data:{name:string, value:string}) => void;
+  onChangeData?: (data: any) => void;
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
@@ -201,5 +201,5 @@ interface Props {
 interface Item {
   id: string | number;
   label: string | null;
-  data?: unknown;
+  data?: any;
 }

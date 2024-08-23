@@ -43,6 +43,13 @@
       "when": 1724247960380,
       "tag": "0005_motionless_starfox",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1724410275427,
+      "tag": "0006_tricky_freak",
+      "breakpoints": true
     }
   ]
 }

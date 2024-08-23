@@ -22,7 +22,7 @@ export default function NameClass() {
               <Input
                 name="name_type"
                 value={state?.name_type}
-                onChange={(e) => handleStateChange?.value(e)}
+                onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
                 placeholder="Футбол"
                 required
               />
@@ -34,7 +34,7 @@ export default function NameClass() {
               <Input
                 name="name_where"
                 value={state?.name_where}
-                onChange={(e) => handleStateChange?.value(e)}
+                onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
                 disabled={Boolean(state?.parent_id)}
                 placeholder="в Школе №38"
                 required

@@ -22,7 +22,7 @@ export default function NameOrg() {
             <Input
               name="name_type"
               value={state?.name_type}
-              onChange={(e) => handleStateChange?.value(e)}
+              onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
               placeholder="Фитнес-клуб"
               required
             />
@@ -34,7 +34,7 @@ export default function NameOrg() {
               <Input
                 name="name_title"
                 value={state?.name_title}
-                onChange={(e) => handleStateChange?.value(e)}
+                onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
                 placeholder="Super Fitness"
               />
               <InputAddon>»</InputAddon>
@@ -45,7 +45,7 @@ export default function NameOrg() {
             <Input
               name="name_where"
               value={state?.name_where}
-              onChange={(e) => handleStateChange?.value(e)}
+              onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
               placeholder="Центральный"
             />
           </Control>
@@ -56,7 +56,7 @@ export default function NameOrg() {
             <Input
               name="name_locative"
               value={state?.name_locative}
-              onChange={(e) => handleStateChange?.value(e)}
+              onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
               placeholder="в клубе"
               required
               style={{flex: "1"}}

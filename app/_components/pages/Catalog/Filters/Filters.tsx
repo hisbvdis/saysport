@@ -147,14 +147,14 @@ export default function Filters(props:Props) {
                 isAutocomplete
                 name="test"
                 value={searchParams.from ? searchParams.from : ""}
-                onChange={(e) => {e.target.value ? router.push(manageSearchParams.set("from", e.target.value)) : router.push(manageSearchParams.delete(["from"]))}}
+                onChange={(data) => {data.value ? router.push(manageSearchParams.set("from", data.value)) : router.push(manageSearchParams.delete(["from"]))}}
                 placeholder="с"
                 items={[{id: "", label: ""}].concat(Array(48).fill(null).map((_, i) => ({id: String(i * 30), label: `${Math.floor(i / 2)}:${i % 2 === 0 ? "00" : "30"}`})))}
               />
               <Select
                 isAutocomplete
                 value={searchParams.to ? searchParams.to : ""}
-                onChange={(e) => {e.target.value ? router.push(manageSearchParams.set("to", e.target.value)) : router.push(manageSearchParams.delete(["to"]))}}
+                onChange={(data) => {data.value ? router.push(manageSearchParams.set("to", data.value)) : router.push(manageSearchParams.delete(["to"]))}}
                 placeholder="до"
                 items={[{id: "", label: ""}].concat(Array(48).fill(null).map((_, i) => ({id: String(i * 30), label: `${Math.floor(i / 2)}:${i % 2 === 0 ? "00" : "30"}`})))}
               />

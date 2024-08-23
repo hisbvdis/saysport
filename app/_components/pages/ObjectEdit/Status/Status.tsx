@@ -27,7 +27,7 @@ export default function Status(props:Props) {
           <Select
             name="status"
             value={state?.status}
-            onChange={handleStateChange?.value}
+            onChange={(data) => handleStateChange?.value(data)}
             disabled={Boolean(state?.status_inherit)}
             items={[
               {id: objectStatusEnum.works, label: "Работает"},
@@ -45,7 +45,7 @@ export default function Status(props:Props) {
           <Input
             name="status_comment"
             value={state?.status_comment}
-            onChange={handleStateChange?.value}
+            onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
             disabled={state?.status_inherit || state?.status === objectStatusEnum.works}
           />
         </Control.Section>
@@ -59,7 +59,7 @@ export default function Status(props:Props) {
           <Input
             name="status_source"
             value={state?.status_source}
-            onChange={handleStateChange?.value}
+            onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
             disabled={state?.status_inherit || state?.status === objectStatusEnum.works}
           />
         </Control.Section>
@@ -69,9 +69,9 @@ export default function Status(props:Props) {
         <Control.Section>
           <Select
             name="status_instead_id"
-            value={state?.status_instead_id}
+            value={String(state?.status_instead_id)}
             label={state?.statusInstead?.name_type.concat(state.statusInstead?.name_title ? ` ${state.statusInstead?.name_title}` : "").concat(state.statusInstead?.name_where ? ` ${state.statusInstead?.name_where}` : "")}
-            onChange={handleStateChange?.valueAsNumber}
+            onChange={(data) => handleStateChange.value({name: data.value, value: data.value})}
             onChangeData={(data) => setState(create((draft) => {draft.statusInstead = data}))}
             isAutocomplete
             placeholder="Введите название"

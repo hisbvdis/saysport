@@ -105,9 +105,9 @@ export default function Address() {
             <Control.Section>
               <Select
                 name="city_id"
-                value={state.city_id}
+                value={String(state.city_id)}
                 label={state.city?.name.concat(state.city.admin1 ? `, ${state.city.admin1}` : "").concat(state.city.country ? `, ${state.city.country}` : "") ?? ""}
-                onChange={handleStateChange.valueAsNumber}
+                onChange={(data) => handleStateChange.value({name: data.name, value: data.value})}
                 onChangeData={(data) => setState((prevState) => create(prevState, (draft) => {draft.city = data}))}
                 isAutocomplete
                 disabled={Boolean(state.parent_id)}
@@ -128,9 +128,9 @@ export default function Address() {
             <Control.Section>
               <Select
                 name="parent_id"
-                value={state.parent_id}
+                value={String(state.parent_id)}
                 label={state.parent?.name_type?.concat(state.parent.name_title ? ` «${state.parent.name_title}»` : "").concat(state.parent.name_where ? ` ${state.parent.name_where}` : "")}
-                onChange={handleStateChange?.valueAsNumber}
+                onChange={(data) => handleStateChange.value({name: data.name, value: data.value})}
                 onChangeData={(parent:DBObject) => {
                   setInheritedData(parent.object_id ? objectReadProcessing(parent) : null, setState);
                   if (!parent.object_id) return;
@@ -153,7 +153,7 @@ export default function Address() {
               <Input
                 name="address"
                 value={state.address}
-                onChange={handleStateChange.value}
+                onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
                 disabled={Boolean(state.parent_id)}
                 placeholder="Центральный проспект, 153A"
                 required
@@ -168,7 +168,7 @@ export default function Address() {
               <Input
                 name="address_2"
                 value={state.address_2}
-                onChange={handleStateChange.value}
+                onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
                 placeholder="ТРЦ «Центральный»"
                 disabled={Boolean(state.parent_id)}
               />

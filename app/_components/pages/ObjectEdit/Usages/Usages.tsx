@@ -59,7 +59,7 @@ export default function Usages() {
         if (scheduleItem) {
           scheduleItem.time = e.target.value;
         } else {
-          usageItem.schedules = usageItem?.schedules?.concat({day_num: dayNum, time: e.target.value, uiID: crypto.randomUUID(), object_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0})
+          usageItem.schedules = usageItem?.schedules?.concat({day_num: dayNum, time: e.target.value, uiID: crypto.randomUUID(), object_on_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0})
         }
       }))
     },
@@ -87,7 +87,7 @@ export default function Usages() {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: "", uiID: crypto.randomUUID(), object_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0}));
+        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: "", uiID: crypto.randomUUID(), object_on_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0}));
       }));
     },
     changeInherit: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
@@ -95,14 +95,14 @@ export default function Usages() {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem || !draft.parent) return;
         usageItem.schedule_inherit = e.target.checked;
-        usageItem.schedules = draft.parent.usages[0]?.schedules.map((schedule) => ({...schedule, object_id: -1, object_usage_id: usage.object_usage_id}))
+        usageItem.schedules = draft.parent.usages[0]?.schedules.map((schedule) => ({...schedule, object_id: -1, object_on_usage_id: usage.object_on_usage_id}))
       }));
     },
     copyToAll: (schedule:ObjectSchedule, usage:UIUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: schedule.time, uiID: crypto.randomUUID(), object_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0}));
+        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: schedule.time, uiID: crypto.randomUUID(), object_on_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0}));
       }));
     },
   }
