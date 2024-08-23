@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, eq, ilike, inArray } from "drizzle-orm";
-import { objectTypeEnum, type objectTypeUnion, section, section_on_spec, sectionTypeEnum, type sectionTypeUnion, spec } from "@/drizzle/schema";
+import { objectTypeEnum, type objectTypeUnion, section, section_on_spec, section_on_usage, sectionTypeEnum, type sectionTypeUnion, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBSection, UISection } from "@/app/_types/types";
 import { sectionReadProcessing } from "./section.processing";
@@ -50,7 +50,8 @@ export const getSectionById = async (id:number):Promise<UISection> => {
   const dbData = await db.query.section.findFirst({
     where: eq(section.section_id, id),
     with: {
-      sectionOnSpecs: {with: {spec: {with: {options: true}}}}
+      sectionOnSpecs: {with: {spec: {with: {options: true}}}},
+      sectionOnUsages: {with: {usage: true}},
     },
   }) satisfies DBSection|undefined;
   if (dbData === undefined) throw new Error("getSectionById returned undefined");
@@ -86,6 +87,11 @@ export const upsertSection = async (state:UISection, init: UISection) => {
   const specsChanged = state.specs?.filter((stateSpec) => init.specs?.some((initSpec) => stateSpec.uiID === initSpec.uiID && (stateSpec.order !== initSpec.order)));
   if (specsChanged.length) {
     specsChanged?.forEach(async (item) => await db.update(spec).set(item).where(eq(spec.spec_id, item.spec_id)));
+  }
+
+  const usagesAdded = state.usages?.filter((stateUsage) => !init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id));
+  if (usagesAdded.length) {
+    await db.insert(section_on_usage).values(usagesAdded.map((section_on_usage) => ({section_id: upsertedSection.section_id, usage_id: section_on_usage.usage_id})));
   }
 
   revalidatePath("/admin/sections");

@@ -1,1 +1,0 @@
-ALTER TABLE "object_on_section" DROP COLUMN IF EXISTS "description";

@@ -1,8 +1,8 @@
 "use server";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
-import { and, eq, ilike } from "drizzle-orm";
-import { objectTypeEnum, usage, type Usage, type objectTypeUnion } from "@/drizzle/schema";
+import { and, eq, exists, ilike, inArray } from "drizzle-orm";
+import { objectTypeEnum, section_on_usage, usage, type Usage, type objectTypeUnion } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 
 
@@ -20,17 +20,20 @@ export const getAllUsages = async ():Promise<Usage[]> => {
   return dbData;
 }
 
-export const getUsagesByFilters = async (filters:{objectType?:objectTypeUnion;name_service?:string;name_public?:string}):Promise<Usage[]> => {
+export const getUsagesByFilters = async (filters:{objectType?:objectTypeUnion;name_service?:string;name_public?:string,sectionIds?:number[]}):Promise<Usage[]> => {
   const objectType = filters.objectType;
   const name_service = filters.name_service;
   const name_public = filters.name_public;
+  const sectionIds = filters.sectionIds;
   const dbData = await db.query.usage.findMany({
     where: and(
       name_service ? ilike(usage.name_service, `%${name_service}%`) : undefined,
       name_public ? ilike(usage.name_public, `%${name_public}%`) : undefined,
       objectType ? eq(usage.object_type, objectType) : undefined,
+      sectionIds?.length ? exists(db.select().from(section_on_usage).where(and(eq(section_on_usage.usage_id, usage.usage_id), inArray(section_on_usage.section_id, sectionIds)))) : undefined,
     )
   })
+  console.log( dbData )
   return dbData;
 }
 

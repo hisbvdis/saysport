@@ -85,6 +85,7 @@ export const sectionRelations = relations(section, ({ many }) => ({
   objectOnSections: many(object_on_section),
   sectionOnSpecs: many(section_on_spec),
   categoryOnSections: many(category_on_section),
+  sectionOnUsages: many(section_on_usage),
 }))
 
 export type Section = typeof section.$inferSelect;
@@ -129,6 +130,24 @@ export const sectionOnSpecRelations = relations(section_on_spec, ({ one }) => ({
 }))
 
 export type SectionOnSpec = typeof section_on_spec.$inferSelect;
+
+
+
+// ===========================================================================
+// SECTION_ON_USAGE
+// ===========================================================================
+export const section_on_usage = pgTable("section_on_usage", {
+  section_on_usage_id: serial("section_on_usage_id").primaryKey(),
+  section_id: integer("section_id").notNull().references(() => section.section_id, {onDelete: "cascade"}),
+  usage_id: integer("usage_id").notNull().references(() => usage.usage_id, {onDelete: "cascade"}),
+})
+
+export const sectionOnUsageRelations = relations(section_on_usage, ({ one }) => ({
+  section: one(section, {fields: [section_on_usage.section_id], references: [section.section_id]}),
+  usage: one(usage, {fields: [section_on_usage.usage_id], references: [usage.usage_id]}),
+}))
+
+export type SectionOnUsage = typeof section_on_usage.$inferSelect;
 
 
 

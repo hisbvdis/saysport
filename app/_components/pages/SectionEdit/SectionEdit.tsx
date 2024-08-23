@@ -3,7 +3,7 @@ import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
 import { sectionTypeEnum } from "@/drizzle/schema";
-import type { UISection, UISpec } from "@/app/_types/types";
+import type { UISection, UISpec, UIUsage } from "@/app/_types/types";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
@@ -18,6 +18,7 @@ import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { getSpecsByFilters } from "@/app/_db/spec";
 import { deleteSectionById, upsertSection } from "@/app/_db/section";
+import { getUsagesByFilters } from "@/app/_db/usage";
 
 
 export default function SectionEdit(props:{init:UISection}) {
@@ -55,6 +56,21 @@ export default function SectionEdit(props:{init:UISection}) {
     },
   }
 
+  const handleUsages = {
+    add: (usage:UIUsage) => {
+      if (!usage.usage_id || state.usages?.some((stateUsage) => stateUsage.usage_id === usage.usage_id)) return;
+      setState((prevState) => create(prevState, (draft) => {
+        if (!draft.usages) draft.usages = [];
+        draft.usages.push({...usage, order: draft.usages.length});
+      }))
+    },
+    delete: (id:number) => {
+      setState((prevState) => create(prevState, (draft) => {
+        draft.usages = draft.usages?.filter((usage) => usage.usage_id !== id);
+      }))
+    },
+  }
+
   const handleFormSubmit = async (e:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     e.preventDefault();
     const { section_id } = await upsertSection(state, props.init);
@@ -66,7 +82,7 @@ export default function SectionEdit(props:{init:UISection}) {
       router.refresh();
     }
   }
-
+  console.log( state )
   return (
     <Form onSubmit={handleFormSubmit}>
       <Card style={{marginBlockStart: "10px"}}>
@@ -159,6 +175,31 @@ export default function SectionEdit(props:{init:UISection}) {
                 <InputAddon>{spec.spec_id}</InputAddon>
                 <Input value={spec.order} onChange={(e) => handleSpecs.changeOrder(e, spec)} required style={{flex: "0 1 40px"}}/>
                 <Link href={`/admin/specs/${spec.spec_id}`} style={{alignSelf: "center"}}>{spec.name_service}</Link>
+              </li>
+            ))}
+          </ul>
+        </Card.Section>
+      </Card>
+
+      <Card style={{marginBlockStart: "10px"}}>
+        <Card.Heading>Использования</Card.Heading>
+        <Card.Section>
+          <Select
+            isAutocomplete
+            onChangeData={handleUsages.add}
+            placeholder="Добавить использование"
+            requestItemsOnFirstTouch={async () =>
+              (await getUsagesByFilters({objectType: state.object_type}))
+                ?.map((usage) => ({id: usage.usage_id, label: usage.name_service, data: usage}))
+            }
+          />
+          <ul style={{marginBlockStart: "5px"}}>
+            {state?.usages?.toSorted((a, b) => a.order - b.order).map((usage) => (
+              <li key={usage.usage_id} style={{display: "flex"}}>
+                <Button onClick={() => handleUsages.delete(usage.usage_id)}>X</Button>
+                <InputAddon>{usage.usage_id}</InputAddon>
+                {/* <Input value={usage.order} onChange={(e) => handleUsages.changeOrder(e, usage)} required style={{flex: "0 1 40px"}}/> */}
+                <Link href={`/admin/usages/${usage.usage_id}`} style={{alignSelf: "center"}}>{usage.name_service}</Link>
               </li>
             ))}
           </ul>

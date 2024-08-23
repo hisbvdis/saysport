@@ -1,5 +1,5 @@
 {
-  "id": "0a06b557-64f2-4d64-8eac-0485371e39aa",
+  "id": "40541c22-c9d6-4aff-90c8-4de5abcaafed",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -454,12 +454,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -500,6 +494,86 @@
           ]
         }
       },
+      "uniqueConstraints": {}
+    },
+    "public.object_on_usage_id": {
+      "name": "object_on_usage_id",
+      "schema": "",
+      "columns": {
+        "object_on_usage_id": {
+          "name": "object_on_usage_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "object_id": {
+          "name": "object_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "usage_id": {
+          "name": "usage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cost": {
+          "name": "cost",
+          "type": "costTYpe",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_inherit": {
+          "name": "schedule_inherit",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "object_on_usage_id_object_id_object_object_id_fk": {
+          "name": "object_on_usage_id_object_id_object_object_id_fk",
+          "tableFrom": "object_on_usage_id",
+          "tableTo": "object",
+          "columnsFrom": [
+            "object_id"
+          ],
+          "columnsTo": [
+            "object_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "object_on_usage_id_usage_id_usage_usage_id_fk": {
+          "name": "object_on_usage_id_usage_id_usage_usage_id_fk",
+          "tableFrom": "object_on_usage_id",
+          "tableTo": "usage",
+          "columnsFrom": [
+            "usage_id"
+          ],
+          "columnsTo": [
+            "usage_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "public.object_phone": {
@@ -629,8 +703,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "object_usage_id": {
-          "name": "object_usage_id",
+        "object_on_usage_id": {
+          "name": "object_on_usage_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -675,95 +749,15 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "object_schedule_object_usage_id_object_usage_object_usage_id_fk": {
-          "name": "object_schedule_object_usage_id_object_usage_object_usage_id_fk",
+        "object_schedule_object_on_usage_id_object_on_usage_id_object_on_usage_id_fk": {
+          "name": "object_schedule_object_on_usage_id_object_on_usage_id_object_on_usage_id_fk",
           "tableFrom": "object_schedule",
-          "tableTo": "object_usage",
+          "tableTo": "object_on_usage_id",
           "columnsFrom": [
-            "object_usage_id"
+            "object_on_usage_id"
           ],
           "columnsTo": [
-            "object_usage_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.object_usage": {
-      "name": "object_usage",
-      "schema": "",
-      "columns": {
-        "object_usage_id": {
-          "name": "object_usage_id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "usage_id": {
-          "name": "usage_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "object_id": {
-          "name": "object_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "order": {
-          "name": "order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "cost": {
-          "name": "cost",
-          "type": "costTYpe",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "schedule_inherit": {
-          "name": "schedule_inherit",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "object_usage_usage_id_usage_usage_id_fk": {
-          "name": "object_usage_usage_id_usage_usage_id_fk",
-          "tableFrom": "object_usage",
-          "tableTo": "usage",
-          "columnsFrom": [
-            "usage_id"
-          ],
-          "columnsTo": [
-            "usage_id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "object_usage_object_id_object_object_id_fk": {
-          "name": "object_usage_object_id_object_object_id_fk",
-          "tableFrom": "object_usage",
-          "tableTo": "object",
-          "columnsFrom": [
-            "object_id"
-          ],
-          "columnsTo": [
-            "object_id"
+            "object_on_usage_id"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -923,6 +917,61 @@
           ]
         }
       },
+      "uniqueConstraints": {}
+    },
+    "public.section_on_usage": {
+      "name": "section_on_usage",
+      "schema": "",
+      "columns": {
+        "section_on_usage_id": {
+          "name": "section_on_usage_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "section_id": {
+          "name": "section_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "usage_id": {
+          "name": "usage_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "section_on_usage_section_id_section_section_id_fk": {
+          "name": "section_on_usage_section_id_section_section_id_fk",
+          "tableFrom": "section_on_usage",
+          "tableTo": "section",
+          "columnsFrom": [
+            "section_id"
+          ],
+          "columnsTo": [
+            "section_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "section_on_usage_usage_id_usage_usage_id_fk": {
+          "name": "section_on_usage_usage_id_usage_usage_id_fk",
+          "tableFrom": "section_on_usage",
+          "tableTo": "usage",
+          "columnsFrom": [
+            "usage_id"
+          ],
+          "columnsTo": [
+            "usage_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "public.spec": {

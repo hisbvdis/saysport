@@ -89,9 +89,9 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
       sectionId ? exists(db.select().from(object_on_section).where(and(eq(object.object_id, object_on_section.object_id), eq(object_on_section.section_id, sectionId)))) : undefined,
       optionIds ? and(...groupedOptions.map(([specId, optionIdArr]) => {
         if (specId.startsWith("!")) {
-          return inArray(object.object_id, db.select({object_id: object_on_option.object_id}).from(object_on_option).where(inArray(object_on_option.option_id, optionIdArr)).groupBy(object_on_option.object_id).having(eq(sql`COUNT(DISTINCT ${object_on_option.option_id})`, optionIdArr.length)))
+          return inArray(object.object_id, db.select({object_id: object_on_option.object_id}).from(object_on_option).where(inArray(object_on_option.option_id, optionIdArr)).groupBy(object_on_option.object_id).having(eq(sql`COUNT(DISTINCT ${object_on_option.option_id})`, optionIdArr.length)));
         }
-        return exists(db.select().from(object_on_option).where(and(eq(object_on_option.object_id, object.object_id), inArray(object_on_option.option_id, optionIdArr))))
+        return exists(db.select().from(object_on_option).where(and(eq(object_on_option.object_id, object.object_id), inArray(object_on_option.option_id, optionIdArr))));
       })) : undefined,
       status ? inArray(object.status, status) : undefined,
       photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined,

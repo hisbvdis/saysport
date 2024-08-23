@@ -165,7 +165,7 @@ export default function Usages() {
           onChangeData={handleUsages.add}
           placeholder="Добавить использование"
           requestItemsOnFirstTouch={async () =>
-            (await getUsagesByFilters({objectType: state.type}))
+            (await getUsagesByFilters({sectionIds: state.sections.map((section) => section.section_id)}))
               .map((usage) => ({id: usage.usage_id, label: usage.name_service, data: usage}))
           }
         />
