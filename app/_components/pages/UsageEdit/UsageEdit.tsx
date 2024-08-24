@@ -12,9 +12,10 @@ import { Radio, RadioGroup } from "../../ui/Choice";
 import { EditBottomPanel } from "../../blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { deleteUsageById, upsertUsage } from "@/app/_db/usage";
+import type { EditUsage } from "@/app/_types/types";
 
 
-export default function UsageEdit(props:{init:Usage}) {
+export default function UsageEdit(props:{init:EditUsage}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();

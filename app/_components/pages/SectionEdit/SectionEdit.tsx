@@ -3,7 +3,7 @@ import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
 import { sectionTypeEnum } from "@/drizzle/schema";
-import type { EditSection, ProcSection, ProcSpec, UIUsage } from "@/app/_types/types";
+import type { EditSection, ProcSection, ProcSpec, ProcObjectUsage } from "@/app/_types/types";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
@@ -57,7 +57,7 @@ export default function SectionEdit(props:{init:EditSection}) {
   }
 
   const handleUsages = {
-    add: (usage:UIUsage) => {
+    add: (usage:ProcObjectUsage) => {
       if (!usage.usage_id || state.usages?.some((stateUsage) => stateUsage.usage_id === usage.usage_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];

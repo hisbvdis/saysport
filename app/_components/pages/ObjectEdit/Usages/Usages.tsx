@@ -1,7 +1,7 @@
 "use client";
 import type React from "react";
 import { create } from "mutative";
-import type { UIUsage } from "@/app/_types/types";
+import type { ProcObjectUsage } from "@/app/_types/types";
 import { type ChangeEvent, useContext } from "react";
 import { costTypeEnum, type ObjectSchedule, objectTypeEnum, Usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
@@ -27,19 +27,19 @@ export default function Usages() {
         draft.usages = draft.usages.concat({...usage, uiID: crypto.randomUUID(), schedules: [], object_id: -1, description: "", object_on_usage_id: -1, order: -1, cost: null, schedule_inherit: false}).map((usage, i) => ({...usage, order: i, }));
       }))
     },
-    delete: (usage:UIUsage) => {
+    delete: (usage:ProcObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         draft.usages = draft.usages?.filter((draftUsage) => draftUsage.uiID !== usage.uiID).map((usage, i) => ({...usage, order: i}));
       }));
     },
-    description: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
+    description: (e:ChangeEvent<HTMLInputElement>, usage:ProcObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
         usageItem.description = e.target.value;
       }));
     },
-    cost: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
+    cost: (e:ChangeEvent<HTMLInputElement>, usage:ProcObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
@@ -49,7 +49,7 @@ export default function Usages() {
   }
 
   const handleSchedule = {
-    changeTime: (e:React.ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
+    changeTime: (e:React.ChangeEvent<HTMLInputElement>, usage:ProcObjectUsage) => {
       const dayNum = Number(e.target.name);
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
@@ -63,7 +63,7 @@ export default function Usages() {
         }
       }))
     },
-    formatTime: (e:React.FocusEvent<HTMLInputElement>, usage:UIUsage) => {
+    formatTime: (e:React.FocusEvent<HTMLInputElement>, usage:ProcObjectUsage) => {
       const dayNum = Number(e.target.name);
       const times = e.target.value
         .trim()
@@ -84,14 +84,14 @@ export default function Usages() {
         scheduleItem.time = times;
       }));
     },
-    clearAll: (usage:UIUsage) => {
+    clearAll: (usage:ProcObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
         usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: "", uiID: crypto.randomUUID(), object_on_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0}));
       }));
     },
-    changeInherit: (e:ChangeEvent<HTMLInputElement>, usage:UIUsage) => {
+    changeInherit: (e:ChangeEvent<HTMLInputElement>, usage:ProcObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem || !draft.parent) return;
@@ -99,7 +99,7 @@ export default function Usages() {
         usageItem.schedules = draft.parent.usages[0]?.schedules.map((schedule) => ({...schedule, object_id: -1, object_on_usage_id: usage.object_on_usage_id}))
       }));
     },
-    copyToAll: (schedule:ObjectSchedule, usage:UIUsage) => {
+    copyToAll: (schedule:ObjectSchedule, usage:ProcObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;

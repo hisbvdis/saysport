@@ -9,7 +9,6 @@ export interface ProcOption extends Option {
 }
 
 
-
 // =============================================================================
 // SPEC
 // =============================================================================
@@ -25,7 +24,6 @@ export interface ProcSpec extends Spec {
 export interface EditSpec extends Omit<ProcSpec, "spec_id"> {
   spec_id: ProcSpec["spec_id"] | null;
 };
-
 
 
 // =============================================================================
@@ -47,7 +45,6 @@ export interface EditSection extends Omit<ProcSection, "section_id"> {
 }
 
 
-
 // =============================================================================
 // CATEGORY
 // =============================================================================
@@ -63,6 +60,22 @@ export interface EditCategory extends Omit<ProcCategory, "category_id"> {
   category_id: ProcCategory["category_id"] | null;
 }
 
+
+// =============================================================================
+// USAGE
+// =============================================================================
+export interface EditUsage extends Omit<Usage, "usage_id"> {
+  usage_id: Usage["usage_id"] | null;
+}
+
+
+// =============================================================================
+// OBJECT USAGE
+// =============================================================================
+export interface ProcObjectUsage extends ObjectOnUsage, Usage {
+  uiID: string;
+  schedules: UISchedule[];
+}
 
 
 // =============================================================================
@@ -87,11 +100,6 @@ export interface DBObject extends Object_ {
 // =============================================================================
 // UI TYPES
 // =============================================================================
-export interface UIUsage extends ObjectOnUsage, Usage {
-  uiID: string;
-  schedules: UISchedule[];
-}
-
 export interface UISchedule extends ObjectSchedule {
   uiID: string;
 }
@@ -110,7 +118,7 @@ export interface UIObject extends Partial<Object_> {
   links?: (ObjectLink & {uiID: string})[];
   sections: ProcSection[];
   options?: ProcOption[];
-  usages: UIUsage[];
+  usages: ProcObjectUsage[];
   photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
   children?: DBObject[];
 }
