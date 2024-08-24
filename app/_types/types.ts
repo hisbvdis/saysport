@@ -59,6 +59,10 @@ export interface ProcCategory extends Category {
   sections: Section[];
 }
 
+export interface EditCategory extends Omit<ProcCategory, "category_id"> {
+  category_id: ProcCategory["category_id"] | null;
+}
+
 
 
 // =============================================================================

@@ -2,9 +2,9 @@
 import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
-import type { ProcCategory, ProcSection } from "@/app/_types/types";
 import { type SyntheticEvent, useEffect, useState } from "react";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
+import type { EditCategory, ProcSection } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
 import { Form } from "../../ui/Form";
 import { Card } from "../../ui/Card";
@@ -18,7 +18,7 @@ import { deleteCategoryById, upsertCategory } from "@/app/_db/category";
 import { getSectionsByFilters } from "@/app/_db/section";
 
 
-export default function CategoryEdit(props:{init:ProcCategory}) {
+export default function CategoryEdit(props:{init:EditCategory}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();

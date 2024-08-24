@@ -2,14 +2,14 @@
 import { db } from "@/drizzle/client"
 import { category, category_on_section, type Category } from "@/drizzle/schema"
 import { categoryReadProcessing } from "./category.processing"
-import type { DBCategory, ProcCategory } from "../_types/types"
+import type { DBCategory, EditCategory, ProcCategory } from "../_types/types"
 import { and, eq, inArray } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
 
-export const getEmptyCategory = async ():Promise<ProcCategory> => {
+export const getEmptyCategory = async ():Promise<EditCategory> => {
   return {
-    category_id: -1,
+    category_id: null,
     name: "",
     order: 0,
     sections: [],
@@ -18,7 +18,9 @@ export const getEmptyCategory = async ():Promise<ProcCategory> => {
 
 export const getAllCategories = async ():Promise<ProcCategory[]> => {
   const dbData:DBCategory[] = await db.query.category.findMany({
-    with: {categoryOnSections: {with: {section: true}}},
+    with: {
+      categoryOnSections: {with: {section: true}},
+    },
     orderBy: [category.order]
   });
   const processed = dbData.map((category) => categoryReadProcessing(category));
@@ -28,7 +30,9 @@ export const getAllCategories = async ():Promise<ProcCategory[]> => {
 export const getCategoryById = async (id:number):Promise<ProcCategory> => {
   const dbData:DBCategory|undefined = await db.query.category.findFirst({
     where: eq(category.category_id, id),
-    with: {categoryOnSections: {with: {section: true}}},
+    with: {
+      categoryOnSections: {with: {section: true}}
+    },
   });
   if (dbData === undefined) throw new Error("getSectionById returned undefined");
   const processed = categoryReadProcessing(dbData);
@@ -40,9 +44,9 @@ export const deleteCategoryById = async (id:number):Promise<void> => {
   revalidatePath("/admin/categories");
 }
 
-export const upsertCategory = async (state:ProcCategory, init: ProcCategory) => {
+export const upsertCategory = async (state:EditCategory, init: EditCategory) => {
   const fields = {
-    category_id: state.category_id > 0 ? state.category_id : undefined,
+    category_id: state.category_id ?? undefined,
     name: state.name,
     order: state.order
   }
