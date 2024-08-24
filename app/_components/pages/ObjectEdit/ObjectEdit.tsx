@@ -3,7 +3,7 @@ import { create } from "mutative";
 import type * as Leaflet from "leaflet";
 import { useRouter } from "next/navigation";
 import { objectTypeEnum } from "@/drizzle/schema";
-import type { UIObject, ProcOption, ProcSection, ProcSpec } from "@/app/_types/types";
+import type { EditObject, ProcObject, ProcOption, ProcSection, ProcSpec } from "@/app/_types/types";
 import { type ChangeEvent, type ChangeEventHandler, type Dispatch, type SetStateAction, type SyntheticEvent, createContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
@@ -15,7 +15,7 @@ import { setInheritedData } from "./Address/setInheritedData";
 import { deleteObjectById, upsertObject } from "@/app/_db/object";
 
 
-export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, commonSections?: ProcSection[]}) {
+export default function ObjectEdit(props:{init:EditObject, parent?:ProcObject|null, commonSections?: ProcSection[]}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -124,8 +124,8 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
 export const ObjectEditContext = createContext<ObjectEditContextType>({} as ObjectEditContextType);
 
 interface ObjectEditContextType {
-  state: UIObject;
-  setState: React.Dispatch<SetStateAction<UIObject>>;
+  state: EditObject;
+  setState: React.Dispatch<SetStateAction<EditObject>>;
   handleStateChange: {
     value: (data:{name:string, value:string}) => void,
     checked: ChangeEventHandler,

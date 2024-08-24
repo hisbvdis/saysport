@@ -1,10 +1,10 @@
-import type { DBObject, UIObject, ProcObjectSchedule } from "../_types/types";
+import type { DBObject, ProcObject, ProcObjectSchedule } from "../_types/types";
 // -----------------------------------------------------------------------------
 import { sectionReadProcessing } from "./section.processing";
 // -----------------------------------------------------------------------------
 
 
-export const objectReadProcessing = (dbData: DBObject): UIObject => {
+export const objectReadProcessing = (dbData: DBObject): ProcObject => {
   return {
     ...dbData,
     phones: dbData.phones?.map((phone) => ({...phone, uiID: crypto.randomUUID()})) ?? [],

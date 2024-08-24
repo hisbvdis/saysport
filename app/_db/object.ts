@@ -4,16 +4,16 @@ import { revalidatePath } from "next/cache";
 import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte, ne, notExists, sql } from "drizzle-orm";
 import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage, object_schedule, type costTypeUnion } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
-import type { DBObject, UIObject } from "../_types/types";
+import type { DBObject, EditObject, ProcObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
 import type { SearchParamsType } from "../(router)/page";
 
 
-export const getEmptyObject = async ():Promise<UIObject> => {
+export const getEmptyObject = async ():Promise<EditObject> => {
   return {
+    object_id: null,
     name_type: "",
     city_id: 0,
-    object_id: 0,
     coord_lat: 0,
     coord_lon: 0,
     type: objectTypeEnum.org,
@@ -136,7 +136,7 @@ interface Filters extends SearchParamsType {
   limit?:number;
 }
 
-export const getObjectsByArea = async (latMin:number, latMax:number, lonMin:number, lonMax:number, currentObjectId?:number, parentObjectId?:number|null):Promise<Object_[]> => {
+export const getObjectsByArea = async (latMin:number, latMax:number, lonMin:number, lonMax:number, currentObjectId?:number|null, parentObjectId?:number|null):Promise<Object_[]> => {
   const dbData:Object_[]|undefined = await db.query.object.findMany({
     where: and(
       between(object.coord_lat, latMin, latMax),
@@ -150,8 +150,8 @@ export const getObjectsByArea = async (latMin:number, latMax:number, lonMin:numb
   return dbData;
 }
 
-export const getObjectById = async (id:number):Promise<UIObject> => {
-  const dbData = await db.query.object.findFirst({
+export const getObjectById = async (id:number):Promise<ProcObject> => {
+  const dbData:DBObject|undefined = await db.query.object.findFirst({
     where: eq(object.object_id, id),
     with: {
       statusInstead: true,
@@ -169,7 +169,7 @@ export const getObjectById = async (id:number):Promise<UIObject> => {
         with: {photos: true, phones: true, links: true, objectOnUsages: {with: {usage: true, schedules: true}}}
       },
     }
-  }) satisfies DBObject|undefined;
+  });
   if (dbData === undefined) throw new Error("getObjectById returned undefined");
   const processed = objectReadProcessing(dbData);
   return processed;
@@ -180,7 +180,7 @@ export const deleteObjectById = async (id:number) => {
   revalidatePath(`object/${id}`, "page");
 }
 
-export const upsertObject = async (state:UIObject, init: UIObject): Promise<Object_> => {
+export const upsertObject = async (state:EditObject, init: EditObject): Promise<Object_> => {
   const fields = {
     object_id: state.object_id || undefined,
     name_type: state.name_type,

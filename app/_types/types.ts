@@ -87,7 +87,7 @@ export interface ProcObjectSchedule extends ObjectSchedule {
 
 
 // =============================================================================
-// DB TYPES
+// OBJECT
 // =============================================================================
 export interface DBObject extends Object_ {
   type: objectTypeUnion;
@@ -104,11 +104,7 @@ export interface DBObject extends Object_ {
   children?: DBObject[];
 }
 
-
-// =============================================================================
-// UI TYPES
-// =============================================================================
-export interface UIObject extends Partial<Object_> {
+export interface ProcObject extends Partial<Object_> {
   name_type: string;
   coord_lat: number;
   coord_lon: number;
@@ -117,7 +113,7 @@ export interface UIObject extends Partial<Object_> {
   status: objectStatusUnion;
   statusInstead?: Object_ | null;
   city?: City;
-  parent?: UIObject | null;
+  parent?: ProcObject | null;
   phones?: (ObjectPhone & {uiID: string})[];
   links?: (ObjectLink & {uiID: string})[];
   sections: ProcSection[];
@@ -127,7 +123,6 @@ export interface UIObject extends Partial<Object_> {
   children?: DBObject[];
 }
 
-export enum UIContactTypeEnum {
-  PHONES = "phones",
-  LINKS = "links"
+export interface EditObject extends Omit<ProcObject, "object_id"> {
+  object_id?: ProcObject["object_id"] | null;
 }

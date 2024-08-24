@@ -1,8 +1,8 @@
-import type { UIObject } from "@/app/_types/types";
+import type { EditObject, ProcObject } from "@/app/_types/types";
 import { create } from "mutative";
 import type { SetStateAction } from "react";
 
-export const setInheritedData = (parent:UIObject|null, setState:React.Dispatch<SetStateAction<UIObject>>) => {
+export const setInheritedData = (parent:ProcObject|null, setState:React.Dispatch<SetStateAction<EditObject>>) => {
   if (parent) {
     setState((prevState) => create(prevState, (draft) => {
       draft.status_inherit = true;

@@ -20,6 +20,8 @@ export enum costTypeEnum {paid="paid", free="free"};
 export type costTypeUnion = "paid" | "free";
 export const costTypeColumnType = pgEnum("costTYpe", ["paid", "free"]);
 
+export enum UIContactTypeEnum {phones = "phones", links = "links"};
+
 
 
 // ===========================================================================

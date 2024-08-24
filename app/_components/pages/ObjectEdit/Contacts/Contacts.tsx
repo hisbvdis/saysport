@@ -7,7 +7,7 @@ import { Button } from "@/app/_components/ui/Button";
 import { FieldSet } from "@/app/_components/ui/FieldSet";
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit";
-import { UIContactTypeEnum } from "@/app/_types/types";
+import { UIContactTypeEnum } from "@/drizzle/schema";
 
 
 export default function Contacts() {
@@ -48,14 +48,14 @@ export default function Contacts() {
         <FieldSet style={{flexBasis: "50%"}}>
           <FieldSet.Legend style={{marginBlockEnd: "10px"}}>
             <span>Телефоны</span>
-            <Button onClick={() => handleContacts.add(UIContactTypeEnum.PHONES)} disabled={Boolean(state.parent_id)}>+</Button>
+            <Button onClick={() => handleContacts.add(UIContactTypeEnum.phones)} disabled={Boolean(state.parent_id)}>+</Button>
           </FieldSet.Legend>
           <FieldSet.Section style={{display: "flex", flexDirection: "column", gap: "10px"}}>
             {state.phones?.map((phone) => (
               <div key={phone.uiID} style={{display: "grid", gridTemplateColumns: "auto 1fr"}}>
                 <Button
                   style={{gridRow: "1 / span 2"}}
-                  onClick={() => handleContacts.delete(UIContactTypeEnum.PHONES, phone.uiID)}
+                  onClick={() => handleContacts.delete(UIContactTypeEnum.phones, phone.uiID)}
                   tabIndex={-1}
                   disabled={Boolean(state.parent_id)}
                 >X</Button>
@@ -63,13 +63,13 @@ export default function Contacts() {
                   value={phone.value}
                   placeholder="+1 (111) 111-11-11"
                   disabled={Boolean(state.parent_id)}
-                  onChangeValue={(value) => handleContacts.changeValue(UIContactTypeEnum.PHONES, value, phone.uiID)}
+                  onChangeValue={(value) => handleContacts.changeValue(UIContactTypeEnum.phones, value, phone.uiID)}
                 />
                 <Input
                   value={phone.comment}
                   placeholder="Комментарий"
                   disabled={Boolean(state.parent_id)}
-                  onChangeValue={(value) => handleContacts.changeComment(UIContactTypeEnum.PHONES, value, phone.uiID)}
+                  onChangeValue={(value) => handleContacts.changeComment(UIContactTypeEnum.phones, value, phone.uiID)}
                 />
               </div>
             ))}
@@ -78,14 +78,14 @@ export default function Contacts() {
         <FieldSet style={{flexBasis: "50%"}}>
           <FieldSet.Legend style={{marginBlockEnd: "10px"}}>
             <span>Ссылка</span>
-            <Button onClick={() => handleContacts.add(UIContactTypeEnum.LINKS)} disabled={Boolean(state.parent_id)}>+</Button>
+            <Button onClick={() => handleContacts.add(UIContactTypeEnum.links)} disabled={Boolean(state.parent_id)}>+</Button>
           </FieldSet.Legend>
           <FieldSet.Section style={{display: "flex", flexDirection: "column", gap: "10px"}}>
             {state.links?.map((link) => (
               <div key={link.uiID} style={{display: "grid", gridTemplateColumns: "auto 1fr"}}>
                 <Button
                   style={{gridRow: "1 / span 2"}}
-                  onClick={() => handleContacts.delete(UIContactTypeEnum.LINKS, link.uiID)}
+                  onClick={() => handleContacts.delete(UIContactTypeEnum.links, link.uiID)}
                   tabIndex={-1}
                   disabled={Boolean(state.parent_id)}
                 >X</Button>
@@ -93,13 +93,13 @@ export default function Contacts() {
                   value={link.value}
                   placeholder="site.com"
                   disabled={Boolean(state.parent_id)}
-                  onChangeValue={(value) => handleContacts.changeValue(UIContactTypeEnum.LINKS, value, link.uiID)}
+                  onChangeValue={(value) => handleContacts.changeValue(UIContactTypeEnum.links, value, link.uiID)}
                 />
                 <Input
                   value={link.comment}
                   placeholder="Комментарий"
                   disabled={Boolean(state.parent_id)}
-                  onChangeValue={(value) => handleContacts.changeComment(UIContactTypeEnum.LINKS, value, link.uiID)}
+                  onChangeValue={(value) => handleContacts.changeComment(UIContactTypeEnum.links, value, link.uiID)}
                 />
               </div>
             ))}
