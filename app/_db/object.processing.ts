@@ -19,7 +19,7 @@ export const objectReadProcessing = (dbData: DBObject): UIObject => {
       uiID: crypto.randomUUID(),
       schedules: Array(7).fill(null).map((_, i) => {
         const daySchedules = objectOnUsage.schedules.filter((usageSchedule) => usageSchedule.day_num === i);
-        const daySchedule = daySchedules
+        const day = daySchedules
           .toSorted((a, b) => a.object_on_usage_id - b.object_on_usage_id)
           .reduce((accum, schedule) => {
             if (typeof accum.day_num === "number") {
@@ -28,7 +28,7 @@ export const objectReadProcessing = (dbData: DBObject): UIObject => {
               return schedule;
             }
           }, {} as UISchedule);
-        return (typeof daySchedule.day_num === "number") ? { ...daySchedule, uiID: crypto.randomUUID() } : { day_num: i, uiID: crypto.randomUUID(), object_id: objectOnUsage.object_id, object_on_usage_id: objectOnUsage.object_on_usage_id, schedule_id: -1, time: "", from: 0, to: 0 };
+        return (typeof day.day_num === "number") ? { ...day, uiID: crypto.randomUUID() } : { day_num: i, uiID: crypto.randomUUID(), object_id: objectOnUsage.object_id, object_on_usage_id: objectOnUsage.object_on_usage_id, schedule_id: -1, time: "", from: 0, to: 0 };
       })
     })) ?? [],
   }

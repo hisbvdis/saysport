@@ -1,5 +1,5 @@
 {
-  "id": "40541c22-c9d6-4aff-90c8-4de5abcaafed",
+  "id": "860c6d13-d2fb-44a7-9f01-9c3da44abce4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -496,8 +496,8 @@
       },
       "uniqueConstraints": {}
     },
-    "public.object_on_usage_id": {
-      "name": "object_on_usage_id",
+    "public.object_on_usage": {
+      "name": "object_on_usage",
       "schema": "",
       "columns": {
         "object_on_usage_id": {
@@ -546,9 +546,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "object_on_usage_id_object_id_object_object_id_fk": {
-          "name": "object_on_usage_id_object_id_object_object_id_fk",
-          "tableFrom": "object_on_usage_id",
+        "object_on_usage_object_id_object_object_id_fk": {
+          "name": "object_on_usage_object_id_object_object_id_fk",
+          "tableFrom": "object_on_usage",
           "tableTo": "object",
           "columnsFrom": [
             "object_id"
@@ -559,9 +559,9 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "object_on_usage_id_usage_id_usage_usage_id_fk": {
-          "name": "object_on_usage_id_usage_id_usage_usage_id_fk",
-          "tableFrom": "object_on_usage_id",
+        "object_on_usage_usage_id_usage_usage_id_fk": {
+          "name": "object_on_usage_usage_id_usage_usage_id_fk",
+          "tableFrom": "object_on_usage",
           "tableTo": "usage",
           "columnsFrom": [
             "usage_id"
@@ -749,10 +749,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "object_schedule_object_on_usage_id_object_on_usage_id_object_on_usage_id_fk": {
-          "name": "object_schedule_object_on_usage_id_object_on_usage_id_object_on_usage_id_fk",
+        "object_schedule_object_on_usage_id_object_on_usage_object_on_usage_id_fk": {
+          "name": "object_schedule_object_on_usage_id_object_on_usage_object_on_usage_id_fk",
           "tableFrom": "object_schedule",
-          "tableTo": "object_on_usage_id",
+          "tableTo": "object_on_usage",
           "columnsFrom": [
             "object_on_usage_id"
           ],

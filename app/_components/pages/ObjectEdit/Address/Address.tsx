@@ -105,7 +105,7 @@ export default function Address() {
             <Control.Section>
               <Select
                 name="city_id"
-                value={String(state.city_id)}
+                value={state.city_id ? String(state.city_id) : ""}
                 label={state.city?.name.concat(state.city.admin1 ? `, ${state.city.admin1}` : "").concat(state.city.country ? `, ${state.city.country}` : "") ?? ""}
                 onChange={(data) => handleStateChange.value({name: data.name, value: data.value})}
                 onChangeData={(data) => setState((prevState) => create(prevState, (draft) => {draft.city = data}))}
@@ -128,7 +128,7 @@ export default function Address() {
             <Control.Section>
               <Select
                 name="parent_id"
-                value={String(state.parent_id)}
+                value={state.parent_id ? String(state.parent_id) : ""}
                 label={state.parent?.name_type?.concat(state.parent.name_title ? ` «${state.parent.name_title}»` : "").concat(state.parent.name_where ? ` ${state.parent.name_where}` : "")}
                 onChange={(data) => handleStateChange.value({name: data.name, value: data.value})}
                 onChangeData={(parent:DBObject) => {

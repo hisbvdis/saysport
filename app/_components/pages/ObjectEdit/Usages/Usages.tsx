@@ -3,7 +3,7 @@ import type React from "react";
 import { create } from "mutative";
 import type { UIUsage } from "@/app/_types/types";
 import { type ChangeEvent, useContext } from "react";
-import { costTypeEnum, type ObjectSchedule, objectTypeEnum } from "@/drizzle/schema";
+import { costTypeEnum, type ObjectSchedule, objectTypeEnum, Usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
@@ -21,10 +21,10 @@ export default function Usages() {
   const { state, setState } = useContext(ObjectEditContext);
 
   const handleUsages = {
-    add: (usage:UIUsage) => {
+    add: (usage:Usage) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages = draft.usages.concat({...usage, uiID: crypto.randomUUID()}).map((usage, i) => ({...usage, order: i}));
+        draft.usages = draft.usages.concat({...usage, uiID: crypto.randomUUID(), schedules: [], object_id: -1, description: "", object_on_usage_id: -1, order: -1, cost: null, schedule_inherit: false}).map((usage, i) => ({...usage, order: i, }));
       }))
     },
     delete: (usage:UIUsage) => {
@@ -66,6 +66,7 @@ export default function Usages() {
     formatTime: (e:React.FocusEvent<HTMLInputElement>, usage:UIUsage) => {
       const dayNum = Number(e.target.name);
       const times = e.target.value
+        .trim()
         .split("\n")
         .map((time) => {
           const matching = time.trim().match(/(\d{1,2}):?(\d{2})?\s?-\s?(\d{1,2}):?(\d{2})?$/);
@@ -162,7 +163,7 @@ export default function Usages() {
         <Select
           isAutocomplete
           value=""
-          onChangeData={handleUsages.add}
+          onChangeData={(data:Usage) => handleUsages.add(data)}
           placeholder="Добавить использование"
           requestItemsOnFirstTouch={async () =>
             (await getUsagesByFilters({sectionIds: state.sections.map((section) => section.section_id)}))
