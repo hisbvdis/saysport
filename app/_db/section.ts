@@ -2,9 +2,9 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, eq, ilike, inArray } from "drizzle-orm";
-import { objectTypeEnum, type objectTypeUnion, section, section_on_spec, section_on_usage, sectionTypeEnum, type sectionTypeUnion, spec } from "@/drizzle/schema";
+import { objectTypeEnum, type objectTypeUnion, Section, section, section_on_spec, section_on_usage, sectionTypeEnum, type sectionTypeUnion, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
-import type { DBSection, ProcSection } from "@/app/_types/types";
+import type { DBSection, EditSection, ProcSection } from "@/app/_types/types";
 import { sectionReadProcessing } from "./section.processing";
 
 
@@ -23,10 +23,12 @@ export const getEmptySection = async ():Promise<ProcSection> => {
 }
 
 export const getAllSections = async ():Promise<ProcSection[]> => {
-  const dbData = await db.query.section.findMany({
-    with: {sectionOnSpecs: {with: {spec: {with: {options: true}}}}},
-    orderBy: [section.name_public_plural]
-  })
+  const dbData:DBSection[] = await db.query.section.findMany({
+    with: {
+      sectionOnSpecs: {with: {spec: {with: {options: true}}}}
+    },
+    orderBy: [section.name_public_plural],
+  });
   const processed = dbData.map((section) => sectionReadProcessing(section));
   return processed;
 }
@@ -35,26 +37,28 @@ export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion;
   const objectType = filters.objectType;
   const sectionType = filters.sectionType;
   const name_public_plural = filters.name_public_plural;
-  const dbData = await db.query.section.findMany({
+  const dbData:DBSection[] = await db.query.section.findMany({
     where: and(
       name_public_plural ? ilike(section.name_public_plural, `%${name_public_plural}%`) : undefined,
       objectType ? eq(section.object_type, objectType) : undefined,
       sectionType ? eq(section.section_type, sectionType) : undefined,
     ),
-    with: {sectionOnSpecs: {with: {spec: {with: {options: true}}}}},
+    with: {
+      sectionOnSpecs: {with: {spec: {with: {options: true}}}}
+    },
   })
   const processed = dbData.map((section) => sectionReadProcessing(section));
   return processed;
 }
 
 export const getSectionById = async (id:number):Promise<ProcSection> => {
-  const dbData = await db.query.section.findFirst({
+  const dbData:DBSection|undefined = await db.query.section.findFirst({
     where: eq(section.section_id, id),
     with: {
       sectionOnSpecs: {with: {spec: {with: {options: true}}}},
       sectionOnUsages: {with: {usage: true}},
     },
-  }) satisfies DBSection|undefined;
+  });
   if (dbData === undefined) throw new Error("getSectionById returned undefined");
   const processed = sectionReadProcessing(dbData);
   return processed;
@@ -65,9 +69,9 @@ export const deleteSectionById = async (id:number):Promise<void> => {
   revalidatePath("/admin/sections");
 }
 
-export const upsertSection = async (state:ProcSection, init: ProcSection) => {
+export const upsertSection = async (state:EditSection, init: EditSection) => {
   const fields = {
-    section_id: state.section_id > 0 ? state.section_id : undefined,
+    section_id: state.section_id ?? undefined,
     section_type: state.section_type,
     name_service: state.name_service,
     name_public_plural: state.name_public_plural,

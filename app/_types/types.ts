@@ -42,6 +42,10 @@ export interface ProcSection extends Section {
   uiID: string;
 }
 
+export interface EditSection extends Omit<ProcSection, "section_id"> {
+  section_id: ProcSection["section_id"] | null;
+}
+
 
 
 // =============================================================================
