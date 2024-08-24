@@ -74,7 +74,15 @@ export interface EditUsage extends Omit<Usage, "usage_id"> {
 // =============================================================================
 export interface ProcObjectUsage extends ObjectOnUsage, Usage {
   uiID: string;
-  schedules: UISchedule[];
+  schedules: ProcObjectSchedule[];
+}
+
+
+// =============================================================================
+// OBJECT SCHEDULE
+// =============================================================================
+export interface ProcObjectSchedule extends ObjectSchedule {
+  uiID: string;
 }
 
 
@@ -100,10 +108,6 @@ export interface DBObject extends Object_ {
 // =============================================================================
 // UI TYPES
 // =============================================================================
-export interface UISchedule extends ObjectSchedule {
-  uiID: string;
-}
-
 export interface UIObject extends Partial<Object_> {
   name_type: string;
   coord_lat: number;

@@ -1,4 +1,4 @@
-import type { DBObject, UIObject, UISchedule } from "../_types/types";
+import type { DBObject, UIObject, ProcObjectSchedule } from "../_types/types";
 // -----------------------------------------------------------------------------
 import { sectionReadProcessing } from "./section.processing";
 // -----------------------------------------------------------------------------
@@ -27,7 +27,7 @@ export const objectReadProcessing = (dbData: DBObject): UIObject => {
             } else {
               return schedule;
             }
-          }, {} as UISchedule);
+          }, {} as ProcObjectSchedule);
         return (typeof day.day_num === "number") ? { ...day, uiID: crypto.randomUUID() } : { day_num: i, uiID: crypto.randomUUID(), object_id: objectOnUsage.object_id, object_on_usage_id: objectOnUsage.object_on_usage_id, schedule_id: -1, time: "", from: 0, to: 0 };
       })
     })) ?? [],
