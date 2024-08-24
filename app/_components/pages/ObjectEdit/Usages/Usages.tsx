@@ -1,9 +1,9 @@
 "use client";
 import type React from "react";
 import { create } from "mutative";
-import type { ProcObjectUsage } from "@/app/_types/types";
+import type { EditObjectUsage, ProcObjectSchedule, ProcObjectUsage } from "@/app/_types/types";
 import { type ChangeEvent, useContext } from "react";
-import { costTypeEnum, type ObjectSchedule, objectTypeEnum, Usage } from "@/drizzle/schema";
+import { costTypeEnum, type ObjectSchedule, objectTypeEnum, type Usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
@@ -24,22 +24,22 @@ export default function Usages() {
     add: (usage:Usage) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages = draft.usages.concat({...usage, uiID: crypto.randomUUID(), schedules: [], object_id: -1, description: "", object_on_usage_id: -1, order: -1, cost: null, schedule_inherit: false}).map((usage, i) => ({...usage, order: i, }));
+        draft.usages = draft.usages.concat({...usage, uiID: crypto.randomUUID(), schedules: [], object_id: null, description: "", object_on_usage_id: null, order: draft.usages.length, cost: null, schedule_inherit: null}).map((usage, i) => ({...usage, order: i, }));
       }))
     },
-    delete: (usage:ProcObjectUsage) => {
+    delete: (usage:EditObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         draft.usages = draft.usages?.filter((draftUsage) => draftUsage.uiID !== usage.uiID).map((usage, i) => ({...usage, order: i}));
       }));
     },
-    description: (e:ChangeEvent<HTMLInputElement>, usage:ProcObjectUsage) => {
+    description: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
         usageItem.description = e.target.value;
       }));
     },
-    cost: (e:ChangeEvent<HTMLInputElement>, usage:ProcObjectUsage) => {
+    cost: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
@@ -49,7 +49,7 @@ export default function Usages() {
   }
 
   const handleSchedule = {
-    changeTime: (e:React.ChangeEvent<HTMLInputElement>, usage:ProcObjectUsage) => {
+    changeTime: (e:React.ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
       const dayNum = Number(e.target.name);
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
@@ -59,11 +59,12 @@ export default function Usages() {
         if (scheduleItem) {
           scheduleItem.time = e.target.value;
         } else {
-          usageItem.schedules = usageItem?.schedules?.concat({day_num: dayNum, time: e.target.value, uiID: crypto.randomUUID(), object_on_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0})
+          const newSchedule = {day_num: dayNum, time: e.target.value, uiID: crypto.randomUUID(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0};
+          usageItem.schedules = usageItem.schedules.concat(newSchedule)
         }
       }))
     },
-    formatTime: (e:React.FocusEvent<HTMLInputElement>, usage:ProcObjectUsage) => {
+    formatTime: (e:React.FocusEvent<HTMLInputElement>, usage:EditObjectUsage) => {
       const dayNum = Number(e.target.name);
       const times = e.target.value
         .trim()
@@ -84,26 +85,26 @@ export default function Usages() {
         scheduleItem.time = times;
       }));
     },
-    clearAll: (usage:ProcObjectUsage) => {
+    clearAll: (usage:EditObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: "", uiID: crypto.randomUUID(), object_on_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0}));
+        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: "", uiID: crypto.randomUUID(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
       }));
     },
-    changeInherit: (e:ChangeEvent<HTMLInputElement>, usage:ProcObjectUsage) => {
+    changeInherit: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem || !draft.parent) return;
         usageItem.schedule_inherit = e.target.checked;
-        usageItem.schedules = draft.parent.usages[0]?.schedules.map((schedule) => ({...schedule, object_id: -1, object_on_usage_id: usage.object_on_usage_id}))
+        usageItem.schedules = draft.parent.usages[0]?.schedules.map((schedule) => ({...schedule, object_id: null, object_on_usage_id: usage.object_on_usage_id}))
       }));
     },
-    copyToAll: (schedule:ObjectSchedule, usage:ProcObjectUsage) => {
+    copyToAll: (schedule:ObjectSchedule, usage:EditObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: schedule.time, uiID: crypto.randomUUID(), object_on_usage_id: -1, object_id: -1, schedule_id: -1, from: 0, to: 0}));
+        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: schedule.time, uiID: crypto.randomUUID(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
       }));
     },
   }

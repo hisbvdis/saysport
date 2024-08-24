@@ -77,12 +77,37 @@ export interface ProcObjectUsage extends ObjectOnUsage, Usage {
   schedules: ProcObjectSchedule[];
 }
 
+export interface EditObjectUsage extends Omit<ProcObjectUsage, "object_on_usage_id"|"object_id"|"schedules"> {
+  object_id: ProcObjectUsage["object_id"] | null;
+  object_on_usage_id: ProcObjectUsage["object_on_usage_id"] | null;
+  uiID: string;
+  schedules: EditObjectSchedule[];
+}
+
 
 // =============================================================================
 // OBJECT SCHEDULE
 // =============================================================================
 export interface ProcObjectSchedule extends ObjectSchedule {
   uiID: string;
+}
+
+export interface EditObjectSchedule extends Omit<ProcObjectSchedule, "object_on_usage_id"|"object_id"|"schedule_id"> {
+  object_id: ProcObjectSchedule["object_id"] | null;
+  object_on_usage_id: ProcObjectSchedule["object_on_usage_id"] | null;
+  schedule_id: ProcObjectSchedule["schedule_id"] | null;
+}
+
+
+// =============================================================================
+// PHOTO
+// =============================================================================
+export interface EditObjectPhoto extends Omit<ObjectPhoto, "object_id" | "photo_id"> {
+  object_id: ObjectPhoto["object_id"] | null;
+  photo_id: ObjectPhoto["photo_id"] | null;
+  uiID: string;
+  blob?: string;
+  file?: File;
 }
 
 
@@ -118,8 +143,8 @@ export interface ProcObject extends Partial<Object_> {
   links?: (ObjectLink & {uiID: string})[];
   sections: ProcSection[];
   options?: ProcOption[];
-  usages: ProcObjectUsage[];
-  photos?: (ObjectPhoto & {uiID: string, blob?: string, file?: File})[];
+  usages: EditObjectUsage[];
+  photos?: EditObjectPhoto[];
   children?: DBObject[];
 }
 

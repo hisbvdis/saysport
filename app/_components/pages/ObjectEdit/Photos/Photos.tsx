@@ -22,7 +22,7 @@ export default function Photos() {
       const newIndexes = Array(10).fill(null).map((_, i) => i).filter((i) => !existingIndexes.includes(i)).toSorted((a, b) => a - b);
       const selectedPhotos = Array.from(e.target.files).slice(0, 10 - statePhotos.length)
       const compressedPhotos:File[] = await Promise.all(selectedPhotos.map((file) => new Promise((resolve:(value:File) =>void) => {new Compressor(file, {mimeType: "image/webp", quality: 0.7, maxWidth: 2560, resize: "contain", success: (result) => {resolve(new File([result], file.name, {type: "image/webp"}))}})})));
-      const enrichedPhotos = compressedPhotos.map((file, i) => ({name: `object_${state.object_id || "ID"}_${newIndexes.shift()}.webp`, uiID: crypto.randomUUID(), blob: URL.createObjectURL(file), file, photo_id: -1, object_id: -1, uploaded: new Date(), order: i}));
+      const enrichedPhotos = compressedPhotos.map((file, i) => ({name: `object_${state.object_id || "ID"}_${newIndexes.shift()}.webp`, uiID: crypto.randomUUID(), blob: URL.createObjectURL(file), file, photo_id: null, object_id: null, uploaded: new Date(), order: i}));
       const allPhotos = statePhotos.concat(enrichedPhotos).map((photo, i) => ({...photo, order: i}));
       setState((prevState) => create(prevState, (draft) => {draft.photos = allPhotos}))
     },

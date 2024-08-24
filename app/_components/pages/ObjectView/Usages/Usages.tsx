@@ -12,7 +12,7 @@ export default function Usages() {
     <Card>
       <Card.Heading>{state.type === objectTypeEnum.place ? "Использование" : "Занятия"}</Card.Heading>
       {state.usages.toSorted((a, b) => a.order - b.order).map((usage) => (
-        <Card.Section key={usage.usage_id}>
+        <Card.Section key={usage.uiID}>
           <p>{usage.name_public}</p>
           <div style={{marginBlockStart: "5px"}}>
             {usage.cost ? <p>

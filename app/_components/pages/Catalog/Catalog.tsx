@@ -10,6 +10,7 @@ import { Select } from "../../ui/Select";
 import { Control } from "../../ui/Control";
 import { Filters, Results, Categories } from ".";
 import { Pagination } from "../../ui/Pagination";
+import { MapCluster } from "../../ui/MapComponent";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import { MapComponent } from "../../ui/MapComponent";
@@ -17,7 +18,6 @@ import type { SearchParamsType } from "@/app/(router)/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import { MapCluster } from "../../ui/MapComponent";
 
 
 export default function Catalog(props:Props) {
@@ -45,7 +45,7 @@ export default function Catalog(props:Props) {
               />
             </Control>
           </Card>
-          {searchParams.section ? <Filters className="mt10"/> : <Categories className="mt10"/>}
+          {searchParams.section ? <Filters/> : <Categories/>}
         </aside>
         <main className={styles["catalog__main"]}>
           <Results/>

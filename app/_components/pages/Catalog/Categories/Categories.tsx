@@ -14,14 +14,13 @@ import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 import styles from "./style.module.css";
 
 
-export default function Categories(props:Props) {
+export default function Categories() {
   const { categories } = useContext(CatalogContext);
   const manageSearchParams = useManageSearchParams();
   const router = useRouter();
-  const { className, style } = props;
 
   return (
-    <Card className={className} style={style}>
+    <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Категории</Card.Heading>
       <Card.Section style={{padding: 0}}>
         <Select

@@ -1,12 +1,12 @@
 "use server";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
+import type { SearchParamsType } from "../(router)/page";
+import type { DBObject, EditObject, ProcObject } from "../_types/types";
 import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte, ne, notExists, sql } from "drizzle-orm";
 import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage, object_schedule, type costTypeUnion } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
-import type { DBObject, EditObject, ProcObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
-import type { SearchParamsType } from "../(router)/page";
 
 
 export const getEmptyObject = async ():Promise<EditObject> => {
@@ -204,7 +204,6 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
     created: state.created ? state.created : new Date(),
   };
 
-
   const [ upsertedObject ] = await db.insert(object).values(fields).onConflictDoUpdate({target: object.object_id, set: {...fields}}).returning();
   const children:DBObject[] = await db.query.object.findMany({where: eq(object.parent_id, upsertedObject.object_id), with: {objectOnUsages: {with: {usage: true, schedules: true}}}});
 
@@ -271,56 +270,18 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
     await db.delete(object_on_option).where(and(eq(object_on_option.object_id, upsertedObject.object_id), inArray(object_on_option.option_id, optionsDeleted.map((opt) => opt.option_id))));
   }
 
-  // const usagesAdded = state.usages?.filter((stateUsage) => !init?.usages?.some((initUsage) => stateUsage.uiID === initUsage.uiID));
-  // if (usagesAdded.length) {
-  //   usagesAdded.forEach(async (usage) => {
-  //     const [upsertedUsage] = await db.insert(object_on_usage).values({...usage, object_id: upsertedObject.object_id}).returning({object_on_usage_id: object_on_usage.object_on_usage_id});
-  //     if (usage.schedules?.length) {
-  //       await db.insert(object_schedule).values(usage.schedules.flatMap((schedule, i) => schedule.time.split("\n").map((time) => {
-  //         const resultObject = {object_id: upsertedObject.object_id, object_on_usage_id: upsertedUsage.object_on_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 0};
-  //         const matching = time.trim().match(/(\d{1,2}):?(\d{2})?\s?-\s?(\d{1,2}):?(\d{2})?$/);
-  //         if (!matching) return resultObject;
-  //         const [_, hoursFrom, minutesFrom, hoursTo, minutesTo] = matching;
-  //         resultObject.from = Number(hoursFrom) * 60 + Number(minutesFrom);
-  //         resultObject.to = Number(hoursTo) * 60 + Number(minutesTo);
-  //         return resultObject;
-  //       })));
-  //     }
-  //   })
-  // }
-  // state.usages.forEach(async (stateUsage) => {
-  //   const initUsage = init.usages.find((initUsage) => initUsage.uiID === stateUsage.uiID);
-  //   if (!initUsage) return;
-  //   const usagesDataChanged = state.usages.filter((stateUsage) => init.usages.some((initUsage) => stateUsage.uiID === initUsage.uiID && (stateUsage.description !== initUsage.description || stateUsage.cost !== initUsage.cost || stateUsage.schedule_inherit !== initUsage.schedule_inherit)));
-  //   if (usagesDataChanged.length)  {
-  //     await db.update(object_on_usage).set(stateUsage).where(eq(object_on_usage.object_on_usage_id, stateUsage.object_on_usage_id));
-  //   }
-    // const usageScheduleChanged = stateUsage.schedules.filter((stateSchedule) => !stateSchedule.time || initUsage.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num && stateSchedule.time !== initSchedule.time));
-  //   await db.delete(object_schedule).where(and(eq(object_schedule.object_on_usage_id, stateUsage.object_on_usage_id), inArray(object_schedule.day_num, usageScheduleChanged.map((schedule) => schedule.day_num))));
-  //   if (usageScheduleChanged.filter((schedule) => schedule.time).length) {
-  //     await db.insert(object_schedule).values(usageScheduleChanged.filter((schedule) => schedule.time).flatMap((schedule, i) => schedule.time.split("\n").map((time) => {
-  //       const resultObject = {object_id: upsertedObject.object_id, object_on_usage_id: stateUsage.object_on_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 0};
-  //         const matching = time.trim().match(/(\d{1,2}):?(\d{2})?\s?-\s?(\d{1,2}):?(\d{2})?$/);
-  //         if (!matching) return resultObject;
-  //         const [_, hoursFrom, minutesFrom, hoursTo, minutesTo] = matching;
-  //         resultObject.from = Number(hoursFrom) * 60 + Number(minutesFrom);
-  //         resultObject.to = Number(hoursTo) * 60 + Number(minutesTo);
-  //         return resultObject;
-  //     })));
-  //   }
-  // })
   state.usages.forEach(async (stateUsage) => {
-    let initUsage = init.usages.find((initUsage) => initUsage.uiID === stateUsage.uiID);
+    const initUsage = init.usages.find((initUsage) => initUsage.uiID === stateUsage.uiID);
+    let upsertedUsage = null;
     if (!initUsage) {
-      await db.insert(object_on_usage).values({...stateUsage, object_id: upsertedObject.object_id, object_on_usage_id: undefined});
-      initUsage = {...stateUsage, object_id: upsertedObject.object_id, schedules: Array(7).fill(null).map((_, i) => ({day_num: i, time: "", uiID: crypto.randomUUID(), object_on_usage_id: stateUsage.object_on_usage_id, object_id: upsertedObject.object_id, schedule_id: -1, from: 0, to: 0}))};
+      [upsertedUsage] = await db.insert(object_on_usage).values({...stateUsage, object_id: upsertedObject.object_id, object_on_usage_id: undefined}).returning();
     }
-    const usageScheduleChanged = stateUsage.schedules.filter((stateSchedule) => initUsage.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num && stateSchedule.time !== initSchedule.time));
+    const usageScheduleChanged = stateUsage.schedules.filter((stateSchedule) => !initUsage?.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num) || initUsage?.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num && stateSchedule.time !== initSchedule.time));
     if (!usageScheduleChanged?.length) return;
-    await db.delete(object_schedule).where(and(eq(object_schedule.object_on_usage_id, stateUsage.object_on_usage_id), inArray(object_schedule.day_num, usageScheduleChanged.map((schedule) => schedule.day_num))));
+    await db.delete(object_schedule).where(and(eq(object_schedule.object_on_usage_id, upsertedUsage?.object_on_usage_id ?? stateUsage.object_on_usage_id ?? -1), inArray(object_schedule.day_num, usageScheduleChanged.map((schedule) => schedule.day_num))));
     if (usageScheduleChanged.filter((schedule) => schedule.time).length) {
-      await db.insert(object_schedule).values(usageScheduleChanged.filter((schedule) => schedule.time).flatMap((schedule, i) => schedule.time.split("\n").map((time) => {
-        const resultObject = {object_id: upsertedObject.object_id, object_on_usage_id: stateUsage.object_on_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 0};
+      await db.insert(object_schedule).values(usageScheduleChanged.filter((schedule) => schedule.time).flatMap((schedule) => schedule.time.split("\n").map((time) => {
+        const resultObject = {object_id: upsertedObject.object_id, object_on_usage_id: upsertedUsage?.object_on_usage_id ?? stateUsage.object_on_usage_id ?? -1, day_num: schedule.day_num, time: time, from: 0, to: 0};
           const matching = time.trim().match(/(\d{1,2}):?(\d{2})?\s?-\s?(\d{1,2}):?(\d{2})?$/);
           if (!matching) return resultObject;
           const [_, hoursFrom, minutesFrom, hoursTo, minutesTo] = matching;
@@ -332,7 +293,7 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
   })
   const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.uiID === stateUsage.uiID));
   if (usagesDeleted.length) {
-    await db.delete(object_on_usage).where(inArray(object_on_usage.object_on_usage_id, usagesDeleted.map((deletedUsage) => deletedUsage.object_on_usage_id)));
+    await db.delete(object_on_usage).where(inArray(object_on_usage.object_on_usage_id, usagesDeleted.map((deletedUsage) => deletedUsage.object_on_usage_id ?? -1)));
   }
 
   const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));
@@ -341,7 +302,7 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
   }
   const photosChanged = state.photos?.filter((statePhoto) => init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID && statePhoto.order !== initPhoto.order));
   if (photosChanged?.length) {
-    photosChanged.forEach(async (photo) => await db.update(object_photo).set({order: photo.order}).where(eq(object_photo.photo_id, photo.photo_id)));
+    photosChanged.forEach(async (photo) => photo.photo_id && await db.update(object_photo).set({order: photo.order}).where(eq(object_photo.photo_id, photo.photo_id)));
   }
   const photosDeleted = init.photos?.filter((initPhoto) => !state.photos?.some((statePhoto) => initPhoto.uiID === statePhoto.uiID));
   if (photosDeleted?.length) {

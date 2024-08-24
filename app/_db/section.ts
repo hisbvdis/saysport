@@ -8,9 +8,9 @@ import type { DBSection, EditSection, ProcSection } from "@/app/_types/types";
 import { sectionReadProcessing } from "./section.processing";
 
 
-export const getEmptySection = async ():Promise<ProcSection> => {
+export const getEmptySection = async ():Promise<EditSection> => {
   return {
-    section_id: -1,
+    section_id: null,
     section_type: sectionTypeEnum.section,
     object_type: objectTypeEnum.org,
     name_service: "",
@@ -97,6 +97,10 @@ export const upsertSection = async (state:EditSection, init: EditSection) => {
   const usagesAdded = state.usages?.filter((stateUsage) => !init.usages?.some((initUsage) => stateUsage.usage_id === initUsage.usage_id));
   if (usagesAdded.length) {
     await db.insert(section_on_usage).values(usagesAdded.map((section_on_usage) => ({section_id: upsertedSection.section_id, usage_id: section_on_usage.usage_id})));
+  }
+  const usagesDeleted = init.usages?.filter((initUsage) => !state.usages?.some((stateUsage) => initUsage.usage_id === stateUsage.usage_id));
+  if (usagesDeleted.length) {
+    await db.delete(section_on_usage).where(and(eq(section_on_usage.section_id, upsertedSection.section_id), inArray(section_on_usage.usage_id, usagesDeleted.map((usage) => usage.usage_id))));
   }
 
   revalidatePath("/admin/sections");
