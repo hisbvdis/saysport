@@ -6,10 +6,10 @@ import { FieldSet } from "@/app/_components/ui/FieldSet";
 import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit";
-import type { UISection } from "@/app/_types/types";
+import type { ProcSection } from "@/app/_types/types";
 
 
-export default function SectionItem(props:{section:UISection, delFunc:(section:UISection) => void}) {
+export default function SectionItem(props:{section:ProcSection, delFunc:(section:ProcSection) => void}) {
   const { section } = props;
   const { state, handleOptions } = useContext(ObjectEditContext);
 

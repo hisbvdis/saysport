@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
-import type { UICategory, UISection } from "@/app/_types/types";
+import type { ProcCategory, ProcSection } from "@/app/_types/types";
 import { type SyntheticEvent, useEffect, useState } from "react";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
@@ -18,7 +18,7 @@ import { deleteCategoryById, upsertCategory } from "@/app/_db/category";
 import { getSectionsByFilters } from "@/app/_db/section";
 
 
-export default function CategoryEdit(props:{init:UICategory}) {
+export default function CategoryEdit(props:{init:ProcCategory}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function CategoryEdit(props:{init:UICategory}) {
   }
 
   const handleSections = {
-    add: (section:UISection) => {
+    add: (section:ProcSection) => {
       if (!section.section_id || state.sections?.some((stateSection) => stateSection.section_id === section.section_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.sections) draft.sections = [];

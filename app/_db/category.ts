@@ -2,12 +2,12 @@
 import { db } from "@/drizzle/client"
 import { category, category_on_section, type Category } from "@/drizzle/schema"
 import { categoryReadProcessing } from "./category.processing"
-import type { DBCategory, UICategory } from "../_types/types"
+import type { DBCategory, ProcCategory } from "../_types/types"
 import { and, eq, inArray } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
 
-export const getEmptyCategory = async ():Promise<UICategory> => {
+export const getEmptyCategory = async ():Promise<ProcCategory> => {
   return {
     category_id: -1,
     name: "",
@@ -16,7 +16,7 @@ export const getEmptyCategory = async ():Promise<UICategory> => {
   }
 }
 
-export const getAllCategories = async ():Promise<UICategory[]> => {
+export const getAllCategories = async ():Promise<ProcCategory[]> => {
   const dbData:DBCategory[] = await db.query.category.findMany({
     with: {categoryOnSections: {with: {section: true}}},
     orderBy: [category.order]
@@ -25,7 +25,7 @@ export const getAllCategories = async ():Promise<UICategory[]> => {
   return processed;
 }
 
-export const getCategoryById = async (id:number):Promise<UICategory> => {
+export const getCategoryById = async (id:number):Promise<ProcCategory> => {
   const dbData:DBCategory|undefined = await db.query.category.findFirst({
     where: eq(category.category_id, id),
     with: {categoryOnSections: {with: {section: true}}},
@@ -40,7 +40,7 @@ export const deleteCategoryById = async (id:number):Promise<void> => {
   revalidatePath("/admin/categories");
 }
 
-export const upsertCategory = async (state:UICategory, init: UICategory) => {
+export const upsertCategory = async (state:ProcCategory, init: ProcCategory) => {
   const fields = {
     category_id: state.category_id > 0 ? state.category_id : undefined,
     name: state.name,

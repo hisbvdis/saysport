@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { createContext } from "react";
 import { useRouter } from "next/navigation";
 import type { City } from "@/drizzle/schema";
-import type { DBObject, UICategory, UISection } from "@/app/_types/types"
+import type { DBObject, ProcCategory, ProcSection } from "@/app/_types/types"
 // -----------------------------------------------------------------------------
 import { Card } from "../../ui/Card";
 import { Select } from "../../ui/Select";
@@ -66,12 +66,12 @@ export const CatalogContext = createContext<CatalogContextType>({} as CatalogCon
 interface Props {
   resultsLimited: DBObject[];
   resultsAll: DBObject[];
-  categories: UICategory[];
+  categories: ProcCategory[];
   searchParams: SearchParamsType;
   city?: City;
-  section?: UISection;
+  section?: ProcSection;
   resultsCount:number;
-  commonSections:UISection[];
+  commonSections:ProcSection[];
 }
 
 interface CatalogContextType {
@@ -79,8 +79,8 @@ interface CatalogContextType {
   resultsAll: DBObject[];
   resultsCount: number;
   searchParams: SearchParamsType;
-  categories: UICategory[];
-  section?: UISection;
+  categories: ProcCategory[];
+  section?: ProcSection;
   city?: City;
-  commonSections:UISection[];
+  commonSections:ProcSection[];
 }

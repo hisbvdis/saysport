@@ -22,7 +22,7 @@ export default function EditBottomPanel(props:Props) {
 }
 
 interface Props {
-  id?: number;
+  id?: number|null;
   delFunc: (id: number) => Promise<void>;
   exitRedirectPath: string;
   delRedirectPath: string;

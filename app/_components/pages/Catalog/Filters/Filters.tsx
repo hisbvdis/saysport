@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { UISpec } from "@/app/_types/types";
+import type { ProcSpec } from "@/app/_types/types";
 import { type ChangeEvent, useContext, useState } from "react";
 import { objectStatusEnum, objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ export default function Filters(props:Props) {
   const [ andSpecs, setAndSpecs ] = useState<number[]>([]);
   const { searchParams, section, commonSections } = useContext(CatalogContext);
 
-  const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:UISpec) => {
+  const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:ProcSpec) => {
     if (e.target.checked) {
       setAndSpecs(andSpecs.concat(spec.spec_id))
       router.push(manageSearchParams.set("options", searchParams.options?.split(",").map((v) => v.startsWith(`${spec.spec_id}:`) ? `!${v}` : v).join(",") ?? ""))

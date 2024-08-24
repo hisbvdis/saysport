@@ -3,7 +3,7 @@ import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
 import { sectionTypeEnum } from "@/drizzle/schema";
-import type { UISection, UISpec, UIUsage } from "@/app/_types/types";
+import type { ProcSection, ProcSpec, UIUsage } from "@/app/_types/types";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
@@ -21,7 +21,7 @@ import { getUsagesByFilters } from "@/app/_db/usage";
 import { deleteSectionById, upsertSection } from "@/app/_db/section";
 
 
-export default function SectionEdit(props:{init:UISection}) {
+export default function SectionEdit(props:{init:ProcSection}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function SectionEdit(props:{init:UISection}) {
   }
 
   const handleSpecs = {
-    add: (spec:UISpec) => {
+    add: (spec:ProcSpec) => {
       if (!spec.spec_id || state.specs?.some((stateSpec) => stateSpec.spec_id === spec.spec_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.specs) draft.specs = [];
@@ -47,7 +47,7 @@ export default function SectionEdit(props:{init:UISection}) {
         draft.specs = draft.specs?.filter((spec) => spec.spec_id !== id);
       }))
     },
-    changeOrder: (e:ChangeEvent<HTMLInputElement>, spec:UISpec) => {
+    changeOrder: (e:ChangeEvent<HTMLInputElement>, spec:ProcSpec) => {
       setState((prevState) => create(prevState, (draft) => {
         const specItem = draft.specs?.find((draftSpec) => draftSpec.spec_id === spec?.spec_id);
         if (!specItem) return;

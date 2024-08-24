@@ -1,7 +1,7 @@
-import type { DBSpec, UISpec } from "@/app/_types/types";
+import type { DBSpec, ProcSpec } from "@/app/_types/types";
 
 
-export const specReadProcessing = (dbData:DBSpec):UISpec => {
+export const specReadProcessing = (dbData:DBSpec):ProcSpec => {
   return {
     ...dbData,
     options: dbData.options.map((option) => ({...option, uiID: crypto.randomUUID()})),

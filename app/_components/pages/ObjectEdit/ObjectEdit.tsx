@@ -3,7 +3,7 @@ import { create } from "mutative";
 import type * as Leaflet from "leaflet";
 import { useRouter } from "next/navigation";
 import { objectTypeEnum } from "@/drizzle/schema";
-import type { UIObject, UIOption, UISection, UISpec } from "@/app/_types/types";
+import type { UIObject, ProcOption, ProcSection, ProcSpec } from "@/app/_types/types";
 import { type ChangeEvent, type ChangeEventHandler, type Dispatch, type SetStateAction, type SyntheticEvent, createContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
@@ -15,7 +15,7 @@ import { setInheritedData } from "./Address/setInheritedData";
 import { deleteObjectById, upsertObject } from "@/app/_db/object";
 
 
-export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, commonSections?: UISection[]}) {
+export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, commonSections?: ProcSection[]}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -31,14 +31,14 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
   }
 
   const handleSections = {
-    add: (section:UISection) => {
+    add: (section:ProcSection) => {
       if (!section.section_id || state.sections?.some((stateSection) => stateSection.section_id === section.section_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.sections) draft.sections = [];
         draft.sections.push(section);
       }))
     },
-    delete: (section:UISection) => {
+    delete: (section:ProcSection) => {
       setState((prevState) => create(prevState, (draft) => {
         draft.sections = draft.sections?.filter((draftSection) => draftSection.section_id !== section.section_id);
         const optionsOfDeletedSection = section.specs?.flatMap((spec) => spec.options?.flatMap(({spec_id}) => spec_id));
@@ -48,7 +48,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
   }
 
   const handleOptions = {
-    changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: UIOption) => {
+    changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: ProcOption) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.options) draft.options = [];
         if (e.target.checked) {
@@ -58,7 +58,7 @@ export default function ObjectEdit(props:{init:UIObject, parent?:UIObject|null, 
         }
       }))
     },
-    changeRadio: (spec:UISpec, opt:UIOption) => {
+    changeRadio: (spec:ProcSpec, opt:ProcOption) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.options) draft.options = [];
         draft.options = draft.options?.filter((stateOpt) => !spec.options?.map((opt) => opt.option_id).includes(stateOpt.option_id));
@@ -131,12 +131,12 @@ interface ObjectEditContextType {
     checked: ChangeEventHandler,
   },
   handleSections: {
-    add: (section:UISection) => void,
-    delete: (section:UISection) => void,
+    add: (section:ProcSection) => void,
+    delete: (section:ProcSection) => void,
   },
   handleOptions: {
-    changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: UIOption) => void,
-    changeRadio: (spec:UISpec, opt:UIOption) => void,
+    changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: ProcOption) => void,
+    changeRadio: (spec:ProcSpec, opt:ProcOption) => void,
   },
   mapInstance?: Leaflet.Map;
   setMapInstance: Dispatch<SetStateAction<Leaflet.Map | undefined>>;

@@ -4,11 +4,11 @@ import { revalidatePath } from "next/cache";
 import { and, eq, ilike, inArray } from "drizzle-orm";
 import { objectTypeEnum, type objectTypeUnion, section, section_on_spec, section_on_usage, sectionTypeEnum, type sectionTypeUnion, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
-import type { DBSection, UISection } from "@/app/_types/types";
+import type { DBSection, ProcSection } from "@/app/_types/types";
 import { sectionReadProcessing } from "./section.processing";
 
 
-export const getEmptySection = async ():Promise<UISection> => {
+export const getEmptySection = async ():Promise<ProcSection> => {
   return {
     section_id: -1,
     section_type: sectionTypeEnum.section,
@@ -22,7 +22,7 @@ export const getEmptySection = async ():Promise<UISection> => {
   }
 }
 
-export const getAllSections = async ():Promise<UISection[]> => {
+export const getAllSections = async ():Promise<ProcSection[]> => {
   const dbData = await db.query.section.findMany({
     with: {sectionOnSpecs: {with: {spec: {with: {options: true}}}}},
     orderBy: [section.name_public_plural]
@@ -31,7 +31,7 @@ export const getAllSections = async ():Promise<UISection[]> => {
   return processed;
 }
 
-export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion;sectionType?:sectionTypeUnion;name_service?:string;name_public_plural?:string}):Promise<UISection[]> => {
+export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion;sectionType?:sectionTypeUnion;name_service?:string;name_public_plural?:string}):Promise<ProcSection[]> => {
   const objectType = filters.objectType;
   const sectionType = filters.sectionType;
   const name_public_plural = filters.name_public_plural;
@@ -47,7 +47,7 @@ export const getSectionsByFilters = async (filters:{objectType?:objectTypeUnion;
   return processed;
 }
 
-export const getSectionById = async (id:number):Promise<UISection> => {
+export const getSectionById = async (id:number):Promise<ProcSection> => {
   const dbData = await db.query.section.findFirst({
     where: eq(section.section_id, id),
     with: {
@@ -65,7 +65,7 @@ export const deleteSectionById = async (id:number):Promise<void> => {
   revalidatePath("/admin/sections");
 }
 
-export const upsertSection = async (state:UISection, init: UISection) => {
+export const upsertSection = async (state:ProcSection, init: ProcSection) => {
   const fields = {
     section_id: state.section_id > 0 ? state.section_id : undefined,
     section_type: state.section_type,

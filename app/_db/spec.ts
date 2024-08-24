@@ -1,24 +1,24 @@
 "use server";
 import { db } from "@/drizzle/client";
-import { and, eq, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { and, eq, inArray } from "drizzle-orm";
+import type { EditSpec, ProcSpec } from "@/app/_types/types";
 import { type Spec, objectTypeEnum, type objectTypeUnion, option, optionsNumberEnum, spec } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
-import type { UISpec } from "@/app/_types/types";
 import { specReadProcessing } from "./spec.processing";
 
 
-export const getEmptySpec = async ():Promise<UISpec> => {
+export const getEmptySpec = async ():Promise<EditSpec> => {
   return {
-    spec_id: 0,
+    spec_id: null,
     name_service: "",
     name_public: "",
     object_type: objectTypeEnum.org,
-    options_number: optionsNumberEnum.many,
+    options_number: optionsNumberEnum.one,
     uiID: crypto.randomUUID(),
     options: [],
-    order: 1,
-    is_and_in_search: null
+    order: 0,
+    is_and_in_search: null,
   }
 }
 
@@ -37,7 +37,7 @@ export const getSpecsByFilters = async (filters:{objectType?:objectTypeUnion}):P
   return dbData;
 }
 
-export const getSpecById = async (id: number):Promise<UISpec> => {
+export const getSpecById = async (id: number):Promise<ProcSpec> => {
   const dbData = await db.query.spec.findFirst({
     where: eq(spec.spec_id, id),
     with: {options: {
@@ -54,7 +54,7 @@ export const deleteSpecById = async (id:number): Promise<void> => {
   revalidatePath("/admin/specs", "page");
 }
 
-export const upsertSpec = async (state:UISpec, init:UISpec):Promise<Spec> => {
+export const upsertSpec = async (state:EditSpec, init:EditSpec):Promise<Spec> => {
   const fields = {
     spec_id: state.spec_id || undefined,
     name_service: state.name_service,
