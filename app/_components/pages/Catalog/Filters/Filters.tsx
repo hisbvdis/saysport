@@ -52,7 +52,7 @@ export default function Filters(props:Props) {
             <Control>
               <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
                 <span>{spec.name_public}</span>
-                {spec.is_and_in_search && <Checkbox value={spec.spec_id} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>}
+                {spec.is_and_in_search && <Checkbox value={String(spec.spec_id)} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>}
               </Control.Label>
               <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
                 {spec.options?.toSorted((a, b) => a.order - b.order).map((opt) => (
@@ -115,6 +115,20 @@ export default function Filters(props:Props) {
         <Card.Heading style={{display: "flex", alignItems: "center"}}>
           <span style={{marginInlineEnd: "auto", paddingInlineEnd: "20px"}}>Использование</span>
         </Card.Heading>
+        <Card.Section>
+          <Control>
+            <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+              <span>Тип</span>
+            </Control.Label>
+            <CheckboxGroup arrayToCompareWith={searchParams.usages?.split(",")}>
+              {section.usages.map((usage) => (
+                <Link key={usage.usage_id} href={manageSearchParams.appendOrClear("usages", String(usage.usage_id))}>
+                  <Checkbox value={String(usage.usage_id)} tabIndex={-1}>{usage.name_public}</Checkbox>
+                </Link>
+              ))}
+            </CheckboxGroup>
+          </Control>
+        </Card.Section>
         <Card.Section>
           <Control>
             <Control.Label style={{display: "flex", justifyContent: "space-between"}}>

@@ -17,8 +17,8 @@ import { Radio, RadioGroup } from "@/app/_components/ui/Choice";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { getSpecsByFilters } from "@/app/_db/spec";
-import { deleteSectionById, upsertSection } from "@/app/_db/section";
 import { getUsagesByFilters } from "@/app/_db/usage";
+import { deleteSectionById, upsertSection } from "@/app/_db/section";
 
 
 export default function SectionEdit(props:{init:UISection}) {
@@ -61,7 +61,7 @@ export default function SectionEdit(props:{init:UISection}) {
       if (!usage.usage_id || state.usages?.some((stateUsage) => stateUsage.usage_id === usage.usage_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages.push({...usage, order: draft.usages.length});
+        draft.usages.push({...usage, section_id: -1, section_on_usage_id: -1});
       }))
     },
     delete: (id:number) => {
@@ -82,7 +82,7 @@ export default function SectionEdit(props:{init:UISection}) {
       router.refresh();
     }
   }
-  console.log( state )
+
   return (
     <Form onSubmit={handleFormSubmit}>
       <Card style={{marginBlockStart: "10px"}}>
@@ -194,11 +194,10 @@ export default function SectionEdit(props:{init:UISection}) {
             }
           />
           <ul style={{marginBlockStart: "5px"}}>
-            {state?.usages?.toSorted((a, b) => a.order - b.order).map((usage) => (
+            {state?.usages?.map((usage) => (
               <li key={usage.usage_id} style={{display: "flex"}}>
                 <Button onClick={() => handleUsages.delete(usage.usage_id)}>X</Button>
                 <InputAddon>{usage.usage_id}</InputAddon>
-                {/* <Input value={usage.order} onChange={(e) => handleUsages.changeOrder(e, usage)} required style={{flex: "0 1 40px"}}/> */}
                 <Link href={`/admin/usages/${usage.usage_id}`} style={{alignSelf: "center"}}>{usage.name_service}</Link>
               </li>
             ))}

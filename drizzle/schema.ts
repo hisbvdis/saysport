@@ -341,7 +341,7 @@ export type Usage = typeof usage.$inferSelect;
 // ===========================================================================
 // OBJECT_ON_USAGE
 // ===========================================================================
-export const object_on_usage = pgTable("object_on_usage_id", {
+export const object_on_usage = pgTable("object_on_usage", {
   object_on_usage_id: serial("object_on_usage_id").primaryKey(),
   object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   usage_id: integer("usage_id").notNull().references(() => usage.usage_id, {onDelete: "cascade"}),

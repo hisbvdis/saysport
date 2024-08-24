@@ -8,6 +8,13 @@
       "when": 1724485569461,
       "tag": "0000_absurd_chamber",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1724492798776,
+      "tag": "0001_huge_starfox",
+      "breakpoints": true
     }
   ]
 }

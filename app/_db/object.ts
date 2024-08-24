@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte, ne, notExists, sql } from "drizzle-orm";
-import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage, object_schedule, costTypeUnion } from "@/drizzle/schema";
+import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage, object_schedule, type costTypeUnion } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import type { DBObject, UIObject } from "../_types/types";
 import { objectReadProcessing } from "./object.processing";
@@ -74,6 +74,7 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
   const from = filters?.from;
   const to = filters?.to;
   const cost = filters?.cost?.split(",").map((value) => String(value)) as costTypeUnion[] ?? [];
+  const usages = filters?.usages?.split(",").map((id) => Number(id)) ?? [];
   const groupedOptions = Object.entries(optionIds
     ? optionIds /* "1:1,1:2,!2:3" */
       .split(",") /* ["1:1"],["1:2"],["!2:3"] */
@@ -102,6 +103,7 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
         to ? gte(object_schedule.to, Number(to)) : undefined,
         cost?.length ? inArray(object_on_usage.cost, cost) : undefined
       ))) : undefined,
+      usages.length ? exists(db.select().from(object_on_usage).where(and(eq(object_on_usage.object_id, object.object_id), inArray(object_on_usage.usage_id, usages)))) : undefined
     ),
     with: {
       // statusInstead: true,
@@ -266,7 +268,6 @@ export const upsertObject = async (state:UIObject, init: UIObject): Promise<Obje
     usagesAdded.forEach(async (usage) => {
       const [upsertedUsage] = await db.insert(object_on_usage).values({...usage, object_id: upsertedObject.object_id}).returning({object_on_usage_id: object_on_usage.object_on_usage_id});
       if (usage.schedules?.length) {
-        // await db.insert(object_schedule).values(usage.schedules.flatMap((schedule, i) => schedule.time.split("\n").map((time) => ({object_id: upsertedObject.object_id, object_on_usage_id: upsertedUsage.object_on_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 1}))));
         await db.insert(object_schedule).values(usage.schedules.flatMap((schedule, i) => schedule.time.split("\n").map((time) => {
           const resultObject = {object_id: upsertedObject.object_id, object_on_usage_id: upsertedUsage.object_on_usage_id, day_num: schedule.day_num, time: time, from: 0, to: 0};
           const matching = time.trim().match(/(\d{1,2}):?(\d{2})?\s?-\s?(\d{1,2}):?(\d{2})?$/);

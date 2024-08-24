@@ -56,6 +56,7 @@ export interface SearchParamsType {
   from?:string;
   to?:string;
   cost?:string;
+  usages?:string;
 }
 
 interface Props {

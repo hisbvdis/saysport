@@ -53,7 +53,7 @@ function Choice(props:Props) {
 interface Props {
   type?: "radio" | "checkbox";
   name?: string;
-  value?: string | number;
+  value?: string;
   valueToCompareWith?: string | number | boolean;
   arrayToCompareWith?: (string | number)[];
   checked?: boolean;

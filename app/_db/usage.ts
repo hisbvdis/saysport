@@ -33,7 +33,6 @@ export const getUsagesByFilters = async (filters:{objectType?:objectTypeUnion;na
       sectionIds?.length ? exists(db.select().from(section_on_usage).where(and(eq(section_on_usage.usage_id, usage.usage_id), inArray(section_on_usage.section_id, sectionIds)))) : undefined,
     )
   })
-  console.log( dbData )
   return dbData;
 }
 

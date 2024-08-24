@@ -47,7 +47,7 @@ export interface UISpec extends Spec {
 
 export interface UISection extends Section {
   specs: UISpec[];
-  usages: SectionOnUsage[];
+  usages: (SectionOnUsage & Usage)[];
   uiID: string;
 }
 
