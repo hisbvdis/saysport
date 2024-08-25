@@ -29,7 +29,7 @@ export default function Usages() {
             </p> : null}
             <p style={{marginBlockStart: "5px"}}>{usage.description}</p>
           </div>
-          {usage.schedules.length > 0 ? (
+          {usage.schedules.filter((schedule) => schedule.time).length > 0 ? (
             <div style={{marginBlockStart: "5px"}}>
               {usage.schedules.every((schedule, _, arr) => schedule.time === arr[0].time) ? (
                 <p style={{marginBlockStart: "5px"}}>Ежедневно: {usage.schedules[0].time.split("\n").join(", ")}</p>

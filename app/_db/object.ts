@@ -277,8 +277,7 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
       [upsertedUsage] = await db.insert(object_on_usage).values({...stateUsage, object_id: upsertedObject.object_id, object_on_usage_id: undefined}).returning();
     }
     if (initUsage && stateUsage.cost !== initUsage.cost || stateUsage.description !== initUsage?.description || stateUsage?.schedule_inherit !== initUsage?.schedule_inherit || stateUsage?.sexMale !== initUsage?.sexMale || stateUsage?.sexFemale !== initUsage?.sexFemale || stateUsage?.ageFrom !== initUsage?.ageFrom || stateUsage?.ageTo !== initUsage?.ageTo) {
-      if (!stateUsage.object_on_usage_id) return;
-      await db.update(object_on_usage).set({...stateUsage, object_id: undefined, object_on_usage_id: undefined}).where(eq(object_on_usage.object_on_usage_id, stateUsage.object_on_usage_id));
+      await db.update(object_on_usage).set({...stateUsage, object_id: undefined, object_on_usage_id: undefined}).where(stateUsage.object_on_usage_id ? eq(object_on_usage.object_on_usage_id, stateUsage.object_on_usage_id) : undefined);
     }
     const usageScheduleChanged = stateUsage.schedules.filter((stateSchedule) => !initUsage?.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num) || initUsage?.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num && stateSchedule.time !== initSchedule.time));
     if (!usageScheduleChanged?.length) return;
@@ -314,5 +313,6 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
   }
 
   revalidatePath(`object/${upsertedObject.object_id}`, "page");
+  revalidatePath(`object/${upsertedObject.object_id}/edit`, "page");
   return upsertedObject;
 }
