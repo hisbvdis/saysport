@@ -18,7 +18,7 @@ export const sectionTypeColumnType = pgEnum("sectionType", ["section", "common"]
 
 export enum costTypeEnum {paid="paid", free="free"};
 export type costTypeUnion = "paid" | "free";
-export const costTypeColumnType = pgEnum("costTYpe", ["paid", "free"]);
+export const costTypeColumnType = pgEnum("costType", ["paid", "free"]);
 
 export enum UIContactTypeEnum {phones = "phones", links = "links"};
 
@@ -349,6 +349,10 @@ export const object_on_usage = pgTable("object_on_usage", {
   usage_id: integer("usage_id").notNull().references(() => usage.usage_id, {onDelete: "cascade"}),
   order: integer("order").notNull(),
   cost: costTypeColumnType("cost"),
+  sexMale: boolean("sexMale"),
+  sexFemale: boolean("sexFemale"),
+  ageFrom: integer("ageFrom"),
+  ageTo: integer("ageTo"),
   description: varchar("description"),
   schedule_inherit: boolean("schedule_inherit"),
 })

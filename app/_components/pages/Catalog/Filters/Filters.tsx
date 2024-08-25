@@ -66,10 +66,10 @@ export default function Filters() {
     </Card>
 
     {/* Usage */}
-    {section?.object_type === objectTypeEnum.place ? (
+    {section?.object_type !== objectTypeEnum.org ? (
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading style={{display: "flex", alignItems: "center"}}>
-          <span style={{marginInlineEnd: "auto", paddingInlineEnd: "20px"}}>Использование</span>
+          <span style={{marginInlineEnd: "auto", paddingInlineEnd: "20px"}}>{section?.object_type === objectTypeEnum.place ? "Использование" : "Занятия"}</span>
         </Card.Heading>
         <Card.Section>
           <Control>
@@ -77,7 +77,7 @@ export default function Filters() {
               <span>Тип</span>
             </Control.Label>
             <CheckboxGroup arrayToCompareWith={searchParams.usages?.split(",")}>
-              {section.usages.map((usage) => (
+              {section?.usages.map((usage) => (
                 <Link key={usage.usage_id} href={manageSearchParams.appendOrClear("usages", String(usage.usage_id))}>
                   <Checkbox value={String(usage.usage_id)} tabIndex={-1}>{usage.name_public}</Checkbox>
                 </Link>
@@ -100,6 +100,36 @@ export default function Filters() {
             </CheckboxGroup>
           </Control>
         </Card.Section>
+        {section?.object_type === objectTypeEnum.class ? (<>
+          <Card.Section>
+            <Control>
+              <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+                <span>Пол</span>
+              </Control.Label>
+              <CheckboxGroup arrayToCompareWith={searchParams.sex?.split(",")}>
+                <Link href={manageSearchParams.appendOrClear("sex", "male")}>
+                  <Checkbox value="male" tabIndex={-1}>Мужской</Checkbox>
+                </Link>
+                <Link href={manageSearchParams.appendOrClear("sex", "female")}>
+                  <Checkbox value="female" tabIndex={-1}>Женский</Checkbox>
+                </Link>
+              </CheckboxGroup>
+            </Control>
+          </Card.Section>
+          <Card.Section>
+            <Control>
+              <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+                <span>Возраст</span>
+              </Control.Label>
+              <Select
+                isAutocomplete
+                value={searchParams.age ?? ""}
+                onChange={(data) => {data.value ? router.push(manageSearchParams.set("age", data.value)) : router.push(manageSearchParams.delete(["age"]))}}
+                items={[{id: "", label: ""}].concat(Array(100).fill(null).map((_, i) => ({id: String(i), label: String(i)})))}
+              />
+            </Control>
+          </Card.Section>
+        </>) : null}
         <Card.Section>
           <Control>
             <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
@@ -115,7 +145,6 @@ export default function Filters() {
             <div style={{display: "flex", gap: "10px", marginBlockStart: "10px"}}>
               <Select
                 isAutocomplete
-                name="test"
                 value={searchParams.from ? searchParams.from : ""}
                 onChange={(data) => {data.value ? router.push(manageSearchParams.set("from", data.value)) : router.push(manageSearchParams.delete(["from"]))}}
                 placeholder="с"
@@ -134,6 +163,7 @@ export default function Filters() {
       </Card>
     ) : null}
 
+    {/* OTHER */}
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Другое</Card.Heading>
       {/* Status */}

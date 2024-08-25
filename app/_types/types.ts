@@ -143,7 +143,7 @@ export interface ProcObject extends Partial<Object_> {
   links?: (ObjectLink & {uiID: string})[];
   sections: ProcSection[];
   options?: ProcOption[];
-  usages: EditObjectUsage[];
+  usages: ProcObjectUsage[];
   photos?: EditObjectPhoto[];
   children?: DBObject[];
 }

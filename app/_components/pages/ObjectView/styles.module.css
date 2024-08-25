@@ -1,6 +1,6 @@
 .objectView {
   display: grid;
-  grid-template-columns: 565px 300px; /* Fixed first column size because of Swiper library */
+  grid-template-columns: 610px 300px; /* Fixed first column size because of Swiper library */
   gap: 10px;
 }
 

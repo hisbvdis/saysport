@@ -8,6 +8,13 @@
       "when": 1724495169742,
       "tag": "0000_certain_shockwave",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1724575002604,
+      "tag": "0001_lively_gateway",
+      "breakpoints": true
     }
   ]
 }

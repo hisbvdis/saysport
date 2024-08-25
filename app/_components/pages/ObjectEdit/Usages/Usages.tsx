@@ -3,16 +3,16 @@ import type React from "react";
 import { create } from "mutative";
 import type { EditObjectUsage, ProcObjectSchedule, ProcObjectUsage } from "@/app/_types/types";
 import { type ChangeEvent, useContext } from "react";
-import { costTypeEnum, type ObjectSchedule, objectTypeEnum, type Usage } from "@/drizzle/schema";
+import { costTypeEnum, costTypeUnion, type ObjectSchedule, objectTypeEnum, type Usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
 import { Select } from "@/app/_components/ui/Select";
 import { Button } from "@/app/_components/ui/Button";
-import { Textarea } from "@/app/_components/ui/Input";
+import { Input, Textarea } from "@/app/_components/ui/Input";
 import { Control } from "@/app/_components/ui/Control";
 import { FieldSet } from "@/app/_components/ui/FieldSet";
-import { Checkbox, Radio, RadioGroup } from "@/app/_components/ui/Choice";
+import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { getUsagesByFilters } from "@/app/_db/usage";
 
@@ -24,7 +24,7 @@ export default function Usages() {
     add: (usage:Usage) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages = draft.usages.concat({...usage, uiID: crypto.randomUUID(), schedules: [], object_id: null, description: "", object_on_usage_id: null, order: draft.usages.length, cost: null, schedule_inherit: null}).map((usage, i) => ({...usage, order: i, }));
+        draft.usages = draft.usages.concat({...usage, uiID: crypto.randomUUID(), schedules: [], object_id: null, description: "", object_on_usage_id: null, order: draft.usages.length, cost: null, schedule_inherit: null, sexMale: null, sexFemale: null, ageFrom: null, ageTo: null}).map((usage, i) => ({...usage, order: i, }));
       }))
     },
     delete: (usage:EditObjectUsage) => {
@@ -32,18 +32,40 @@ export default function Usages() {
         draft.usages = draft.usages?.filter((draftUsage) => draftUsage.uiID !== usage.uiID).map((usage, i) => ({...usage, order: i}));
       }));
     },
-    description: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
+    age: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.description = e.target.value;
+        usageItem[e.target.name as "ageFrom" | "ageTo"] = Number(e.target.value);
       }));
     },
     cost: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.cost = e.target.value as costTypeEnum;
+        usageItem.cost = e.target.value as costTypeUnion;
+      }));
+    },
+    sex: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage, fieldName:string) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
+        if (!usageItem) return;
+        usageItem[fieldName as "sexMale" | "sexFemale"] = e.target.checked;
+      }));
+    },
+    ageRange: (usage:EditObjectUsage, ageFrom:number, ageTo:number) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
+        if (!usageItem) return;
+        usageItem.ageFrom = ageFrom;
+        usageItem.ageTo = ageTo;
+      }));
+    },
+    description: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
+      setState((prevState) => create(prevState, (draft) => {
+        const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
+        if (!usageItem) return;
+        usageItem.description = e.target.value;
       }));
     },
   }
@@ -147,15 +169,36 @@ export default function Usages() {
                 </Control.Section>
               </Control>
             </>)}
-            <div style={{display: "flex", flex: "1"}}>
-              {Array(7).fill(null).map((localDay, i) => usage.schedules?.find((dbDay) => dbDay.day_num === i) ?? localDay).map((day, i) => (
-                <div key={i} style={{display: "flex", flexDirection: "column", alignItems: "center", flexGrow: 1, flexBasis: 0}}>
-                  <p >{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</p>
-                  <Textarea name={String(i)} value={day?.time} onChange={(e) => handleSchedule.changeTime(e, usage)} onBlurIfChanged={(e) => handleSchedule.formatTime(e, usage)} disabled={Boolean(usage.schedule_inherit)} pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d" style={{inlineSize: "100%"}}/>
-                  <Button onClick={(e) => handleSchedule.copyToAll(day, usage)} disabled={Boolean(usage.schedule_inherit)}>Copy</Button>
-                </div>
-              ))}
-            </div>
+            {state.type === objectTypeEnum.class && (<>
+              <Control>
+                <Control.Label>Пол</Control.Label>
+                <Control.Section style={{display: "flex", flexDirection: "column", gap: "5px"}}>
+                  <CheckboxGroup required>
+                    <Checkbox checked={Boolean(usage.sexMale)} onChange={(e) => handleUsages.sex(e, usage, "sexMale")}>Мужской</Checkbox>
+                    <Checkbox checked={Boolean(usage.sexFemale)} onChange={(e) => handleUsages.sex(e, usage, "sexFemale")}>Женский</Checkbox>
+                  </CheckboxGroup>
+                </Control.Section>
+              </Control>
+              <Control>
+                <Control.Label>Возраст</Control.Label>
+                <Control.Section style={{display: "flex", gap: "5px"}}>
+                  <Input type="number" style={{inlineSize: "50px"}} name="ageFrom" value={usage.ageFrom} onChange={(e) => handleUsages.age(e, usage)} required/>
+                  <Input type="number" style={{inlineSize: "50px"}} name="ageTo" value={usage.ageTo} onChange={(e) => handleUsages.age(e, usage)} required/>
+                  <Button onClick={() => handleUsages.ageRange(usage, 6, 10)}>Дети (6-10)</Button>
+                  <Button onClick={() => handleUsages.ageRange(usage, 11, 16)}>Юноши (11-16)</Button>
+                  <Button onClick={() => handleUsages.ageRange(usage, 17, 100)}>Взрослые (17-100)</Button>
+                </Control.Section>
+              </Control>
+            </>)}
+          </div>
+          <div style={{display: "flex", flex: "1"}}>
+            {Array(7).fill(null).map((localDay, i) => usage.schedules?.find((dbDay) => dbDay.day_num === i) ?? localDay).map((day, i) => (
+              <div key={i} style={{display: "flex", flexDirection: "column", alignItems: "center", flexGrow: 1, flexBasis: 0}}>
+                <p >{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</p>
+                <Textarea name={String(i)} value={day?.time} onChange={(e) => handleSchedule.changeTime(e, usage)} onBlurIfChanged={(e) => handleSchedule.formatTime(e, usage)} disabled={Boolean(usage.schedule_inherit)} pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d" style={{inlineSize: "100%"}}/>
+                <Button onClick={(e) => handleSchedule.copyToAll(day, usage)} disabled={Boolean(usage.schedule_inherit)}>Copy</Button>
+              </div>
+            ))}
           </div>
           <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.description(e, usage)} maxLength="2000" style={{marginBlockStart: "15px"}} />
         </Card.Section>
