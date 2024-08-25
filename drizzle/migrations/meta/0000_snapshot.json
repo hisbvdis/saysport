@@ -1,5 +1,5 @@
 {
-  "id": "860c6d13-d2fb-44a7-9f01-9c3da44abce4",
+  "id": "09d70666-4506-4fb5-adb8-426e8b5682fb",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -526,8 +526,32 @@
         },
         "cost": {
           "name": "cost",
-          "type": "costTYpe",
+          "type": "costType",
           "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sexMale": {
+          "name": "sexMale",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sexFemale": {
+          "name": "sexFemale",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ageFrom": {
+          "name": "ageFrom",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ageTo": {
+          "name": "ageTo",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -1065,8 +1089,8 @@
     }
   },
   "enums": {
-    "public.costTYpe": {
-      "name": "costTYpe",
+    "public.costType": {
+      "name": "costType",
       "schema": "public",
       "values": [
         "paid",

@@ -3,7 +3,7 @@ import type React from "react";
 import { create } from "mutative";
 import type { EditObjectUsage, ProcObjectSchedule, ProcObjectUsage } from "@/app/_types/types";
 import { type ChangeEvent, useContext } from "react";
-import { costTypeEnum, costTypeUnion, type ObjectSchedule, objectTypeEnum, type Usage } from "@/drizzle/schema";
+import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, type Usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";

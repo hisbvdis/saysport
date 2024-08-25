@@ -148,6 +148,7 @@ export interface ProcObject extends Partial<Object_> {
   children?: DBObject[];
 }
 
-export interface EditObject extends Omit<ProcObject, "object_id"> {
+export interface EditObject extends Omit<ProcObject, "object_id"|"usages"> {
   object_id?: ProcObject["object_id"] | null;
+  usages: EditObjectUsage[];
 }

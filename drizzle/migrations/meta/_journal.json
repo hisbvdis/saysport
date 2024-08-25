@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1724495169742,
-      "tag": "0000_certain_shockwave",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1724575002604,
-      "tag": "0001_lively_gateway",
+      "when": 1724586953738,
+      "tag": "0000_fuzzy_human_torch",
       "breakpoints": true
     }
   ]

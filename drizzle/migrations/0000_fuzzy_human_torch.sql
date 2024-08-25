@@ -1,5 +1,5 @@
 DO $$ BEGIN
- CREATE TYPE "public"."costTYpe" AS ENUM('paid', 'free');
+ CREATE TYPE "public"."costType" AS ENUM('paid', 'free');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -100,7 +100,11 @@ CREATE TABLE IF NOT EXISTS "object_on_usage" (
 	"object_id" integer NOT NULL,
 	"usage_id" integer NOT NULL,
 	"order" integer NOT NULL,
-	"cost" "costTYpe",
+	"cost" "costType",
+	"sexMale" boolean,
+	"sexFemale" boolean,
+	"ageFrom" integer,
+	"ageTo" integer,
 	"description" varchar,
 	"schedule_inherit" boolean
 );
