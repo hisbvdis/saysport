@@ -1,0 +1,11 @@
+.objectViewHeader__backLink {
+  display: block;
+  margin-block-start: 5px;
+
+  color: var(--color-blue);
+  text-decoration: none;
+}
+
+.objectViewHeader__backLink:hover {
+  text-decoration: underline;
+}

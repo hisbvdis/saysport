@@ -3,7 +3,7 @@ import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import type { SearchParamsType } from "../(router)/page";
 import type { DBObject, EditObject, ProcObject } from "../_types/types";
-import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte, ne, notExists, sql } from "drizzle-orm";
+import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte, ne, notExists, or, sql } from "drizzle-orm";
 import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage, object_schedule, type costTypeUnion } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { objectReadProcessing } from "./object.processing";
@@ -36,6 +36,8 @@ export const getObjectsCountByFilters = async (filters?:Filters) => {
   const to = filters?.to;
   const cost = filters?.cost?.split(",").map((value) => String(value)) as costTypeUnion[];
   const usages = filters?.usages?.split(",").map((id) => Number(id)) ?? [];
+  const sex = filters?.sex?.split(",");
+  const age = filters?.age ? Number(filters?.age) : undefined;
   const groupedOptions = Object.entries(optionIds
     ? optionIds /* "1:1,1:2,!2:3" */
       .split(",") /* ["1:1"],["1:2"],["!2:3"] */
@@ -61,7 +63,9 @@ export const getObjectsCountByFilters = async (filters?:Filters) => {
       days.length ? inArray(object_schedule.day_num, days) : undefined,
       from ? and(lte(object_schedule.from, Number(from)), gte(object_schedule.to, Number(from))) : undefined,
       to ? gte(object_schedule.to, Number(to)) : undefined,
-      cost?.length ? inArray(object_on_usage.cost, cost) : undefined
+      cost?.length ? inArray(object_on_usage.cost, cost) : undefined,
+      or(sex?.includes("male") ? eq(object_on_usage.sexMale, true) : undefined, sex?.includes("female") ? eq(object_on_usage.sexFemale, true) : undefined),
+      age ? and(lte(object_on_usage.ageFrom, age), gte(object_on_usage.ageTo, age)) : undefined,
     ))) : undefined,
     usages.length ? exists(db.select().from(object_on_usage).where(and(eq(object_on_usage.object_id, object.object_id), inArray(object_on_usage.usage_id, usages)))) : undefined
   ))
@@ -83,6 +87,8 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
   const to = filters?.to;
   const cost = filters?.cost?.split(",").map((value) => String(value)) as costTypeUnion[] ?? [];
   const usages = filters?.usages?.split(",").map((id) => Number(id)) ?? [];
+  const sex = filters?.sex?.split(",");
+  const age = filters?.age ? Number(filters?.age) : undefined;
   const groupedOptions = Object.entries(optionIds
     ? optionIds /* "1:1,1:2,!2:3" */
       .split(",") /* ["1:1"],["1:2"],["!2:3"] */
@@ -104,12 +110,14 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
       })) : undefined,
       status ? inArray(object.status, status) : undefined,
       photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined,
-      days.length || from || to || cost?.length ? exists(db.select().from(object_schedule).innerJoin(object_on_usage, eq(object_schedule.object_on_usage_id, object_on_usage.object_on_usage_id)).where(and(
+      days.length || from || to || cost?.length || sex?.length || age ? exists(db.select().from(object_schedule).innerJoin(object_on_usage, eq(object_schedule.object_on_usage_id, object_on_usage.object_on_usage_id)).where(and(
         eq(object_schedule.object_id, object.object_id),
         days.length ? inArray(object_schedule.day_num, days) : undefined,
         from ? and(lte(object_schedule.from, Number(from)), gte(object_schedule.to, Number(from))) : undefined,
         to ? gte(object_schedule.to, Number(to)) : undefined,
-        cost?.length ? inArray(object_on_usage.cost, cost) : undefined
+        cost?.length ? inArray(object_on_usage.cost, cost) : undefined,
+        or(sex?.includes("male") ? eq(object_on_usage.sexMale, true) : undefined, sex?.includes("female") ? eq(object_on_usage.sexFemale, true) : undefined),
+        age ? and(lte(object_on_usage.ageFrom, age), gte(object_on_usage.ageTo, age)) : undefined,
       ))) : undefined,
       usages.length ? exists(db.select().from(object_on_usage).where(and(eq(object_on_usage.object_id, object.object_id), inArray(object_on_usage.usage_id, usages)))) : undefined
     ),

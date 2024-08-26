@@ -1,14 +1,16 @@
+import Link from "next/link";
 import { useContext } from "react"
 // -----------------------------------------------------------------------------
+import { ObjectViewContext } from "../"
 import { Card } from "@/app/_components/ui/Card";
+import { DelBtn } from "@/app/_components/ui/DelBtn";
+import { Dropdown } from "@/app/_components/ui/Dropdown";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 // -----------------------------------------------------------------------------
-import { ObjectViewContext } from "../"
-import Link from "next/link";
 import { deleteObjectById } from "@/app/_db/object";
-import { DelBtn } from "@/app/_components/ui/DelBtn";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
-import { Dropdown } from "@/app/_components/ui/Dropdown";
+// -----------------------------------------------------------------------------
+import styles from "./styles.module.css";
 
 
 export default function Header(props:Props) {
@@ -35,7 +37,7 @@ export default function Header(props:Props) {
           ) : null}
         </div>
         {<h1>{state.name_type.concat(state.name_title ? ` «${state.name_title}»` : "").concat(state.name_where ? ` ${state.name_where}` : "")}</h1>}
-        {state.parent_id ? <Link href={`/object/${state.parent_id}`}>&lt; {state.parent?.name_type.concat(state.parent?.name_title ? ` «${state.parent?.name_title}»` : "").concat(state.parent?.name_where ? ` ${state.parent?.name_where}` : "")}</Link> : null}
+        {state.parent_id ? <Link className={styles["objectViewHeader__backLink"]} href={`/object/${state.parent_id}`}>&lt; {state.parent?.name_type.concat(state.parent?.name_title ? ` «${state.parent?.name_title}»` : "").concat(state.parent?.name_where ? ` ${state.parent?.name_where}` : "")}</Link> : null}
       </Card>
     </header>
   )

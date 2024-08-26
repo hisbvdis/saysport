@@ -40,7 +40,7 @@ export default function Select(props:Props) {
   }
 
   const handleInputFocus = async (e:React.FocusEvent) => {
-    if (e.relatedTarget && inputRef.current && e.relatedTarget !== inputRef.current) return;
+    // if (e.relatedTarget && inputRef.current && e.relatedTarget !== inputRef.current) return;
     isAutocomplete && setIsShowMenu(true);
     if (requestItemsOnFirstTouch) {
       const newItems = await requestItemsOnFirstTouch("");
