@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { type NextRequest, NextResponse } from "next/server";
 import { S3Client, PutObjectCommand, DeleteObjectsCommand } from '@aws-sdk/client-s3';
+import { writeFile } from "node:fs/promises";
 
 const s3Client = new S3Client({
   forcePathStyle: true,
@@ -20,18 +21,19 @@ export async function POST(request:NextRequest) {
   const photos = files.reduce<{file:File; name:string}[]>((acc, file, i) => acc.concat({file: file, name: names[i]}), []);
   for (const {file, name} of photos) {
     const buffer = Buffer.from(await file.arrayBuffer());
+    await writeFile(`./public/photos/${name}`, buffer);
     // const compressedFile = await sharp(buffer)
     //   .resize({ width: 2560, height: 2560, fit: "inside", withoutEnlargement: true })
     //   .webp({quality: 70})
     //   .toBuffer();
-      // .toFile(`./public/photos/${name}`);
-    const uploadCommand = new PutObjectCommand({
-      Bucket: 'photos',
-      Key: name,
-      Body: buffer,
-      ContentType: 'image/webp',
-    })
-    await s3Client.send(uploadCommand)
+    //   .toFile(`./public/photos/${name}`);
+    // const uploadCommand = new PutObjectCommand({
+    //   Bucket: 'photos',
+    //   Key: name,
+    //   Body: buffer,
+    //   ContentType: 'image/webp',
+    // })
+    // await s3Client.send(uploadCommand)
   }
   return NextResponse.json("Ok");
 }
