@@ -17,7 +17,7 @@ export default function Usages() {
           {state.type === objectTypeEnum.class ? (
             <p>
               <span>{"".concat(usage.sexMale ? "Мужчины" : "").concat(usage.sexMale && usage.sexFemale ? ", " : "").concat(usage.sexFemale ? "Женщины" : "")}</span>
-              <span> от {usage.ageFrom} {usage.ageTo === 100 ? "" : `до ${usage.ageTo}`} лет ({{paid: "Платно", free: "Бесплатно"}[usage.cost]})</span>
+              <span> от {usage.ageFrom} {usage.ageTo === 100 ? "" : `до ${usage.ageTo}`} лет ({usage.cost ? {paid: "Платно", free: "Бесплатно"}[usage.cost] : null})</span>
             </p>
           ) : null}
           <p style={{marginBlockStart: "5px"}}>{usage.description}</p>
