@@ -1,4 +1,5 @@
 "use server";
+import { nanoid } from "nanoid";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, eq, ilike, inArray } from "drizzle-orm";
@@ -17,7 +18,7 @@ export const getEmptySection = async ():Promise<EditSection> => {
     name_public_plural: "",
     name_public_singular: "",
     specs: [],
-    uiID: crypto.randomUUID(),
+    uiID: nanoid(),
     usages: [],
   }
 }

@@ -1,4 +1,5 @@
 "use server";
+import { nanoid } from "nanoid";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, eq, inArray } from "drizzle-orm";
@@ -15,7 +16,7 @@ export const getEmptySpec = async ():Promise<EditSpec> => {
     name_public: "",
     object_type: objectTypeEnum.org,
     options_number: optionsNumberEnum.one,
-    uiID: crypto.randomUUID(),
+    uiID: nanoid(),
     options: [],
     order: 0,
     is_and_in_search: null,

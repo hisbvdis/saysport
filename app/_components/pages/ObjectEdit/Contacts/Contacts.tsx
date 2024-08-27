@@ -1,5 +1,6 @@
+import { nanoid } from "nanoid";
 import { create } from "mutative";
-import { type ChangeEvent, useContext } from "react";
+import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
@@ -17,7 +18,7 @@ export default function Contacts() {
     add: (type:UIContactTypeEnum) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft[type]) draft[type] = [];
-        draft[type] = draft[type]?.concat({object_id: 0, value: "", order: draft[type]?.length ?? 0, uiID: crypto.randomUUID(), comment: ""})
+        draft[type] = draft[type]?.concat({object_id: 0, value: "", order: draft[type]?.length ?? 0, uiID: nanoid(), comment: ""})
       }))
     },
     delete: (type:UIContactTypeEnum, uiID:string) => {

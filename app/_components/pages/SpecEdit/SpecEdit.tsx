@@ -1,4 +1,5 @@
 "use client";
+import { nanoid } from "nanoid";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react";
@@ -39,7 +40,7 @@ export default function SpecEdit(props:{init:EditSpec}) {
     add: () => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft?.options) draft.options = [];
-        draft.options.push({option_id: 0, spec_id: 0, name: "", order: draft.options.length, uiID: crypto.randomUUID()});
+        draft.options.push({option_id: 0, spec_id: 0, name: "", order: draft.options.length, uiID: nanoid()});
       }))
     },
     changeName: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {

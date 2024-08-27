@@ -1,7 +1,8 @@
 "use client";
 import type React from "react";
+import { nanoid } from "nanoid";
 import { create } from "mutative";
-import type { EditObjectUsage, ProcObjectSchedule, ProcObjectUsage } from "@/app/_types/types";
+import type { EditObjectUsage } from "@/app/_types/types";
 import { type ChangeEvent, useContext } from "react";
 import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, type Usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
@@ -24,7 +25,7 @@ export default function Usages() {
     add: (usage:Usage) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages = draft.usages.concat({...usage, uiID: crypto.randomUUID(), schedules: [], object_id: null, description: "", object_on_usage_id: null, order: draft.usages.length, cost: null, schedule_inherit: null, sexMale: null, sexFemale: null, ageFrom: null, ageTo: null}).map((usage, i) => ({...usage, order: i, }));
+        draft.usages = draft.usages.concat({...usage, uiID: nanoid(), schedules: [], object_id: null, description: "", object_on_usage_id: null, order: draft.usages.length, cost: null, schedule_inherit: null, sexMale: null, sexFemale: null, ageFrom: null, ageTo: null}).map((usage, i) => ({...usage, order: i, }));
       }))
     },
     delete: (usage:EditObjectUsage) => {
@@ -81,7 +82,7 @@ export default function Usages() {
         if (scheduleItem) {
           scheduleItem.time = e.target.value;
         } else {
-          const newSchedule = {day_num: dayNum, time: e.target.value, uiID: crypto.randomUUID(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0};
+          const newSchedule = {day_num: dayNum, time: e.target.value, uiID: nanoid(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0};
           usageItem.schedules = usageItem.schedules.concat(newSchedule)
         }
       }))
@@ -111,7 +112,7 @@ export default function Usages() {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: "", uiID: crypto.randomUUID(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
+        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: "", uiID: nanoid(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
       }));
     },
     changeInherit: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
@@ -126,7 +127,7 @@ export default function Usages() {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: schedule.time, uiID: crypto.randomUUID(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
+        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: schedule.time, uiID: nanoid(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
       }));
     },
   }
