@@ -4,7 +4,7 @@ import { writeFile } from "node:fs/promises";
 import { existsSync, mkdirSync, unlinkSync } from "node:fs";
 
 export async function POST(request:NextRequest) {
-  if (!existsSync("./public/photos")) mkdirSync("./public/photos");
+  if (!existsSync(`./public/${process.env.NEXT_PUBLIC_PHOTOS_PATH}`)) mkdirSync(`./public/${process.env.NEXT_PUBLIC_PHOTOS_PATH}`);
   const formData = await request.formData();
   const files: File[] = formData.getAll("file") as File[];
   const names: string[] = formData.getAll("name") as string[];
@@ -25,7 +25,7 @@ export async function DELETE(request:NextRequest) {
   const formData = await request.formData();
   const names = formData.getAll("name");
   for (const name of names) {
-    if (existsSync(`./public/photos/${name}`)) unlinkSync(`./public/photos/${name}`);
+    if (existsSync(`./public/${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${name}`)) unlinkSync(`./public/${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${name}`);
   }
   return NextResponse.json("Ok");
 }
