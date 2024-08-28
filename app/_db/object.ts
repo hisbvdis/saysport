@@ -7,6 +7,7 @@ import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte
 import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage, object_schedule, type costTypeUnion } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { objectReadProcessing } from "./object.processing";
+import { existsSync, unlinkSync } from "node:fs";
 
 
 export const getEmptyObject = async ():Promise<EditObject> => {
@@ -185,6 +186,10 @@ export const getObjectById = async (id:number):Promise<ProcObject> => {
 
 export const deleteObjectById = async (id:number) => {
   await db.delete(object).where(eq(object.object_id, id));
+  const objectPhotos = await db.select({name: object_photo.name}).from(object_photo).where(eq(object_photo.object_id, id));
+  if (objectPhotos.length) {
+    objectPhotos.forEach(({name}) => unlinkSync(`${process.env.PHOTO_UPLOAD_PATH}/${name}`));
+  }
   revalidatePath(`object/${id}`, "page");
 }
 

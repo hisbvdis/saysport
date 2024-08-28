@@ -238,7 +238,7 @@ export type ObjectLink = typeof object_link.$inferSelect;
 // ===========================================================================
 export const object_photo = pgTable("object_photo", {
   photo_id: serial("photo_id").primaryKey(),
-  object_id: integer("object_id").notNull().references(() => object.object_id),
+  object_id: integer("object_id").notNull().references(() => object.object_id, {onDelete: "cascade"}),
   order: integer("order").notNull(),
   name: varchar("name").notNull(),
   uploaded: timestamp("uploaded").notNull().defaultNow(),

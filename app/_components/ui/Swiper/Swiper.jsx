@@ -10,12 +10,12 @@ export default function Swiper(props) {
   useEffect(() => {
     register();
   },[])
-
+  console.log( photos )
   return (
     <swiper-container navigation={navigation} speed={speed} loop={loop} pagination="true" pagination-type="bullets">
       {photos.map((photo) => (
         <swiper-slide key={photo}>
-          <img src={`${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${photo}`} width={width} height={height} alt="" style={{maxInlineSize: "100%",  inlineSize: "100%", blockSize: "auto", aspectRatio: `${width}/${height}`, objectFit: "cover"}}/>
+          <img src={photo} width={width} height={height} alt="" style={{maxInlineSize: "100%",  inlineSize: "100%", blockSize: "auto", aspectRatio: `${width}/${height}`, objectFit: "cover"}}/>
         </swiper-slide>
       ))}
     </swiper-container>
