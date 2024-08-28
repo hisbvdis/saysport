@@ -14,6 +14,7 @@ export default function Usages() {
       {state.usages.toSorted((a, b) => a.order - b.order).map((usage) => (
         <Card.Section key={usage.uiID}>
           {state.type !== objectTypeEnum.class ? <p>{usage.name_public}</p> : null}
+          {state.type === objectTypeEnum.place ? <p>{usage.cost ? {paid: "Платно", free: "Бесплатно"}[usage.cost] : null}</p> : null}
           {state.type === objectTypeEnum.class ? (
             <p>
               <span>{"".concat(usage.sexMale ? "Мужчины" : "").concat(usage.sexMale && usage.sexFemale ? ", " : "").concat(usage.sexFemale ? "Женщины" : "")}</span>
