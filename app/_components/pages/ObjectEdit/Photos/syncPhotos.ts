@@ -16,12 +16,12 @@ export const syncPhotos = async (objectId:ProcObject["object_id"], state:EditObj
 
   // 2. Upload new photos after deleting old ones
   if (photosToUpload && photosToUpload.length > 0) {
-    const formData = new FormData();
-    photosToUpload.forEach((photo) => {
+    photosToUpload.forEach(async (photo) => {
+      const formData = new FormData();
       if (!photo.file) return;
       formData.append("file", photo.file);
       formData.append("name", photo.name.replace("ID", String(objectId)));
+      await fetch("/api/photos", { method: "POST", body: formData });
     });
-    await fetch("/api/photos", { method: "POST", body: formData });
   }
 }

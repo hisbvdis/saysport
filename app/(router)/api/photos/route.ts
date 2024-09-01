@@ -12,11 +12,6 @@ export async function POST(request:NextRequest) {
   for (const {file, name} of photos) {
     const buffer = Buffer.from(await file.arrayBuffer());
     await writeFile(`${process.env.PHOTO_UPLOAD_PATH}/${name}`, buffer);
-    // const compressedFile = await sharp(buffer)
-    //   .resize({ width: 2560, height: 2560, fit: "inside", withoutEnlargement: true })
-    //   .webp({quality: 70})
-    //   .toBuffer();
-    //   .toFile(`./public/photos/${name}`);
   }
   return NextResponse.json("Ok");
 }

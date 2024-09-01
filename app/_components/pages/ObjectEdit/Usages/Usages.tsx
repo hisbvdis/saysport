@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 import { create } from "mutative";
 import type { EditObjectUsage } from "@/app/_types/types";
 import { type ChangeEvent, useContext } from "react";
-import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, type Usage } from "@/drizzle/schema";
+import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, section, sectionTypeEnum, type Usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
@@ -127,7 +127,7 @@ export default function Usages() {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: schedule.time, uiID: nanoid(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
+        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: schedule?.time ?? "", uiID: nanoid(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
       }));
     },
   }
@@ -210,10 +210,14 @@ export default function Usages() {
           value=""
           onChangeData={(data:Usage) => handleUsages.add(data)}
           placeholder="Добавить использование"
-          requestItemsOnFirstTouch={async () =>
-            (await getUsagesByFilters({sectionIds: state.sections.map((section) => section.section_id)}))
+          requestItemsOnFirstTouch={async () => {
+            if (state.sections.filter((section) => section.section_type !== sectionTypeEnum.common).length > 0) {
+              return (await getUsagesByFilters({sectionIds: state.sections.map((section) => section.section_id)}))
               .map((usage) => ({id: usage.usage_id, label: usage.name_service, data: usage}))
-          }
+            } else {
+              return []
+            }
+          }}
         />
         {/* <RequiredInput isValidIf={Boolean(state.sections.filter((section) => section.section_type === sectionTypeEnum.usage).length > 0)}/> */}
       </Card.Section>

@@ -66,12 +66,12 @@ export default function Contacts() {
                   disabled={Boolean(state.parent_id)}
                   onChangeValue={(value) => handleContacts.changeValue(UIContactTypeEnum.links, value, link.uiID)}
                 />
-                <Input
+                {/* <Input
                   value={link.comment}
                   placeholder="Комментарий"
                   disabled={Boolean(state.parent_id)}
                   onChangeValue={(value) => handleContacts.changeComment(UIContactTypeEnum.links, value, link.uiID)}
-                />
+                /> */}
               </div>
             ))}
           </FieldSet.Section>
@@ -96,12 +96,12 @@ export default function Contacts() {
                   disabled={Boolean(state.parent_id)}
                   onChangeValue={(value) => handleContacts.changeValue(UIContactTypeEnum.phones, value, phone.uiID)}
                 />
-                <Input
+                {/* <Input
                   value={phone.comment}
                   placeholder="Комментарий"
                   disabled={Boolean(state.parent_id)}
                   onChangeValue={(value) => handleContacts.changeComment(UIContactTypeEnum.phones, value, phone.uiID)}
-                />
+                /> */}
               </div>
             ))}
           </FieldSet.Section>

@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1724586953738,
-      "tag": "0000_fuzzy_human_torch",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1724836783161,
-      "tag": "0001_moaning_greymalkin",
+      "when": 1725126570016,
+      "tag": "0000_cold_blade",
       "breakpoints": true
     }
   ]

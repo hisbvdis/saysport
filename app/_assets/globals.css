@@ -9,7 +9,9 @@
   --color-brand: #507299;
   --color-red: #FF0000;
   --color-white: #FFFFFF;
-  --color-blue: #0088cf;
+
+  --color-blue-light: #0088CF;
+  --color-blue-dark: #337AB7;
 
   --fontColor: #000000;
   --fontColor-light: #464646;

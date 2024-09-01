@@ -41,11 +41,6 @@ export default function MapComponent(props:Props) {
     map.fitBounds(fitBoundsArray);
   }, [map, fitBoundsArray])
 
-  // useEffect(() => {
-  //   if (!map || !center[0] || !center[1]) return;
-  //   map.setView(center);
-  // }, [center])
-
   return (
     <MapContext.Provider value={{ L, map, center, zoom, mapContainerRef }}>
       <TileLayer/>

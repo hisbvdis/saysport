@@ -75,6 +75,9 @@ export default function Address() {
         draft.coord_lat = lat;
         draft.coord_lon = lng;
       }));
+    },
+    moveToPin: () => {
+      mapInstance?.setView([state.coord_lat, state.coord_lon]);
     }
   }
 
@@ -106,7 +109,7 @@ export default function Address() {
               <Select
                 name="city_id"
                 value={state.city_id ? String(state.city_id) : ""}
-                label={state.city?.name.concat(state.city.admin1 ? `, ${state.city.admin1}` : "").concat(state.city.country ? `, ${state.city.country}` : "") ?? ""}
+                label={state.city?.name?.concat(state.city.admin1 ? `, ${state.city.admin1}` : "").concat(state.city.country ? `, ${state.city.country}` : "") ?? ""}
                 onChange={(data) => handleStateChange.value({name: data.name, value: data.value})}
                 onChangeData={(data) => setState((prevState) => create(prevState, (draft) => {draft.city = data}))}
                 isAutocomplete
@@ -174,6 +177,21 @@ export default function Address() {
               />
             </Control.Section>
           </Control>
+          <Control style={{display: "flex"}}>
+            <Input
+              name="coord_lat"
+              value={state.coord_lat}
+              onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
+              disabled={Boolean(state.parent_id)}
+            />
+            <Input
+              name="coord_lon"
+              value={state.coord_lon}
+              onChange={(e) => handleStateChange.value({name:e.target.name, value:e.target.value})}
+              disabled={Boolean(state.parent_id)}
+            />
+            <Button onClick={() => handleMap.moveToPin()} disabled={Boolean(state.parent_id)}>→</Button>
+          </Control>
         </div>
         <div style={{flexBasis: "66%", display: "flex", flexDirection: "column"}}>
           {state.parent_id && <Checkbox
@@ -197,7 +215,7 @@ export default function Address() {
               }));
             }}
           >
-            <MapCluster markersData={nearestObjects?.map((object) => ({coord: [object.coord_lat, object.coord_lon] as Leaflet.LatLngTuple, popup: `<a href="object/${object.object_id}">${object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</a>`, iconUrl: "/map/marker-icon-secondary.png", draggable: false, onDragEnd: handleMap.markerDragEnd})).concat({coord: [state.coord_lat, state.coord_lon] as Leaflet.LatLngTuple, popup: "Текущий объект", iconUrl: "", draggable: Boolean(!state.coord_inherit), onDragEnd: handleMap.markerDragEnd}) ?? []}/>
+            <MapCluster markersData={nearestObjects?.map((object) => ({coord: [object.coord_lat, object.coord_lon] as Leaflet.LatLngTuple, popup: `<a href="/object/${object.object_id}">${object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</a>`, iconUrl: "/map/marker-icon-secondary.png", draggable: false, onDragEnd: handleMap.markerDragEnd})).concat({coord: [state.coord_lat, state.coord_lon] as Leaflet.LatLngTuple, popup: "Текущий объект", iconUrl: "", draggable: Boolean(!state.coord_inherit), onDragEnd: handleMap.markerDragEnd}) ?? []}/>
             <MapControl html={`<a href='https://www.google.com/maps/search/${liveMap.lat},${liveMap.lon}/@${liveMap.lat},${liveMap.lon},${liveMap.zoom}z' target='blank'>Google<a/>`}/>
             <MapControl html={`<a href='https://yandex.ru/maps/?ll=${liveMap.lon}%2C${liveMap.lat}&z=${liveMap.zoom}' target='blank'>Яндекс<a/>`}/>
             <MapControl html={`<a href='https://2gis.ru/?m=${liveMap.lon}%2C${liveMap.lat}/${liveMap.zoom}' target='blank'>2Гис<a/>`}/>

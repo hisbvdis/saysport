@@ -10,7 +10,7 @@ export default function Swiper(props) {
   useEffect(() => {
     register();
   },[])
-  console.log( photos )
+
   return (
     <swiper-container navigation={navigation} speed={speed} loop={loop} pagination="true" pagination-type="bullets">
       {photos.map((photo) => (

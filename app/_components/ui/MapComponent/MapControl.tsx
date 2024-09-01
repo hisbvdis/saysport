@@ -14,6 +14,7 @@ export default function MapControl(props:Props) {
 		control.onAdd = () => {
 			const button = L.DomUtil.create("div");
 			if (props.html) button.innerHTML = props.html;
+			if (props.onClick) button.onclick = props.onClick;
 			return button;
 		}
 		control.addTo(map);
@@ -28,5 +29,6 @@ export default function MapControl(props:Props) {
 }
 
 interface Props {
-  html?:string;
+  html?: string;
+	onClick?: ()=>void;
 }
