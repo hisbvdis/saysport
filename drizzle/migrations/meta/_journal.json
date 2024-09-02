@@ -8,6 +8,13 @@
       "when": 1725126570016,
       "tag": "0000_cold_blade",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1725300949059,
+      "tag": "0001_cooing_kronos",
+      "breakpoints": true
     }
   ]
 }

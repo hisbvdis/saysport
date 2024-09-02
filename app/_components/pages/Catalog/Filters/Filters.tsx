@@ -40,7 +40,7 @@ export default function Filters() {
             </Link>
           : null
         }
-        <a href={manageSearchParams.delete(["section", "options"])}>
+        <a href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => !["city"].includes(paramName)))}>
           <img src="/icons/close.svg" width={15} height={20} alt="Close Icon"/>
         </a>
       </Card.Heading>
@@ -54,7 +54,7 @@ export default function Filters() {
                 {spec.is_and_in_search && <Checkbox value={String(spec.spec_id)} arrayToCompareWith={andSpecs} onChange={(e) => handleAndSpecChange(e, spec)}>И</Checkbox>}
               </Control.Label>
               <CheckboxGroup arrayToCompareWith={searchParams.options?.split(",")}>
-                {spec.options?.toSorted((a, b) => a.order - b.order).map((opt) => (
+                {spec.options?.toSorted((a, b) => a.name.localeCompare(b.name)).map((opt) => (
                   <Link key={opt.option_id} href={manageSearchParams.appendOrClear("options", `${andSpecs.includes(spec.spec_id) ? "!" : ""}${spec.spec_id}:${opt.option_id}`)}>
                     <Checkbox value={`${andSpecs.includes(spec.spec_id) ? "!" : ""}${spec.spec_id}:${opt.option_id}`} tabIndex={-1}>{opt.name}</Checkbox>
                   </Link>
@@ -63,109 +63,97 @@ export default function Filters() {
             </Control>
           </Card.Section>
       ))}
-    </Card>
 
-    {/* Usage */}
-    {section?.object_type !== objectTypeEnum.org ? (
-      <Card style={{marginBlockStart: "10px"}}>
-        <Card.Heading style={{display: "flex", alignItems: "center"}}>
-          <span style={{marginInlineEnd: "auto", paddingInlineEnd: "20px"}}>{section?.object_type === objectTypeEnum.place ? "Использование" : "Занятия"}</span>
-        </Card.Heading>
-        <Card.Section>
-          <Control>
-            <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
-              <span>Тип</span>
-            </Control.Label>
-            <CheckboxGroup arrayToCompareWith={searchParams.usages?.split(",")}>
-              {section?.usages.map((usage) => (
-                <Link key={usage.usage_id} href={manageSearchParams.appendOrClear("usages", String(usage.usage_id))}>
-                  <Checkbox value={String(usage.usage_id)} tabIndex={-1}>{usage.name_public}</Checkbox>
-                </Link>
-              ))}
-            </CheckboxGroup>
-          </Control>
-        </Card.Section>
-        <Card.Section>
-          <Control>
-            <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
-              <span>Стоимость</span>
-            </Control.Label>
-            <CheckboxGroup arrayToCompareWith={searchParams.cost?.split(",")}>
-              <Link href={manageSearchParams.appendOrClear("cost", "paid")}>
-                <Checkbox value="paid" tabIndex={-1}>Платно</Checkbox>
+      <Card.Section>
+        <Control>
+          <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+            <span>Тип {section?.object_type === objectTypeEnum.place ? "использования" : "занятий"}</span>
+          </Control.Label>
+          <CheckboxGroup arrayToCompareWith={searchParams.usages?.split(",")}>
+            {section?.usages.map((usage) => (
+              <Link key={usage.usage_id} href={manageSearchParams.appendOrClear("usages", String(usage.usage_id))}>
+                <Checkbox value={String(usage.usage_id)} tabIndex={-1}>{usage.name_public}</Checkbox>
               </Link>
-              <Link href={manageSearchParams.appendOrClear("cost", "free")}>
-                <Checkbox value="free" tabIndex={-1}>Бесплатно</Checkbox>
+            ))}
+          </CheckboxGroup>
+        </Control>
+      </Card.Section>
+      <Card.Section>
+        <Control>
+          <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+            <span>Стоимость</span>
+          </Control.Label>
+          <CheckboxGroup arrayToCompareWith={searchParams.cost?.split(",")}>
+            <Link href={manageSearchParams.appendOrClear("cost", "paid")}>
+              <Checkbox value="paid" tabIndex={-1}>Платно</Checkbox>
+            </Link>
+            <Link href={manageSearchParams.appendOrClear("cost", "free")}>
+              <Checkbox value="free" tabIndex={-1}>Бесплатно</Checkbox>
+            </Link>
+          </CheckboxGroup>
+        </Control>
+      </Card.Section>
+      {section?.object_type === objectTypeEnum.class ? (<>
+        <Card.Section>
+          <Control>
+            <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+              <span>Пол</span>
+            </Control.Label>
+            <CheckboxGroup arrayToCompareWith={searchParams.sex?.split(",")}>
+              <Link href={manageSearchParams.appendOrClear("sex", "male")}>
+                <Checkbox value="male" tabIndex={-1}>Мужской</Checkbox>
+              </Link>
+              <Link href={manageSearchParams.appendOrClear("sex", "female")}>
+                <Checkbox value="female" tabIndex={-1}>Женский</Checkbox>
               </Link>
             </CheckboxGroup>
           </Control>
         </Card.Section>
-        {section?.object_type === objectTypeEnum.class ? (<>
-          <Card.Section>
-            <Control>
-              <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
-                <span>Пол</span>
-              </Control.Label>
-              <CheckboxGroup arrayToCompareWith={searchParams.sex?.split(",")}>
-                <Link href={manageSearchParams.appendOrClear("sex", "male")}>
-                  <Checkbox value="male" tabIndex={-1}>Мужской</Checkbox>
-                </Link>
-                <Link href={manageSearchParams.appendOrClear("sex", "female")}>
-                  <Checkbox value="female" tabIndex={-1}>Женский</Checkbox>
-                </Link>
-              </CheckboxGroup>
-            </Control>
-          </Card.Section>
-          <Card.Section>
-            <Control>
-              <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
-                <span>Возраст</span>
-              </Control.Label>
-              <Select
-                isAutocomplete
-                value={searchParams.age ?? ""}
-                onChange={(data) => {data.value ? router.push(manageSearchParams.set("age", data.value)) : router.push(manageSearchParams.delete(["age"]))}}
-                items={[{id: "", label: ""}].concat(Array(100).fill(null).map((_, i) => ({id: String(i), label: String(i)})))}
-              />
-            </Control>
-          </Card.Section>
-        </>) : null}
         <Card.Section>
           <Control>
             <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
-              <span>Время посещения</span>
+              <span>Возраст</span>
             </Control.Label>
-            <CheckboxGroup arrayToCompareWith={searchParams.days?.split(",")} style={{display: "flex", flexDirection: "row"}}>
-              {Array(7).fill(null).map((_, i) => (
-                <Link key={i} href={manageSearchParams.appendOrClear("days", String(i))}>
-                  <Checkbox value={String(i)} tabIndex={-1} style={{display: "flex", flexDirection: "column-reverse"}}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</Checkbox>
-                </Link>
-              ))}
-            </CheckboxGroup>
-            <div style={{display: "flex", gap: "10px", marginBlockStart: "10px"}}>
-              <Select
-                isAutocomplete
-                value={searchParams.from ? searchParams.from : ""}
-                onChange={(data) => {data.value ? router.push(manageSearchParams.set("from", data.value)) : router.push(manageSearchParams.delete(["from"]))}}
-                placeholder="с"
-                items={[{id: "", label: ""}].concat(Array(48).fill(null).map((_, i) => ({id: String(i * 30), label: `${Math.floor(i / 2)}:${i % 2 === 0 ? "00" : "30"}`})))}
-              />
-              <Select
-                isAutocomplete
-                value={searchParams.to ? searchParams.to : ""}
-                onChange={(data) => {data.value ? router.push(manageSearchParams.set("to", data.value)) : router.push(manageSearchParams.delete(["to"]))}}
-                placeholder="до"
-                items={[{id: "", label: ""}].concat(Array(48).fill(null).map((_, i) => ({id: String(i * 30), label: `${Math.floor(i / 2)}:${i % 2 === 0 ? "00" : "30"}`})))}
-              />
-            </div>
+            <Select
+              isAutocomplete
+              value={searchParams.age ?? ""}
+              onChange={(data) => {data.value ? router.push(manageSearchParams.set("age", data.value)) : router.push(manageSearchParams.delete(["age"]))}}
+              items={[{id: "", label: ""}].concat(Array(100).fill(null).map((_, i) => ({id: String(i), label: String(i)})))}
+            />
           </Control>
         </Card.Section>
-      </Card>
-    ) : null}
+      </>) : null}
+      <Card.Section>
+        <Control>
+          <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+            <span>Время посещения</span>
+          </Control.Label>
+          <CheckboxGroup arrayToCompareWith={searchParams.days?.split(",")} style={{display: "flex", flexDirection: "row"}}>
+            {Array(7).fill(null).map((_, i) => (
+              <Link key={i} href={manageSearchParams.appendOrClear("days", String(i))}>
+                <Checkbox value={String(i)} tabIndex={-1} style={{display: "flex", flexDirection: "column-reverse"}}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</Checkbox>
+              </Link>
+            ))}
+          </CheckboxGroup>
+          <div style={{display: "flex", gap: "10px", marginBlockStart: "10px"}}>
+            <Select
+              isAutocomplete
+              value={searchParams.from ? searchParams.from : ""}
+              onChange={(data) => {data.value ? router.push(manageSearchParams.set("from", data.value)) : router.push(manageSearchParams.delete(["from"]))}}
+              placeholder="с"
+              items={[{id: "", label: ""}].concat(Array(48).fill(null).map((_, i) => ({id: String(i * 30), label: `${Math.floor(i / 2)}:${i % 2 === 0 ? "00" : "30"}`})))}
+            />
+            <Select
+              isAutocomplete
+              value={searchParams.to ? searchParams.to : ""}
+              onChange={(data) => {data.value ? router.push(manageSearchParams.set("to", data.value)) : router.push(manageSearchParams.delete(["to"]))}}
+              placeholder="до"
+              items={[{id: "", label: ""}].concat(Array(48).fill(null).map((_, i) => ({id: String(i * 30), label: `${Math.floor(i / 2)}:${i % 2 === 0 ? "00" : "30"}`})))}
+            />
+          </div>
+        </Control>
+      </Card.Section>
 
-    {/* OTHER */}
-    <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Другое</Card.Heading>
       {/* Status */}
       <Card.Section>
         <Control>

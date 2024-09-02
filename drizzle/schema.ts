@@ -47,6 +47,9 @@ export const object = pgTable("object", {
   coord_lat: doublePrecision("coord_lat").notNull(),
   coord_lon: doublePrecision("coord_lon").notNull(),
   description: varchar("description"),
+  schedule_date: timestamp("schedule_date"),
+  schedule_source: varchar("schedule_source"),
+  schedule_comment: varchar("schedule_comment"),
   created: timestamp("created").notNull(),
   modified: timestamp("modified").notNull().defaultNow(),
 })

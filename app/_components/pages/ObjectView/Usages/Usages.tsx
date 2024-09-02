@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectViewContext } from "../ObjectView";
 import { objectTypeEnum } from "@/drizzle/schema";
+import { format } from "date-fns";
 
 
 export default function Usages() {
@@ -10,15 +11,18 @@ export default function Usages() {
 
   return (
     <Card>
-      <Card.Heading>{state.type === objectTypeEnum.place ? "Использование" : "Групповые занятия"}</Card.Heading>
+      <Card.Heading style={{display: "flex"}}>
+        <p>{state.type === objectTypeEnum.place ? "Использование" : "Расписание"}</p>
+        {state.schedule_date ? <p>&nbsp;от {format(state.schedule_date, "yyyy-MM-dd")}&nbsp;</p> : null}
+        {state.schedule_source ? <a href={`${state.schedule_source}`}>(Источник)</a> : null}
+      </Card.Heading>
       {state.usages.toSorted((a, b) => a.order - b.order).map((usage) => (
         <Card.Section key={usage.uiID}>
-          {state.type !== objectTypeEnum.class ? <p>{usage.name_public}</p> : null}
-          {state.type === objectTypeEnum.place ? <p>{usage.cost ? {paid: "Платно", free: "Бесплатно"}[usage.cost] : null}</p> : null}
+          {state.type === objectTypeEnum.place ? <p>{usage.name_public} ({usage.cost ? {paid: "Платно", free: "Бесплатно"}[usage.cost] : null})</p> : null}
           {state.type === objectTypeEnum.class ? (
             <p>
-              <span>{"".concat(usage.sexMale ? "Мужчины" : "").concat(usage.sexMale && usage.sexFemale ? ", " : "").concat(usage.sexFemale ? "Женщины" : "")}</span>
-              <span> от {usage.ageFrom} {usage.ageTo === 100 ? "" : `до ${usage.ageTo}`} лет ({usage.cost ? {paid: "Платно", free: "Бесплатно"}[usage.cost] : null})</span>
+              <span>{"".concat(usage.sexMale ? "Мужчины" : "").concat(usage.sexMale && usage.sexFemale ? " / " : "").concat(usage.sexFemale ? "Женщины" : "")}</span>
+              <span>, {usage.ageFrom} — {usage.ageTo} лет ({usage.cost ? {paid: "Платно", free: "Бесплатно"}[usage.cost] : null})</span>
             </p>
           ) : null}
           <p style={{marginBlockStart: "5px"}}>{usage.description}</p>

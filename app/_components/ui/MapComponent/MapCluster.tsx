@@ -13,7 +13,7 @@ export default function MapCluster(props:{markersData:MapMarkerProps[]}) {
   const { L, map } = mapContext;
 
   useEffect(() => {
-    if (!L || !map) return;
+    if (!L || !map || !Number(props.markersData?.[0]?.coord?.[0]) || !Number(props.markersData?.[0]?.coord?.[1])) return;
     const markerClusterGroup = L.markerClusterGroup({animate: false});
     props.markersData?.forEach((markerData) => {
       const markerIcon = L.icon({iconUrl: markerData.iconUrl ? markerData.iconUrl : "/map/marker-icon.png", iconSize: [25, 41], iconAnchor: [12, 40], popupAnchor: [0, -40], shadowUrl: "/map/marker-shadow.png", shadowSize: [41, 41], shadowAnchor: [13, 40], });

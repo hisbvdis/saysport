@@ -1,6 +1,6 @@
 {
-  "id": "86ddcff7-632c-4948-a16c-e59c8dc643d7",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "297370bc-92ac-43e4-a107-425f2a1ed830",
+  "prevId": "86ddcff7-632c-4948-a16c-e59c8dc643d7",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -263,6 +263,24 @@
         },
         "description": {
           "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_date": {
+          "name": "schedule_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_source": {
+          "name": "schedule_source",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_comment": {
+          "name": "schedule_comment",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false

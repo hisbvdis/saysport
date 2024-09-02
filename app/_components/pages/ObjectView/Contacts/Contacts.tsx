@@ -12,7 +12,7 @@ export default function Contacts() {
         <p>{state.city?.name},</p>
         <p>{state.address}</p>
         <p style={{color: "var(--fontColor-light)", marginBlockStart: "2px", fontSize: "0.8em"}}>{state.address_2}</p>
-        <p style={{color: "var(--fontColor-light)", marginBlockStart: "10px", fontSize: "0.8em"}}>{state.city?.country.concat(state.city?.admin1 ? `, ${state.city?.admin1}` : "").concat(state.city?.admin2 ? `, ${state.city?.admin2}` : "")}</p>
+        <p style={{color: "var(--fontColor-light)", marginBlockStart: "5px", fontSize: "0.8em"}}>{state.city?.country.concat(state.city?.admin1 ? `, ${state.city?.admin1}` : "").concat(state.city?.admin2 ? `, ${state.city?.admin2}` : "")}</p>
       </Card.Section>
 
       {state.phones?.length ? (

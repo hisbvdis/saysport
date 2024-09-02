@@ -2,9 +2,10 @@
 import type React from "react";
 import { nanoid } from "nanoid";
 import { create } from "mutative";
-import type { EditObjectUsage } from "@/app/_types/types";
+import { format } from "date-fns";
 import { type ChangeEvent, useContext } from "react";
-import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, section, sectionTypeEnum, type Usage } from "@/drizzle/schema";
+import type { EditObjectUsage } from "@/app/_types/types";
+import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, sectionTypeEnum, type Usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
@@ -132,14 +133,28 @@ export default function Usages() {
     },
   }
 
+  const handleScheduleSource = {
+    setDate: (date:Date|null) => {
+      setState((prevState) => create(prevState, (draft) => {
+        draft.schedule_date = date;
+      }));
+    },
+    value: (e:ChangeEvent<HTMLInputElement>) => {
+      setState((prevState) => create(prevState, (draft) => {
+        draft[e.target.name as keyof typeof draft] = e.target.value as never;
+      }))
+    },
+  }
+
   return (
     <Card style={{marginBlockStart: "10px"}}>
       <Card.Heading>Использование</Card.Heading>
       {state.usages?.toSorted((a, b) => a.order - b.order).map((usage) => (
         <Card.Section key={usage.uiID}>
           <FieldSet style={{display: "flex", gap: "20px"}}>
-            <FieldSet.Legend style={{inlineSize: "200px", marginInlineEnd: "auto"}}>
+            <FieldSet.Legend style={{marginInlineEnd: "auto", display: "flex", alignItems: "center"}}>
               <Button onClick={() => handleUsages.delete(usage)}>X</Button>
+              <Input value={usage.order} style={{inlineSize: "30px"}}/>
               <span>{usage?.name_public}</span>
             </FieldSet.Legend>
             <Checkbox
@@ -185,9 +200,9 @@ export default function Usages() {
                 <Control.Section style={{display: "flex", gap: "5px"}}>
                   <Input type="number" style={{inlineSize: "50px"}} name="ageFrom" value={usage.ageFrom} onChange={(e) => handleUsages.age(e, usage)} required/>
                   <Input type="number" style={{inlineSize: "50px"}} name="ageTo" value={usage.ageTo} onChange={(e) => handleUsages.age(e, usage)} required/>
-                  <Button onClick={() => handleUsages.ageRange(usage, 6, 10)}>Дети (6-10)</Button>
-                  <Button onClick={() => handleUsages.ageRange(usage, 11, 16)}>Юноши (11-16)</Button>
-                  <Button onClick={() => handleUsages.ageRange(usage, 17, 100)}>Взрослые (17-100)</Button>
+                  <Button onClick={() => handleUsages.ageRange(usage, 6, 15)}>Дети (6-15)</Button>
+                  <Button onClick={() => handleUsages.ageRange(usage, 16, 100)}>Взрослые (16-100)</Button>
+                  <Button onClick={() => handleUsages.ageRange(usage, 0, 100)}>Все (0-100)</Button>
                 </Control.Section>
               </Control>
             </>)}
@@ -204,6 +219,30 @@ export default function Usages() {
           <Textarea name="description" value={usage.description} onChange={(e) => handleUsages.description(e, usage)} maxLength="2000" style={{marginBlockStart: "15px"}} />
         </Card.Section>
       ))}
+      <Card.Section>
+        <div style={{display: "flex"}}>
+          <Control>
+            <Control.Label>Дата расписания</Control.Label>
+            <Control.Section>
+              <input type="date" name="schedule_date" value={state.schedule_date ? format(state.schedule_date, "yyyy-MM-dd") : ""} onChange={(e) => handleScheduleSource.setDate(new Date(e.target.value))}/>
+              <Button onClick={() => handleScheduleSource.setDate(new Date())}>Сегодня</Button>
+              <Button onClick={() => handleScheduleSource.setDate(null)}>X</Button>
+            </Control.Section>
+          </Control>
+          <Control>
+            <Control.Label>Комментарий</Control.Label>
+            <Control.Section>
+              <Input name="schedule_comment" value={state.schedule_comment} onChange={(e) => handleScheduleSource.value(e)}/>
+            </Control.Section>
+          </Control>
+          <Control>
+            <Control.Label>Ссылка</Control.Label>
+            <Control.Section>
+              <Input name="schedule_source" value={state.schedule_source} onChange={(e) => handleScheduleSource.value(e)}/>
+            </Control.Section>
+          </Control>
+        </div>
+      </Card.Section>
       <Card.Section>
         <Select
           isAutocomplete

@@ -62,8 +62,8 @@ export const getObjectsCountByFilters = async (filters?:Filters) => {
     days.length || from || to || cost?.length ? exists(db.select().from(object_schedule).innerJoin(object_on_usage, eq(object_schedule.object_on_usage_id, object_on_usage.object_on_usage_id)).where(and(
       eq(object_schedule.object_id, object.object_id),
       days.length ? inArray(object_schedule.day_num, days) : undefined,
-      from ? and(lte(object_schedule.from, Number(from)), gte(object_schedule.to, Number(from))) : undefined,
-      to ? gte(object_schedule.to, Number(to)) : undefined,
+      from ? gte(object_schedule.from, Number(from)) : undefined,
+      to ? lte(object_schedule.to, Number(to)) : undefined,
       cost?.length ? inArray(object_on_usage.cost, cost) : undefined,
       or(sex?.includes("male") ? eq(object_on_usage.sexMale, true) : undefined, sex?.includes("female") ? eq(object_on_usage.sexFemale, true) : undefined),
       age ? and(lte(object_on_usage.ageFrom, age), gte(object_on_usage.ageTo, age)) : undefined,
@@ -114,8 +114,8 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
       days.length || from || to || cost?.length || sex?.length || age ? exists(db.select().from(object_schedule).innerJoin(object_on_usage, eq(object_schedule.object_on_usage_id, object_on_usage.object_on_usage_id)).where(and(
         eq(object_schedule.object_id, object.object_id),
         days.length ? inArray(object_schedule.day_num, days) : undefined,
-        from ? and(lte(object_schedule.from, Number(from)), gte(object_schedule.to, Number(from))) : undefined,
-        to ? gte(object_schedule.to, Number(to)) : undefined,
+        from ? gte(object_schedule.from, Number(from)) : undefined,
+        to ? lte(object_schedule.to, Number(to)) : undefined,
         cost?.length ? inArray(object_on_usage.cost, cost) : undefined,
         or(sex?.includes("male") ? eq(object_on_usage.sexMale, true) : undefined, sex?.includes("female") ? eq(object_on_usage.sexFemale, true) : undefined),
         age ? and(lte(object_on_usage.ageFrom, age), gte(object_on_usage.ageTo, age)) : undefined,
@@ -214,15 +214,18 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
     coord_lat: state.coord_lat,
     coord_lon: state.coord_lon,
     description: state.description || null,
+    schedule_date: state.schedule_date || null,
+    schedule_source: state.schedule_source || null,
+    schedule_comment: state.schedule_comment || null,
     created: state.created ? state.created : new Date(),
   };
 
   const [ upsertedObject ] = await db.insert(object).values(fields).onConflictDoUpdate({target: object.object_id, set: {...fields}}).returning();
   const children:DBObject[] = await db.query.object.findMany({where: eq(object.parent_id, upsertedObject.object_id), with: {objectOnUsages: {with: {usage: true, schedules: true}}}});
 
-  const nameTitleIsChanged = state.name_title !== init.name_title;
-  if (nameTitleIsChanged) {
-    children.length && children.forEach(async (child) => await db.update(object).set({name_where: state.name_locative?.concat(state.name_title ? ` «${state.name_title}»` : "")}).where(eq(object.object_id, child.object_id)));
+  const orgNameChanged = state.name_title !== init.name_title || state.name_where !== init.name_where;
+  if (orgNameChanged) {
+    children.length && children.forEach(async (child) => await db.update(object).set({name_where: state.name_locative?.concat(state.name_title ? ` «${state.name_title}»` : "").concat((state.name_where ? ` ${state.name_where}` : ""))}).where(eq(object.object_id, child.object_id)));
   }
   const coordsIsChanged = state.coord_lat !== init.coord_lat || state.coord_lon !== init.coord_lon;
   if (coordsIsChanged) {
@@ -289,7 +292,7 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
     if (!initUsage) {
       [upsertedUsage] = await db.insert(object_on_usage).values({...stateUsage, object_id: upsertedObject.object_id, object_on_usage_id: undefined}).returning();
     }
-    if (initUsage && stateUsage.cost !== initUsage.cost || stateUsage.description !== initUsage?.description || stateUsage?.schedule_inherit !== initUsage?.schedule_inherit || stateUsage?.sexMale !== initUsage?.sexMale || stateUsage?.sexFemale !== initUsage?.sexFemale || stateUsage?.ageFrom !== initUsage?.ageFrom || stateUsage?.ageTo !== initUsage?.ageTo) {
+    if (initUsage && (stateUsage.cost !== initUsage.cost || stateUsage.description !== initUsage?.description || stateUsage?.schedule_inherit !== initUsage?.schedule_inherit || stateUsage?.sexMale !== initUsage?.sexMale || stateUsage?.sexFemale !== initUsage?.sexFemale || stateUsage?.ageFrom !== initUsage?.ageFrom || stateUsage?.ageTo !== initUsage?.ageTo)) {
       await db.update(object_on_usage).set({...stateUsage, object_id: undefined, object_on_usage_id: undefined}).where(stateUsage.object_on_usage_id ? eq(object_on_usage.object_on_usage_id, stateUsage.object_on_usage_id) : undefined);
     }
     const usageScheduleChanged = stateUsage.schedules.filter((stateSchedule) => !initUsage?.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num) || initUsage?.schedules.some((initSchedule) => stateSchedule.day_num === initSchedule.day_num && stateSchedule.time !== initSchedule.time));
