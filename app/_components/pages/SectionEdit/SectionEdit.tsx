@@ -126,6 +126,15 @@ export default function SectionEdit(props:{init:EditSection}) {
             />
           </Control>
           <Control className="mt15">
+            <Control.Label>Title</Control.Label>
+            <Input
+              name="name_seo_title"
+              value={state?.name_seo_title}
+              onChange={handleStateChange.value}
+              required
+            />
+          </Control>
+          <Control className="mt15">
             <Control.Label>Тип раздела</Control.Label>
             <Control.Section>
               <RadioGroup

@@ -16,7 +16,7 @@ export default function Usages() {
         {state.schedule_date ? <p>&nbsp;от {format(state.schedule_date, "yyyy-MM-dd")}&nbsp;</p> : null}
         {state.schedule_source ? <a href={`${state.schedule_source}`}>(Источник)</a> : null}
       </Card.Heading>
-      {state.usages.toSorted((a, b) => a.order - b.order).map((usage) => (
+      {state.usages.length ? state.usages.toSorted((a, b) => a.order - b.order).map((usage) => (
         <Card.Section key={usage.uiID}>
           {state.type === objectTypeEnum.place ? <p>{usage.name_public} ({usage.cost ? {paid: "Платно", free: "Бесплатно"}[usage.cost] : null})</p> : null}
           {state.type === objectTypeEnum.class ? (
@@ -45,7 +45,9 @@ export default function Usages() {
             </div>
           ) : null}
         </Card.Section>
-      ))}
+      )) : (
+        <Card.Section>Неизвестно</Card.Section>
+      )}
     </Card>
   )
 }

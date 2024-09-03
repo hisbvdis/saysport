@@ -1,7 +1,7 @@
 .menu:not(:empty) {
   position: absolute;
   inset-block-start: 100%;
-  z-index: 1;
+  z-index: 2;
 
   min-inline-size: max(100%, 150px);
   max-block-size: 250px;

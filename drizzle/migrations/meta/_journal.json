@@ -15,6 +15,20 @@
       "when": 1725300949059,
       "tag": "0001_cooing_kronos",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1725370281960,
+      "tag": "0002_silly_joshua_kane",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1725370402979,
+      "tag": "0003_workable_smasher",
+      "breakpoints": true
     }
   ]
 }

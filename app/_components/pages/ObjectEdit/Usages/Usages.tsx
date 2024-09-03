@@ -94,10 +94,10 @@ export default function Usages() {
         .trim()
         .split("\n")
         .map((time) => {
-          const matching = time.trim().match(/(\d{1,2}):?(\d{2})?\s?-\s?(\d{1,2}):?(\d{2})?$/);
+          const matching = time.trim().match(/(\d{1,2}):?(\d{2})?\s?-?\s?(\d{1,2})?:?(\d{2})?$/);
           if (!matching) return time;
           const [_, hoursFrom, minutesFrom, hoursTo, minutesTo] = matching;
-          return `${hoursFrom}:${minutesFrom ?? "00"} - ${hoursTo}:${minutesTo ?? "00"}`
+          return `${hoursFrom}:${minutesFrom ?? "00"} - ${hoursTo ?? Number(hoursFrom) + 1}:${minutesTo ?? minutesFrom ?? "00"}`
         })
         .join("\n");
       setState((prevState) => create(prevState, (draft) => {
@@ -190,8 +190,8 @@ export default function Usages() {
                 <Control.Label>Пол</Control.Label>
                 <Control.Section style={{display: "flex", flexDirection: "column", gap: "5px"}}>
                   <CheckboxGroup required>
-                    <Checkbox checked={Boolean(usage.sexMale)} onChange={(e) => handleUsages.sex(e, usage, "sexMale")}>Мужской</Checkbox>
-                    <Checkbox checked={Boolean(usage.sexFemale)} onChange={(e) => handleUsages.sex(e, usage, "sexFemale")}>Женский</Checkbox>
+                    <Checkbox checked={Boolean(usage.sexMale)} onChange={(e) => handleUsages.sex(e, usage, "sexMale")}>Мужчины</Checkbox>
+                    <Checkbox checked={Boolean(usage.sexFemale)} onChange={(e) => handleUsages.sex(e, usage, "sexFemale")}>Женщины</Checkbox>
                   </CheckboxGroup>
                 </Control.Section>
               </Control>
@@ -212,7 +212,7 @@ export default function Usages() {
               <div key={i} style={{display: "flex", flexDirection: "column", alignItems: "center", flexGrow: 1, flexBasis: 0}}>
                 <p >{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</p>
                 <Textarea name={String(i)} value={day?.time} onChange={(e) => handleSchedule.changeTime(e, usage)} onBlurIfChanged={(e) => handleSchedule.formatTime(e, usage)} disabled={Boolean(usage.schedule_inherit)} pattern="\d{1,2}:\d\d\s-\s\d{1,2}:\d\d" style={{inlineSize: "100%"}}/>
-                <Button onClick={(e) => handleSchedule.copyToAll(day, usage)} disabled={Boolean(usage.schedule_inherit)}>Copy</Button>
+                <Button onClick={(e) => handleSchedule.copyToAll(day, usage)} disabled={Boolean(usage.schedule_inherit)} tabIndex={-1}>Copy</Button>
               </div>
             ))}
           </div>

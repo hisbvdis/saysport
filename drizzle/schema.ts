@@ -83,6 +83,7 @@ export const section = pgTable("section", {
   name_service: varchar("name_service").notNull(),
   name_public_plural: varchar("name_public_plural").notNull(),
   name_public_singular: varchar("name_public_singular").notNull(),
+  name_seo_title: varchar("name_seo_title").notNull(),
   object_type: objectTypeColumnType("object_type").notNull(),
 })
 

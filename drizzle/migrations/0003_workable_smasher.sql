@@ -1,0 +1,1 @@
+ALTER TABLE "section" ALTER COLUMN "name_seo_title" SET NOT NULL;

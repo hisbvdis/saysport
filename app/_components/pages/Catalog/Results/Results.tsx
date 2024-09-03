@@ -24,7 +24,7 @@ export default function Results() {
           {label: section?.name_public_plural ?? ""}
         ]}/>
         <h1 style={{fontWeight: "400"}}>
-          <span>{section?.name_public_plural ?? "Спортивные объекты и секции"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
+          <span>{section?.name_seo_title ?? "Спортивные объекты и секции"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
           <sup style={{fontSize: "0.5em"}}>{resultsCount}</sup>
         </h1>
         <SearchPanel/>

@@ -1,5 +1,5 @@
 .results__link {
-  display: block;
+  display: inline-block;
 
   /* font-size: 1.125em; */
   color: #0088CF;
@@ -11,7 +11,7 @@
 }
 
 .results__linkParent {
-  display: block;
+  display: inline-block;
   margin-block-start: 5px;
 
   font-size: 0.95em;

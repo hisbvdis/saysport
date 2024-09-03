@@ -35,7 +35,7 @@ export default async function CatalogPage({searchParams}:Props) {
 export async function generateMetadata({searchParams}:Props):Promise<Metadata> {
   const city = searchParams.city ? await getCityById(Number(searchParams.city)) : undefined;
   const section = searchParams.section ? await getSectionById(Number(searchParams.section)) : undefined;
-  const sectionName = searchParams.section ? section?.name_public_plural : null;
+  const sectionName = searchParams.section ? section?.name_seo_title : null;
   const cityName = searchParams.city ? city?.name_preposition : null;
 
   return {
