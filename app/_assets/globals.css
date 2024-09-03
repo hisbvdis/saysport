@@ -94,7 +94,8 @@ body {
   margin-block-start: 10px;
 }
 
-.srOnly:not(:focus):not(:active):not(:focus-within) {
+/* .srOnly:not(:focus):not(:active):not(:focus-within) { */
+.srOnly {
   position: absolute;
 
   width: 0;

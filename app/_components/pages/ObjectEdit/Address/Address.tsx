@@ -166,7 +166,6 @@ export default function Address() {
             </Control.Section>
           </Control>
           <Control>
-            <Control.Label srOnly>Уточнение местоположения</Control.Label>
             <Control.Section>
               <Input
                 name="address_2"

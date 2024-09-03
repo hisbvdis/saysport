@@ -1,14 +1,16 @@
 "use client";
-import { useContext } from "react"
-import { ControlContext } from "./Control"
 import clsx from "clsx";
+import { useContext } from "react"
+// -----------------------------------------------------------------------------
+import { ControlContext } from "./Control"
+// -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
 export default function ControlLabel(props:Props) {
   const controlContext = useContext(ControlContext);
   const labelId = props.id ?? controlContext?.labelId;
-  const inputId = controlContext?.inputId;
+  const inputId = props.for ?? controlContext?.inputId;
   const required = controlContext?.required;
   const { className, children, style, srOnly } = props;
 
@@ -31,4 +33,5 @@ interface Props {
   style?: React.CSSProperties;
   children?: React.ReactNode;
   srOnly?: boolean;
+  for?: string;
 }
