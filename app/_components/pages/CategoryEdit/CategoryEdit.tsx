@@ -109,7 +109,7 @@ export default function CategoryEdit(props:{init:EditCategory}) {
               {state.sections?.filter((section) => section.object_type === objectTypeEnum.org).map((section) => (
                 <li key={section.section_id} style={{display: "flex"}}>
                   <Button onClick={() => handleSections.delete(section.section_id)}>X</Button>
-                  <Link href={`/admin/specs/${section.section_id}`} style={{alignSelf: "center"}}>{section.name_service}</Link>
+                  <Link href={`/admin/sections/${section.section_id}`} style={{alignSelf: "center"}}>{section.name_service}</Link>
                 </li>
               ))}
             </ul>
@@ -120,7 +120,7 @@ export default function CategoryEdit(props:{init:EditCategory}) {
               {state.sections?.filter((section) => section.object_type === objectTypeEnum.place).map((section) => (
                 <li key={section.section_id} style={{display: "flex"}}>
                   <Button onClick={() => handleSections.delete(section.section_id)}>X</Button>
-                  <Link href={`/admin/specs/${section.section_id}`} style={{alignSelf: "center"}}>{section.name_service}</Link>
+                  <Link href={`/admin/sections/${section.section_id}`} style={{alignSelf: "center"}}>{section.name_service}</Link>
                 </li>
               ))}
             </ul>
@@ -131,7 +131,7 @@ export default function CategoryEdit(props:{init:EditCategory}) {
               {state.sections?.filter((section) => section.object_type === objectTypeEnum.class).map((section) => (
                 <li key={section.section_id} style={{display: "flex"}}>
                   <Button onClick={() => handleSections.delete(section.section_id)}>X</Button>
-                  <Link href={`/admin/specs/${section.section_id}`} style={{alignSelf: "center"}}>{section.name_service}</Link>
+                  <Link href={`/admin/sections/${section.section_id}`} style={{alignSelf: "center"}}>{section.name_service}</Link>
                 </li>
               ))}
             </ul>
