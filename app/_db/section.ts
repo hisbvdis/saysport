@@ -17,6 +17,7 @@ export const getEmptySection = async ():Promise<EditSection> => {
     name_service: "",
     name_public_plural: "",
     name_public_singular: "",
+    name_seo_title: "",
     specs: [],
     uiID: nanoid(),
     usages: [],
@@ -77,6 +78,7 @@ export const upsertSection = async (state:EditSection, init: EditSection) => {
     name_service: state.name_service,
     name_public_plural: state.name_public_plural,
     name_public_singular: state.name_public_singular,
+    name_seo_title: state.name_seo_title,
     object_type: state.object_type,
   }
   const [upsertedSection] = await db.insert(section).values(fields).onConflictDoUpdate({target: section.section_id, set: fields}).returning();
