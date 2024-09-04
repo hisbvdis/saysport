@@ -7,6 +7,7 @@ import { getCityById } from "@/app/_db/city";
 import { getAllCategories } from "@/app/_db/category";
 import { getSectionById, getSectionsByFilters } from "@/app/_db/section";
 import { getObjectsCountByFilters, getObjectsByFilters } from "@/app/_db/object"
+import Head from "next/head";
 
 
 export default async function CatalogPage({searchParams}:Props) {
@@ -37,9 +38,22 @@ export async function generateMetadata({searchParams}:Props):Promise<Metadata> {
   const section = searchParams.section ? await getSectionById(Number(searchParams.section)) : undefined;
   const sectionName = searchParams.section ? section?.name_seo_title : null;
   const cityName = searchParams.city ? city?.name_preposition : null;
+  const resultsCount = (await getObjectsCountByFilters(searchParams))[0].count;
 
   return {
-    title: `${sectionName ? sectionName : "Спортивные объекты и секции"}${cityName ? ` в ${cityName}` : ""}`
+    title: `${sectionName ? sectionName : "Спортивные объекты и секции"}${cityName ? ` в ${cityName}` : ""}`,
+    alternates: {
+      canonical: (() => {
+        const baseUrl = "/";
+        const searchParams = new URLSearchParams();
+        if (city) searchParams.append("city", String(city.city_id));
+        if (section) searchParams.append("section", String(section.section_id));
+        return baseUrl.concat(Array.from(searchParams.keys()).length ? "?" : "").concat(searchParams.toString());
+      })(),
+    },
+    robots: {
+      index: resultsCount > 0 ? undefined : false
+    }
   }
 }
 

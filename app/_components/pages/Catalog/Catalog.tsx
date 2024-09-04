@@ -36,11 +36,11 @@ export default function Catalog(props:Props) {
                 isAutocomplete
                 value={city?.city_id ? String(city?.city_id) : ""}
                 label={city?.name}
-                onChange={(data) => {data.value ? router.push(manageSearchParams.set("city", data.value)) : router.push(manageSearchParams.delete(["city"]))}}
+                onChange={(data) => {data.value ? router.push(manageSearchParams.set("city", data.value, manageSearchParams.delete(["page"]))) : router.push(manageSearchParams.delete(["city"]))}}
                 placeholder="Введите название"
-                requestItemsOnInputChange={async (value) => (
-                  await getCitiesByFilters({name: value})).map((city) => ({
-                    id: city.city_id, label: `${city.name}, ${city.country}, ${city.admin1 ?? ""}, ${city.admin2 ?? ""}`, data: city
+                requestItemsOnInputChange={async (inputValue) => (
+                  await getCitiesByFilters({name: inputValue})).map((city) => ({
+                    id: city.city_id, label: `${city.name.concat(city.admin1 ? `, ${city.admin1}` : "").concat(city.country ? `, ${city.country}` : "")}`, data: city
                 }))}
               />
             </Control>

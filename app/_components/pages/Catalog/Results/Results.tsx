@@ -38,7 +38,7 @@ export default function Results() {
       </Card.Section>
       {resultsLimited.map((object) => (
         <Card.Section key={object.object_id} style={{display: "grid", gap: "15px", gridTemplateColumns: "1fr 1.5fr"}}>
-          <img src={object.photos?.length ? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${object.photos[0].name}` : "/no-photo.svg"} width="250" height="210" alt="" loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
+          <img src={object.photos?.length ? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${object.photos[0].name}` : "/no-photo.svg"} width="250" height="210" alt={object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")} loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
           <div>
             {object.type === objectTypeEnum.org || (object.type === objectTypeEnum.place && !object.parent_id) ? (
               <h4><Link className={styles["results__link"]} href={`object/${object.object_id}`}>{object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</Link></h4>

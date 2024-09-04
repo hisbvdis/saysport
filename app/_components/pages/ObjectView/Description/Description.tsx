@@ -24,7 +24,7 @@ export default function Description() {
 
   return (
     <Card className={styles["description"]}>
-      <p className={clsx(styles["description__content"], !shouldShowFullText && styles["description__content--short"])} ref={textRef}>
+      <p className={clsx(styles["description__content"], !shouldShowFullText && isTrimmedText ? styles["description__content--short"] : "")} ref={textRef}>
         {state.description}
       </p>
       {isTrimmedText

@@ -27,7 +27,7 @@ export default function Contacts() {
         <Card.Section>
           {state.links.map((link) => (
             <p key={link.uiID}>
-              <a href={link.value}>{link.value.match(/^(https?:\/\/)?(www.)?(.*?(?=\/))/)?.[3]}</a>
+              <a href={link.value} rel="nofollow">{link.value.match(/^(https?:\/\/)?(www.)?(.*?(?=\/))/)?.[3]}</a>
             </p>
           ))}
         </Card.Section>
