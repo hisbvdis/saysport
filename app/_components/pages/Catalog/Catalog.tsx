@@ -21,12 +21,12 @@ import styles from "./styles.module.css";
 
 
 export default function Catalog(props:Props) {
-  const { searchParams, resultsLimited, resultsAll, categories, section, city, resultsCount, commonSections } = props;
+  const { searchParams, results, categories, section, city, commonSections } = props;
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
 
   return (
-    <CatalogContext.Provider value={{searchParams, resultsLimited, categories, section, city, resultsCount, resultsAll, commonSections}}>
+    <CatalogContext.Provider value={{searchParams, results, categories, section, city, commonSections}}>
       <div className={clsx(styles["catalog"], !searchParams.map && "container", "page")}>
         <aside>
           <Card>
@@ -49,11 +49,11 @@ export default function Catalog(props:Props) {
         </aside>
         <main className={styles["catalog__main"]}>
           <Results/>
-          <Pagination itemsCount={resultsCount} pageSize={10} currentPage={searchParams.page ? Number(searchParams.page) : 1}/>
+          <Pagination itemsCount={results.totalCount ?? 0} pageSize={10} currentPage={searchParams.page ? Number(searchParams.page) : 1}/>
         </main>
         {searchParams.map &&
-          <MapComponent className={styles["catalog__map"]} fitBoundsArray={resultsAll.map((object) => [object.coord_lat, object.coord_lon])}>
-            <MapCluster markersData={resultsAll?.map((object) => ({coord: [object.coord_lat, object.coord_lon], popup: `<a href="object/${object.object_id}">${object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</a>`}))}/>
+          <MapComponent className={styles["catalog__map"]} fitBoundsArray={results.unlimited?.map((object) => [object.coord_lat, object.coord_lon])}>
+            <MapCluster markersData={results.unlimited?.map((object) => ({coord: [object.coord_lat, object.coord_lon], popup: `<a href="object/${object.object_id}">${object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</a>`})) ?? []}/>
           </MapComponent>
         }
       </div>
@@ -64,20 +64,24 @@ export default function Catalog(props:Props) {
 export const CatalogContext = createContext<CatalogContextType>({} as CatalogContextType);
 
 interface Props {
-  resultsLimited: DBObject[];
-  resultsAll: DBObject[];
-  categories: ProcCategory[];
+  results: {
+    requested: DBObject[];
+    unlimited?: DBObject[];
+    totalCount?: number;
+  }
   searchParams: SearchParamsType;
+  categories: ProcCategory[];
   city?: City;
   section?: ProcSection;
-  resultsCount:number;
   commonSections:ProcSection[];
 }
 
 interface CatalogContextType {
-  resultsLimited: DBObject[];
-  resultsAll: DBObject[];
-  resultsCount: number;
+  results: {
+    requested: DBObject[];
+    unlimited?: DBObject[];
+    totalCount?: number;
+  }
   searchParams: SearchParamsType;
   categories: ProcCategory[];
   section?: ProcSection;

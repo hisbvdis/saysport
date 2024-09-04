@@ -1,13 +1,13 @@
 "use server";
+import { unlinkSync } from "node:fs";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import type { SearchParamsType } from "../(router)/page";
 import type { DBObject, EditObject, ProcObject } from "../_types/types";
-import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte, ne, notExists, or, sql } from "drizzle-orm";
+import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte, ne, notExists, or, Placeholder, placeholder, sql } from "drizzle-orm";
 import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage, object_schedule, type costTypeUnion } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { objectReadProcessing } from "./object.processing";
-import { existsSync, unlinkSync } from "node:fs";
 
 
 export const getEmptyObject = async ():Promise<EditObject> => {
@@ -24,56 +24,9 @@ export const getEmptyObject = async ():Promise<EditObject> => {
   }
 }
 
-export const getObjectsCountByFilters = async (filters?:Filters) => {
-  const type = filters?.type;
-  const query = filters?.query;
-  const cityId = filters?.city ? Number(filters?.city) : undefined;
-  const status = filters?.status?.split(",") as objectStatusUnion[];
-  const photo = filters?.photo?.split(",");
-  const sectionId = filters?.section ? Number(filters.section) : undefined;
-  const optionIds = filters?.options ?? undefined;
-  const days = filters?.days?.split(",").map((day) => Number(day)) ?? [];
-  const from = filters?.from;
-  const to = filters?.to;
-  const cost = filters?.cost?.split(",").map((value) => String(value)) as costTypeUnion[];
-  const usages = filters?.usages?.split(",").map((id) => Number(id)) ?? [];
-  const sex = filters?.sex?.split(",");
-  const age = filters?.age ? Number(filters?.age) : undefined;
-  const groupedOptions = Object.entries(optionIds
-    ? optionIds /* "1:1,1:2,!2:3" */
-      .split(",") /* ["1:1"],["1:2"],["!2:3"] */
-      .map((str) => str.split(":")) /* ["1":"1"],["1":"2"],["!2":"3"] */
-      .reduce((acc, [key, value]) => ({...acc, [key]: acc[key] ? [...acc[key], Number(value)] : [Number(value)]}), {} as {[key:string]: number[]}) /* ['1',[1,2], ["!2",[5,6]]] */
-    : {}
-  )
-  const dbData = await db.select({count: count()}).from(object).where(and(
-    query ? ilike(sql`TRIM(CONCAT(${object.name_type}, COALESCE(NULLIF(CONCAT(' ', '«' || ${object.name_title} || '»'), ' '), ''), COALESCE(NULLIF(CONCAT(' ', ${object.name_where}), ' '), '')))` as any, `%${query}%`) : undefined,
-    cityId ? eq(object.city_id, cityId) : undefined,
-    type ? eq(object.type, type) : undefined,
-    sectionId ? exists(db.select().from(object_on_section).where(and(eq(object.object_id, object_on_section.object_id), eq(object_on_section.section_id, sectionId)))) : undefined,
-    optionIds ? and(...groupedOptions.map(([specId, optionIdArr]) => {
-      if (specId.startsWith("!")) {
-        return inArray(object.object_id, db.select({object_id: object_on_option.object_id}).from(object_on_option).where(inArray(object_on_option.option_id, optionIdArr)).groupBy(object_on_option.object_id).having(eq(sql`COUNT(DISTINCT ${object_on_option.option_id})`, optionIdArr.length)))
-      }
-      return exists(db.select().from(object_on_option).where(and(eq(object_on_option.object_id, object.object_id), inArray(object_on_option.option_id, optionIdArr))))
-    })) : undefined,
-    status ? inArray(object.status, status) : undefined,
-    photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined,
-    days.length || from || to || cost?.length ? exists(db.select().from(object_schedule).innerJoin(object_on_usage, eq(object_schedule.object_on_usage_id, object_on_usage.object_on_usage_id)).where(and(
-      eq(object_schedule.object_id, object.object_id),
-      days.length ? inArray(object_schedule.day_num, days) : undefined,
-      from ? gte(object_schedule.from, Number(from)) : undefined,
-      to ? lte(object_schedule.to, Number(to)) : undefined,
-      cost?.length ? inArray(object_on_usage.cost, cost) : undefined,
-      or(sex?.includes("male") ? eq(object_on_usage.sexMale, true) : undefined, sex?.includes("female") ? eq(object_on_usage.sexFemale, true) : undefined),
-      age ? and(lte(object_on_usage.ageFrom, age), gte(object_on_usage.ageTo, age)) : undefined,
-    ))) : undefined,
-    usages.length ? exists(db.select().from(object_on_usage).where(and(eq(object_on_usage.object_id, object.object_id), inArray(object_on_usage.usage_id, usages)))) : undefined
-  ))
-  return dbData;
-}
-
-export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> => {
+export const getObjectsByFilters = async (filters?:Filters):Promise<{requested:DBObject[], unlimited?:DBObject[], totalCount?:number}> => {
+  const withTotalCount = filters?.withTotalCount;
+  const withUnlimited = filters?.withUnlimited;
   const type = filters?.type;
   const query = filters?.query;
   const cityId = filters?.city ? Number(filters?.city) : undefined;
@@ -97,52 +50,52 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<DBObject[]> 
       .reduce((acc, [key, value]) => ({...acc, [key]: acc[key] ? [...acc[key], Number(value)] : [Number(value)]}), {} as {[key:string]: number[]}) /* ['1',[1,2], ["!2",[5,6]]] */
     : {}
   )
-  const dbData = await db.query.object.findMany({
-    where: and(
-      query ? ilike(sql`TRIM(CONCAT(${object.name_type}, COALESCE(NULLIF(CONCAT(' ', '«' || ${object.name_title} || '»'), ' '), ''), COALESCE(NULLIF(CONCAT(' ', ${object.name_where}), ' '), '')))` as any, `%${query}%`) : undefined,
-      cityId ? eq(object.city_id, cityId) : undefined,
-      type ? eq(object.type, type) : undefined,
-      sectionId ? exists(db.select().from(object_on_section).where(and(eq(object.object_id, object_on_section.object_id), eq(object_on_section.section_id, sectionId)))) : undefined,
-      optionIds ? and(...groupedOptions.map(([specId, optionIdArr]) => {
-        if (specId.startsWith("!")) {
-          return inArray(object.object_id, db.select({object_id: object_on_option.object_id}).from(object_on_option).where(inArray(object_on_option.option_id, optionIdArr)).groupBy(object_on_option.object_id).having(eq(sql`COUNT(DISTINCT ${object_on_option.option_id})`, optionIdArr.length)));
-        }
-        return exists(db.select().from(object_on_option).where(and(eq(object_on_option.object_id, object.object_id), inArray(object_on_option.option_id, optionIdArr))));
-      })) : undefined,
-      status ? inArray(object.status, status) : undefined,
-      photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined,
-      days.length || from || to || cost?.length || sex?.length || age ? exists(db.select().from(object_schedule).innerJoin(object_on_usage, eq(object_schedule.object_on_usage_id, object_on_usage.object_on_usage_id)).where(and(
-        eq(object_schedule.object_id, object.object_id),
-        days.length ? inArray(object_schedule.day_num, days) : undefined,
-        from ? gte(object_schedule.from, Number(from)) : undefined,
-        to ? lte(object_schedule.to, Number(to)) : undefined,
-        cost?.length ? inArray(object_on_usage.cost, cost) : undefined,
-        or(sex?.includes("male") ? eq(object_on_usage.sexMale, true) : undefined, sex?.includes("female") ? eq(object_on_usage.sexFemale, true) : undefined),
-        age ? and(lte(object_on_usage.ageFrom, age), gte(object_on_usage.ageTo, age)) : undefined,
-      ))) : undefined,
-      usages.length ? exists(db.select().from(object_on_usage).where(and(eq(object_on_usage.object_id, object.object_id), inArray(object_on_usage.usage_id, usages)))) : undefined
-    ),
+  const whereCondition = and(
+    query ? ilike(sql`TRIM(CONCAT(${object.name_type}, COALESCE(NULLIF(CONCAT(' ', '«' || ${object.name_title} || '»'), ' '), ''), COALESCE(NULLIF(CONCAT(' ', ${object.name_where}), ' '), '')))` as any, `%${query}%`) : undefined,
+    cityId ? eq(object.city_id, cityId) : undefined,
+    type ? eq(object.type, type) : undefined,
+    sectionId ? exists(db.select().from(object_on_section).where(and(eq(object.object_id, object_on_section.object_id), eq(object_on_section.section_id, sectionId)))) : undefined,
+    optionIds ? and(...groupedOptions.map(([specId, optionIdArr]) => {
+      if (specId.startsWith("!")) {
+        return inArray(object.object_id, db.select({object_id: object_on_option.object_id}).from(object_on_option).where(inArray(object_on_option.option_id, optionIdArr)).groupBy(object_on_option.object_id).having(eq(sql`COUNT(DISTINCT ${object_on_option.option_id})`, optionIdArr.length)));
+      }
+      return exists(db.select().from(object_on_option).where(and(eq(object_on_option.object_id, object.object_id), inArray(object_on_option.option_id, optionIdArr))));
+    })) : undefined,
+    status ? inArray(object.status, status) : undefined,
+    photo?.length === 1 ? photo[0] === "true" ? exists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : notExists(db.select().from(object_photo).where(eq(object_photo.object_id, object.object_id))) : undefined,
+    days.length || from || to || cost?.length || sex?.length || age ? exists(db.select().from(object_schedule).innerJoin(object_on_usage, eq(object_schedule.object_on_usage_id, object_on_usage.object_on_usage_id)).where(and(
+      eq(object_schedule.object_id, object.object_id),
+      days.length ? inArray(object_schedule.day_num, days) : undefined,
+      from ? gte(object_schedule.from, Number(from)) : undefined,
+      to ? lte(object_schedule.to, Number(to)) : undefined,
+      cost?.length ? inArray(object_on_usage.cost, cost) : undefined,
+      or(sex?.includes("male") ? eq(object_on_usage.sexMale, true) : undefined, sex?.includes("female") ? eq(object_on_usage.sexFemale, true) : undefined),
+      age ? and(lte(object_on_usage.ageFrom, age), gte(object_on_usage.ageTo, age)) : undefined,
+    ))) : undefined,
+    usages.length ? exists(db.select().from(object_on_usage).where(and(eq(object_on_usage.object_id, object.object_id), inArray(object_on_usage.usage_id, usages)))) : undefined
+  );
+  const prepared = db.query.object.findMany({
+    where: whereCondition,
     with: {
-      // statusInstead: true,
       city: true,
-      // parent: true,
-      // phones: {orderBy: (phones, { asc }) => [asc(phones.order)]},
-      // links: {orderBy: (links, { asc }) => [asc(links.order)]},
       objectOnOptions: {with: {option: true}},
       photos: {orderBy: (photos, { asc }) => [asc(photos.order)]},
       objectOnSections: {with: {section: {with: {sectionOnSpecs: {with: {spec: {with: {options: true}}}}}}}},
-      // objectSchedules: true,
     },
     orderBy: [desc(object.created)],
-    limit: limit,
-    offset: page ? (Number(page) - 1) * 10 : undefined
-  });
-  return dbData;
+    limit: new Placeholder("limit") ?? undefined,
+    offset: new Placeholder("offset") ?? undefined,
+  }).prepare("query_name");
+  const requested = await prepared.execute({limit: limit, offset: page ? (Number(page) - 1) * 10 : undefined});
+  const unlimited = withUnlimited ? await prepared.execute({limit: undefined, offset: undefined}) : undefined;
+  const totalCount = withTotalCount ? (await db.select({count: count()}).from(object).where(whereCondition))[0].count : undefined;
+  return {requested, unlimited, totalCount};
 }
 
 interface Filters extends SearchParamsType {
   type?:objectTypeUnion;
-  limit?:number;
+  withUnlimited?:boolean;
+  withTotalCount?:boolean;
 }
 
 export const getObjectsByArea = async (latMin:number, latMax:number, lonMin:number, lonMax:number, currentObjectId?:number|null, parentObjectId?:number|null):Promise<Object_[]> => {

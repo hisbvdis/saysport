@@ -12,7 +12,7 @@ import styles from "./styles.module.css";
 
 
 export default function Results() {
-  const { searchParams, city, resultsLimited, section, resultsCount } = useContext(CatalogContext);
+  const { searchParams, city, section, results } = useContext(CatalogContext);
   const manageSearchParams = useManageSearchParams();
 
   return (
@@ -25,7 +25,7 @@ export default function Results() {
         ]}/>
         <h1 style={{fontWeight: "400"}}>
           <span>{section?.name_seo_title ?? "Спортивные объекты и секции"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
-          <sup style={{fontSize: "0.5em"}}>{resultsCount}</sup>
+          <sup style={{fontSize: "0.5em"}}>{results.totalCount}</sup>
         </h1>
         <SearchPanel/>
       </Card.Heading>
@@ -36,7 +36,7 @@ export default function Results() {
           <span>Карта</span>
         </Link>
       </Card.Section>
-      {resultsLimited.map((object) => (
+      {results.requested?.map((object) => (
         <Card.Section key={object.object_id} style={{display: "grid", gap: "15px", gridTemplateColumns: "1fr 1.5fr"}}>
           <img src={object.photos?.length ? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${object.photos[0].name}` : "/no-photo.svg"} width="250" height="210" alt={object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")} loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
           <div>

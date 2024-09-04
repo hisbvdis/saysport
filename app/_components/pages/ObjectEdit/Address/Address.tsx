@@ -143,7 +143,7 @@ export default function Address() {
                 placeholder="Введите название"
                 disabled={!state.city_id}
                 requestItemsOnInputChange={async (value) => (
-                  await getObjectsByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))
+                  (await getObjectsByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))).requested
                     .filter((org) => org.object_id !== state.object_id)
                     .map((org) => ({id: org.object_id, label: `${org.name_type ?? ""} ${org.name_title ?? ""} ${org.name_where ?? ""}`, data: org})
                 )}

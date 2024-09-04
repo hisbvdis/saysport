@@ -77,7 +77,7 @@ export default function Status(props:Props) {
             placeholder="Введите название"
             disabled={state?.status_inherit || state?.status !== objectStatusEnum.closed_forever}
             requestItemsOnInputChange={
-              async (value) => (await getObjectsByFilters({city: String(state.city_id), type: state?.type, query: value}))
+              async (value) => (await getObjectsByFilters({city: String(state.city_id), type: state?.type, query: value})).requested
               ?.filter((object) => object.object_id !== state?.object_id)
               ?.map((object) => ({id: object.object_id, label: `${object.name_type ?? ""} ${object.name_title ?? ""} ${object.name_where ?? ""}`, data: object}))
             }
