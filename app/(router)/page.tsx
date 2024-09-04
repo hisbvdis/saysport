@@ -7,7 +7,7 @@ import { getCityById } from "@/app/_db/city";
 import { getAllCategories } from "@/app/_db/category";
 import { getSectionById, getSectionsByFilters } from "@/app/_db/section";
 import { getObjectsCountByFilters, getObjectsByFilters } from "@/app/_db/object"
-import Head from "next/head";
+// -----------------------------------------------------------------------------
 
 
 export default async function CatalogPage({searchParams}:Props) {
@@ -41,7 +41,7 @@ export async function generateMetadata({searchParams}:Props):Promise<Metadata> {
   const resultsCount = (await getObjectsCountByFilters(searchParams))[0].count;
 
   return {
-    title: `${sectionName ? sectionName : "Спортивные объекты и секции"}${cityName ? ` в ${cityName}` : ""}`,
+    title: `${sectionName ? sectionName : "Спортивные объекты и секции"}${cityName ? ` в ${cityName}` : ""} | SaySport.info`,
     alternates: {
       canonical: (() => {
         const baseUrl = "/";
