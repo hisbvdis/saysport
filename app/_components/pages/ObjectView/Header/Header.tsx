@@ -16,6 +16,9 @@ import styles from "./styles.module.css";
 export default function Header(props:Props) {
   const { className, style } = props;
   const { state, session } = useContext(ObjectViewContext);
+  console.log( "state.name_type: ", state.name_type )
+  console.log( "state.name_title: ", state.name_title )
+  console.log( "state.name_where: ", state.name_where )
 
   return (
     <header className={className} style={style}>

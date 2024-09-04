@@ -14,8 +14,8 @@ export default function Swiper(props) {
   return (
     <swiper-container navigation={navigation} speed={speed} loop={loop} pagination="true" pagination-type="bullets">
       {photos.map((photo) => (
-        <swiper-slide key={photo}>
-          <img src={photo} width={width} height={height} alt="" style={{maxInlineSize: "100%",  inlineSize: "100%", blockSize: "auto", aspectRatio: `${width}/${height}`, objectFit: "cover"}}/>
+        <swiper-slide key={photo.src}>
+          <img src={photo.src} width={width} height={height} alt={photo.alt} style={{maxInlineSize: "100%",  inlineSize: "100%", blockSize: "auto", aspectRatio: `${width}/${height}`, objectFit: "cover"}}/>
         </swiper-slide>
       ))}
     </swiper-container>
