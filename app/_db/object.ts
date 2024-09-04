@@ -315,6 +315,11 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
     await db.delete(object_on_usage).where(inArray(object_on_usage.object_on_usage_id, usagesDeleted.map((deletedUsage) => deletedUsage.object_on_usage_id ?? -1)));
   }
 
+  // Delete photo — first (important)
+  const photosDeleted = init.photos?.filter((initPhoto) => !state.photos?.some((statePhoto) => initPhoto.uiID === statePhoto.uiID));
+  if (photosDeleted?.length) {
+    await db.delete(object_photo).where(and(eq(object_photo.object_id, upsertedObject.object_id), inArray(object_photo.order, photosDeleted.map((photo) => photo.order))));
+  }
   const photosAdded = state.photos?.filter((statePhoto) => !init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID));
   if (photosAdded?.length) {
     await db.insert(object_photo).values(photosAdded.map((photo) => ({...photo, photo_id:undefined, name: photo.name.replace("ID", String(upsertedObject.object_id)), object_id: upsertedObject.object_id})));
@@ -322,10 +327,6 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
   const photosChanged = state.photos?.filter((statePhoto) => init?.photos?.some((initPhoto) => statePhoto.uiID === initPhoto.uiID && statePhoto.order !== initPhoto.order));
   if (photosChanged?.length) {
     photosChanged.forEach(async (photo) => photo.photo_id && await db.update(object_photo).set({order: photo.order}).where(eq(object_photo.photo_id, photo.photo_id)));
-  }
-  const photosDeleted = init.photos?.filter((initPhoto) => !state.photos?.some((statePhoto) => initPhoto.uiID === statePhoto.uiID));
-  if (photosDeleted?.length) {
-    await db.delete(object_photo).where(and(eq(object_photo.object_id, upsertedObject.object_id), inArray(object_photo.order, photosDeleted.map((photo) => photo.order))));
   }
 
   revalidatePath(`object/${upsertedObject.object_id}`, "page");
