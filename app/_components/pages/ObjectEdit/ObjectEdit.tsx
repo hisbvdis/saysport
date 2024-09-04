@@ -8,7 +8,7 @@ import { type ChangeEvent, type ChangeEventHandler, type Dispatch, type SetState
 // -----------------------------------------------------------------------------
 import { Form } from "@/app/_components/ui/Form";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
-import { NameOrg, NamePlace, Address, Contacts, Specs, Description, Photos, Usages, NameClass } from "./"
+import { NameOrg, NamePlace, Address, Contacts, Sections, Description, Photos, Usages, NameClass } from "./"
 // -----------------------------------------------------------------------------
 import { syncPhotos } from "./Photos/syncPhotos";
 import { setInheritedData } from "./Address/setInheritedData";
@@ -106,8 +106,8 @@ export default function ObjectEdit(props:{init:EditObject, parent?:ProcObject|nu
         {state.type === objectTypeEnum.class ? <NameClass/> : null}
         <Address/>
         <Contacts/>
-        <Specs/>
         <Description/>
+        <Sections/>
         <Usages/>
         <Photos/>
         <EditBottomPanel

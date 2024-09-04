@@ -1,8 +1,11 @@
 .control__label {
   display: inline-block;
-  margin-block-end: 3px;
 }
 
 .control__asteriks {
   color: red;
+}
+
+.control__label + * {
+  margin-block-start: 3px;
 }

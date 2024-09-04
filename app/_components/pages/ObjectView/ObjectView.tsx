@@ -5,7 +5,7 @@ import type { Session } from "next-auth";
 import { objectTypeEnum } from "@/drizzle/schema";
 import type { ProcObject } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
-import { Children, Contacts, Description, Header, Specs, Usages, Gallery } from ".";
+import { Children, Contacts, Description, Header, Sections, Usages, Gallery } from ".";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
@@ -20,7 +20,7 @@ export default function ObjectView(props:{init:ProcObject, session:Session|null}
           {props.init.description ? <Description/> : null}
           {props.init.type === objectTypeEnum.org ? <Children/> : null}
           {props.init.type !== objectTypeEnum.org ? <Usages/> : null}
-          <Specs/>
+          <Sections/>
         </article>
         <aside className={styles["objectView__aside"]}>
           <Contacts/>

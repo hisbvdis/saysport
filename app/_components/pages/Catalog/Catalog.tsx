@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { createContext } from "react";
 import { useRouter } from "next/navigation";
 import type { City } from "@/drizzle/schema";
+import type { SearchParamsType } from "@/app/(router)/page";
 import type { DBObject, ProcCategory, ProcSection } from "@/app/_types/types"
 // -----------------------------------------------------------------------------
 import { Card } from "../../ui/Card";
@@ -11,10 +12,9 @@ import { Control } from "../../ui/Control";
 import { Filters, Results, Categories } from ".";
 import { Pagination } from "../../ui/Pagination";
 import { MapCluster } from "../../ui/MapComponent";
+import { MapComponent } from "../../ui/MapComponent";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
-import { MapComponent } from "../../ui/MapComponent";
-import type { SearchParamsType } from "@/app/(router)/page";
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";

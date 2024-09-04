@@ -5,10 +5,9 @@ import NamePlace from "./NamePlace/NamePlace";
 import NameClass from "./NameClass/NameClass";
 import Address from "./Address/Address";
 import Contacts from "./Contacts/Contacts";
-import Specs from "./Specs/Specs";
+import Sections from "./Sections/Sections";
 import Description from "./Description/Description";
 import Photos from "./Photos/Photos";
-import SectionItem from "./SectionItem/SectionItem";
 import Usages from "./Usages/Usages";
 
 export {
@@ -19,9 +18,8 @@ export {
 	NameClass,
 	Address,
 	Contacts,
-	Specs,
+	Sections,
 	Description,
   Photos,
-	SectionItem,
 	Usages
 };

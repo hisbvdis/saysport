@@ -2,11 +2,11 @@ import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { Status } from "../";
 import { Card } from "@/app/_components/ui/Card";
+import { ObjectEditContext } from "../ObjectEdit";
 import { Input } from "@/app/_components/ui/Input";
 import { Control } from "@/app/_components/ui/Control";
+import { InputAddon } from "@/app/_components/ui/InputAddon";
 // -----------------------------------------------------------------------------
-import { ObjectEditContext } from "../ObjectEdit";
- import { InputAddon } from "@/app/_components/ui/InputAddon";
 
 
 export default function NameOrg() {
@@ -17,7 +17,7 @@ export default function NameOrg() {
       <Card.Heading>Название и статус</Card.Heading>
       <Card.Section>
         <div style={{display: "flex", gap: "10px"}}>
-          <Control>
+        <Control style={{flex: "1"}}>
             <Control.Label>Тип организации</Control.Label>
             <Input
               name="name_type"
@@ -27,7 +27,7 @@ export default function NameOrg() {
               required
             />
           </Control>
-          <Control>
+          <Control style={{flex: "1"}}>
             <Control.Label>Название организации</Control.Label>
             <Control.Section style={{display: "flex"}}>
               <InputAddon>«</InputAddon>
@@ -40,7 +40,7 @@ export default function NameOrg() {
               <InputAddon>»</InputAddon>
             </Control.Section>
           </Control>
-          <Control>
+          <Control style={{flex: "1"}}>
             <Control.Label>Филиал</Control.Label>
             <Input
               name="name_where"

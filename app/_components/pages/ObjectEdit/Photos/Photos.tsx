@@ -1,14 +1,16 @@
 "use client";
 import { nanoid } from "nanoid";
 import { create } from "mutative";
+import Compressor from "compressorjs";
 import { type ChangeEvent, useContext, useRef } from "react"
 // -----------------------------------------------------------------------------
+import { ObjectEditContext } from "../ObjectEdit"
 import { Card } from "@/app/_components/ui/Card";
+import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
 // -----------------------------------------------------------------------------
-import { ObjectEditContext } from "../ObjectEdit"
-import { Input } from "@/app/_components/ui/Input";
-import Compressor from "compressorjs";
+import styles from "./styles.module.css";
+import { Control } from "@/app/_components/ui/Control";
 
 
 export default function Photos() {
@@ -47,22 +49,29 @@ export default function Photos() {
   }
   return (
     <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-        <span>Фото</span>
-        <Button onClick={handlePhotos.deleteAll}>Удалить все</Button>
+      <Card.Heading style={{display: "flex", alignItems: "center"}}>
+        <span style={{marginInlineEnd: "auto"}}>Фото</span>
+        {state.photos?.length ? <Button onClick={handlePhotos.deleteAll}>Удалить все</Button> : null}
+        <Control style={{marginInlineStart: "10px"}}>
+          <Control.Label for="inputFile" style={{cursor: "pointer"}}>Choose File</Control.Label>
+          <Control.Section className="srOnly">
+            <input id="inputFile" type="file" ref={inputFileRef} onChange={handlePhotos.add} multiple/>
+          </Control.Section>
+        </Control>
       </Card.Heading>
-      <Card.Section>
-        <input type="file" ref={inputFileRef} onChange={handlePhotos.add} multiple/>
-        <ul style={{display: "grid", gap: "15px", gridTemplateColumns: "repeat(5, 1fr)", listStyle: "none", paddingInlineStart: 0}}>
-          {state.photos?.toSorted((a, b) => a.order - b.order).map((photo, i) => (
-            <li key={photo.uiID}  style={{position: "relative",  border: "1px solid black"}}>
-              <Button onClick={() => handlePhotos.delete(photo.uiID)} style={{position: "absolute"}}>X</Button>
-              <Input value={photo.order} onChange={(e) => handlePhotos.changeOrder(e, photo.uiID)} style={{position: "absolute", insetInlineStart: "20px", inlineSize: "30px"}}/>
-              <img src={photo.blob ?? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${photo.name}`} style={{width: "100%", aspectRatio: "1/1", objectFit: "contain"}} alt=""/>
-            </li>
-          ))}
-        </ul>
-      </Card.Section>
+      {state.photos?.length ? (
+        <Card.Section>
+          <ul style={{display: "grid", gap: "15px", gridTemplateColumns: "repeat(5, 1fr)", listStyle: "none", paddingInlineStart: 0}}>
+            {state.photos?.toSorted((a, b) => a.order - b.order).map((photo, i) => (
+              <li key={photo.uiID}  style={{position: "relative",  border: "1px solid black"}}>
+                <Button onClick={() => handlePhotos.delete(photo.uiID)} style={{position: "absolute"}}>X</Button>
+                <Input value={photo.order} onChange={(e) => handlePhotos.changeOrder(e, photo.uiID)} style={{position: "absolute", insetInlineStart: "20px", inlineSize: "30px"}}/>
+                <img src={photo.blob ?? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${photo.name}`} style={{width: "100%", aspectRatio: "1/1", objectFit: "contain"}} alt=""/>
+              </li>
+            ))}
+          </ul>
+        </Card.Section>
+      ) : null}
     </Card>
   )
 }

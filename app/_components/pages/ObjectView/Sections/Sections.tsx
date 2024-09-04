@@ -7,7 +7,7 @@ import { Card } from "@/app/_components/ui/Card";
 import { sectionTypeEnum } from "@/drizzle/schema";
 
 
-export default function Specs() {
+export default function Sections() {
   const { state } = useContext(ObjectViewContext);
 
   return (

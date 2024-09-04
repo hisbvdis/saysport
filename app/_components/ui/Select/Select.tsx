@@ -158,7 +158,7 @@ export default function Select(props:Props) {
           readOnly={!isAutocomplete}
           required={required}
         />
-        {props.items?.length && !props.value ?
+        {!isAutocomplete || (props.items?.length && !props.value) ?
           <Button className={clsx(styles["select__button"], styles["select__button--arrow"])} disabled={disabled} tabIndex={-1}>
             <ArrowDownIcon className={clsx("icon", disabled && "disabled")}/>
           </Button>

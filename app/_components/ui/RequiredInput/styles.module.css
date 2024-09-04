@@ -1,6 +1,6 @@
 .requiredInput {
   all:unset;
-  /* position: absolute; */
+  position: absolute;
 
   inline-size: 1px;
   block-size: 1px;
