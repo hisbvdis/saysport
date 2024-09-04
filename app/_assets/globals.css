@@ -13,6 +13,8 @@
   --color-blue-light: #0088CF;
   --color-blue-dark: #337AB7;
 
+  --boxShadow: 0 0px 10px rgb(0 0 0 / 0.2);
+
   --fontColor: #000000;
   --fontColor-light: #464646;
   --fontColor-lighter: #808080;
@@ -121,4 +123,9 @@ body {
 
 a {
   color: var(--fontColor);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }

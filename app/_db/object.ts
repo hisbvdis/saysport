@@ -85,7 +85,7 @@ export const getObjectsByFilters = async (filters?:Filters):Promise<{requested:D
     orderBy: [desc(object.created)],
     limit: new Placeholder("limit") ?? undefined,
     offset: new Placeholder("offset") ?? undefined,
-  }).prepare("query_name");
+  }).prepare("");
   const requested = await prepared.execute({limit: limit, offset: page ? (Number(page) - 1) * 10 : undefined});
   const unlimited = withUnlimited ? await prepared.execute({limit: undefined, offset: undefined}) : undefined;
   const totalCount = withTotalCount ? (await db.select({count: count()}).from(object).where(whereCondition))[0].count : undefined;

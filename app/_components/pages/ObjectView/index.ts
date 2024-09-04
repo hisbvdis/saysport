@@ -7,5 +7,6 @@ import Sections from "./Sections/Sections";
 import Contacts from "./Contacts/Contacts";
 import Usages from "./Usages/Usages";
 import Gallery from "./Gallery/Gallery";
+import MoreSections from "./MoreSections/MoreSections";
 
-export { Header, ObjectView, ObjectViewContext, Description, Children, Sections, Contacts, Usages, Gallery };
+export { Header, ObjectView, ObjectViewContext, Description, Children, Sections, Contacts, Usages, Gallery, MoreSections };

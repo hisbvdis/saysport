@@ -19,9 +19,4 @@
 .breadcrumbs__link,
 .breadcrumbs__span {
   color: var(--fontColor);
-  text-decoration: none;
-}
-
-.breadcrumbs__link:hover {
-  text-decoration: underline;
 }

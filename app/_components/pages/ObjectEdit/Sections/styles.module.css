@@ -1,9 +1,0 @@
-.sections__sectionName,
-.sections__specName {
-  text-decoration: none;
-}
-
-.sections__sectionName:hover,
-.sections__specName:hover {
-  text-decoration: underline;
-}
