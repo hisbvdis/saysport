@@ -20,8 +20,8 @@
     "leaflet.markercluster": "^1.5.3",
     "mutative": "^1.0.8",
     "nanoid": "^5.0.7",
-    "next": "14.2.7",
-    "next-auth": "^5.0.0-beta.20",
+    "next": "14.2.8",
+    "next-auth": "^4.24.7",
     "pg": "^8.12.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -29,14 +29,14 @@
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.12",
-    "@types/node": "^22.5.3",
+    "@types/node": "^22.5.4",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.24.2",
-    "eslint": "^9.9.1",
-    "eslint-config-next": "14.2.7",
-    "knip": "^5.29.2",
+    "eslint": "^9.10.0",
+    "eslint-config-next": "14.2.8",
+    "knip": "^5.30.0",
     "typescript": "^5.5.4"
   }
 }

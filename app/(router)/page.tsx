@@ -42,6 +42,7 @@ export async function generateMetadata({searchParams}:Props):Promise<Metadata> {
       canonical: (() => {
         const baseUrl = "/";
         const searchParams = new URLSearchParams();
+        if (!city) baseUrl;
         if (city) searchParams.append("city", String(city.city_id));
         if (section) searchParams.append("section", String(section.section_id));
         return baseUrl.concat(Array.from(searchParams.keys()).length ? "?" : "").concat(searchParams.toString());
