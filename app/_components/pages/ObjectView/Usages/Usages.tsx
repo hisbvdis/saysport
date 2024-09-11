@@ -1,9 +1,11 @@
+import { format } from "date-fns";
 import { useContext } from "react";
+import { objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectViewContext } from "../ObjectView";
-import { objectTypeEnum } from "@/drizzle/schema";
-import { format } from "date-fns";
+import { PlaceSchedule, ClassSchedule } from "../";
+// -----------------------------------------------------------------------------
 
 
 export default function Usages() {
@@ -12,9 +14,11 @@ export default function Usages() {
   return (
     <Card>
       <Card.Heading style={{display: "flex"}}>
-        <p>{state.type === objectTypeEnum.place ? "Использование" : "Расписание"}</p>
-        {state.schedule_date ? <p>&nbsp;от {format(state.schedule_date, "yyyy-MM-dd")}&nbsp;</p> : null}
-        {state.schedule_source ? <a href={`${state.schedule_source}`}>(Источник)</a> : null}
+        <p>
+          <span>{state.type === objectTypeEnum.place ? "Использование" : "Расписание"}</span>
+          {state.schedule_date ? <span>&nbsp;от {format(state.schedule_date, "yyyy-MM-dd")}&nbsp;</span> : null}
+          {state.schedule_source ? <a href={`${state.schedule_source}`}>(Источник)</a> : null}
+        </p>
       </Card.Heading>
       {state.usages.length ? state.usages.toSorted((a, b) => a.order - b.order).map((usage) => (
         <Card.Section key={usage.uiID}>
@@ -26,24 +30,9 @@ export default function Usages() {
             </p>
           ) : null}
           <p style={{marginBlockStart: "5px"}}>{usage.description}</p>
-          {usage.schedules.filter((schedule) => schedule.time).length > 0 ? (
-            <div style={{marginBlockStart: "5px"}}>
-              <table style={{marginBlockStart: "10px", inlineSize: "100%", borderCollapse: "collapse"}}>
-                <tbody>
-                  <tr>
-                    {usage.schedules.map((day, i) => (
-                      <td key={i} style={{textAlign: "center", fontSize: "0.9em", border: "1px solid #eee", backgroundColor: "#fafafa", inlineSize: "calc(100% / 7)"}}>{["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][day.day_num]}</td>
-                    ))}
-                  </tr>
-                  <tr>
-                    {usage.schedules.map((localDay, i) => usage.schedules.find((schedule) => schedule.day_num === localDay.day_num) ?? localDay).map((day, i) => (
-                      <td key={i} style={{verticalAlign: "top", whiteSpace: "pre-wrap", textAlign: "center", fontSize: "0.8em", border: "1px solid #eee", inlineSize: "calc(100% / 7)"}}>{day?.time}</td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          ) : null}
+					{usage.schedules.filter((schedule) => schedule.time).length > 0 ? (
+            state.type === objectTypeEnum.class ? <ClassSchedule usage={usage}/> : <PlaceSchedule usage={usage}/>
+          ) : <p>Неизвестно</p>}
         </Card.Section>
       )) : (
         <Card.Section>Неизвестно</Card.Section>

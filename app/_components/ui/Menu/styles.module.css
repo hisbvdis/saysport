@@ -11,13 +11,9 @@
 
   background-color: var(--color-white);
   border: 1px solid var(--textField-borderColor);
-  /* box-shadow: 0 1px 3px rgb(0 0 0 / 0.08); */
+  box-shadow: var(--boxShadow);
   list-style: none;
   overflow: auto;
-}
-
-.menu__item {
-
 }
 
 .menu__link {
@@ -35,4 +31,12 @@
 
 .menu__item--focus .menu__link {
   background-color: var(--control-hovered-backgroundColor);
+}
+
+@media (width < 768px) {
+  .menu__link {
+    padding: var(--card-padding);
+
+    font-size: 1rem;
+  }
 }

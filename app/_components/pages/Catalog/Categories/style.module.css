@@ -1,44 +1,105 @@
-.categories__list {
+.catetories__select {
+  padding: var(--card-padding);
 
+  font-size: 1rem;
+
+  border: 1px solid var(--card-borderColor);
+  border-block-start: none;
 }
 
 .categories__item {
   position: relative;
-  padding: 15px 15px;
 }
 
-.categories__item:hover {
+.categories__item + .categories__item {
+  border-block-start: 1px solid var(--card-borderColor);
+}
+
+.categories__itemButton {
+  inline-size: 100%;
+  padding: 15px 15px;
+
+  font-size: inherit;
+  text-align: start;
+
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.categories__itemButton:is(:focus-visible, :hover) {
   background-color: var(--control-hovered-backgroundColor);
 }
 
 .categories__popup {
   position: absolute;
-  inset-inline-start: 100%;
-  inset-block-start: 0;
-  padding: var(--card-padding);
-  display: none;
-  /* display: flex; */
-  gap: 20px;
 
-  background-color: var(--color-white);
-  box-shadow: 0 0px 10px rgb(0 0 0 / 0.2);
+  inline-size: 0;
+  block-size: 0;
+  margin: -1px;
+  padding: 0;
+
+  white-space: nowrap;
+
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(100%);
 }
 
-.categories__item:hover .categories__popup {
-  display: flex;
-}
-
-.categories__column {
-  min-inline-size: 200px;
-
-  font-size: 0.9rem;
-}
-
-.categories__heading {
-  margin-block-end: 10px;
-  padding-block-end: 10px;
+.categories__popupHeading {
+  margin-block-end: 3px;
 
   font-size: 1rem;
+}
 
-  border-block-end: 1px solid var(--card-borderColor);
+.categories__link {
+  display: inline-block;
+  margin-block-end: 5px;
+}
+
+@media (width < 768px) {
+  .categories__heading {
+    display: none;
+  }
+
+  .categories__item--isOpened .categories__itemButton {
+    background-color: var(--color-brand-light);
+  }
+
+  .categories__item--isOpened .categories__popup {
+    all: revert;
+    display: block;
+    padding: var(--card-padding);
+  }
+
+  .categories__popup {
+    padding-inline-start: 50px;
+  }
+
+  .categories__popupColumn + .categories__popupColumn {
+    margin-block-start: 15px;
+  }
+}
+
+@media (width >= 768px) {
+  .categories__item:hover .categories__popup {
+    all: revert;
+    position: absolute;
+    inset-inline-start: 100%;
+    inset-block-start: 0;
+
+    display: flex;
+    gap: 20px;
+    inline-size: 100vw;
+    max-inline-size: min(640px, calc(100vw - 330px));
+    padding: var(--card-padding);
+
+    background-color: var(--color-white);
+    box-shadow: var(--boxShadow);
+  }
+
+  .categories__popupColumn {
+    flex: 1;
+  }
 }

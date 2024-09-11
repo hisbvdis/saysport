@@ -9,10 +9,7 @@
 }
 
 .select__input {
-  font-size: inherit;
   cursor: default;
-
-  font-size: var(--textField-fontSize, 0.8125rem);
 }
 
 .select__input--isAutocomplete {

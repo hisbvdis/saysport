@@ -1,0 +1,16 @@
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-inline: 20px;
+
+  color: var(--color-white);
+
+  background:
+    linear-gradient(rgb(0 0 0 / 0.6), rgb(0 0 0 / 0.6)),
+    url("/images/hero.webp") left / cover no-repeat;
+}
+
+.hero__heading {
+  text-align: center;
+}

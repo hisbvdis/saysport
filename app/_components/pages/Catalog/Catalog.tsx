@@ -9,7 +9,7 @@ import type { DBObject, ProcCategory, ProcSection } from "@/app/_types/types"
 import { Card } from "../../ui/Card";
 import { Select } from "../../ui/Select";
 import { Control } from "../../ui/Control";
-import { Filters, Results, Categories } from ".";
+import { Filters, Results, Categories, Hero, PopularSections } from ".";
 import { Pagination } from "../../ui/Pagination";
 import { MapCluster } from "../../ui/MapComponent";
 import { MapComponent } from "../../ui/MapComponent";
@@ -27,9 +27,10 @@ export default function Catalog(props:Props) {
 
   return (
     <CatalogContext.Provider value={{searchParams, results, categories, section, city, commonSections}}>
-      <div className={clsx(styles["catalog"], !searchParams.map && "container", "page")}>
-        <aside>
-          <Card>
+      <div className={clsx(styles["catalog"], "container", styles["catalog__container"], "page", styles["catalog__page"])}>
+        {searchParams.section ? null : <Hero className={styles["catalog__hero"]}/>}
+        <aside className={styles["catalog__aside"]}>
+          <Card className={styles["catalog__city"]}>
             <Control>
               <Control.Label>Город</Control.Label>
               <Select
@@ -48,8 +49,12 @@ export default function Catalog(props:Props) {
           {searchParams.section ? <Filters/> : <Categories/>}
         </aside>
         <main className={styles["catalog__main"]}>
-          <Results/>
-          <Pagination itemsCount={results.totalCount ?? 0} pageSize={10} currentPage={searchParams.page ? Number(searchParams.page) : 1}/>
+          {searchParams.section ? (<>
+            <Results/>
+            <Pagination itemsCount={results.totalCount ?? 0} pageSize={10} currentPage={searchParams.page ? Number(searchParams.page) : 1}/>
+          </>) : (
+            <PopularSections/>
+          )}
         </main>
         {searchParams.map &&
           <MapComponent className={styles["catalog__map"]} fitBoundsArray={results.unlimited?.map((object) => [object.coord_lat, object.coord_lon])}>

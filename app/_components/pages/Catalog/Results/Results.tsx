@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { SearchPanel } from "@/app/_components/blocks/SearchPanel";
 // -----------------------------------------------------------------------------
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+// -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
@@ -23,9 +24,9 @@ export default function Results() {
           {label: city?.name ?? "", href: section?.section_id ? `?city=${city?.city_id}` : null},
           {label: section?.name_public_plural ?? ""}
         ]}/>
-        <h1 style={{fontWeight: "400"}}>
+        <h1 style={{fontWeight: "400", position: "relative", display: "inline-block"}}>
           <span>{section?.name_seo_title ?? "Спортивные объекты и секции"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
-          <sup style={{fontSize: "0.5em"}}>{results.totalCount}</sup>
+          <sup style={{fontSize: "0.5em", position: "absolute", insetInlineStart: "100%"}}>{results.totalCount}</sup>
         </h1>
         <SearchPanel/>
       </Card.Heading>
@@ -38,7 +39,7 @@ export default function Results() {
       </Card.Section>
       {results.requested?.map((object) => (
         <Card.Section key={object.object_id} style={{display: "grid", gap: "15px", gridTemplateColumns: "1fr 1.5fr"}}>
-          <img src={object.photos?.length ? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${object.photos[0].name}` : "/no-photo.svg"} width="250" height="210" alt={object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")} loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
+          <img src={object.photos?.length ? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${object.photos[0].name}` : "/images/no-photo.svg"} width="250" height="210" alt={object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")} loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
           <div>
             {object.type === objectTypeEnum.org || (object.type === objectTypeEnum.place && !object.parent_id) ? (
               <h4><Link className={styles["results__link"]} href={`object/${object.object_id}`}>{object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</Link></h4>

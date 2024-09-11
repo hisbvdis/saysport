@@ -22,5 +22,5 @@
 }
 
 .pagination__link--active {
-  background-color: var(--color-brand-lighter);
+  background-color: var(--color-brand-light);
 }

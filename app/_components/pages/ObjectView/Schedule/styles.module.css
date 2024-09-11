@@ -1,0 +1,27 @@
+.table {
+  inline-size: 100%;
+
+  text-align: center;
+
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table--periods {
+  font-size: 0.9em;
+}
+
+.table__th {
+  font-weight: 400;
+
+  background-color: var(--color-brand-lightest);
+}
+
+.table__th,
+.table__td {
+  border: 1px solid var(--card-borderColor);
+}
+
+.table__td--filled {
+  background-color: var(--color-brand-light);
+}

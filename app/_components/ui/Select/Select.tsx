@@ -13,6 +13,7 @@ import styles from "./styles.module.css";
 
 
 export default function Select(props:Props) {
+  const { className } = props;
   const { requestItemsOnInputChange, requestItemsOnFirstTouch, requestMinInputLenght=3 } = props;
   const { onChange=(e=>e), onChangeData=(e=>e) } = props;
   const { placeholder, disabled, isAutocomplete, required } = props;
@@ -51,6 +52,10 @@ export default function Select(props:Props) {
 
   const handleInputChange = async (e:ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    setSuggestions([]);
+    if (!e.target.value) {
+      setIsShowMenu(false);
+    }
     if (requestItemsOnInputChange) {
       if (e.target.value.length < requestMinInputLenght) return;
       debounce(async () => {
@@ -147,17 +152,17 @@ export default function Select(props:Props) {
       <p className={styles["select__inputWrapper"]}>
         <Input
           className={clsx(styles["select__input"], isAutocomplete && styles["select__input--isAutocomplete"])}
-          ref={inputRef}
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyDown={handleInputKeydown}
-          onClick={handleInputClick}
-          onFocus={handleInputFocus}
-          placeholder={placeholder}
-          disabled={disabled}
-          readOnly={!isAutocomplete}
-          required={required}
-        />
+              ref={inputRef}
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleInputKeydown}
+              onClick={handleInputClick}
+              onFocus={handleInputFocus}
+              placeholder={placeholder}
+              disabled={disabled}
+              readOnly={!isAutocomplete}
+              required={required}
+            />
         {!isAutocomplete || (props.items?.length && !props.value) ?
           <Button className={clsx(styles["select__button"], styles["select__button--arrow"])} disabled={disabled} tabIndex={-1}>
             <ArrowDownIcon className={clsx("icon", disabled && "disabled")}/>
@@ -196,6 +201,7 @@ interface Props {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
+  className?: string;
 }
 
 interface Item {

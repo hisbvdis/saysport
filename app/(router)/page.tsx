@@ -5,8 +5,8 @@ import { Catalog } from "@/app/_components/pages/Catalog";
 // -----------------------------------------------------------------------------
 import { getCityById } from "@/app/_db/city";
 import { getAllCategories } from "@/app/_db/category";
-import { getSectionById, getSectionsByFilters } from "@/app/_db/section";
 import { getObjectsByFilters } from "@/app/_db/object"
+import { getSectionById, getSectionsByFilters } from "@/app/_db/section";
 // -----------------------------------------------------------------------------
 
 

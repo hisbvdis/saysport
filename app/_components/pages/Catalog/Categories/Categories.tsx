@@ -1,7 +1,8 @@
 "use client";
+import clsx from "clsx";
 import Link from "next/link";
-import { useContext } from "react";
 import { useRouter } from "next/navigation";
+import { useContext, useState } from "react";
 import { objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
@@ -14,16 +15,19 @@ import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 import styles from "./style.module.css";
 
 
-export default function Categories() {
+export default function Categories(props:Props) {
+  const router = useRouter();
+  const { className } = props;
   const { categories } = useContext(CatalogContext);
   const manageSearchParams = useManageSearchParams();
-  const router = useRouter();
+  const [isOpenedCategory, setIsOpenedCategory] = useState<number|null>(null);
 
   return (
-    <Card style={{marginBlockStart: "10px"}}>
-      <Card.Heading>Категории</Card.Heading>
+    <Card className={clsx(styles["categories"], className)}>
+      <Card.Heading className={styles["categories__heading"]}>Категории</Card.Heading>
       <Card.Section style={{padding: 0}}>
         <Select
+          className={styles["catetories__select"]}
           isAutocomplete
           onChange={(data) => {
             const paramsWithoutPageParam = manageSearchParams.delete(["page"]);
@@ -36,36 +40,36 @@ export default function Categories() {
           }
         />
         <ul className={styles["categories__list"]}>
-          {categories.filter((category) => category.sections.length).map((category) => (
-            <li key={category.category_id} className={styles["categories__item"]}>
-              <span>{category.name}</span>
+          {categories.filter((category) => category.sections.length).map((category, i) => (
+            <li key={category.category_id} className={clsx(styles["categories__item"], i === isOpenedCategory && styles["categories__item--isOpened"])}>
+              <button className={styles["categories__itemButton"]} type="button" onClick={() => setIsOpenedCategory(i === isOpenedCategory ? null : i)}>{category.name}</button>
               <section className={styles["categories__popup"]}>
-                <div className={styles["categories__column"]}>
-                  <h3 className={styles["categories__heading"]}>Организации</h3>
+                <div className={styles["categories__popupColumn"]}>
+                  <h3 className={styles["categories__popupHeading"]}>Организации</h3>
                   <ul>
                     {category.sections.filter((section) => section.object_type === objectTypeEnum.org).map((section) => (
                       <li key={section.section_id}>
-                        <Link href={manageSearchParams.set("section", String(section.section_id))}>{section.name_public_plural}</Link>
+                        <Link className={styles["categories__link"]} href={manageSearchParams.set("section", String(section.section_id))} tabIndex={i === isOpenedCategory ? 0 : -1}>{section.name_public_plural}</Link>
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className={styles["categories__column"]}>
-                  <h3 className={styles["categories__heading"]}>Места</h3>
+                <div className={styles["categories__popupColumn"]}>
+                  <h3 className={styles["categories__popupHeading"]}>Места</h3>
                   <ul>
                   {category.sections.filter((section) => section.object_type === objectTypeEnum.place).map((section) => (
                       <li key={section.section_id}>
-                        <Link href={manageSearchParams.set("section", String(section.section_id))}>{section.name_public_plural}</Link>
+                        <Link className={styles["categories__link"]} href={manageSearchParams.set("section", String(section.section_id))} tabIndex={i === isOpenedCategory ? 0 : -1}>{section.name_public_plural}</Link>
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className={styles["categories__column"]}>
-                  <h3 className={styles["categories__heading"]}>Секции</h3>
+                <div className={styles["categories__popupColumn"]}>
+                  <h3 className={styles["categories__popupHeading"]}>Секции</h3>
                   <ul>
                   {category.sections.filter((section) => section.object_type === objectTypeEnum.class).map((section) => (
                       <li key={section.section_id}>
-                        <Link href={manageSearchParams.set("section", String(section.section_id))}>{section.name_public_plural}</Link>
+                        <Link className={styles["categories__link"]} href={manageSearchParams.set("section", String(section.section_id))} tabIndex={i === isOpenedCategory ? 0 : -1}>{section.name_public_plural}</Link>
                       </li>
                     ))}
                   </ul>

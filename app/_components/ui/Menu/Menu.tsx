@@ -44,7 +44,7 @@ export default function Menu(props:Props) {
   }
 
   const handlePointerDown = (e:React.PointerEvent<HTMLLIElement>) => {
-    if (e.pointerId !== 1) return;
+    if (e.pointerType === "mouse" && e.pointerId !== 1) return;
     if (onSelect) onSelect(focusIndex);
   }
 
@@ -69,7 +69,7 @@ export default function Menu(props:Props) {
   return (
     <ul className={clsx(styles["menu"], className)} style={style} ref={itemsListRef}>
       {items?.map((item, i) => (
-        <li key={i} className={clsx(styles["menu__item"], i === focusIndex && styles["menu__item--focus"])} onPointerDown={handlePointerDown} onPointerEnter={() => setFocusIndex(i)}>
+        <li key={i} className={clsx(styles["menu__item"], i === focusIndex && styles["menu__item--focus"])} onClick={handlePointerDown} onPointerEnter={() => setFocusIndex(i)}>
           <p className={styles["menu__link"]} style={{whiteSpace: "pre-wrap"}}>{item.label}</p>
         </li>
       ))}

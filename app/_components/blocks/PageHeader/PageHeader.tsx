@@ -16,10 +16,10 @@ export default async function PageHeader() {
         <Logo/>
         {session ? (
           <>
-            <Link className={styles["pageHeader__link"]} href="/admin">Админ</Link>
-            <Link className={styles["pageHeader__link"]} href="/object/add/org">Орг</Link>
-            <Link className={styles["pageHeader__link"]} href="/object/add/place">Место</Link>
-            <Link className={styles["pageHeader__link"]} href="/object/add/class">Секция</Link>
+            <Link className={styles["pageHeader__link"]} href="/admin">Adm</Link>
+            <Link className={styles["pageHeader__link"]} href="/object/add/org">Org</Link>
+            <Link className={styles["pageHeader__link"]} href="/object/add/place">Plc</Link>
+            <Link className={styles["pageHeader__link"]} href="/object/add/class">Cls</Link>
             <form action={async () => {
               "use server";
               await signOut();

@@ -5,7 +5,7 @@
 /* VARIABLES */
 :root {
   --color-brand-lightest: #FAFBFC;
-  --color-brand-lighter: #E7EDF2;
+  --color-brand-light: #E7EDF2;
   --color-brand: #507299;
   --color-red: #FF0000;
   --color-white: #FFFFFF;
@@ -32,6 +32,9 @@
 
   --controls-gap: 20px;
   --sections-gap: 10px;
+
+  --tablet: 768px;
+  --desktop: 905px;
 }
 
 
@@ -93,7 +96,7 @@ body {
 }
 
 .page {
-  margin-block-start: 10px;
+  margin-block-start: 15px;
 }
 
 /* .srOnly:not(:focus):not(:active):not(:focus-within) { */
