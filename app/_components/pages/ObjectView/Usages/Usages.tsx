@@ -16,7 +16,7 @@ export default function Usages() {
       <Card.Heading style={{display: "flex"}}>
         <p>
           <span>{state.type === objectTypeEnum.place ? "Использование" : "Расписание"}</span>
-          {state.schedule_date ? <span>&nbsp;от {format(state.schedule_date, "yyyy-MM-dd")}&nbsp;</span> : null}
+          {state.schedule_date ? <span>&nbsp;от {format(state.schedule_date, "dd.MM.yyyy")}&nbsp;</span> : null}
           {state.schedule_source ? <a href={`${state.schedule_source}`}>(Источник)</a> : null}
         </p>
       </Card.Heading>

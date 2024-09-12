@@ -31,11 +31,11 @@ export default function Filters() {
   }
 
   return (<>
-    <Card style={{marginBlockStart: "10px"}}>
+    <Card>
       <Card.Heading style={{display: "flex", alignItems: "center"}}>
         <span style={{marginInlineEnd: "auto", paddingInlineEnd: "20px"}}>{section?.name_seo_title}</span>
-        {Object.keys(searchParams).filter((paramName) => !["section", "city", "map"].includes(paramName) ).length
-          ? <Link href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => !["section", "city", "map"].includes(paramName)))} style={{display: "flex", alignItems: "center"}} scroll={false}>
+        {Object.keys(searchParams).filter((paramName) => !["section", "city", "map", "page"].includes(paramName) ).length
+          ? <Link href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => !["section", "city", "map", "page"].includes(paramName)))} style={{display: "flex", alignItems: "center"}} scroll={false}>
               <img src="/icons/bin.svg" width={24} height={24} alt="Map Pin" style={{inlineSize: "19px", blockSize: "19px"}}/>
             </Link>
           : null

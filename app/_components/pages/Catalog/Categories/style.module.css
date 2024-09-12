@@ -58,11 +58,7 @@
   margin-block-end: 5px;
 }
 
-@media (width < 768px) {
-  .categories__heading {
-    display: none;
-  }
-
+@media (width < 905px) {
   .categories__item--isOpened .categories__itemButton {
     background-color: var(--color-brand-light);
   }
@@ -82,7 +78,7 @@
   }
 }
 
-@media (width >= 768px) {
+@media (width >= 905px) {
   .categories__item:hover .categories__popup {
     all: revert;
     position: absolute;
@@ -96,7 +92,7 @@
     padding: var(--card-padding);
 
     background-color: var(--color-white);
-    box-shadow: var(--boxShadow);
+    box-shadow: var(--boxShadow--thin);
   }
 
   .categories__popupColumn {

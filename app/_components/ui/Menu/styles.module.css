@@ -33,7 +33,7 @@
   background-color: var(--control-hovered-backgroundColor);
 }
 
-@media (width < 768px) {
+@media (width < 905px) {
   .menu__link {
     padding: var(--card-padding);
 

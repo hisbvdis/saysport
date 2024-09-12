@@ -27,10 +27,10 @@ export default function Catalog(props:Props) {
 
   return (
     <CatalogContext.Provider value={{searchParams, results, categories, section, city, commonSections}}>
-      <div className={clsx(styles["catalog"], "container", styles["catalog__container"], "page", styles["catalog__page"])}>
+      <div className={clsx(styles["catalog"], "container", styles["catalog__container"], "page")}>
         {searchParams.section ? null : <Hero className={styles["catalog__hero"]}/>}
         <aside className={styles["catalog__aside"]}>
-          <Card className={styles["catalog__city"]}>
+          <Card>
             <Control>
               <Control.Label>Город</Control.Label>
               <Select
@@ -38,7 +38,7 @@ export default function Catalog(props:Props) {
                 value={city?.city_id ? String(city?.city_id) : ""}
                 label={city?.name}
                 onChange={(data) => {data.value ? router.push(manageSearchParams.set("city", data.value, manageSearchParams.delete(["page"]))) : router.push(manageSearchParams.delete(["city"]))}}
-                placeholder="Введите название"
+                placeholder="Введите город"
                 requestItemsOnInputChange={async (inputValue) => (
                   await getCitiesByFilters({name: inputValue})).map((city) => ({
                     id: city.city_id, label: `${city.name.concat(city.admin1 ? `, ${city.admin1}` : "").concat(city.country ? `, ${city.country}` : "")}`, data: city
@@ -49,12 +49,13 @@ export default function Catalog(props:Props) {
           {searchParams.section ? <Filters/> : <Categories/>}
         </aside>
         <main className={styles["catalog__main"]}>
-          {searchParams.section ? (<>
-            <Results/>
-            <Pagination itemsCount={results.totalCount ?? 0} pageSize={10} currentPage={searchParams.page ? Number(searchParams.page) : 1}/>
-          </>) : (
-            <PopularSections/>
-          )}
+          {searchParams.section
+            ? <>
+                <Results/>
+                <Pagination itemsCount={results.totalCount ?? 0} pageSize={10} currentPage={searchParams.page ? Number(searchParams.page) : 1}/>
+              </>
+            : <PopularSections className={styles["catalog__popularSections"]}/>
+          }
         </main>
         {searchParams.map &&
           <MapComponent className={styles["catalog__map"]} fitBoundsArray={results.unlimited?.map((object) => [object.coord_lat, object.coord_lon])}>

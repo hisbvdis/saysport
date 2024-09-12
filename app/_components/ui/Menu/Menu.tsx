@@ -85,8 +85,3 @@ interface Props {
   style?: React.CSSProperties;
   onSelect?: (index:number) => void;
 }
-
-export interface MenuItem {
-  id: string | number;
-  label: string | null;
-}

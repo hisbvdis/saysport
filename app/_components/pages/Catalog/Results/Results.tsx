@@ -16,8 +16,8 @@ export default function Results() {
   const { searchParams, city, section, results } = useContext(CatalogContext);
   const manageSearchParams = useManageSearchParams();
 
-  return (
-    <Card>
+  return (<>
+    <Card className={styles["results"]}>
       <Card.Heading>
         <Breadcrumbs style={{fontSize: "0.85em", marginBlockEnd: "5px"}} items={[
           {label: "Каталог", href: city || section ? "/" : null},
@@ -30,30 +30,30 @@ export default function Results() {
         </h1>
         <SearchPanel/>
       </Card.Heading>
-      <Card.Section style={{display: "flex", justifyContent: "space-between"}}>
-        <p>Сортировка: По дате добавления</p>
+      {/* <Card.Section style={{display: "flex", justifyContent: "space-between", backgroundColor: "white"}}>
         <Link href={searchParams.map ? manageSearchParams.delete(["map"]) : manageSearchParams.set("map", "true")} style={{display: "flex", alignItems: "center", gap: "5px"}}>
           <img src="/icons/map-pin.svg" width={15} height={20} alt="Map Pin"/>
           <span>Карта</span>
         </Link>
-      </Card.Section>
-      {results.requested?.map((object) => (
-        <Card.Section key={object.object_id} style={{display: "grid", gap: "15px", gridTemplateColumns: "1fr 1.5fr"}}>
-          <img src={object.photos?.length ? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${object.photos[0].name}` : "/images/no-photo.svg"} width="250" height="210" alt={object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")} loading="lazy" style={{maxInlineSize: "100%", height: "auto", aspectRatio: "250/210", objectFit: "cover"}}/>
-          <div>
-            {object.type === objectTypeEnum.org || (object.type === objectTypeEnum.place && !object.parent_id) ? (
-              <h4><Link className={styles["results__link"]} href={`object/${object.object_id}`}>{object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</Link></h4>
-            ) : (
-              <>
-                <h4><Link className={styles["results__link"]} href={`object/${object.object_id}`}>{object.name_type}</Link></h4>
-                <p><Link className={styles["results__linkParent"]} href={`object/${object.parent_id}`}>{object.name_where}</Link></p>
-              </>
-            )}
-            <p className={styles["results__address"]}>{object.city?.name}, {object.address}</p>
-            <hr/>
-          </div>
-        </Card.Section>
-      ))}
+      </Card.Section> */}
     </Card>
-  )
+    <ul className={styles["results__list"]}>
+      {results.requested?.map((object) => (
+        <li key={object.object_id} className={styles["results__item"]}>
+          <Link href={`object/${object.object_id}`}>
+            <img className={styles["results__photo"]} src={object.photos?.length ? `${process.env.NEXT_PUBLIC_PHOTOS_PATH}/${object.photos[0].name}` : "/images/no-photo.svg"} width="250" height="210" alt={object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")} loading="lazy"/>
+          </Link>
+          <div className={styles["results__info"]}>
+            {object.type === objectTypeEnum.org || (object.type === objectTypeEnum.place && !object.parent_id)
+              ? <h4><Link className={styles["results__title"]} href={`object/${object.object_id}`}>{object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</Link></h4>
+              : <>
+                  <h4><Link className={styles["results__title"]} href={`object/${object.object_id}`}>{object.name_type}</Link></h4>
+                  <p><Link className={styles["results__parent"]} href={`object/${object.parent_id}`}>{object.name_where}</Link></p>
+                </>}
+            <p className={styles["results__address"]}>{object.city?.name}, {object.address}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </>)
 }

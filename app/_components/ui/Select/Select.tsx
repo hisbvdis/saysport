@@ -151,18 +151,18 @@ export default function Select(props:Props) {
     <div className={clsx(styles["select"], disabled && styles["select--disabled"])} ref={divRef}>
       <p className={styles["select__inputWrapper"]}>
         <Input
-          className={clsx(styles["select__input"], isAutocomplete && styles["select__input--isAutocomplete"])}
-              ref={inputRef}
-              value={inputValue}
-              onChange={handleInputChange}
-              onKeyDown={handleInputKeydown}
-              onClick={handleInputClick}
-              onFocus={handleInputFocus}
-              placeholder={placeholder}
-              disabled={disabled}
-              readOnly={!isAutocomplete}
-              required={required}
-            />
+          className={clsx(styles["select__input"], isAutocomplete && styles["select__input--isAutocomplete"], className)}
+          ref={inputRef}
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleInputKeydown}
+          onClick={handleInputClick}
+          onFocus={handleInputFocus}
+          placeholder={placeholder}
+          disabled={disabled}
+          readOnly={!isAutocomplete}
+          required={required}
+        />
         {!isAutocomplete || (props.items?.length && !props.value) ?
           <Button className={clsx(styles["select__button"], styles["select__button--arrow"])} disabled={disabled} tabIndex={-1}>
             <ArrowDownIcon className={clsx("icon", disabled && "disabled")}/>

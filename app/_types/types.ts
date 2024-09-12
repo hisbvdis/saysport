@@ -92,7 +92,7 @@ export interface ProcObjectSchedule extends ObjectSchedule {
   uiID: string;
 }
 
-export interface EditObjectSchedule extends Omit<ProcObjectSchedule, "object_on_usage_id"|"object_id"|"schedule_id"> {
+interface EditObjectSchedule extends Omit<ProcObjectSchedule, "object_on_usage_id"|"object_id"|"schedule_id"> {
   object_id: ProcObjectSchedule["object_id"] | null;
   object_on_usage_id: ProcObjectSchedule["object_on_usage_id"] | null;
   schedule_id: ProcObjectSchedule["schedule_id"] | null;
@@ -102,7 +102,7 @@ export interface EditObjectSchedule extends Omit<ProcObjectSchedule, "object_on_
 // =============================================================================
 // PHOTO
 // =============================================================================
-export interface EditObjectPhoto extends Omit<ObjectPhoto, "object_id" | "photo_id"> {
+interface EditObjectPhoto extends Omit<ObjectPhoto, "object_id" | "photo_id"> {
   object_id: ObjectPhoto["object_id"] | null;
   photo_id: ObjectPhoto["photo_id"] | null;
   uiID: string;

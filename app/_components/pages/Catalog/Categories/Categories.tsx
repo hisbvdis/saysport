@@ -33,7 +33,7 @@ export default function Categories(props:Props) {
             const paramsWithoutPageParam = manageSearchParams.delete(["page"]);
             router.push(manageSearchParams.set("section", data.value, paramsWithoutPageParam))
           }}
-          placeholder="Найти раздел"
+          placeholder="Найти раздел..."
           requestItemsOnInputChange={async (name) =>
             (await getSectionsByFilters({name_public_plural: name}))
               ?.map((section) => ({id: section.section_id, label: section.name_service, data: section}))
@@ -47,7 +47,7 @@ export default function Categories(props:Props) {
                 <div className={styles["categories__popupColumn"]}>
                   <h3 className={styles["categories__popupHeading"]}>Организации</h3>
                   <ul>
-                    {category.sections.filter((section) => section.object_type === objectTypeEnum.org).map((section) => (
+                    {category.sections.filter((section) => section.object_type === objectTypeEnum.org).toSorted((a, b) => a.name_public_plural.localeCompare(b.name_public_plural)).map((section) => (
                       <li key={section.section_id}>
                         <Link className={styles["categories__link"]} href={manageSearchParams.set("section", String(section.section_id))} tabIndex={i === isOpenedCategory ? 0 : -1}>{section.name_public_plural}</Link>
                       </li>
@@ -57,7 +57,7 @@ export default function Categories(props:Props) {
                 <div className={styles["categories__popupColumn"]}>
                   <h3 className={styles["categories__popupHeading"]}>Места</h3>
                   <ul>
-                  {category.sections.filter((section) => section.object_type === objectTypeEnum.place).map((section) => (
+                  {category.sections.filter((section) => section.object_type === objectTypeEnum.place).toSorted((a, b) => a.name_public_plural.localeCompare(b.name_public_plural)).map((section) => (
                       <li key={section.section_id}>
                         <Link className={styles["categories__link"]} href={manageSearchParams.set("section", String(section.section_id))} tabIndex={i === isOpenedCategory ? 0 : -1}>{section.name_public_plural}</Link>
                       </li>
@@ -67,7 +67,7 @@ export default function Categories(props:Props) {
                 <div className={styles["categories__popupColumn"]}>
                   <h3 className={styles["categories__popupHeading"]}>Секции</h3>
                   <ul>
-                  {category.sections.filter((section) => section.object_type === objectTypeEnum.class).map((section) => (
+                  {category.sections.filter((section) => section.object_type === objectTypeEnum.class).toSorted((a, b) => a.name_public_plural.localeCompare(b.name_public_plural)).map((section) => (
                       <li key={section.section_id}>
                         <Link className={styles["categories__link"]} href={manageSearchParams.set("section", String(section.section_id))} tabIndex={i === isOpenedCategory ? 0 : -1}>{section.name_public_plural}</Link>
                       </li>

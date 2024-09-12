@@ -8,6 +8,7 @@ import styles from "./styles.module.css";
 
 export default function Card(props:Props) {
   const { className, children, style } = props;
+
   return (
     <section className={clsx(styles.card, className)} style={style}>
       {children}
