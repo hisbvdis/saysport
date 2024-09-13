@@ -40,9 +40,6 @@ export default function Filters() {
             </Link>
           : null
         }
-        <a href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => !["city"].includes(paramName)))}>
-          <img src="/icons/close.svg" width={15} height={20} alt="Close Icon"/>
-        </a>
       </Card.Heading>
       {section?.specs
         .concat(section.object_type !== objectTypeEnum.org ? commonSections.filter((section) => section.section_type === sectionTypeEnum.common && section.object_type !== objectTypeEnum.org).flatMap((section) => section.specs) : [])

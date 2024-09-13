@@ -1,24 +1,25 @@
-.catalog {
+.home {
   display: grid;
+  grid-template-rows: 150px;
   gap: 10px;
 }
 
-.catalog__aside {
+.home__aside {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
 @media (width < 905px) {
-  .catalog {
+  .home {
     padding-inline: 0;
   }
 }
 
 @media (width >= 905px) {
-  .catalog {
+  .home {
     grid-template-columns: 250px 1fr;
-    /* grid-template-rows: 150px auto auto; */
+    grid-template-rows: 200px;
   }
 
   .home__aside {

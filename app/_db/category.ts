@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client"
 import { category, category_on_section, type Category } from "@/drizzle/schema"
 import { categoryReadProcessing } from "./category.processing"
-import type { DBCategory, EditCategory, ProcCategory } from "../_types/types"
+import type { DBCategory, EditCategory, ProcessedCategory } from "../_types/types"
 import { and, eq, inArray } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
@@ -16,7 +16,7 @@ export const getEmptyCategory = async ():Promise<EditCategory> => {
   }
 }
 
-export const getAllCategories = async ():Promise<ProcCategory[]> => {
+export const getAllCategories = async ():Promise<ProcessedCategory[]> => {
   const dbData:DBCategory[] = await db.query.category.findMany({
     with: {
       categoryOnSections: {with: {section: true}},
@@ -27,7 +27,7 @@ export const getAllCategories = async ():Promise<ProcCategory[]> => {
   return processed;
 }
 
-export const getCategoryById = async (id:number):Promise<ProcCategory> => {
+export const getCategoryById = async (id:number):Promise<ProcessedCategory> => {
   const dbData:DBCategory|undefined = await db.query.category.findFirst({
     where: eq(category.category_id, id),
     with: {

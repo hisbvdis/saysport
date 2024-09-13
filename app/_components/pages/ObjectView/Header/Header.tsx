@@ -23,7 +23,7 @@ export default function Header(props:Props) {
           <Breadcrumbs items={[
             {label: "Каталог", href: "/"},
             {label: `${state.city?.name ?? ""}`, href: `/?city=${state.city?.city_id}`},
-            {label: `${state.sections?.filter((section) => section.section_type === sectionTypeEnum.section)[0]?.name_public_plural ?? ""}`, href: `/?city=${state.city?.city_id}&section=${state.sections?.filter((section) => section.section_type === sectionTypeEnum.section)[0]?.section_id}`}
+            {label: `${state.sections?.filter((section) => section.section_type === sectionTypeEnum.section)[0]?.name_public_plural ?? ""}`, href: `/catalog/?city=${state.city?.city_id}&section=${state.sections?.filter((section) => section.section_type === sectionTypeEnum.section)[0]?.section_id}`}
           ]} style={{fontSize: "0.85em"}}/>
           <MoreSections/>
           {session ? (

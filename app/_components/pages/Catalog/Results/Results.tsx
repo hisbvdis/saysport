@@ -19,7 +19,7 @@ export default function Results() {
       <Card.Heading>
         <Breadcrumbs style={{fontSize: "0.85em", marginBlockEnd: "5px"}} items={[
           {label: "Каталог", href: city || section ? "/" : null},
-          {label: city?.name ?? "", href: section?.section_id ? `?city=${city?.city_id}` : null},
+          {label: city?.name ?? "", href: section?.section_id ? `/?city=${city?.city_id}` : null},
           {label: section?.name_public_plural ?? ""}
         ]}/>
         <h1 style={{fontWeight: "400", position: "relative", display: "inline-block"}}>

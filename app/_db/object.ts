@@ -2,8 +2,7 @@
 import { unlinkSync } from "node:fs";
 import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
-import type { SearchParamsType } from "../(router)/page";
-import type { DBObject, EditObject, ProcObject } from "../_types/types";
+import type { DBObject, EditObject, ProcObject, SearchParamsType } from "../_types/types";
 import { and, between, count, desc, eq, exists, gte, ilike, inArray, isNull, lte, ne, notExists, or, Placeholder, placeholder, sql } from "drizzle-orm";
 import { type Object_, object_link, object, objectStatusEnum, type objectStatusUnion, objectTypeEnum, type objectTypeUnion, object_on_option, object_on_section, object_phone, object_photo, object_on_usage, object_schedule, type costTypeUnion } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------

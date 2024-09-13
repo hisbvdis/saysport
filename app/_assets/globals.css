@@ -91,11 +91,12 @@ body {
   padding-inline: 15px;
 }
 
-@media (width > 905px) {
-  .page {
+.page {
+  @media (width > 905px) {
     margin-block-start: 15px;
   }
 }
+
 
 /* .srOnly:not(:focus):not(:active):not(:focus-within) { */
 .srOnly {

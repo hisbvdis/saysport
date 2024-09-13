@@ -52,12 +52,12 @@ export interface DBCategory extends Category {
   categoryOnSections?: (CategoryOnSection & {section: Section})[];
 }
 
-export interface ProcCategory extends Category {
+export interface ProcessedCategory extends Category {
   sections: Section[];
 }
 
-export interface EditCategory extends Omit<ProcCategory, "category_id"> {
-  category_id: ProcCategory["category_id"] | null;
+export interface EditCategory extends Omit<ProcessedCategory, "category_id"> {
+  category_id: ProcessedCategory["category_id"] | null;
 }
 
 
@@ -151,4 +151,27 @@ export interface ProcObject extends Partial<Object_> {
 export interface EditObject extends Omit<ProcObject, "object_id"|"usages"> {
   object_id?: ProcObject["object_id"] | null;
   usages: EditObjectUsage[];
+}
+
+
+// =============================================================================
+// SEARCH PARAMS TYPE
+// =============================================================================
+export interface SearchParamsType {
+  city?:string;
+  section?:string;
+  options?:string;
+  map?:boolean;
+  photo?:string;
+  status?:string;
+  query:string;
+  limit?:number;
+  page?:string;
+  days?:string;
+  from?:string;
+  to?:string;
+  cost?:string;
+  usages?:string;
+  sex?:string;
+  age?:string;
 }
