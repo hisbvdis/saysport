@@ -12,9 +12,9 @@ import { getSectionById, getSectionsByFilters } from "@/app/_db/section";
 
 export default async function CatalogPage({searchParams}:Props) {
   const city = searchParams.city ? await getCityById(Number(searchParams.city)) : undefined;
-  const section = searchParams.section ? await getSectionById(Number(searchParams.section)) : undefined;
+  const section = Number(searchParams.section) ? await getSectionById(Number(searchParams.section)) : undefined;
   const categories = await getAllCategories();
-  const results = await getObjectsByFilters({...searchParams, limit: 10, withTotalCount: true, withUnlimited: true});
+  const results = section || searchParams.section === "all" ? await getObjectsByFilters({...searchParams, limit: 10, withTotalCount: true, withUnlimited: true}) : {requested: [], unlimited: [], totalCount: 0};
   const commonSections = section?.object_type === objectTypeEnum.place ? await getSectionsByFilters({objectType: objectTypeEnum.place, sectionType: sectionTypeEnum.common}) : await getSectionsByFilters({objectType: objectTypeEnum.class, sectionType: sectionTypeEnum.common});
 
   return (
@@ -31,10 +31,10 @@ export default async function CatalogPage({searchParams}:Props) {
 
 export async function generateMetadata({searchParams}:Props):Promise<Metadata> {
   const city = searchParams.city ? await getCityById(Number(searchParams.city)) : undefined;
-  const section = searchParams.section ? await getSectionById(Number(searchParams.section)) : undefined;
+  const section = Number(searchParams.section) ? await getSectionById(Number(searchParams.section)) : undefined;
   const sectionName = searchParams.section ? section?.name_seo_title : null;
   const cityName = searchParams.city ? city?.name_preposition : null;
-  const resultsCount = (await getObjectsByFilters({...searchParams, withTotalCount: true})).totalCount;
+  const resultsCount = section || searchParams.section === "all" ? (await getObjectsByFilters({...searchParams, withTotalCount: true})).totalCount : 0;
 
   return {
     title: `${sectionName ? sectionName : "Спортивные объекты и секции"}${cityName ? ` в ${cityName}` : ""} | SaySport.info`,

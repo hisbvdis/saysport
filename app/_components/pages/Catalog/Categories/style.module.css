@@ -16,6 +16,7 @@
 }
 
 .categories__itemButton {
+  display: block;
   inline-size: 100%;
   padding: 15px 15px;
 

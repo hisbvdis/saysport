@@ -33,7 +33,7 @@ export default function Filters() {
   return (<>
     <Card>
       <Card.Heading style={{display: "flex", alignItems: "center"}}>
-        <span style={{marginInlineEnd: "auto", paddingInlineEnd: "20px"}}>{section?.name_seo_title}</span>
+        <span style={{marginInlineEnd: "auto", paddingInlineEnd: "20px"}}>{section ? section?.name_seo_title : "Все объекты"}</span>
         {Object.keys(searchParams).filter((paramName) => !["section", "city", "map", "page"].includes(paramName) ).length
           ? <Link href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => !["section", "city", "map", "page"].includes(paramName)))} style={{display: "flex", alignItems: "center"}} scroll={false}>
               <img src="/icons/bin.svg" width={24} height={24} alt="Map Pin" style={{inlineSize: "19px", blockSize: "19px"}}/>
@@ -64,35 +64,42 @@ export default function Filters() {
           </Card.Section>
       ))}
 
-      <Card.Section>
-        <Control>
-          <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
-            <span>Тип {section?.object_type === objectTypeEnum.place ? "использования" : "занятий"}</span>
-          </Control.Label>
-          <CheckboxGroup arrayToCompareWith={searchParams.usages?.split(",")}>
-            {section?.usages.map((usage) => (
-              <Link key={usage.usage_id} href={manageSearchParams.appendOrClear("usages", String(usage.usage_id))} scroll={false}>
-                <Checkbox value={String(usage.usage_id)} tabIndex={-1}>{usage.name_public}</Checkbox>
-              </Link>
-            ))}
-          </CheckboxGroup>
-        </Control>
-      </Card.Section>
-      <Card.Section>
-        <Control>
-          <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
-            <span>Стоимость</span>
-          </Control.Label>
-          <CheckboxGroup arrayToCompareWith={searchParams.cost?.split(",")}>
-            <Link href={manageSearchParams.appendOrClear("cost", "paid")} scroll={false}>
-              <Checkbox value="paid" tabIndex={-1}>Платно</Checkbox>
-            </Link>
-            <Link href={manageSearchParams.appendOrClear("cost", "free")} scroll={false}>
-              <Checkbox value="free" tabIndex={-1}>Бесплатно</Checkbox>
-            </Link>
-          </CheckboxGroup>
-        </Control>
-      </Card.Section>
+      {section
+        ? <Card.Section>
+            <Control>
+              <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+                <span>Тип {section?.object_type === objectTypeEnum.place ? "использования" : "занятий"}</span>
+              </Control.Label>
+              <CheckboxGroup arrayToCompareWith={searchParams.usages?.split(",")}>
+                {section?.usages.map((usage) => (
+                  <Link key={usage.usage_id} href={manageSearchParams.appendOrClear("usages", String(usage.usage_id))} scroll={false}>
+                    <Checkbox value={String(usage.usage_id)} tabIndex={-1}>{usage.name_public}</Checkbox>
+                  </Link>
+                ))}
+              </CheckboxGroup>
+            </Control>
+          </Card.Section>
+        : null
+      }
+
+      {section
+        ? <Card.Section>
+            <Control>
+              <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
+                <span>Стоимость</span>
+              </Control.Label>
+              <CheckboxGroup arrayToCompareWith={searchParams.cost?.split(",")}>
+                <Link href={manageSearchParams.appendOrClear("cost", "paid")} scroll={false}>
+                  <Checkbox value="paid" tabIndex={-1}>Платно</Checkbox>
+                </Link>
+                <Link href={manageSearchParams.appendOrClear("cost", "free")} scroll={false}>
+                  <Checkbox value="free" tabIndex={-1}>Бесплатно</Checkbox>
+                </Link>
+              </CheckboxGroup>
+            </Control>
+          </Card.Section>
+        : null
+      }
 
       {section?.object_type === objectTypeEnum.class ? (<>
         <Card.Section>

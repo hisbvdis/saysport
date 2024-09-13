@@ -4,7 +4,6 @@ import Image from "next/image";
 import { Card } from "@/app/_components/ui/Card";
 // -----------------------------------------------------------------------------
 import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
-import clsx from "clsx";
 
 
 export default function PopularSections(props:Props) {

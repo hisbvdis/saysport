@@ -40,6 +40,9 @@ export default function Categories(props:Props) {
           }
         />
         <ul className={styles["categories__list"]}>
+          <li className={clsx(styles["categories__item"])}>
+            <Link className={styles["categories__itemButton"]} href={manageSearchParams.set("section", "all")}>Все объекты</Link>
+          </li>
           {categories.filter((category) => category.sections.length).map((category, i) => (
             <li key={category.category_id} className={clsx(styles["categories__item"], i === isOpenedCategory && styles["categories__item--isOpened"])}>
               <button className={styles["categories__itemButton"]} type="button" onClick={() => setIsOpenedCategory(i === isOpenedCategory ? null : i)}>{category.name}</button>

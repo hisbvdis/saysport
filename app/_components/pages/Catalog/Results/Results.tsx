@@ -7,14 +7,12 @@ import { Card } from "@/app/_components/ui/Card";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { SearchPanel } from "@/app/_components/blocks/SearchPanel";
 // -----------------------------------------------------------------------------
-import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
 export default function Results() {
   const { searchParams, city, section, results } = useContext(CatalogContext);
-  const manageSearchParams = useManageSearchParams();
 
   return (<>
     <Card className={styles["results"]}>
@@ -26,7 +24,7 @@ export default function Results() {
         ]}/>
         <h1 style={{fontWeight: "400", position: "relative", display: "inline-block"}}>
           <span>{section?.name_seo_title ?? "Спортивные объекты и секции"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
-          <sup style={{fontSize: "0.5em", position: "absolute", insetInlineStart: "100%"}}>{results.totalCount}</sup>
+          <sup style={{fontSize: "0.5em"}}>{results.totalCount}</sup>
         </h1>
         <SearchPanel/>
       </Card.Heading>
