@@ -7,7 +7,7 @@ import { Input } from "@/app/_components/ui/Input/";
 import { Button } from "@/app/_components/ui/Button/";
 import { ArrowDownIcon, CloseIcon } from ".";
 // -----------------------------------------------------------------------------
-import { useDebounce } from "@/app/_utils/useDebounce";
+import { useDebounce } from "@/app/_hooks/useDebounce";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 

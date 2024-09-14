@@ -1,13 +1,34 @@
 .breadcrumbs {
   --gap: 1.5em;
+  position: relative;
+
+  overflow-x: auto;
+}
+
+.breadcrumbs::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: 0;
+
+  display: block;
+  inline-size: 15px;
+  block-size: 100%;
+
+  background: linear-gradient(to right, rgb(255 255 255 / 0), rgb(255 255 255 / 1));;
+  pointer-events: none;
 }
 
 .breadcrumbs__list {
   display: flex;
-  padding-inline-start: 0;
+  padding-inline-end: 10px;
   gap: var(--gap);
 
-  list-style: none;
+  overflow-x: auto;
+}
+
+.breadcrumbs__item {
+  flex: 0 0 max-content;
 }
 
 .breadcrumbs__item + .breadcrumbs__item::before {
@@ -19,4 +40,8 @@
 .breadcrumbs__link,
 .breadcrumbs__span {
   color: var(--fontColor);
+}
+
+.breadcrumbs__link {
+  text-decoration: underline;
 }

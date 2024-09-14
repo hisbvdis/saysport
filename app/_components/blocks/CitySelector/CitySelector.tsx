@@ -7,7 +7,7 @@ import { Select } from "../../ui/Select"
 import { Control } from "../../ui/Control"
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
-import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 // -----------------------------------------------------------------------------
 
 

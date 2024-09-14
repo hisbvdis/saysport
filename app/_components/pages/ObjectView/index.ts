@@ -6,17 +6,16 @@ import Children from "./Children/Children";
 import Sections from "./Sections/Sections";
 import Contacts from "./Contacts/Contacts";
 import Usages from "./Usages/Usages";
-import Gallery from "./Gallery/Gallery";
 import MoreSections from "./MoreSections/MoreSections";
 import ClassSchedule from "./Schedule/ClassSchedule";
 import PlaceSchedule from "./Schedule/PlaceSchedule";
+import Gallery from "./Gallery/Gallery";
 
 export {
 	Children,
 	ClassSchedule,
 	Contacts,
 	Description,
-	Gallery,
 	Header,
 	MoreSections,
 	ObjectView,
@@ -24,4 +23,5 @@ export {
 	PlaceSchedule,
 	Sections,
 	Usages,
+	Gallery,
 };

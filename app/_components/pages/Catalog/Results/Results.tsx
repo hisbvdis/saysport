@@ -22,9 +22,9 @@ export default function Results() {
           {label: city?.name ?? "", href: section?.section_id ? `/?city=${city?.city_id}` : null},
           {label: section?.name_public_plural ?? ""}
         ]}/>
-        <h1 style={{fontWeight: "400", position: "relative", display: "inline-block"}}>
+        <h1 style={{fontWeight: "700", fontSize: "19px", position: "relative", display: "inline-block", marginBlockEnd: "10px"}}>
           <span>{section?.name_seo_title ?? "Спортивные объекты и секции"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
-          <sup style={{fontSize: "0.5em"}}>{results.totalCount}</sup>
+          <sup style={{fontSize: "0.6em", fontWeight: 400}}>{results.totalCount}</sup>
         </h1>
         <SearchPanel/>
       </Card.Heading>

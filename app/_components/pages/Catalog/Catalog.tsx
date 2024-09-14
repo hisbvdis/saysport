@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import { createContext } from "react";
 import type { City } from "@/drizzle/schema";
-import type { DBObject, ProcSection, SearchParamsType } from "@/app/_types/types"
+import type { DBObject, ProcessedCategory, ProcSection, SearchParamsType } from "@/app/_types/types"
 // -----------------------------------------------------------------------------
 import { Filters, Results } from ".";
 import { Pagination } from "../../ui/Pagination";
@@ -11,17 +11,18 @@ import { MapComponent } from "../../ui/MapComponent";
 import { CitySelector } from "../../blocks/CitySelector";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
+import { Categories } from "../Home";
 
 
 export default function Catalog(props:Props) {
-  const { searchParams, results, section, city, commonSections } = props;
+  const { searchParams, results, section, city, commonSections, categories } = props;
 
   return (
     <CatalogContext.Provider value={{searchParams, results, section, city, commonSections}}>
-      <div className={clsx(styles["catalog"], "container", "page")}>
+      <div className={clsx(styles["catalog"], "container")}>
         <aside className={styles["catalog__aside"]}>
           <CitySelector className={styles["home__city"]} city={city}/>
-          <Filters/>
+          {searchParams.section ? <Filters/> : <Categories categories={categories}/>}
         </aside>
         <main className={styles["catalog__main"]}>
           <Results/>
@@ -49,6 +50,7 @@ interface Props {
   city?: City;
   section?: ProcSection;
   commonSections:ProcSection[];
+  categories: ProcessedCategory[];
 }
 
 interface CatalogContextType {

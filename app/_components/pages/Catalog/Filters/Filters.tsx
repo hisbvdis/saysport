@@ -11,7 +11,8 @@ import { Control } from "@/app/_components/ui/Control";
 import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
-import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
+import { Cross1Icon, Cross2Icon } from "@radix-ui/react-icons";
 
 
 export default function Filters() {
@@ -40,6 +41,9 @@ export default function Filters() {
             </Link>
           : null
         }
+        <a href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => !["city"].includes(paramName)))}>
+          <Cross1Icon/>
+        </a>
       </Card.Heading>
       {section?.specs
         .concat(section.object_type !== objectTypeEnum.org ? commonSections.filter((section) => section.section_type === sectionTypeEnum.common && section.object_type !== objectTypeEnum.org).flatMap((section) => section.specs) : [])

@@ -52,6 +52,7 @@
   margin-block-end: 3px;
 
   font-size: 1rem;
+  font-weight: 700;
 }
 
 .categories__link {
@@ -80,7 +81,8 @@
 }
 
 @media (width >= 905px) {
-  .categories__item:hover .categories__popup {
+  .categories__item:hover .categories__popup,
+  .categories__itemButton:focus + .categories__popup {
     all: revert;
     position: absolute;
     inset-inline-start: 100%;

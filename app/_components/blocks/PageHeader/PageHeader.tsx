@@ -12,7 +12,7 @@ export default async function PageHeader() {
 
   return (
     <header className={styles["pageHeader"]}>
-      <div className={clsx("container", styles["pageHeader__container"])}>
+      <div className={styles["pageHeader__container"]}>
         <Logo/>
         {session ? (
           <>

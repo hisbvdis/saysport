@@ -1,0 +1,25 @@
+.carousel {
+  inline-size: 100%;
+  aspect-ratio: 565 / 350;
+}
+
+.carousel__slide {
+
+}
+
+.carousel__image {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+@media (width < 905px) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none;
+  }
+
+  .swiper-pagination {
+    pointer-events: none;
+  }
+}

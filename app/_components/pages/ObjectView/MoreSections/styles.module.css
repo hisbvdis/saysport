@@ -1,17 +1,17 @@
 .more {
   position: relative;
 
-  margin-inline-start: 25px;
-
   font-size: 0.85em;
 }
 
 .more__button {
+  min-inline-size: max-content;
+
   font-size: inherit;
 
   border: none;
-  background: none;
   cursor: pointer;
+  background: none;
 }
 
 .more__text {

@@ -9,7 +9,7 @@ import { Button } from "../../ui/Button";
 import styles from "./styles.module.css";
 import { useRouter } from "next/navigation";
 import { CatalogContext } from "../../pages/Catalog/Catalog";
-import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 
 
 export default function SearchPanel() {

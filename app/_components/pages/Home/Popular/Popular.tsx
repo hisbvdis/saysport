@@ -4,7 +4,7 @@ import Image from "next/image";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 // -----------------------------------------------------------------------------
-import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 
 
 export default function Popular(props:Props) {

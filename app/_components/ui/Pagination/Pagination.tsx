@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 import Link from "next/link";
 import styles from "./styles.module.css";
-import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 import clsx from "clsx";
 
 

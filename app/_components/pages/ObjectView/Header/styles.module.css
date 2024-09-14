@@ -2,5 +2,6 @@
   display: inline-block;
   margin-block-start: 5px;
 
+  font-weight: normal;
   color: var(--color-blue-dark);
 }

@@ -8,6 +8,9 @@
   display: flex;
   align-items: center;
   gap: 5px;
+  max-inline-size: var(--container-maxInlineSize);
+  margin-inline: auto;
+  padding-inline: var(--container-paddingInline);
 }
 
 .pageHeader__link {

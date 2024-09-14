@@ -1,0 +1,38 @@
+/* VARIABLES */
+:root {
+  --color-brand-lightest: #FAFBFC;
+  --color-brand-light: #E7EDF2;
+  --color-brand: #507299;
+  --color-red: #FF0000;
+  --color-white: #FFFFFF;
+
+  --color-blue-light: #0088CF;
+  --color-blue-dark: #337AB7;
+
+  --boxShadow: 0 0px 10px rgb(0 0 0 / 0.2);
+  --boxShadow--thin: 1px 1px 5px rgb(0 0 0 / 0.4);
+
+  --fontColor: #000000;
+  --fontColor-light: #464646;
+  --fontColor-lighter: #808080;
+
+  --card-borderColor: #E4E4E4;
+  --card-padding: 15px;
+
+  --textField-borderColor: #B8C1C9;
+  --textfield-fontSize: 0.8125rem;
+  --textField-placeholder-fontColor: #BBBBBB;
+
+  --control-disabled-backgroundColor: #F8F8F8;
+  --control-disabled-fontColor: #cccccc;
+  --control-hovered-backgroundColor: #F5F6F8;
+
+  --container-maxInlineSize: 950px;
+  --container-paddingInline: 15px;
+  --container-paddingBlockStart: 10px;
+
+  --controls-gap: 20px;
+  --sections-gap: 10px;
+
+  --desktop: 905px;
+}

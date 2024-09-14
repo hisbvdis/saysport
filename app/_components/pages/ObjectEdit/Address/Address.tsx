@@ -19,7 +19,7 @@ import { getCitiesByFilters } from "@/app/_db/city";
 import { setInheritedData } from "./setInheritedData";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { getObjectsByArea, getObjectsByFilters } from "@/app/_db/object";
-import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_utils/nominatim";
+import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_lib/nominatim";
 
 
 export default function Address() {

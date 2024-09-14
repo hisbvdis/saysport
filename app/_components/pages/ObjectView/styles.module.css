@@ -1,6 +1,30 @@
-.objectView {
+.objectView,
+.objectView__aside,
+.objectView__main {
   display: grid;
-  grid-template-columns: 610px 300px; /* Fixed first column size because of Swiper library */
+  gap: 10px;
+}
+
+@media (width > 905px) {
+  .objectView {
+    grid-template-columns: 610px 300px;
+    align-items: start;
+  }
+
+  .objectView__header {
+    grid-column: 1 / -1;
+  }
+
+  .objectView__gallery {
+    padding: var(--card-padding);
+
+    background-color: var(--color-white);
+  }
+}
+
+/* .objectView {
+  display: grid;
+  grid-template-columns: 610px 300px;
   gap: 10px;
 }
 
@@ -18,4 +42,4 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
+} */

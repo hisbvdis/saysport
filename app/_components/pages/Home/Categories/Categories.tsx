@@ -4,15 +4,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { objectTypeEnum } from "@/drizzle/schema";
+import type { ProcessedCategory } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Select } from "@/app/_components/ui/Select";
 // -----------------------------------------------------------------------------
 import { getSectionsByFilters } from "@/app/_db/section";
-import { useManageSearchParams } from "@/app/_utils/useManageSearchParams";
+import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./style.module.css";
-import type { ProcessedCategory } from "@/app/_types/types";
 
 
 export default function Categories(props:Props) {

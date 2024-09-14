@@ -10,7 +10,8 @@ import ArrowDownIcon from "@/app/_components/ui/Select/assets/ArrowDownIcon";
 import styles from "./styles.module.css";
 
 
-export default function MoreSections() {
+export default function MoreSections(props:Props) {
+  const { style, className } = props;
   const { state } = useContext(ObjectViewContext);
   const listRef = useRef(null);
   const [ isShowList, setIsShowList ] = useState(false);
@@ -27,7 +28,7 @@ export default function MoreSections() {
 
   if (state.sections.filter((section) => section.section_type === sectionTypeEnum.section).length <= 1) return null;
   return (
-    <div className={styles["more"]}>
+    <div className={clsx(styles["more"], className)} style={style}>
       <button className={styles["more__button"]} type="button" onClick={() => setIsShowList(!isShowList)}>
         <span className={styles["more__text"]}>ещё</span>
         <ArrowDownIcon/>
@@ -41,4 +42,9 @@ export default function MoreSections() {
       </ul>
     </div>
   )
+}
+
+interface Props {
+  className?: string;
+  style?: React.CSSProperties;
 }

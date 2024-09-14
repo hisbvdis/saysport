@@ -14,7 +14,7 @@ export default function Home(props:Props) {
   const { city, categories } = props;
 
   return (
-    <div className={clsx(styles["home"], "container", "page")}>
+    <div className={clsx(styles["home"], "container")}>
       <Hero className={styles["home__hero"]} city={city}/>
       <aside className={styles["home__aside"]}>
         <CitySelector className={styles["home__city"]} city={city}/>
