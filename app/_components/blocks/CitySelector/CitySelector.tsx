@@ -24,7 +24,7 @@ export default function CitySelector(props:{className?:string;city?:City}) {
           isAutocomplete
           value={city?.city_id ? String(city?.city_id) : ""}
           label={city?.name}
-          onChange={(data) => {data.value ? router.push(`/catalog/${manageSearchParams.set("city", data.value, manageSearchParams.delete(["page"]))}`) : router.push(manageSearchParams.delete(["city"]))}}
+          onChange={(data) => {data.value ? router.push(manageSearchParams.set("city", data.value, manageSearchParams.delete(["page"]))) : router.push(manageSearchParams.delete(["city"]))}}
           placeholder="Введите город"
           requestItemsOnInputChange={async (inputValue) => (
             await getCitiesByFilters({name: inputValue})).map((city) => ({
