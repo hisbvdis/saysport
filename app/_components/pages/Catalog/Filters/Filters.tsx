@@ -41,7 +41,7 @@ export default function Filters() {
             </Link>
           : null
         }
-        <a href={manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => !["city"].includes(paramName)))}>
+        <a href={`/${manageSearchParams.delete(Object.keys(searchParams).filter((paramName) => !["city"].includes(paramName)))}`}>
           <Cross1Icon/>
         </a>
       </Card.Heading>
