@@ -79,7 +79,7 @@ export default function Menu(props:Props) {
 
 interface Props {
   isShowMenu: boolean;
-  items?: MenuItem[];
+  items?: {id: number|string, label: string|null}[];
   value?: string | number;
   className?: string;
   style?: React.CSSProperties;
