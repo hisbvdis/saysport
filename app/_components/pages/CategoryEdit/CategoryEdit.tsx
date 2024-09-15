@@ -6,13 +6,13 @@ import { type SyntheticEvent, useEffect, useState } from "react";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 import type { EditCategory, ProcSection } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
-import { Form } from "../../ui/Form";
-import { Card } from "../../ui/Card";
-import { Input } from "../../ui/Input";
-import { Button } from "../../ui/Button";
-import { Select } from "../../ui/Select";
-import { Control } from "../../ui/Control";
-import { EditBottomPanel } from "../../blocks/EditBottomPanel";
+import { Form } from "@/app/_components/ui/Form";
+import { Card } from "@/app/_components/ui/Card";
+import { Input } from "@/app/_components/ui/Input";
+import { Button } from "@/app/_components/ui/Button";
+import { Select } from "@/app/_components/ui/Select";
+import { Control } from "@/app/_components/ui/Control";
+import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { deleteCategoryById, upsertCategory } from "@/app/_db/category";
 import { getSectionsByFilters } from "@/app/_db/section";

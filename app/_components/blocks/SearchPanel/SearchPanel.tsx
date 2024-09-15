@@ -2,9 +2,9 @@
 import clsx from "clsx";
 import { type SyntheticEvent, useContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
-import { Form } from "../../ui/Form";
-import { Input } from "../../ui/Input";
-import { Button } from "../../ui/Button";
+import { Form } from "@/app/_components/ui/Form";
+import { Input } from "@/app/_components/ui/Input";
+import { Button } from "@/app/_components/ui/Button";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 import { useRouter } from "next/navigation";

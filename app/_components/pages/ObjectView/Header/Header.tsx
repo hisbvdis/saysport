@@ -6,7 +6,6 @@ import { ObjectViewContext } from "../"
 import { Card } from "@/app/_components/ui/Card";
 import { DelBtn } from "@/app/_components/ui/DelBtn";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/app/_components/ui/Dropdown/Dropdown";
 // -----------------------------------------------------------------------------
 import { deleteObjectById } from "@/app/_db/object";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
@@ -27,19 +26,22 @@ export default function Header(props:Props) {
             {label: `${state.city?.name ?? ""}`, href: `/?city=${state.city?.city_id}`},
             {label: `${state.sections?.filter((section) => section.section_type === sectionTypeEnum.section)[0]?.name_public_plural ?? ""}`, href: `/catalog/?city=${state.city?.city_id}&section=${state.sections?.filter((section) => section.section_type === sectionTypeEnum.section)[0]?.section_id}`}
           ]} style={{fontSize: "0.85em"}}/>
-          {state.sections.filter((section) => section.section_type === sectionTypeEnum.section).length > 1
-            ? <DropdownMenu>
-                <DropdownMenuTrigger style={{display: "flex", alignItems: "center", fontSize: "0.85em", marginInlineStart: "20px"}}>ещё<ChevronDownIcon/></DropdownMenuTrigger>
-                <DropdownMenuContent style={{padding: 0}}>
-                {state.sections.slice(1).map((section) => (
-                  <DropdownMenuItem key={section.section_id} style={{padding: 0}}>
-                    <Link href={`/?city=${state.city_id}&section=${section.section_id}`} style={{padding: "5px"}}>{section.name_public_plural}</Link>
-                  </DropdownMenuItem>
-                ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+          {/* {state.sections.filter((section) => section.section_type === sectionTypeEnum.section).length > 1
+            ? <DropdownMenu.Root>
+                <DropdownMenu.Trigger style={{display: "flex", alignItems: "center", fontSize: "0.85em", marginInlineStart: "20px"}}>ещё<ChevronDownIcon/></DropdownMenu.Trigger>
+                <DropdownMenu.Portal>
+                  <DropdownMenu.Content style={{padding: 0}}>
+                  {state.sections.slice(1).map((section) => (
+                    <DropdownMenu.Item key={section.section_id} style={{padding: 0}}>
+                      <Link href={`/?city=${state.city_id}&section=${section.section_id}`} style={{padding: "5px"}}>{section.name_public_plural}</Link>
+                    </DropdownMenu.Item>
+                  ))}
+                  </DropdownMenu.Content>
+                </DropdownMenu.Portal>
+              </DropdownMenu.Root>
             : null
-          }
+          } */}
+
           {session ? (
             <div style={{marginInlineStart: "auto", display: "flex", gap: "10px"}}>
               {state.type === objectTypeEnum.org ? <Link href={`/object/add/place?parent=${state.object_id}`}>М</Link> : null}

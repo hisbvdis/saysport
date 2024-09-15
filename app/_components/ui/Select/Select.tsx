@@ -5,11 +5,11 @@ import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { Menu } from "@/app/_components/ui/Menu";
 import { Input } from "@/app/_components/ui/Input/";
 import { Button } from "@/app/_components/ui/Button/";
-import { ArrowDownIcon, CloseIcon } from ".";
 // -----------------------------------------------------------------------------
 import { useDebounce } from "@/app/_hooks/useDebounce";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
+import { ChevronDownIcon, Cross1Icon } from "@radix-ui/react-icons";
 
 
 export default function Select(props:Props) {
@@ -165,12 +165,12 @@ export default function Select(props:Props) {
         />
         {!isAutocomplete || (props.items?.length && !props.value) ?
           <Button className={clsx(styles["select__button"], styles["select__button--arrow"])} disabled={disabled} tabIndex={-1}>
-            <ArrowDownIcon className={clsx("icon", disabled && "disabled")}/>
+            <ChevronDownIcon/>
           </Button>
         : null}
         {isAutocomplete && props.value ?
           <Button className={styles["select__button"]} onClick={handleClearBtnClick} disabled={disabled}>
-            <CloseIcon className={clsx("icon", disabled && "disabled")}/>
+            <Cross1Icon/>
           </Button>
         : null}
       </p>

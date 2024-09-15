@@ -2,10 +2,10 @@ import clsx from "clsx";
 import type { City } from "@/drizzle/schema";
 import type { ProcessedCategory } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
-import { Categories, Popular } from ".";
-import { Hero } from "../../blocks/Hero";
-import { CitySelector } from "../../blocks/CitySelector";
-// -----------------------------------------------------------------------------
+import { Popular } from ".";
+import { Hero } from "@/app/_components/blocks/Hero";
+import { Categories } from "@/app/_components/blocks/Categories";
+import { CitySelector } from "@/app/_components/blocks/CitySelector";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 

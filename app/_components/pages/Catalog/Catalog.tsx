@@ -5,13 +5,13 @@ import type { City } from "@/drizzle/schema";
 import type { DBObject, ProcessedCategory, ProcSection, SearchParamsType } from "@/app/_types/types"
 // -----------------------------------------------------------------------------
 import { Filters, Results } from ".";
-import { Pagination } from "../../ui/Pagination";
-import { MapCluster } from "../../ui/MapComponent";
-import { MapComponent } from "../../ui/MapComponent";
-import { CitySelector } from "../../blocks/CitySelector";
+import { Pagination } from "@/app/_components/ui/Pagination";
+import { MapCluster } from "@/app/_components/ui/MapComponent";
+import { Categories } from "@/app/_components/blocks/Categories";
+import { MapComponent } from "@/app/_components/ui/MapComponent";
+import { CitySelector } from "@/app/_components/blocks/CitySelector";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import { Categories } from "../Home";
 
 
 export default function Catalog(props:Props) {

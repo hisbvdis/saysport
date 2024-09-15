@@ -1,6 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import "./variables.css";
 
 /* RESET */
@@ -59,16 +56,10 @@ body {
   margin-inline: auto;
 
   @media (width > 905px) {
+    padding-block-start: var(--container-paddingBlockStart);
     padding-inline: var(--container-paddingInline);
   }
 }
-
-/* .page {
-  @media (width > 905px) {
-    margin-block-start: 15px;
-  }
-} */
-
 
 /* .srOnly:not(:focus):not(:active):not(:focus-within) { */
 .srOnly {
@@ -81,10 +72,6 @@ body {
 
   clip-path: inset(50%);
   overflow: hidden;
-}
-
-.icon.disabled {
-  fill: var(--control-disabled-fontColor);
 }
 
 .mt10 {
@@ -102,10 +89,4 @@ a {
 
 a:hover {
   text-decoration: underline;
-}
-
-@layer base {
-  :root {
-    --radius: 0.5rem;
-  }
 }
