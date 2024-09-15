@@ -30,7 +30,7 @@ export default function Categories(props:Props) {
           isAutocomplete
           onChange={(data) => {
             const paramsWithoutPageParam = manageSearchParams.delete(["page"]);
-            router.push(manageSearchParams.set("section", data.value, paramsWithoutPageParam))
+            router.push(`/catalog/${manageSearchParams.set("section", data.value, paramsWithoutPageParam)}`)
           }}
           placeholder="Найти раздел..."
           requestItemsOnInputChange={async (name) =>
