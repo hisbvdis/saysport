@@ -12,13 +12,13 @@ export default function Control(props:Props) {
   const labelId = useId();
   const inputId = useId();
   const { className, style, children } = props;
-  const [ required, setRequired ] = useState(props.required ?? false)
+  const [ required, setRequired ] = useState(props.required ?? false);
 
   useEffect(() => {
     if (!required && containerRef.current?.querySelector("[required]")) {
       setRequired(true);
     }
-  }, [required])
+  }, [])
 
   return (
     <ControlContext.Provider value={{labelId, inputId, required}}>

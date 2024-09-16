@@ -1,5 +1,6 @@
+"use client";
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
@@ -9,10 +10,13 @@ import { SearchPanel } from "@/app/_components/blocks/SearchPanel";
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
+import { Modal } from "@/app/_components/ui/Modal";
+import { useDisclosure } from "@/app/_hooks/useDisclosure";
 
 
 export default function Results() {
   const { searchParams, city, section, results } = useContext(CatalogContext);
+  const { isOpen, open, close } = useDisclosure(false);
 
   return (<>
     <Card className={styles["results"]}>
@@ -27,6 +31,13 @@ export default function Results() {
           <sup style={{fontSize: "0.6em", fontWeight: 400}}>{results.totalCount}</sup>
         </h1>
         <SearchPanel/>
+        <button type="button" onClick={open}>Open</button>
+        <Modal.Root isOpen={isOpen} close={close}>
+          <Modal.Content>
+            <h1>Hello</h1>
+            <p>Goodbuy</p>
+          </Modal.Content>
+        </Modal.Root>
       </Card.Heading>
       {/* <Card.Section style={{display: "flex", justifyContent: "space-between", backgroundColor: "white"}}>
         <Link href={searchParams.map ? manageSearchParams.delete(["map"]) : manageSearchParams.set("map", "true")} style={{display: "flex", alignItems: "center", gap: "5px"}}>
@@ -35,7 +46,7 @@ export default function Results() {
         </Link>
       </Card.Section> */}
     </Card>
-    <ul className={styles["results__list"]}>
+        <ul className={styles["results__list"]}>
       {results.requested?.map((object) => (
         <li key={object.object_id} className={styles["results__item"]}>
           <Link href={`object/${object.object_id}`}>
