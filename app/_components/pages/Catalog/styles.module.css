@@ -10,6 +10,10 @@
 }
 
 @media (width < 905px) {
+  .catalog__aside {
+    display: none;
+  }
+
   .catalog {
     padding-inline: 0;
   }

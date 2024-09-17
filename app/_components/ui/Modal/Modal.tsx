@@ -1,19 +1,22 @@
 "use client";
-import { createPortal } from "react-dom";
+import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
+// -----------------------------------------------------------------------------
+import ModalContent from "./ModalContent";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
-export default function ModalRoot(props:Props) {
-  const { isOpen, children, close } = props;
+export default function Modal(props:Props) {
+  const { isOpen, className, children, close } = props;
   const modalRef = useRef<HTMLDialogElement>(null);
   const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
   const [ bodyOverflow, setBodyOverflow ] = useState<string>("");
   const isClickOnBackdrop = useRef<boolean>();
 
   const closeModal = () => {
-    // Закрыть модальное окно
+    // // Закрыть модальное окно
+    modalRef.current?.close();
     close();
 
     // Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
@@ -21,7 +24,8 @@ export default function ModalRoot(props:Props) {
     document.body.style.overflow = bodyOverflow;
 
     // Разные варианты перехода "назад" в браузере (обычно или с заменой записи в истории)
-    history.state.fromSite ? history.back() : history.replaceState(null, "");
+    // history.state?.fromSite ? history.back() : history.replaceState(null, "");
+    // history.replaceState(null, "")
 
     // Удалить обработчики модального окна
     document.removeEventListener("keydown", documentKeydownEscapeHandler);
@@ -55,36 +59,44 @@ export default function ModalRoot(props:Props) {
   }
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (isOpen) {
+      modalRef.current?.showModal();
 
-    // Добавить в историю браузера новую запись
-    history.pushState({fromSite:true}, "");
+      // Прокрутить вверх (потому что "show()" может скроллить, если первый элемента находится за пределами "viewPort")
+      modalRef.current?.scrollTo(0, 0);
 
-    // У <body> отключить прокрутку, вычислить и задать отступ
-    const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
-    setBodyPaddingRight(Number.parseFloat(getComputedStyle(document.body).paddingInlineEnd));
-    document.body.style.paddingInlineEnd = `${bodyPaddingRight + scrollBarWidth}px`;
-    setBodyOverflow(getComputedStyle(document.body).overflow);
-    document.body.style.overflow = "hidden";
+      // Добавить в историю браузера новую запись
+      // history.pushState({fromSite:true}, "");
 
-    // Добавление обработчиков модального окна
-    document.addEventListener("keydown", documentKeydownEscapeHandler);
-    modalRef.current?.addEventListener("pointerdown", backdropPointerdownHandler);
-    modalRef.current?.addEventListener("pointerup", backdropPointerupHandler);
-    window.addEventListener("popstate", windowPopstateHandler);
+      // У <body> отключить прокрутку, вычислить и задать отступ
+      const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
+      setBodyPaddingRight(Number.parseFloat(getComputedStyle(document.body).paddingInlineEnd));
+      document.body.style.paddingInlineEnd = `${bodyPaddingRight + scrollBarWidth}px`;
+      setBodyOverflow(getComputedStyle(document.body).overflow);
+      document.body.style.overflow = "hidden";
+
+      // Добавление обработчиков модального окна
+      document.addEventListener("keydown", documentKeydownEscapeHandler);
+      modalRef.current?.addEventListener("pointerdown", backdropPointerdownHandler);
+      modalRef.current?.addEventListener("pointerup", backdropPointerupHandler);
+      window.addEventListener("popstate", windowPopstateHandler);
+    } else {
+      closeModal();
+    }
   }, [isOpen])
 
-  if (!isOpen) return null;
-  return createPortal(
-    <dialog className={styles["modal"]} ref={modalRef} open={isOpen}>
+  return (
+    <dialog className={clsx(styles["modal"], className)} ref={modalRef}>
       {children}
     </dialog>
-    ,document.body
   )
 }
 
+Modal.Content = ModalContent;
+
 interface Props {
-  close: () => void;
+  className: string;
   children: React.ReactNode;
   isOpen: boolean;
+  close: () => void;
 }

@@ -2,6 +2,18 @@
   background-color: #eeeeee;
 }
 
+.results__breadcrumbs {
+  font-size: 0.85em;
+}
+
+.results__heading {
+  display: inline-block;
+  margin-block-start: 5px;
+
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
 .results__list {
   display: flex;
   flex-direction: column;

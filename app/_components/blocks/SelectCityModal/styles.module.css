@@ -1,0 +1,8 @@
+.selectCityModal__content {
+  inline-size: 100%;
+  min-block-size: 100%;
+}
+
+.selectCityModal__select {
+  padding: 15px;
+}

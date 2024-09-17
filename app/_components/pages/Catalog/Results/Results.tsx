@@ -1,17 +1,16 @@
 "use client";
 import Link from "next/link";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { objectTypeEnum } from "@/drizzle/schema";
+import { useDisclosure } from "@/app/_hooks/useDisclosure";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
 import { Card } from "@/app/_components/ui/Card";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
 import { SearchPanel } from "@/app/_components/blocks/SearchPanel";
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import { Modal } from "@/app/_components/ui/Modal";
-import { useDisclosure } from "@/app/_hooks/useDisclosure";
+import SelectCityModal from "../../../blocks/SelectCityModal/SelectCityModal";
 
 
 export default function Results() {
@@ -21,23 +20,21 @@ export default function Results() {
   return (<>
     <Card className={styles["results"]}>
       <Card.Heading>
-        <Breadcrumbs style={{fontSize: "0.85em", marginBlockEnd: "5px"}} items={[
-          {label: "Каталог", href: city || section ? "/" : null},
-          {label: city?.name ?? "", href: section?.section_id ? `/?city=${city?.city_id}` : null},
-          {label: section?.name_public_plural ?? ""}
-        ]}/>
-        <h1 style={{fontWeight: "700", fontSize: "19px", position: "relative", display: "inline-block", marginBlockEnd: "10px"}}>
+        <Breadcrumbs
+          className={styles["results__breadcrumbs"]}
+          items={[
+            {label: "Каталог", href: city || section ? "/" : null},
+            {label: city?.name ?? "", href: section?.section_id ? `/?city=${city?.city_id}` : null},
+            {label: section?.name_public_plural ?? ""}
+          ]}
+        />
+        <h1 className={styles["results__heading"]}>
           <span>{section?.name_seo_title ?? "Спортивные объекты и секции"} {searchParams?.city && city ? ` в ${city?.name_preposition}` : null}</span>
           <sup style={{fontSize: "0.6em", fontWeight: 400}}>{results.totalCount}</sup>
         </h1>
-        <SearchPanel/>
-        <button type="button" onClick={open}>Open</button>
-        <Modal.Root isOpen={isOpen} close={close}>
-          <Modal.Content>
-            <h1>Hello</h1>
-            <p>Goodbuy</p>
-          </Modal.Content>
-        </Modal.Root>
+        {/* <SearchPanel/> */}
+        <button type="button" onClick={open}>open</button>
+        <SelectCityModal isOpen={isOpen} close={close} city={city}/>
       </Card.Heading>
       {/* <Card.Section style={{display: "flex", justifyContent: "space-between", backgroundColor: "white"}}>
         <Link href={searchParams.map ? manageSearchParams.delete(["map"]) : manageSearchParams.set("map", "true")} style={{display: "flex", alignItems: "center", gap: "5px"}}>

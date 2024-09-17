@@ -53,10 +53,10 @@ body {
 /* GLOBAL CLASSES */
 .container {
   max-inline-size: var(--container-maxInlineSize);
+  padding-block-start: var(--container-paddingBlockStart);
   margin-inline: auto;
 
   @media (width > 905px) {
-    padding-block-start: var(--container-paddingBlockStart);
     padding-inline: var(--container-paddingInline);
   }
 }

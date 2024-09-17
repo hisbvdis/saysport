@@ -1,1 +1,3 @@
-export * as Modal from "./namespaces";
+import Modal from "./Modal";
+
+export { Modal }

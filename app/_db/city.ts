@@ -11,8 +11,8 @@ export const getCitiesByFilters = async (filters:{name?:string}):Promise<City[]>
     .select()
     .from(city)
     .where(cityName ? ilike(city.name, `${cityName}%`) : undefined)
-    .orderBy(sql`length(${city.name}), ${city.name}, ${city.country.name}, ${city.admin1}`)
-    .limit(25)
+    .orderBy(sql`length(${city.name}), ${city.name}, ${city.country}, ${city.admin1}`)
+    .limit(25);
   return dbData;
 }
 
