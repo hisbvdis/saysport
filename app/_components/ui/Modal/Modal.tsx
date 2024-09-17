@@ -1,5 +1,6 @@
 "use client";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
 import ModalContent from "./ModalContent";
@@ -13,6 +14,30 @@ export default function Modal(props:Props) {
   const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
   const [ bodyOverflow, setBodyOverflow ] = useState<string>("");
   const isClickOnBackdrop = useRef<boolean>();
+  const router = useRouter();
+
+  const openModal = () => {
+    modalRef.current?.showModal();
+
+    // Прокрутить вверх (потому что "show()" может скроллить, если первый элемента находится за пределами "viewPort")
+    modalRef.current?.scrollTo(0, 0);
+
+    // Добавить в историю браузера новую запись
+    history.pushState({fromSite: true}, "");
+
+    // У <body> отключить прокрутку, вычислить и задать отступ
+    const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
+    setBodyPaddingRight(Number.parseFloat(getComputedStyle(document.body).paddingInlineEnd));
+    document.body.style.paddingInlineEnd = `${bodyPaddingRight + scrollBarWidth}px`;
+    setBodyOverflow(getComputedStyle(document.body).overflow);
+    document.body.style.overflow = "hidden";
+
+    // Добавление обработчиков модального окна
+    document.addEventListener("keydown", documentKeydownEscapeHandler);
+    modalRef.current?.addEventListener("pointerdown", backdropPointerdownHandler);
+    modalRef.current?.addEventListener("pointerup", backdropPointerupHandler);
+    window.addEventListener("popstate", windowPopstateHandler);
+  }
 
   const closeModal = () => {
     // // Закрыть модальное окно
@@ -22,10 +47,6 @@ export default function Modal(props:Props) {
     // Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
     document.body.style.paddingInlineEnd = `${bodyPaddingRight}px`;
     document.body.style.overflow = bodyOverflow;
-
-    // Разные варианты перехода "назад" в браузере (обычно или с заменой записи в истории)
-    // history.state?.fromSite ? history.back() : history.replaceState(null, "");
-    // history.replaceState(null, "")
 
     // Удалить обработчики модального окна
     document.removeEventListener("keydown", documentKeydownEscapeHandler);
@@ -37,6 +58,7 @@ export default function Modal(props:Props) {
   const documentKeydownEscapeHandler = (e:KeyboardEvent) => {
     if (e.code !== "Escape") return;
     closeModal();
+    router.back();
   }
 
   // Надавили указатель (ЛКМ) => Проверить и записать, является ли целевой элемент подложкой
@@ -50,6 +72,7 @@ export default function Modal(props:Props) {
     if (e.pointerType === "mouse" && e.pointerId !== 1) return;
     if (isClickOnBackdrop.current === false) return;
     closeModal();
+    router.back();
   }
 
   // Нажали "Назад" в браузере =>  Закрыть модальное окно
@@ -59,28 +82,9 @@ export default function Modal(props:Props) {
   }
 
   useEffect(() => {
-    if (isOpen) {
-      modalRef.current?.showModal();
-
-      // Прокрутить вверх (потому что "show()" может скроллить, если первый элемента находится за пределами "viewPort")
-      modalRef.current?.scrollTo(0, 0);
-
-      // Добавить в историю браузера новую запись
-      // history.pushState({fromSite:true}, "");
-
-      // У <body> отключить прокрутку, вычислить и задать отступ
-      const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
-      setBodyPaddingRight(Number.parseFloat(getComputedStyle(document.body).paddingInlineEnd));
-      document.body.style.paddingInlineEnd = `${bodyPaddingRight + scrollBarWidth}px`;
-      setBodyOverflow(getComputedStyle(document.body).overflow);
-      document.body.style.overflow = "hidden";
-
-      // Добавление обработчиков модального окна
-      document.addEventListener("keydown", documentKeydownEscapeHandler);
-      modalRef.current?.addEventListener("pointerdown", backdropPointerdownHandler);
-      modalRef.current?.addEventListener("pointerup", backdropPointerupHandler);
-      window.addEventListener("popstate", windowPopstateHandler);
-    } else {
+    if (isOpen && !modalRef.current?.open) {
+      openModal();
+    } else if (!isOpen && modalRef.current?.open) {
       closeModal();
     }
   }, [isOpen])

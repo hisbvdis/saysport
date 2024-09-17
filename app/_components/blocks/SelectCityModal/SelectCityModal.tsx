@@ -25,7 +25,6 @@ export default function SelectCityModal(props:Props) {
           value={city?.city_id ? String(city?.city_id) : ""}
           label={city?.name}
           onChange={(data) => {
-            console.log( "test" )
             data.value ? router.push(manageSearchParams.set("city", data.value, manageSearchParams.delete(["page"]))) : router.push(manageSearchParams.delete(["city"]));
             close();
           }}
