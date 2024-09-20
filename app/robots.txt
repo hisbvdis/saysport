@@ -1,0 +1,3 @@
+User-Agent: *
+Allow: /
+Sitemap: https://saysport.info/sitemap.xml
