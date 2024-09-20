@@ -156,7 +156,7 @@ export const upsertObject = async (state:EditObject, init: EditObject): Promise<
     status: state.status,
     status_inherit: state.status_inherit || null,
     status_comment: state.status_comment || null,
-    status_source: state.status_source || null,
+    status_sogurce: state.status_source || null,
     status_instead_id: state.status_instead_id || null,
     city_id: state.city_id,
     parent_id: state.parent_id || null,

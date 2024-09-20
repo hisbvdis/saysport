@@ -5,13 +5,13 @@ import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 import { Catalog } from "@/app/_components/pages/Catalog";
 // -----------------------------------------------------------------------------
 import { getCityById } from "@/app/_db/city";
+import { getAllCategories } from "@/app/_db/category";
 import { getObjectsByFilters } from "@/app/_db/object"
 import { getSectionById, getSectionsByFilters } from "@/app/_db/section";
-import { getAllCategories } from "@/app/_db/category";
 // -----------------------------------------------------------------------------
 
 
-export default async function HomePage({searchParams}:Props) {
+export default async function CatalogPage({searchParams}:Props) {
   const city = searchParams.city ? await getCityById(Number(searchParams.city)) : undefined;
   const section = Number(searchParams.section) ? await getSectionById(Number(searchParams.section)) : undefined;
   const results = await getObjectsByFilters({...searchParams, limit: 10, withTotalCount: true, withUnlimited: true});
