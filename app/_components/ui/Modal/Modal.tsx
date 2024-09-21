@@ -12,7 +12,7 @@ export default function Modal(props:Props) {
   const { isOpen, className, children, close } = props;
   const modalRef = useRef<HTMLDialogElement>(null);
   const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
-  const [ bodyOverflow, setBodyOverflow ] = useState<string>("");
+  const [ bodyOverflowY, setBodyOverflowY ] = useState<string>("");
   const isClickOnBackdrop = useRef<boolean>();
   const router = useRouter();
 
@@ -29,8 +29,8 @@ export default function Modal(props:Props) {
     const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
     setBodyPaddingRight(Number.parseFloat(getComputedStyle(document.body).paddingInlineEnd));
     document.body.style.paddingInlineEnd = `${bodyPaddingRight + scrollBarWidth}px`;
-    setBodyOverflow(getComputedStyle(document.body).overflow);
-    document.body.style.overflow = "hidden";
+    setBodyOverflowY(getComputedStyle(document.body).overflowY);
+    document.body.style.overflowY = "hidden";
 
     // Добавление обработчиков модального окна
     document.addEventListener("keydown", documentKeydownEscapeHandler);
@@ -46,7 +46,7 @@ export default function Modal(props:Props) {
 
     // Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
     document.body.style.paddingInlineEnd = `${bodyPaddingRight}px`;
-    document.body.style.overflow = bodyOverflow;
+    document.body.style.overflowY = bodyOverflowY;
 
     // Удалить обработчики модального окна
     document.removeEventListener("keydown", documentKeydownEscapeHandler);
