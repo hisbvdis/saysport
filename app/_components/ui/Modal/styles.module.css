@@ -6,7 +6,7 @@
   display: grid;
   place-items: center;
   margin: 0;
-  padding: 10px;
+  /* padding: 10px; */
   inline-size: 100vw; /* Mandatory */
   block-size: 100vh; /* Mandatory */
   max-inline-size: 100%; /* Mandatory */
@@ -21,4 +21,14 @@
   padding: 20px;
 
   background: #fff;
+}
+
+
+.modal__close {
+  all:unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
 }

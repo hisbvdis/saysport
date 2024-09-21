@@ -5,11 +5,11 @@ import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { Menu } from "@/app/_components/ui/Menu";
 import { Input } from "@/app/_components/ui/Input/";
 import { Button } from "@/app/_components/ui/Button/";
+import { ChevronDownIcon, Cross1Icon } from "@radix-ui/react-icons";
 // -----------------------------------------------------------------------------
 import { useDebounce } from "@/app/_hooks/useDebounce";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import { ChevronDownIcon, Cross1Icon } from "@radix-ui/react-icons";
 
 
 export default function Select(props:Props) {
@@ -148,10 +148,10 @@ export default function Select(props:Props) {
   }
 
   return (
-    <div className={clsx(styles["select"], disabled && styles["select--disabled"])} ref={divRef}>
+    <div className={clsx(styles["select"], className, disabled && styles["select--disabled"])} ref={divRef}>
       <p className={styles["select__inputWrapper"]}>
         <Input
-          className={clsx(styles["select__input"], isAutocomplete && styles["select__input--isAutocomplete"], className)}
+          className={clsx(styles["select__input"], isAutocomplete && styles["select__input--isAutocomplete"])}
           ref={inputRef}
           value={inputValue}
           onChange={handleInputChange}

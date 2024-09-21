@@ -7,10 +7,10 @@ import { useDisclosure } from "@/app/_hooks/useDisclosure";
 import { CatalogContext } from "../Catalog";
 import { Card } from "@/app/_components/ui/Card";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
+import { SelectCityModal } from "../../../blocks/SelectCityModal";
 import { SearchPanel } from "@/app/_components/blocks/SearchPanel";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import SelectCityModal from "../../../blocks/SelectCityModal/SelectCityModal";
 
 
 export default function Results() {

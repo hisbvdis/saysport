@@ -1,8 +1,9 @@
 "use client";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
+import ModalClose from "./ModalClose";
 import ModalContent from "./ModalContent";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
@@ -17,7 +18,7 @@ export default function Modal(props:Props) {
   const router = useRouter();
 
   const openModal = () => {
-    modalRef.current?.showModal();
+    // modalRef.current?.showModal();
 
     // Прокрутить вверх (потому что "show()" может скроллить, если первый элемента находится за пределами "viewPort")
     modalRef.current?.scrollTo(0, 0);
@@ -40,8 +41,7 @@ export default function Modal(props:Props) {
   }
 
   const closeModal = () => {
-    // // Закрыть модальное окно
-    modalRef.current?.close();
+    // Закрыть модальное окно
     close();
 
     // Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
@@ -82,25 +82,31 @@ export default function Modal(props:Props) {
   }
 
   useEffect(() => {
-    if (isOpen && !modalRef.current?.open) {
-      openModal();
-    } else if (!isOpen && modalRef.current?.open) {
-      closeModal();
-    }
+    if (!isOpen) return;
+    openModal();
   }, [isOpen])
 
   return (
-    <dialog className={clsx(styles["modal"], className)} ref={modalRef}>
-      {children}
-    </dialog>
+    <ModalContext.Provider value={{close}}>
+      <dialog className={clsx(styles["modal"], className)} ref={modalRef} open={isOpen}>
+        {children}
+      </dialog>
+    </ModalContext.Provider>
   )
 }
 
+export const ModalContext = createContext<ModalContextType>({} as ModalContextType);
+
 Modal.Content = ModalContent;
+Modal.Close = ModalClose;
 
 interface Props {
   className: string;
   children: React.ReactNode;
   isOpen: boolean;
+  close: () => void;
+}
+
+interface ModalContextType {
   close: () => void;
 }

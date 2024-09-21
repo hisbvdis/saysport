@@ -6,6 +6,7 @@
   position: relative;
 
   display: flex;
+  block-size: 100%;
 }
 
 .select__input {
