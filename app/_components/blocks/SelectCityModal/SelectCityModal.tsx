@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import type { City } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Modal } from "@/app/_components/ui/Modal";
-import { Select } from "@/app/_components/ui/Select";
+import { SelectOld } from "@/app/_components/ui/SelectOld";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
@@ -24,7 +24,7 @@ export default function SelectCityModal(props:Props) {
           <Modal.Close className={styles["selectCityModal__close"]}>
             <ArrowLeftIcon width={25} height={25}/>
           </Modal.Close>
-          <Select
+          <SelectOld
             className={styles["selectCityModal__select"]}
             isAutocomplete
             value={city?.city_id ? String(city?.city_id) : ""}

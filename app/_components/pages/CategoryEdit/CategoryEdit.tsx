@@ -10,7 +10,7 @@ import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
-import { Select } from "@/app/_components/ui/Select";
+import { SelectOld } from "@/app/_components/ui/SelectOld";
 import { Control } from "@/app/_components/ui/Control";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ export default function CategoryEdit(props:{init:EditCategory}) {
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading>Разделы</Card.Heading>
         <Card.Section>
-          <Select
+          <SelectOld
             isAutocomplete
             onChangeData={handleSections.add}
             placeholder="Добавить раздел"

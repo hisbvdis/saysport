@@ -9,7 +9,7 @@ import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, 
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
-import { Select } from "@/app/_components/ui/Select";
+import { SelectOld } from "@/app/_components/ui/SelectOld";
 import { Button } from "@/app/_components/ui/Button";
 import { Input, Textarea } from "@/app/_components/ui/Input";
 import { Control } from "@/app/_components/ui/Control";
@@ -244,7 +244,7 @@ export default function Usages() {
         </div>
       </Card.Section>
       <Card.Section>
-        <Select
+        <SelectOld
           isAutocomplete
           value=""
           onChangeData={(data:Usage) => handleUsages.add(data)}

@@ -7,7 +7,7 @@ import { objectTypeEnum } from "@/drizzle/schema";
 import type { ProcessedCategory } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
-import { Select } from "@/app/_components/ui/Select";
+import { SelectOld } from "@/app/_components/ui/SelectOld";
 // -----------------------------------------------------------------------------
 import { getSectionsByFilters } from "@/app/_db/section";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
@@ -25,7 +25,7 @@ export default function Categories(props:Props) {
     <Card className={clsx(styles["categories"], className)}>
       <Card.Heading className={styles["categories__heading"]}>Категории</Card.Heading>
       <Card.Section style={{padding: 0}}>
-        <Select
+        <SelectOld
           className={styles["catetories__select"]}
           isAutocomplete
           onChange={(data) => {

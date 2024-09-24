@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { Input } from "@/app/_components/ui/Input";
-import { Select } from "@/app/_components/ui/Select";
+import { SelectOld } from "@/app/_components/ui/SelectOld";
 import { Control } from "@/app/_components/ui/Control";
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit";
@@ -10,6 +10,8 @@ import { create } from "mutative";
 import { getObjectsByFilters } from "@/app/_db/object";
 import { objectStatusEnum } from "@/drizzle/schema";
 import { Checkbox } from "@/app/_components/ui/Choice";
+import { SelectRoot, SelectTrigger } from "@/app/_components/ui/Select";
+import { ChevronDownIcon, Cross1Icon } from "@radix-ui/react-icons";
 
 
 export default function Status(props:Props) {
@@ -24,7 +26,7 @@ export default function Status(props:Props) {
           {state.parent_id && <Checkbox name="status_inherit" checked={Boolean(state.status_inherit)} onChange={handleStateChange.checked} disabled={!state.parent_id}>Наследовать</Checkbox>}
         </Control.Label>
         <Control.Section>
-          <Select
+          <SelectOld
             name="status"
             value={state?.status}
             onChange={(data) => handleStateChange?.value(data)}
@@ -37,6 +39,24 @@ export default function Status(props:Props) {
               {id: objectStatusEnum.closed_forever, label: "Закрыто навсегда"},
             ]}
           />
+          <SelectRoot
+            name="status"
+            value={state?.status}
+            onChange={(data) => handleStateChange?.value(data)}
+            items={[
+              {id: objectStatusEnum.works, label: "Работает"},
+              {id: objectStatusEnum.open_soon, label: "Скоро открытие"},
+              {id: objectStatusEnum.might_closed, label: "Возможно, не работает"},
+              {id: objectStatusEnum.closed_temp, label: "Временно закрыто"},
+              {id: objectStatusEnum.closed_forever, label: "Закрыто навсегда"},
+            ]}
+          >
+            <SelectTrigger>
+              <SelectTrigger.Input/>
+              <SelectTrigger.ArrowIcon><ChevronDownIcon/></SelectTrigger.ArrowIcon>
+              <SelectTrigger.CloseButton><Cross1Icon/></SelectTrigger.CloseButton>
+            </SelectTrigger>
+          </SelectRoot>
         </Control.Section>
       </Control>
       <Control>
@@ -67,7 +87,7 @@ export default function Status(props:Props) {
       <Control>
         <Control.Label>Вместо закрытого</Control.Label>
         <Control.Section>
-          <Select
+          <SelectOld
             name="status_instead_id"
             value={String(state?.status_instead_id)}
             label={state?.statusInstead?.name_type.concat(state.statusInstead?.name_title ? ` ${state.statusInstead?.name_title}` : "").concat(state.statusInstead?.name_where ? ` ${state.statusInstead?.name_where}` : "")}

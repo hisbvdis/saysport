@@ -3,10 +3,10 @@
   align-items: center;
   padding-inline: 5px;
 
-  font-size: var(--textfield-fontSize);
-  color: var(--control-disabled-fontColor);
+  font-size: var(--input-fontSize);
+  color: var(--input-disabled-fontColor);
 
-  background: var(--control-disabled-backgroundColor);
-  border: 1px solid var(--textField-borderColor);
+  background: var(--input-disabled-backgroundColor);
+  border: 1px solid var(--input-borderColor);
   cursor: default;
 }

@@ -1,11 +1,11 @@
 .input {
+  display: block;
   inline-size: 100%;
-  padding: 5.5px;
+  padding: var(--input-padding);
 
-  font-family: inherit;
-  font-size: var(--textField-fontSize, 0.8125rem);
+  font-size: var(--input-fontSize);
 
-  border: 1px solid var(--textField-borderColor);
+  border: 1px solid var(--input-borderColor);
   resize: none;
 }
 
@@ -15,11 +15,13 @@
 }
 
 .input:disabled {
-  background-color: var(--control-disabled-backgroundColor);
+  color: var(--input-disabled-fontColor);
+
+  background-color: var(--input-disabled-backgroundColor);
 }
 
 .input::placeholder {
-  color: var(--textField-placeholder-fontColor);
+  color: var(--input-placeholder-fontColor);
 }
 
 .input--textarea {

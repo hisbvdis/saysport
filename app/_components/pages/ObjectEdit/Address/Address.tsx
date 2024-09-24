@@ -10,7 +10,7 @@ import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
-import { Select } from "@/app/_components/ui/Select";
+import { SelectOld } from "@/app/_components/ui/SelectOld";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
 import { MapComponent, MapControl, MapCluster } from "@/app/_components/ui/MapComponent";
@@ -106,7 +106,7 @@ export default function Address() {
           <Control>
             <Control.Label>Город</Control.Label>
             <Control.Section>
-              <Select
+              <SelectOld
                 name="city_id"
                 value={state.city_id ? String(state.city_id) : ""}
                 label={state.city?.name?.concat(state.city.admin1 ? `, ${state.city.admin1}` : "").concat(state.city.country ? `, ${state.city.country}` : "") ?? ""}
@@ -129,7 +129,7 @@ export default function Address() {
               {state.parent_id && <Link href={`/object/${state.parent?.object_id}`}>(Open)</Link>}
             </Control.Label>
             <Control.Section>
-              <Select
+              <SelectOld
                 name="parent_id"
                 value={state.parent_id ? String(state.parent_id) : ""}
                 label={state.parent?.name_type?.concat(state.parent.name_title ? ` «${state.parent.name_title}»` : "").concat(state.parent.name_where ? ` ${state.parent.name_where}` : "")}

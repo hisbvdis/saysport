@@ -10,7 +10,7 @@ import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
-import { Select } from "@/app/_components/ui/Select";
+import { SelectOld } from "@/app/_components/ui/SelectOld";
 import { Control } from "@/app/_components/ui/Control";
 import { InputAddon } from "@/app/_components/ui/InputAddon";
 import { Radio, RadioGroup } from "@/app/_components/ui/Choice";
@@ -168,7 +168,7 @@ export default function SectionEdit(props:{init:EditSection}) {
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading>Характеристики</Card.Heading>
         <Card.Section>
-          <Select
+          <SelectOld
             isAutocomplete
             onChangeData={handleSpecs.add}
             placeholder="Добавить характеристику"
@@ -193,7 +193,7 @@ export default function SectionEdit(props:{init:EditSection}) {
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading>Использования</Card.Heading>
         <Card.Section>
-          <Select
+          <SelectOld
             isAutocomplete
             onChangeData={handleUsages.add}
             placeholder="Добавить использование"

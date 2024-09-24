@@ -2,14 +2,15 @@
   position: relative;
 }
 
-.select__inputWrapper {
-  position: relative;
-
-  display: flex;
-  block-size: 100%;
-}
-
 .select__input {
+  display: block;
+  inline-size: 100%;
+  padding: var(--input-padding);
+
+  font-size: var(--input-fontSize);
+
+  border: 1px solid var(--input-borderColor);
+  appearance: none;
   cursor: default;
 }
 
@@ -17,46 +18,49 @@
   cursor: text;
 }
 
-.select--disabled .select__input--isAutocomplete {
-  cursor: default;
+.select__input:disabled {
+  color: var(--input-disabled-fontColor);
+
+  background-color: var(--input-disabled-backgroundColor);
 }
 
-.select__button {
+.select__input::placeholder {
+  color: var(--input-placeholder-fontColor);
+}
+
+.select__arrowIcon,
+.select__closeButton {
   position: absolute;
-  inset-block: 2px;
   inset-inline-end: 0;
+  inset-block-start: 50%;
+  translate: 0 -50%;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  block-size: calc(100% - 4px);
-  padding-inline: 7px;
+  block-size: 100%;
   aspect-ratio: 1 / 1;
+  padding: 0;
 
-  /* background: var(--color-white); */
-  background: transparent;
+  background: none;
   border: none;
-  border-inline-end: 1px solid var(--textField-borderColor);
 }
 
-.select__button:disabled {
-  background: var(--control-disabled-backgroundColor);
-  cursor: default;
-}
-
-.select__button--arrow {
+.select__arrowIcon,
+.select--disabled .select__closeButton {
   pointer-events: none;
 }
 
-.select__nativeSelect {
-  position: absolute;
+.select__closeButton {
+  cursor: pointer;
+}
 
-  width: 0;
-  height: 0;
+.select__arrowIcon svg {
+  width: 18px;
+  height: 18px
+}
 
-  white-space: nowrap;
-
-  border: none;
-  clip-path: inset(50%);
-  overflow: hidden;
+.select--disabled .select__arrowIcon,
+.select--disabled .select__closeButton {
+  color: var(--input-disabled-fontColor);
 }

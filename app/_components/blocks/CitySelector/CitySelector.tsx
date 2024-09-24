@@ -2,9 +2,10 @@
 import { useRouter } from "next/navigation";
 import type { City } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
+import { Select } from "../../ui/Select";
 import { Card } from "@/app/_components/ui/Card"
-import { Select } from "@/app/_components/ui/Select"
 import { Control } from "@/app/_components/ui/Control"
+import { SelectOld } from "@/app/_components/ui/SelectOld"
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
@@ -20,7 +21,7 @@ export default function CitySelector(props:{className?:string;city?:City}) {
     <Card>
       <Control>
         <Control.Label>Город</Control.Label>
-        <Select
+        <SelectOld
           isAutocomplete
           value={city?.city_id ? String(city?.city_id) : ""}
           label={city?.name}
@@ -32,7 +33,19 @@ export default function CitySelector(props:{className?:string;city?:City}) {
           }))}
         />
       </Control>
+      <Select
+        isAutocomplete
+        label={city?.name}
+        placeholder="Введите город"
+        value={city?.city_id ? String(city?.city_id) : ""}
+        onChange={(data) => {data.value ? router.push(manageSearchParams.set("city", data.value, manageSearchParams.delete(["page"]))) : router.push(manageSearchParams.delete(["city"]))}}
+      />
+      <Select
+        label={city?.name}
+        placeholder="Введите город"
+        value={city?.city_id ? String(city?.city_id) : ""}
+        onChange={(data) => {data.value ? router.push(manageSearchParams.set("city", data.value, manageSearchParams.delete(["page"]))) : router.push(manageSearchParams.delete(["city"]))}}
+      />
     </Card>
   )
 }
-
