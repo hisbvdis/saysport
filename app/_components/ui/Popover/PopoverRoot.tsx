@@ -39,7 +39,7 @@ export default function PopoverRoot(props:Props) {
     // Добавление обработчиков модального окна
     document.addEventListener("keydown", documentKeydownEscapeHandler);
     document.addEventListener("pointerdown", notContentPointerDownHandler);
-    document.addEventListener("pointerup", notContentPointerUpHandler);
+    document.addEventListener("click", notContentClickHandler);
   }
 
   const closePopover = () => {
@@ -58,7 +58,7 @@ export default function PopoverRoot(props:Props) {
     // Удалить обработчики модального окна
     document.removeEventListener("keydown", documentKeydownEscapeHandler);
     document.removeEventListener("pointerdown", notContentPointerDownHandler);
-    document.removeEventListener("pointerup", notContentPointerUpHandler);
+    document.removeEventListener("click", notContentClickHandler);
   }
 
   const documentKeydownEscapeHandler = (e:KeyboardEvent) => {
@@ -81,8 +81,7 @@ export default function PopoverRoot(props:Props) {
   }
 
   // "Клик" в области модального окна =>  Если переменная "надавили указатель" === true, закрыть модальное окно
-  const notContentPointerUpHandler = (e:PointerEvent) => {
-    if (e.pointerType === "mouse" && e.pointerId !== 1) return;
+  const notContentClickHandler = (e:MouseEvent) => {
     if (dialogContentRef.current?.contains(e.target)) return;
     if (isClickOnBackdrop.current === false) return;
     isClickOnBackdrop.current = false;
