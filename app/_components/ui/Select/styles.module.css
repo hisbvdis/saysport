@@ -44,15 +44,12 @@
 
   background: none;
   border: none;
+  cursor: pointer;
 }
 
 .select__arrowIcon,
 .select--disabled .select__closeButton {
   pointer-events: none;
-}
-
-.select__closeButton {
-  cursor: pointer;
 }
 
 .select__arrowIcon svg {

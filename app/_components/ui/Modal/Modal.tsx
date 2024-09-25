@@ -10,81 +10,82 @@ import styles from "./styles.module.css";
 
 
 export default function Modal(props:Props) {
-  const { isOpen, className, children, close } = props;
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
-  const [ bodyOverflowY, setBodyOverflowY ] = useState<string>("");
-  const isClickOnBackdrop = useRef<boolean>();
-  const router = useRouter();
+  /* [V] */const { isOpen, className, children, close } = props;
+  /* [V] */const modalRef = useRef<HTMLDialogElement>(null);
+  /* [V] */const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
+  /* [V] */const [ bodyOverflowY, setBodyOverflowY ] = useState<string>("");
+  /* [V] */const isClickOnBackdrop = useRef<boolean>();
+  /* [V] */const router = useRouter();
 
   const openModal = () => {
-    // modalRef.current?.showModal();
+    /* [V] */// modalRef.current?.showModal(); // elem.close() doesn't work in Chrome
 
-    // Прокрутить вверх (потому что "show()" может скроллить, если первый элемента находится за пределами "viewPort")
-    modalRef.current?.scrollTo(0, 0);
+    /* [V] */// Прокрутить вверх (потому что "show()" может скроллить, если первый элемента находится за пределами "viewPort")
+    /* [V] */modalRef.current?.scrollTo(0, 0);
 
-    // Добавить в историю браузера новую запись
-    history.pushState({fromSite: true}, "");
+    /* [V] */// Добавить в историю браузера новую запись
+    /* [V] */history.pushState({fromSite: true}, "");
 
-    // У <body> отключить прокрутку, вычислить и задать отступ
-    const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
-    setBodyPaddingRight(Number.parseFloat(getComputedStyle(document.body).paddingInlineEnd));
-    document.body.style.paddingInlineEnd = `${bodyPaddingRight + scrollBarWidth}px`;
-    setBodyOverflowY(getComputedStyle(document.body).overflowY);
-    document.body.style.overflowY = "hidden";
+    /* [V] */// У <body> отключить прокрутку, вычислить и задать отступ
+    /* [V] */const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
+    /* [V] */setBodyPaddingRight(Number.parseFloat(getComputedStyle(document.body).paddingInlineEnd));
+    /* [V] */document.body.style.paddingInlineEnd = `${bodyPaddingRight + scrollBarWidth}px`;
+    /* [V] */setBodyOverflowY(getComputedStyle(document.body).overflowY);
+    /* [V] */document.body.style.overflowY = "hidden";
 
     // Добавление обработчиков модального окна
-    document.addEventListener("keydown", documentKeydownEscapeHandler);
-    modalRef.current?.addEventListener("pointerdown", backdropPointerdownHandler);
-    modalRef.current?.addEventListener("pointerup", backdropPointerupHandler);
-    window.addEventListener("popstate", windowPopstateHandler);
+    /* [V] */document.addEventListener("keydown", documentKeydownEscapeHandler);
+    /* [V] */modalRef.current?.addEventListener("pointerdown", backdropPointerdownHandler);
+    /* [V] */modalRef.current?.addEventListener("pointerup", backdropPointerupHandler);
+    /* [V] */window.addEventListener("popstate", windowPopstateHandler);
   }
 
   const closeModal = () => {
-    // Закрыть модальное окно
-    close();
+    /* [V] */// Закрыть модальное окно
+    /* [V] */// modalRef.current?.close(); // elem.close() doesn't work in Chrome
+    /* [V] */close();
 
-    // Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
-    document.body.style.paddingInlineEnd = `${bodyPaddingRight}px`;
-    document.body.style.overflowY = bodyOverflowY;
+    /* [V] */// Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
+    /* [V] */document.body.style.paddingInlineEnd = `${bodyPaddingRight}px`;
+    /* [V] */document.body.style.overflowY = bodyOverflowY;
 
-    // Удалить обработчики модального окна
-    document.removeEventListener("keydown", documentKeydownEscapeHandler);
-    modalRef.current?.removeEventListener("pointerdown", backdropPointerdownHandler);
-    modalRef.current?.removeEventListener("pointerup", backdropPointerupHandler);
-    window.removeEventListener("popstate", windowPopstateHandler);
+    /* [V] */// Удалить обработчики модального окна
+    /* [V] */document.removeEventListener("keydown", documentKeydownEscapeHandler);
+    /* [V] */modalRef.current?.removeEventListener("pointerdown", backdropPointerdownHandler);
+    /* [V] */modalRef.current?.removeEventListener("pointerup", backdropPointerupHandler);
+    /* [V] */window.removeEventListener("popstate", windowPopstateHandler);
   }
 
-  const documentKeydownEscapeHandler = (e:KeyboardEvent) => {
-    if (e.code !== "Escape") return;
-    closeModal();
-    router.back();
-  }
+  /* [V] */const documentKeydownEscapeHandler = (e:KeyboardEvent) => {
+  /* [V] */  if (e.code !== "Escape") return;
+  /* [V] */  closeModal();
+  /* [V] */  router.back();
+  /* [V] */}
 
-  // Надавили указатель (ЛКМ) => Проверить и записать, является ли целевой элемент подложкой
-  const backdropPointerdownHandler = (e:PointerEvent) => {
-    if (e.pointerType === "mouse" && e.pointerId !== 1) return;
-    isClickOnBackdrop.current = e.target === modalRef.current;
-  }
+  /* [V] */// Надавили указатель (ЛКМ) => Проверить и записать, является ли целевой элемент подложкой
+  /* [V] */const backdropPointerdownHandler = (e:PointerEvent) => {
+  /* [V] */  if (e.pointerType === "mouse" && e.pointerId !== 1) return;
+  /* [V] */  isClickOnBackdrop.current = e.target === modalRef.current;
+  /* [V] */}
 
-  // "Клик" в области модального окна =>  Если переменная "надавили указатель" === true, закрыть модальное окно
-  const backdropPointerupHandler = (e:PointerEvent) => {
-    if (e.pointerType === "mouse" && e.pointerId !== 1) return;
-    if (isClickOnBackdrop.current === false) return;
-    closeModal();
-    router.back();
-  }
+  /* [V] */// "Клик" в области модального окна =>  Если переменная "надавили указатель" === true, закрыть модальное окно
+  /* [V] */const backdropPointerupHandler = (e:PointerEvent) => {
+  /* [V] */  if (e.pointerType === "mouse" && e.pointerId !== 1) return;
+  /* [V] */  if (isClickOnBackdrop.current === false) return;
+  /* [V] */  closeModal();
+  /* [V] */  router.back();
+  /* [V] */}
 
-  // Нажали "Назад" в браузере =>  Закрыть модальное окно
-  function windowPopstateHandler() {
-    if (!isOpen) return;
-    closeModal();
-  }
+  /* [V] */// Нажали "Назад" в браузере =>  Закрыть модальное окно
+  /* [V] */function windowPopstateHandler() {
+  /* [V] */  if (!isOpen) return;
+  /* [V] */  closeModal();
+  /* [V] */}
 
-  useEffect(() => {
-    if (!isOpen) return;
-    openModal();
-  }, [isOpen])
+  /* [V] */useEffect(() => {
+  /* [V] */  if (isOpen) openModal();
+  /* [V] */  else closeModal();
+  /* [V] */}, [isOpen])
 
   return (
     <ModalContext.Provider value={{close}}>
@@ -101,12 +102,10 @@ Modal.Content = ModalContent;
 Modal.Close = ModalClose;
 
 interface Props {
-  className: string;
-  children: React.ReactNode;
+  className?: string;
+  children?: React.ReactNode;
   isOpen: boolean;
   close: () => void;
 }
 
-interface ModalContextType {
-  close: () => void;
-}
+interface ModalContextType extends Pick<Props, "close"> {}

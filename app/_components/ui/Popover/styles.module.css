@@ -1,12 +1,18 @@
-.modal[open] {
-  position: fixed;
-  inset: 0;
-  z-index: 3;
-
+.popover[open] {
   display: grid;
   place-items: center;
   margin: 0;
-  /* padding: 10px; */
+  padding: 0;
+
+  background-color: transparent;
+  border: none;
+}
+
+.popover--modal[open] {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+
   inline-size: 100vw; /* Mandatory */
   block-size: 100vh; /* Mandatory */
   max-inline-size: 100%; /* Mandatory */
@@ -14,20 +20,11 @@
 
   overflow-y: scroll;
   background-color: rgb(0 0 0 / 0.6);
-  border: none;
 }
 
-.modal__content {
+.popover__content {
   padding: 20px;
 
   background: #fff;
-}
-
-.modal__close {
-  all:unset;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
+  pointer-events: all;
 }
