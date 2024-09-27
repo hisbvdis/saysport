@@ -1,11 +1,10 @@
-"use client";
 import clsx from "clsx";
 import { useContext } from "react";
-import type { SelectArrowIconProps } from "./SelectTypes";
 // -----------------------------------------------------------------------------
 import { SelectContext } from "./SelectRoot";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
+import type { SelectArrowIconProps } from "./types";
 
 
 export default function SelectArrowIcon(props:SelectArrowIconProps) {

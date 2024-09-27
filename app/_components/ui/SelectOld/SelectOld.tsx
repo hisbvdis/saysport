@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { ChevronDownIcon, Cross1Icon } from "@radix-ui/react-icons";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
-import { Menu } from "@/app/_components/ui/Menu";
+import { MenuOld } from "@/app/_components/ui/MenuOld";
 import { Input } from "@/app/_components/ui/Input/";
 import { Button } from "@/app/_components/ui/Button/";
 // -----------------------------------------------------------------------------
@@ -69,12 +69,12 @@ export default function SelectOld(props:Props) {
     /* [V] */}
   /* [V] */}
 
-  const handleDocumentMousedown = (e:MouseEvent) => {
-    if ((e.target as HTMLElement).closest(`.${styles["select"]}`) === divRef.current) return;
-    setIsShowMenu(false);
-    setSuggestions(localItems ?? []);
-    !props.items?.length ? setInputValue(props.label) : setInputValue(selectedItem?.label);
-  }
+  /* [V] */const handleDocumentMousedown = (e:MouseEvent) => {
+  /* [V] */  if ((e.target as HTMLElement).closest(`.${styles["select"]}`) === divRef.current) return;
+  /* [V] */  setIsShowMenu(false);
+  /* [V] */  setSuggestions(localItems ?? []);
+  /* [V] */  !props.items?.length ? setInputValue(props.label) : setInputValue(selectedItem?.label);
+  /* [V] */}
 
   const handleClearBtnClick = () => {
     setInputValue("");
@@ -137,12 +137,12 @@ export default function SelectOld(props:Props) {
     /* [V] */}
   /* [V] */}
 
-  useEffect(() => {
-    if (inputRef.current === document.activeElement) {
-      document.addEventListener("mousedown", handleDocumentMousedown);
-    }
-    return () => document.removeEventListener("mousedown", handleDocumentMousedown);
-  })
+  /* [V] */useEffect(() => {
+  /* [V] */  if (inputRef.current === document.activeElement) {
+  /* [V] */    document.addEventListener("mousedown", handleDocumentMousedown);
+  /* [V] */  }
+  /* [V] */  return () => document.removeEventListener("mousedown", handleDocumentMousedown);
+  /* [V] */})
 
   if (requestItemsOnInputChange && requestItemsOnFirstTouch) {
     throw new Error("Only one type of 'request' function");
@@ -178,7 +178,7 @@ export default function SelectOld(props:Props) {
       {/* [X] */}<select className={styles["select__nativeSelect"]} name={props.name} value={props.value || ""} onChange={(e) => e} ref={selectRef} tabIndex={-1}>
       {/* [X] */}  <option value={selectedItem?.id ?? ""}/>
       {/* [X] */}</select>
-      <Menu
+      <MenuOld
         isShowMenu={isShowMenu}
         value={props.value ?? ""}
         items={suggestions.map((item) => ({id: item.id, label: item.label}))}

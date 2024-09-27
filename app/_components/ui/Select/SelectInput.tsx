@@ -1,9 +1,7 @@
-"use client";
 import clsx from "clsx";
 import { useContext } from "react"
-import type { SelectInputProps } from "./SelectTypes";
 // -----------------------------------------------------------------------------
-import { SelectContext } from "./SelectRoot"
+import { SelectContext, type SelectInputProps } from ".";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
@@ -31,3 +29,4 @@ export default function SelectInput(props:SelectInputProps) {
     />
   )
 }
+

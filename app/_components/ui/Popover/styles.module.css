@@ -1,6 +1,9 @@
 .popover[open] {
+  z-index: 1;
+
   display: grid;
   place-items: center;
+  inline-size: 100%;
   margin: 0;
   padding: 0;
 
@@ -11,7 +14,6 @@
 .popover--modal[open] {
   position: fixed;
   inset: 0;
-  z-index: 1;
 
   inline-size: 100vw; /* Mandatory */
   block-size: 100vh; /* Mandatory */
@@ -23,7 +25,8 @@
 }
 
 .popover__content {
-  padding: 20px;
+  display: block;
+  inline-size: 100%;
 
   background: #fff;
   pointer-events: all;

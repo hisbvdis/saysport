@@ -1,8 +1,9 @@
 import clsx from "clsx";
+import { useContext } from "react";
+// -----------------------------------------------------------------------------
+import { PopoverContext } from "./PopoverRoot";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import { useContext } from "react";
-import { PopoverContext } from "./PopoverRoot";
 
 
 export default function PopoverContent(props:Props) {

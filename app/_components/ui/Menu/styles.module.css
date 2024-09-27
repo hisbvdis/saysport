@@ -1,42 +1,24 @@
-.menu:not(:empty) {
-  position: absolute;
-  inset-block-start: 100%;
-  z-index: 2;
-
-  min-inline-size: max(100%, 150px);
+.menu {
   max-block-size: 250px;
-  padding-inline-start: 0;
-
-  font-size: var(--input-fontSize, 0.8125rem);
 
   background-color: var(--color-white);
   border: 1px solid var(--input-borderColor);
-  box-shadow: var(--boxShadow);
-  list-style: none;
+  box-shadow: var(--boxShadow--thin);
   overflow: auto;
 }
 
-.menu__link {
+.menu__item {
   display: block;
-  min-inline-size: 100%;
-  min-block-size: 25px;
+  inline-size: 100%;
   padding: 5px;
 
   text-align: start;
 
-  border: none;
   background: none;
+  border: none;
   cursor: pointer;
 }
 
-.menu__item--focus .menu__link {
+.menu__item:is(:hover, :focus) {
   background-color: var(--control-hovered-backgroundColor);
-}
-
-@media (width < 905px) {
-  .menu__link {
-    padding: var(--card-padding);
-
-    font-size: 1rem;
-  }
 }

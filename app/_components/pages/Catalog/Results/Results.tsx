@@ -2,20 +2,16 @@
 import Link from "next/link";
 import { useContext } from "react";
 import { objectTypeEnum } from "@/drizzle/schema";
-import { useDisclosure } from "@/app/_hooks/useDisclosure";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
 import { Card } from "@/app/_components/ui/Card";
 import { Breadcrumbs } from "@/app/_components/ui/Breadcrumbs";
-import { SelectCityModal } from "../../../blocks/SelectCityModal";
-import { SearchPanel } from "@/app/_components/blocks/SearchPanel";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
 export default function Results() {
   const { searchParams, city, section, results } = useContext(CatalogContext);
-  const { isOpen, open, close } = useDisclosure(false);
 
   return (<>
     <Card className={styles["results"]}>
@@ -33,8 +29,6 @@ export default function Results() {
           <sup style={{fontSize: "0.6em", fontWeight: 400}}>{results.totalCount}</sup>
         </h1>
         {/* <SearchPanel/> */}
-        <button type="button" onClick={open}>open</button>
-        <SelectCityModal isOpen={isOpen} close={close} city={city}/>
       </Card.Heading>
       {/* <Card.Section style={{display: "flex", justifyContent: "space-between", backgroundColor: "white"}}>
         <Link href={searchParams.map ? manageSearchParams.delete(["map"]) : manageSearchParams.set("map", "true")} style={{display: "flex", alignItems: "center", gap: "5px"}}>

@@ -3,18 +3,23 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 
 
-export default function SelectTrigger(props:SelectTriggerProps) {
+export default function MenuRoot(props:MenuRootProps) {
   const { children, className, style } = props;
 
-  return (<>
-    <div className={clsx(styles["select__trigger"], className)} style={style}>
+  return (
+    <div className={clsx(styles["menu"], className)} style={style}>
       {children}
     </div>
-  </>)
+  )
 }
 
-export interface SelectTriggerProps {
-  children?: React.ReactNode;
+export interface MenuRootProps {
   className?: string;
+  children?: React.ReactNode;
   style?: React.CSSProperties;
+}
+
+interface MenuItem {
+  id: string;
+  label: string;
 }

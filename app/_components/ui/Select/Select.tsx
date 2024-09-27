@@ -1,27 +1,29 @@
-import type { SelectRootProps } from "./SelectTypes";
+"use client";
+import { useState } from "react";
 import { ChevronDownIcon, Cross1Icon } from "@radix-ui/react-icons";
-// -----------------------------------------------------------------------------
-import SelectRoot from "./SelectRoot";
-import SelectContent from "./SelectContent";
-import SelectTrigger from "./SelectTrigger";
-// -----------------------------------------------------------------------------
+import { SelectArrowIcon, SelectCloseButton, SelectInput, type SelectItem, SelectMenu, SelectOption, type SelectProps, SelectRoot, SelectTrigger, SelectValue } from ".";
 
 
-export default function Select(props:SelectRootProps) {
+export default function Select(props:SelectProps) {
+  const [ suggestions, setSuggestions ] = useState<SelectItem[]>([]);
+
   return (
-    <SelectRoot {...props}>
-      <SelectTrigger>
-        <SelectTrigger.Input/>
-        <SelectTrigger.ArrowIcon>
-          <ChevronDownIcon/>
-        </SelectTrigger.ArrowIcon>
-        <SelectTrigger.CloseButton>
-          <Cross1Icon/>
-        </SelectTrigger.CloseButton>
-      </SelectTrigger>
-      <SelectContent>
+    <SelectRoot {...props} setSuggestions={setSuggestions} suggestions={suggestions}>
 
-      </SelectContent>
+      <SelectTrigger>
+        <SelectInput/>
+        <SelectArrowIcon><ChevronDownIcon/></SelectArrowIcon>
+        <SelectCloseButton><Cross1Icon/></SelectCloseButton>
+      </SelectTrigger>
+
+      <SelectMenu>
+        {suggestions?.map((item) => (
+          <SelectOption key={item.id}>
+            <SelectValue>{item.label}</SelectValue>
+          </SelectOption>
+        ))}
+      </SelectMenu>
+
     </SelectRoot>
   )
 }

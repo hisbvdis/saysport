@@ -1,9 +1,9 @@
 "use client";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 import { createContext, type RefObject, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import { useRouter } from "next/navigation";
 
 
 export default function PopoverRoot(props:Props) {
@@ -12,12 +12,13 @@ export default function PopoverRoot(props:Props) {
   const dialogContentRef = useRef<HTMLDivElement>(null);
   const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
   const [ bodyOverflowY, setBodyOverflowY ] = useState<string>("");
-  const isClickOnBackdrop = useRef<boolean>();
+  const isClickOnBackdrop = useRef(false);
   const router = useRouter();
 
   const openPopover = () => {
     // Показать модальное окно
     // dialogRef.current?.showModal(); // elem.close() doesn't work in Chrome
+    // dialogRef.current?.showPopover();
 
     // Прокрутить вверх (потому что "show()" может скроллить, если первый элемента находится за пределами "viewPort")
     // dialogRef.current?.scrollTo(0, 0);
@@ -76,14 +77,14 @@ export default function PopoverRoot(props:Props) {
   // Надавили указатель (ЛКМ) => Проверить и записать, является ли целевой элемент подложкой
   const notContentPointerDownHandler = (e:PointerEvent) => {
     if (e.pointerType === "mouse" && e.pointerId !== 1) return;
-    if (dialogContentRef.current?.contains(e.target)) return;
+    if (dialogContentRef.current?.contains(e.target as Node)) return;
     isClickOnBackdrop.current = true;
   }
 
   // "Клик" в области модального окна =>  Если переменная "надавили указатель" === true, закрыть модальное окно
   const notContentClickHandler = (e:MouseEvent) => {
-    if (dialogContentRef.current?.contains(e.target)) return;
-    if (isClickOnBackdrop.current === false) return;
+    if (dialogContentRef.current?.contains(e.target as Node)) return;
+    if (!isClickOnBackdrop.current) return;
     isClickOnBackdrop.current = false;
     closePopover();
     if (isModal) router.back();
