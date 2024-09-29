@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import type { MenuValueProps } from ".";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
@@ -11,10 +12,4 @@ export default function MenuValue(props:MenuValueProps) {
       {children}
     </span>
   )
-}
-
-interface MenuValueProps {
-  className?: string;
-  children: React.ReactNode;
-  style?: React.CSSProperties;
 }

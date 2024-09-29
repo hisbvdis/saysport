@@ -2,6 +2,10 @@
   position: relative;
 }
 
+.select__trigger {
+  position: relative;
+}
+
 .select__input {
   display: block;
   inline-size: 100%;

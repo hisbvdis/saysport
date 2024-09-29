@@ -1,25 +1,23 @@
 import clsx from "clsx";
 import { useContext } from "react";
+import { type SelectContentProps, SelectContext } from ".";
 // -----------------------------------------------------------------------------
 import { MenuRoot } from "../Menu";
-import { type SelectContentProps, SelectContext } from ".";
-import { PopoverRoot, PopoverContent } from "@/app/_components/ui/Popover";
+import { Popover } from "@/app/_components/ui/Popover";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
 export default function SelectMenu(props:SelectContentProps) {
   const { className, style, children } = props;
-  const { isMenuOpen, closeMenu } = useContext(SelectContext);
+  const { isMenuOpen, onChange, closeMenu, suggestions, value, handleMenuSelect } = useContext(SelectContext);
 
-  if (!isMenuOpen) return null;
+  if (!isMenuOpen || !suggestions.length) return null;
   return (
-    <PopoverRoot className={clsx(styles["select__content"], className)} style={style} isOpen={isMenuOpen} close={closeMenu}>
-      <PopoverContent>
-        <MenuRoot>
-          {children}
-        </MenuRoot>
-      </PopoverContent>
-    </PopoverRoot>
+    <Popover className={clsx(styles["select__menu"], className)} style={style} isOpen={isMenuOpen} popover="manual">
+      <MenuRoot items={suggestions} isOpen={isMenuOpen} value={value ?? ""} onSelect={handleMenuSelect} close={closeMenu}>
+        {children}
+      </MenuRoot>
+    </Popover>
   )
 }

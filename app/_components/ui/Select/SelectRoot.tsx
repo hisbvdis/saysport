@@ -1,7 +1,8 @@
+"use client";
 import clsx from "clsx";
 import { type ChangeEvent, createContext, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
-import type { SelectContextType, SelectItem, SelectRootProps } from ".";
+import type { SelectContextType, SelectItemType, SelectRootProps } from ".";
 // -----------------------------------------------------------------------------
 import { useDebounce } from "@/app/_hooks/useDebounce";
 import { useDisclosure } from "@/app/_hooks/useDisclosure";
@@ -10,14 +11,14 @@ import styles from "./styles.module.css";
 
 
 export default function SelectRoot(props:SelectRootProps) {
-  const { isAutocomplete, disabled, items=[], value, label, placeholder, children, className, style, required, onChange=(e=>e), name, requestItemsOnFirstTouch, requestItemsOnInputChange, requestMinInputLenght=3, suggestions, setSuggestions } = props;
+  const { isAutocomplete, disabled, items=[], value, label, placeholder, children, className, style, required, onChange=(e=>e), onChangeData=(e=>e), name, requestItemsOnFirstTouch, requestItemsOnInputChange, requestMinInputLenght=3, suggestions, setSuggestions } = props;
   const debounce = useDebounce();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [ localItems, setLocalItems ] = useState(props.items ?? []);
   const { isOpen:isMenuOpen, open:openMenu, close:closeMenu, toggle:toggleMenu } = useDisclosure(false);
   const emptySelectedItem = {id: value ?? "", label: label ?? ""};
-  const [ selectedItem, setSelectedItem ] = useState<SelectItem>(items.length ? (localItems.find((item) => item.id === value) ?? emptySelectedItem) : emptySelectedItem);
+  const [ selectedItem, setSelectedItem ] = useState<SelectItemType>(items.length ? (localItems.find((item) => item.id === value) ?? emptySelectedItem) : emptySelectedItem);
   const [ inputValue, setInputValue ] = useState<string>(selectedItem?.label ?? "");
   useEffect(() => {items.length ? setSelectedItem(localItems.find((item) => item.id === value) ?? emptySelectedItem) : setSelectedItem(emptySelectedItem)}, [value]);
   useEffect(() => {items.length ? null : setInputValue(label ?? "")}, [label]);
@@ -33,7 +34,9 @@ export default function SelectRoot(props:SelectRootProps) {
     }
   }
 
-  const handleInputFocus = async () => {
+  const handleInputFocus = async (e:React.FocusEvent) => {
+    // if (e.relatedTarget && inputRef.current && e.relatedTarget !== inputRef.current) return;
+    if (!e.relatedTarget) return;
     isAutocomplete && openMenu();
     if (requestItemsOnFirstTouch) {
       const newItems = await requestItemsOnFirstTouch();
@@ -61,7 +64,14 @@ export default function SelectRoot(props:SelectRootProps) {
   const handleClearBtnClick = () => {
     setSelectedItem({id: "", label: ""});
     onChange({name: name ?? "", value: ""});
+    onChangeData({});
     inputRef.current?.focus();
+  }
+
+  const handleMenuSelect = (itemId:string) => {
+    const item = suggestions.find((suggestion) => suggestion.id === itemId);
+    onChange({name: name ?? "", value: itemId});
+    onChangeData(item?.data);
   }
 
   const handleInputKeydown = (e:React.KeyboardEvent) => {
@@ -75,6 +85,7 @@ export default function SelectRoot(props:SelectRootProps) {
         break;
       }
       case "Enter": {
+        e.preventDefault();
         if (isAutocomplete || isMenuOpen) break;
         openMenu();
         break;
@@ -117,7 +128,7 @@ export default function SelectRoot(props:SelectRootProps) {
   })
 
   return (
-    <SelectContext.Provider value={{ isAutocomplete, disabled, value, suggestions, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu }}>
+    <SelectContext.Provider value={{ isAutocomplete, disabled, value, suggestions, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect }}>
       <div className={clsx(styles["select"], className, disabled && styles["select--disabled"])} style={style} ref={rootRef}>
         {children}
       </div>

@@ -2,6 +2,10 @@
   display: inline-block;
 }
 
+.control__section {
+  margin-block-start: 5px;
+}
+
 .control__asteriks {
   color: red;
 }

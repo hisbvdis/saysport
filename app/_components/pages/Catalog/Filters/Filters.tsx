@@ -13,6 +13,7 @@ import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 import { Cross1Icon, Cross2Icon } from "@radix-ui/react-icons";
+import { Select } from "@/app/_components/ui/Select";
 
 
 export default function Filters() {
@@ -123,7 +124,7 @@ export default function Filters() {
             <Control.Label style={{display: "flex", justifyContent: "space-between"}}>
               <span>Возраст</span>
             </Control.Label>
-            <SelectOld
+            <Select
               isAutocomplete
               value={searchParams.age ?? ""}
               onChange={(data) => {data.value ? router.push(manageSearchParams.set("age", data.value)) : router.push(manageSearchParams.delete(["age"]))}}
@@ -147,14 +148,14 @@ export default function Filters() {
               ))}
             </CheckboxGroup>
             <div style={{display: "flex", gap: "10px", marginBlockStart: "10px"}}>
-              <SelectOld
+              <Select
                 isAutocomplete
                 value={searchParams.from ? searchParams.from : ""}
                 onChange={(data) => {data.value ? router.push(manageSearchParams.set("from", data.value)) : router.push(manageSearchParams.delete(["from"]))}}
                 placeholder="с"
                 items={[{id: "", label: ""}].concat(Array(48).fill(null).map((_, i) => ({id: String(i * 30), label: `${Math.floor(i / 2)}:${i % 2 === 0 ? "00" : "30"}`})))}
               />
-              <SelectOld
+              <Select
                 isAutocomplete
                 value={searchParams.to ? searchParams.to : ""}
                 onChange={(data) => {data.value ? router.push(manageSearchParams.set("to", data.value)) : router.push(manageSearchParams.delete(["to"]))}}

@@ -1,13 +1,14 @@
 "use client";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { createContext, type RefObject, useEffect, useRef, useState } from "react";
+import type { PopoverContextType, PopoverRootProps } from ".";
+import { createContext, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
-export default function PopoverRoot(props:Props) {
-  const { children, className, style, isOpen, close, isModal } = props;
+export default function PopoverRoot(props:PopoverRootProps) {
+  const { children, className, style, isOpen, close, isModal, popover="auto" } = props;
   const dialogRef = useRef<HTMLDialogElement>(null);
   const dialogContentRef = useRef<HTMLDivElement>(null);
   const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
@@ -37,16 +38,17 @@ export default function PopoverRoot(props:Props) {
       window.addEventListener("popstate", windowPopstateHandler);
     }
 
-    // Добавление обработчиков модального окна
-    document.addEventListener("keydown", documentKeydownEscapeHandler);
-    document.addEventListener("pointerdown", notContentPointerDownHandler);
-    document.addEventListener("click", notContentClickHandler);
+    if (popover === "auto") {
+      document.addEventListener("pointerdown", notContentPointerDownHandler);
+      document.addEventListener("click", notContentClickHandler);
+      document.addEventListener("keydown", documentKeydownEscapeHandler);
+    }
   }
 
   const closePopover = () => {
     // Закрыть модальное окно
     // dialogRef.current?.close(); // elem.close() doesn't work in Chrome
-    close();
+    if (close) close();
 
     if (isModal) {
       // Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
@@ -56,10 +58,11 @@ export default function PopoverRoot(props:Props) {
       window.removeEventListener("popstate", windowPopstateHandler);
     }
 
-    // Удалить обработчики модального окна
-    document.removeEventListener("keydown", documentKeydownEscapeHandler);
-    document.removeEventListener("pointerdown", notContentPointerDownHandler);
-    document.removeEventListener("click", notContentClickHandler);
+    if (popover === "auto") {
+      document.removeEventListener("keydown", documentKeydownEscapeHandler);
+      document.removeEventListener("pointerdown", notContentPointerDownHandler);
+      document.removeEventListener("click", notContentClickHandler);
+    }
   }
 
   const documentKeydownEscapeHandler = (e:KeyboardEvent) => {
@@ -105,16 +108,3 @@ export default function PopoverRoot(props:Props) {
 }
 
 export const PopoverContext = createContext<PopoverContextType>({} as PopoverContextType);
-
-interface Props {
-  isOpen: boolean;
-  close: () => void;
-  isModal?: boolean;
-  children?: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-interface PopoverContextType {
-  dialogContentRef: RefObject<HTMLDivElement>;
-}

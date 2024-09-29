@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
 import { ChevronDownIcon, Cross1Icon } from "@radix-ui/react-icons";
-import { SelectArrowIcon, SelectCloseButton, SelectInput, type SelectItem, SelectMenu, SelectOption, type SelectProps, SelectRoot, SelectTrigger, SelectValue } from ".";
+import { SelectArrowIcon, SelectCloseButton, SelectInput, type SelectItemType, SelectMenu, SelectItem, type SelectProps, SelectRoot, SelectTrigger, SelectValue } from ".";
 
 
 export default function Select(props:SelectProps) {
-  const [ suggestions, setSuggestions ] = useState<SelectItem[]>([]);
+  const [ suggestions, setSuggestions ] = useState<SelectItemType[]>([]);
 
   return (
     <SelectRoot {...props} setSuggestions={setSuggestions} suggestions={suggestions}>
@@ -17,10 +17,10 @@ export default function Select(props:SelectProps) {
       </SelectTrigger>
 
       <SelectMenu>
-        {suggestions?.map((item) => (
-          <SelectOption key={item.id}>
+        {suggestions?.map((item, i) => (
+          <SelectItem key={item.id} itemIndex={i}>
             <SelectValue>{item.label}</SelectValue>
-          </SelectOption>
+          </SelectItem>
         ))}
       </SelectMenu>
 

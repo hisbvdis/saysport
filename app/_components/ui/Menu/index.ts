@@ -1,6 +1,25 @@
 import Menu from "./Menu";
-import MenuRoot from "./MenuRoot";
-import type { MenuRootProps } from "./MenuRoot";
+import MenuRoot, { MenuContext } from "./MenuRoot";
+import MenuValue from "./MenuValue";
 import MenuItem from "./MenuItem";
 
-export { Menu, MenuRoot, MenuItem, type MenuRootProps }
+import type { MenuItemType } from "./types";
+import type { MenuRootProps } from "./types";
+import type { MenuItemProps } from "./types";
+import type { MenuValueProps } from "./types";
+import type { MenuContextType } from "./types";
+
+export {
+  Menu,
+  MenuRoot,
+  MenuValue,
+  MenuItem,
+
+  MenuContext,
+
+  type MenuItemType,
+  type MenuRootProps,
+  type MenuItemProps,
+  type MenuValueProps,
+  type MenuContextType,
+};

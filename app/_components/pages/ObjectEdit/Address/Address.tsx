@@ -20,6 +20,7 @@ import { setInheritedData } from "./setInheritedData";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { getObjectsByArea, getObjectsByFilters } from "@/app/_db/object";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_lib/nominatim";
+import { Select } from "@/app/_components/ui/Select";
 
 
 export default function Address() {
@@ -106,7 +107,7 @@ export default function Address() {
           <Control>
             <Control.Label>Город</Control.Label>
             <Control.Section>
-              <SelectOld
+              <Select
                 name="city_id"
                 value={state.city_id ? String(state.city_id) : ""}
                 label={state.city?.name?.concat(state.city.admin1 ? `, ${state.city.admin1}` : "").concat(state.city.country ? `, ${state.city.country}` : "") ?? ""}
@@ -118,7 +119,7 @@ export default function Address() {
                 required
                 requestItemsOnInputChange={async (inputValue) => (
                   await getCitiesByFilters({name: inputValue})).map((city) => ({
-                    id: city.city_id, label: `${city.name.concat(city.admin1 ? `, ${city.admin1}` : "").concat(city.country ? `, ${city.country}` : "")}`, data: city
+                    id: String(city.city_id), label: `${city.name.concat(city.admin1 ? `, ${city.admin1}` : "").concat(city.country ? `, ${city.country}` : "")}`, data: city
                 }))}
               />
             </Control.Section>
@@ -129,7 +130,7 @@ export default function Address() {
               {state.parent_id && <Link href={`/object/${state.parent?.object_id}`}>(Open)</Link>}
             </Control.Label>
             <Control.Section>
-              <SelectOld
+              <Select
                 name="parent_id"
                 value={state.parent_id ? String(state.parent_id) : ""}
                 label={state.parent?.name_type?.concat(state.parent.name_title ? ` «${state.parent.name_title}»` : "").concat(state.parent.name_where ? ` ${state.parent.name_where}` : "")}
@@ -145,7 +146,7 @@ export default function Address() {
                 requestItemsOnInputChange={async (value) => (
                   (await getObjectsByFilters({city: String(state.city_id), type: objectTypeEnum.org, query: value}))).requested
                     .filter((org) => org.object_id !== state.object_id)
-                    .map((org) => ({id: org.object_id, label: `${org.name_type ?? ""} ${org.name_title ?? ""} ${org.name_where ?? ""}`, data: org})
+                    .map((org) => ({id: String(org.object_id), label: `${org.name_type ?? ""} ${org.name_title ?? ""} ${org.name_where ?? ""}`, data: org})
                 )}
               />
             </Control.Section>

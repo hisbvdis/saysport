@@ -1,4 +1,4 @@
-import type { ChangeEvent, Dispatch, KeyboardEventHandler, RefObject, SetStateAction } from "react";
+import type { ChangeEvent, Dispatch, FocusEventHandler, KeyboardEventHandler, RefObject, SetStateAction } from "react";
 
 
 export interface SelectProps {
@@ -11,17 +11,18 @@ export interface SelectProps {
   label?: string;
   placeholder?: string;
   required?: boolean;
-  value: string;
-  onChange: (data:{name:string, value:string}) => void;
-  items?: SelectItem[];
-  requestItemsOnFirstTouch?: () => Promise<SelectItem[]>;
-  requestItemsOnInputChange?: (value:string) => Promise<SelectItem[]>;
+  value?: string;
+  onChange?: (data:{name:string, value:string}) => void;
+  onChangeData?: (data:any) => void;
+  items?: SelectItemType[];
+  requestItemsOnFirstTouch?: () => Promise<SelectItemType[]>;
+  requestItemsOnInputChange?: (value:string) => Promise<SelectItemType[]>;
   requestMinInputLenght?: number;
 }
 
 export interface SelectRootProps extends SelectProps {
-  setSuggestions: Dispatch<SetStateAction<SelectItem[]>>;
-  suggestions: SelectItem[];
+  setSuggestions: Dispatch<SetStateAction<SelectItemType[]>>;
+  suggestions: SelectItemType[];
 }
 
 export interface SelectContextType extends Pick<SelectRootProps,
@@ -32,18 +33,20 @@ export interface SelectContextType extends Pick<SelectRootProps,
   "placeholder" |
   "required" |
   "name" |
-  "suggestions"
+  "suggestions" |
+  "onChange"
 > {
   inputRef: RefObject<HTMLInputElement>;
   inputValue: string;
-  selectedItem?: SelectItem;
+  selectedItem?: SelectItemType;
   handleInputChange: (e:ChangeEvent<HTMLInputElement>) => void;
   handleClearBtnClick: () => void;
   handleInputClick: () => void;
-  handleInputFocus: () => void;
+  handleInputFocus: FocusEventHandler;
   handleInputKeydown: KeyboardEventHandler<HTMLInputElement>;
   closeMenu: () => void;
   isMenuOpen: boolean;
+  handleMenuSelect: (itemId:string) => void;
 };
 
 export  interface SelectArrowIconProps {
@@ -52,7 +55,8 @@ export  interface SelectArrowIconProps {
   style?: React.CSSProperties;
 }
 
-export interface SelectOptionProps {
+export interface SelectItemProps {
+  itemIndex: number;
   children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -82,7 +86,7 @@ export interface SelectContentProps {
   children?: React.ReactNode;
 }
 
-export interface SelectItem {
+export interface SelectItemType {
   id: string;
   label: string;
   data?: any;

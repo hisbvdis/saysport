@@ -17,6 +17,7 @@ import { FieldSet } from "@/app/_components/ui/FieldSet";
 import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { getUsagesByFilters } from "@/app/_db/usage";
+import { Select } from "@/app/_components/ui/Select";
 
 
 export default function Usages() {
@@ -244,7 +245,7 @@ export default function Usages() {
         </div>
       </Card.Section>
       <Card.Section>
-        <SelectOld
+        <Select
           isAutocomplete
           value=""
           onChangeData={(data:Usage) => handleUsages.add(data)}
@@ -252,7 +253,7 @@ export default function Usages() {
           requestItemsOnFirstTouch={async () => {
             if (state.sections.filter((section) => section.section_type !== sectionTypeEnum.common).length > 0) {
               return (await getUsagesByFilters({sectionIds: state.sections.map((section) => section.section_id)}))
-              .map((usage) => ({id: usage.usage_id, label: usage.name_service, data: usage}))
+              .map((usage) => ({id: String(usage.usage_id), label: usage.name_service, data: usage}))
             } else {
               return []
             }

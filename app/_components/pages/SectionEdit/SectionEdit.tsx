@@ -19,6 +19,7 @@ import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 import { getSpecsByFilters } from "@/app/_db/spec";
 import { getUsagesByFilters } from "@/app/_db/usage";
 import { deleteSectionById, upsertSection } from "@/app/_db/section";
+import { Select } from "../../ui/Select";
 
 
 export default function SectionEdit(props:{init:EditSection}) {
@@ -168,13 +169,13 @@ export default function SectionEdit(props:{init:EditSection}) {
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading>Характеристики</Card.Heading>
         <Card.Section>
-          <SelectOld
+          <Select
             isAutocomplete
             onChangeData={handleSpecs.add}
             placeholder="Добавить характеристику"
             requestItemsOnFirstTouch={async () =>
               (await getSpecsByFilters({objectType: state.object_type}))
-                ?.map((spec) => ({id: spec.spec_id, label: spec.name_service, data: spec}))
+                ?.map((spec) => ({id: String(spec.spec_id), label: spec.name_service, data: spec}))
             }
           />
           <ul style={{marginBlockStart: "5px"}}>
@@ -193,13 +194,13 @@ export default function SectionEdit(props:{init:EditSection}) {
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading>Использования</Card.Heading>
         <Card.Section>
-          <SelectOld
+          <Select
             isAutocomplete
             onChangeData={handleUsages.add}
             placeholder="Добавить использование"
             requestItemsOnFirstTouch={async () =>
               (await getUsagesByFilters({objectType: state.object_type}))
-                ?.map((usage) => ({id: usage.usage_id, label: usage.name_service, data: usage}))
+                ?.map((usage) => ({id: String(usage.usage_id), label: usage.name_service, data: usage}))
             }
           />
           <ul style={{marginBlockStart: "5px"}}>

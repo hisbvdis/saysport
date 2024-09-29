@@ -15,6 +15,7 @@ import { getSectionsByFilters } from "@/app/_db/section";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 import Link from "next/link";
+import { Select } from "@/app/_components/ui/Select";
 
 
 export default function Sections() {
@@ -59,14 +60,14 @@ export default function Sections() {
         </Card.Section>
       ))}
       <Card.Section>
-        <SelectOld
+        <Select
           isAutocomplete
           value=""
           onChangeData={handleSections.add}
           placeholder="Добавить раздел"
           requestItemsOnFirstTouch={async () =>
             (await getSectionsByFilters({objectType: state.type, sectionType: sectionTypeEnum.section}))
-              .map((section) => ({id: section.section_id, label: section.name_service, data: section}))
+              .map((section) => ({id: String(section.section_id), label: section.name_service, data: section}))
           }
         />
         <RequiredInput isValidIf={state.type === objectTypeEnum.place ? Boolean(state.sections.length > 1) : Boolean(state.sections.length > 0) }/>

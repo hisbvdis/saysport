@@ -1,6 +1,9 @@
 .menu {
   max-block-size: 250px;
+  margin: 0;
+  padding: 0;
 
+  list-style: none;
   background-color: var(--color-white);
   border: 1px solid var(--input-borderColor);
   box-shadow: var(--boxShadow--thin);
@@ -19,6 +22,6 @@
   cursor: pointer;
 }
 
-.menu__item:is(:hover, :focus) {
+.menu__item--focus {
   background-color: var(--control-hovered-backgroundColor);
 }

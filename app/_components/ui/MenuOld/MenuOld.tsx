@@ -8,62 +8,62 @@ import styles from "./styles.module.css";
 export default function MenuOld(props:Props) {
   const { isShowMenu=false, value, onSelect, items } = props;
   const { className, style } = props;
-  const [ focusIndex, setFocusIndex ] = useState(0);
+  /* [V] */const [ focusIndex, setFocusIndex ] = useState(0);
   const itemsListRef = useRef<HTMLUListElement>(null);
 
-  const handleDocumentKeydown = (e:KeyboardEvent) => {
-    if (!["Escape", "ArrowUp", "ArrowDown", "Enter"].includes(e.code)) return;
-    e.preventDefault();
-    switch (e.code) {
-      case "ArrowUp": {
-        if (items?.length === 0 || focusIndex === 0) return;
-        setFocusIndex(focusIndex - 1);
-        focusItemByIndex(focusIndex - 1);
-        break;
-      }
-      case "ArrowDown": {
-        if (items?.length === 0 || items?.length && focusIndex === items?.length - 1) return;
-        setFocusIndex(focusIndex + 1);
-        focusItemByIndex(focusIndex + 1);
-        break;
-      }
-      case "Enter": {
-        if (onSelect) onSelect(focusIndex);
-        break;
-      }
-    }
-  }
+  /* [V] */const handleDocumentKeydown = (e:KeyboardEvent) => {
+  /* [V] */  if (!["Escape", "ArrowUp", "ArrowDown", "Enter"].includes(e.code)) return;
+  /* [V] */  e.preventDefault();
+  /* [V] */  switch (e.code) {
+  /* [V] */    case "ArrowUp": {
+  /* [V] */      if (items?.length === 0 || focusIndex === 0) return;
+  /* [V] */      setFocusIndex(focusIndex - 1);
+  /* [V] */      focusItemByIndex(focusIndex - 1);
+  /* [V] */      break;
+  /* [V] */    }
+  /* [V] */    case "ArrowDown": {
+  /* [V] */      if (items?.length === 0 || items?.length && focusIndex === items?.length - 1) return;
+  /* [V] */      setFocusIndex(focusIndex + 1);
+  /* [V] */      focusItemByIndex(focusIndex + 1);
+  /* [V] */      break;
+  /* [V] */    }
+  /* [V] */    case "Enter": {
+  /* [V] */      if (onSelect) onSelect(focusIndex);
+  /* [V] */      break;
+  /* [V] */    }
+  /* [V] */  }
+  /* [V] */}
 
-  const focusItemByIndex = (index:number) => {
-    if (!isShowMenu || !itemsListRef.current) return;
-    const itemElem = itemsListRef.current.children[index] as HTMLLIElement;
-    const itemRect = itemsListRef.current.children[index]?.getBoundingClientRect();
-    const listRect = itemsListRef.current.getBoundingClientRect();
-    if (itemRect?.top < listRect.top) itemsListRef.current.scrollTo({top: itemElem.offsetTop});
-    if (itemRect?.bottom > listRect.bottom) itemsListRef.current.scrollTo({top: itemElem.offsetTop + itemRect.height - listRect.height});
-  }
+  /* [V] */const focusItemByIndex = (index:number) => {
+  /* [V] */  if (!isShowMenu || !itemsListRef.current) return;
+  /* [V] */  const itemElem = itemsListRef.current.children[index] as HTMLLIElement;
+  /* [V] */  const itemRect = itemsListRef.current.children[index]?.getBoundingClientRect();
+  /* [V] */  const listRect = itemsListRef.current.getBoundingClientRect();
+  /* [V] */  if (itemRect?.top < listRect.top) itemsListRef.current.scrollTo({top: itemElem.offsetTop});
+  /* [V] */  if (itemRect?.bottom > listRect.bottom) itemsListRef.current.scrollTo({top: itemElem.offsetTop + itemRect.height - listRect.height});
+  /* [V] */}
 
-  const handlePointerDown = (e:React.PointerEvent<HTMLLIElement>) => {
-    if (e.pointerType === "mouse" && e.pointerId !== 1) return;
-    if (onSelect) onSelect(focusIndex);
-  }
+  /* [V] */const handlePointerDown = (e:React.PointerEvent<HTMLLIElement>) => {
+  /* [V] */  if (e.pointerType === "mouse" && e.pointerId !== 1) return;
+  /* [V] */  if (onSelect) onSelect(focusIndex);
+  /* [V] */}
 
-  useEffect(() => {
-    if (!isShowMenu || !value || !items?.length) return;
-    const itemIndex = items?.findIndex((item) => item.id === value);
-    setFocusIndex(itemIndex);
-    focusItemByIndex(itemIndex);
-  }, [isShowMenu])
+  /* [V] */useEffect(() => {
+  /* [V] */  if (!isShowMenu || !value || !items?.length) return;
+  /* [V] */  const itemIndex = items?.findIndex((item) => item.id === value);
+  /* [V] */  setFocusIndex(itemIndex);
+  /* [V] */  focusItemByIndex(itemIndex);
+  /* [V] */}, [isShowMenu])
 
-  useEffect(() => {
-    if (isShowMenu) document.addEventListener("keydown", handleDocumentKeydown);
-    return () => document.removeEventListener("keydown", handleDocumentKeydown);
-  }, [isShowMenu, items, focusIndex]);
+  /* [V] */useEffect(() => {
+  /* [V] */  if (isShowMenu) document.addEventListener("keydown", handleDocumentKeydown);
+  /* [V] */  return () => document.removeEventListener("keydown", handleDocumentKeydown);
+  /* [V] */}, [isShowMenu, items, focusIndex]);
 
-  useEffect(() => {
-    setFocusIndex(items?.length && items.some((item) => item.id === value) ? items.findIndex((item) => item.id === value) : 0);
-    // items?.length && focusItemByIndex(0);
-  }, [items])
+  /* [V] */useEffect(() => {
+  /* [V] */  setFocusIndex(items?.length && items.some((item) => item.id === value) ? items.findIndex((item) => item.id === value) : 0);
+  /* [V] */  // items?.length && focusItemByIndex(0);
+  /* [V] */}, [items])
 
   if (!isShowMenu) return null;
   return (

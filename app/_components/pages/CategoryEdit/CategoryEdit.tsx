@@ -16,6 +16,7 @@ import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { deleteCategoryById, upsertCategory } from "@/app/_db/category";
 import { getSectionsByFilters } from "@/app/_db/section";
+import { Select } from "../../ui/Select";
 
 
 export default function CategoryEdit(props:{init:EditCategory}) {
@@ -92,13 +93,13 @@ export default function CategoryEdit(props:{init:EditCategory}) {
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading>Разделы</Card.Heading>
         <Card.Section>
-          <SelectOld
+          <Select
             isAutocomplete
             onChangeData={handleSections.add}
             placeholder="Добавить раздел"
             requestItemsOnFirstTouch={async () =>
               (await getSectionsByFilters({sectionType: sectionTypeEnum.section}))
-                ?.map((section) => ({id: section.section_id, label: section.name_service, data: section}))
+                ?.map((section) => ({id: String(section.section_id), label: section.name_service, data: section}))
             }
           />
         </Card.Section>

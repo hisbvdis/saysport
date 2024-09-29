@@ -4,9 +4,10 @@ import { useContext } from "react";
 import { PopoverContext } from "./PopoverRoot";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
+import type { PopoverContentProps } from ".";
 
 
-export default function PopoverContent(props:Props) {
+export default function PopoverContent(props:PopoverContentProps) {
   const { className, children, style } = props;
   const { dialogContentRef } = useContext(PopoverContext);
 
@@ -15,10 +16,4 @@ export default function PopoverContent(props:Props) {
       {children}
     </div>
   )
-}
-
-interface Props {
-  className?: string;
-  children?: React.ReactNode;
-  style?: React.CSSProperties;
 }

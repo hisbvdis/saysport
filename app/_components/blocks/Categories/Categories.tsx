@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { objectTypeEnum } from "@/drizzle/schema";
 import type { ProcessedCategory } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
+import { Select } from "../../ui/Select";
 import { Card } from "@/app/_components/ui/Card";
 import { SelectOld } from "@/app/_components/ui/SelectOld";
 // -----------------------------------------------------------------------------
@@ -25,7 +26,7 @@ export default function Categories(props:Props) {
     <Card className={clsx(styles["categories"], className)}>
       <Card.Heading className={styles["categories__heading"]}>Категории</Card.Heading>
       <Card.Section style={{padding: 0}}>
-        <SelectOld
+        <Select
           className={styles["catetories__select"]}
           isAutocomplete
           onChange={(data) => {
@@ -35,7 +36,7 @@ export default function Categories(props:Props) {
           placeholder="Найти раздел..."
           requestItemsOnInputChange={async (name) =>
             (await getSectionsByFilters({name_public_plural: name}))
-              ?.map((section) => ({id: section.section_id, label: section.name_service, data: section}))
+              ?.map((section) => ({id: String(section.section_id), label: section.name_service, data: section}))
           }
         />
         <ul className={styles["categories__list"]}>

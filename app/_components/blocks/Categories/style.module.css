@@ -1,10 +1,10 @@
 .catetories__select {
-  padding: var(--card-padding);
+  /* padding: var(--card-padding); */
 
   font-size: 1rem;
 
-  border: 1px solid var(--card-borderColor);
-  border-block-start: none;
+  /* border: 1px solid var(--card-borderColor); */
+  /* border-block-start: none; */
 }
 
 .categories__item {

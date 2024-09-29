@@ -16,7 +16,7 @@ export default function SelectOld(props:Props) {
   /* [V] */const { className } = props;
   /* [V] */const { requestItemsOnInputChange, requestItemsOnFirstTouch, requestMinInputLenght=3 } = props;
   /* [V] */const { onChange=(e=>e) } = props;
-  const { onChangeData=(e=>e) } = props;
+  /* [V] */const { onChangeData=(e=>e) } = props;
   /* [V] */const { placeholder, disabled, isAutocomplete, required } = props;
   /* [V] */const [ localItems, setLocalItems ] = useState(props.items ?? []);
   /* [V] */const [ suggestions, setSuggestions ] = useState(localItems);
@@ -85,10 +85,10 @@ export default function SelectOld(props:Props) {
   }
 
   const handleMenuSelect = (index:number) => {
-    const item = suggestions?.[index];
+    /* [V] */const item = suggestions?.[index];
     setSelectedItem(item);
-    onChange({name: props.name ?? "", value: String(item.id)});
-    onChangeData(item?.data);
+    /* [V] */onChange({name: props.name ?? "", value: String(item.id)});
+    /* [V] */onChangeData(item?.data);
     setSuggestions(localItems ?? []);
     setIsShowMenu(false);
     !props.items?.length ? setInputValue(props.label) : setInputValue(selectedItem?.label);
@@ -105,6 +105,7 @@ export default function SelectOld(props:Props) {
       /* [V] */  break;
       /* [V] */}
       /* [V] */case "Enter": {
+      /* [V] */e.preventDefault();
       /* [V] */  (!isAutocomplete && !isShowMenu) && setIsShowMenu(true);
       /* [V] */  break;
       /* [V] */}
