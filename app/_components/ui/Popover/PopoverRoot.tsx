@@ -1,14 +1,21 @@
 "use client";
-import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import type { PopoverContextType, PopoverRootProps } from ".";
 import { createContext, useEffect, useRef, useState } from "react";
+// -----------------------------------------------------------------------------
+import { useDisclosure } from "@/app/_hooks/useDisclosure";
+import type { PopoverContextType, PopoverRootProps } from ".";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
 export default function PopoverRoot(props:PopoverRootProps) {
-  const { children, className, style, isOpen, close, isModal, popover="auto" } = props;
+  const { children, isModal, popover="auto" } = props;
+  const disclosure = useDisclosure();
+  const isOpen = props.isOpen ?? disclosure.isOpen;
+  const openPopover = props.openPopover ?? disclosure.open;
+  const closePopover = props.closePopover ?? disclosure.close;
+  const togglePopover = props.togglePopover ?? disclosure.toggle;
+
   const dialogRef = useRef<HTMLDialogElement>(null);
   const dialogContentRef = useRef<HTMLDivElement>(null);
   const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
@@ -16,7 +23,7 @@ export default function PopoverRoot(props:PopoverRootProps) {
   const isClickOnBackdrop = useRef(false);
   const router = useRouter();
 
-  const openPopover = () => {
+  const open = () => {
     // Показать модальное окно
     // dialogRef.current?.showModal(); // elem.close() doesn't work in Chrome
     // dialogRef.current?.showPopover();
@@ -45,10 +52,10 @@ export default function PopoverRoot(props:PopoverRootProps) {
     }
   }
 
-  const closePopover = () => {
+  const close = () => {
     // Закрыть модальное окно
     // dialogRef.current?.close(); // elem.close() doesn't work in Chrome
-    if (close) close();
+    closePopover();
 
     if (isModal) {
       // Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
@@ -67,14 +74,14 @@ export default function PopoverRoot(props:PopoverRootProps) {
 
   const documentKeydownEscapeHandler = (e:KeyboardEvent) => {
     if (e.code !== "Escape") return;
-    closePopover();
+    close();
     if (isModal) router.back();
   }
 
   // Нажали "Назад" в браузере =>  Закрыть модальное окно
   function windowPopstateHandler() {
     if (!isOpen) return;
-    closePopover();
+    close();
   }
 
   // Надавили указатель (ЛКМ) => Проверить и записать, является ли целевой элемент подложкой
@@ -89,20 +96,18 @@ export default function PopoverRoot(props:PopoverRootProps) {
     if (dialogContentRef.current?.contains(e.target as Node)) return;
     if (!isClickOnBackdrop.current) return;
     isClickOnBackdrop.current = false;
-    closePopover();
+    close();
     if (isModal) router.back();
   }
 
   useEffect(() => {
-    if (isOpen) openPopover();
-    else closePopover();
+    if (isOpen) open();
+    else close();
   }, [isOpen])
 
   return (
-    <PopoverContext.Provider value={{ dialogContentRef }}>
-      <dialog className={clsx(styles["popover"], isModal && styles["popover--modal"], className)} style={style} ref={dialogRef} open={isOpen}>
-        {children}
-      </dialog>
+    <PopoverContext.Provider value={{ dialogContentRef, isModal, isOpen, dialogRef, openPopover, closePopover, togglePopover, styles }}>
+      {children}
     </PopoverContext.Provider>
   )
 }

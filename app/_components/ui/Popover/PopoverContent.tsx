@@ -1,19 +1,19 @@
 import clsx from "clsx";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
-import { PopoverContext } from "./PopoverRoot";
+import { type PopoverContentProps, PopoverContext } from ".";
 // -----------------------------------------------------------------------------
-import styles from "./styles.module.css";
-import type { PopoverContentProps } from ".";
 
 
 export default function PopoverContent(props:PopoverContentProps) {
   const { className, children, style } = props;
-  const { dialogContentRef } = useContext(PopoverContext);
+  const { dialogContentRef, isModal, isOpen, dialogRef, styles } = useContext(PopoverContext);
 
   return (
-    <div className={clsx(styles["popover__content"], className)} style={style} ref={dialogContentRef}>
-      {children}
-    </div>
+    <dialog className={clsx(styles["popover"], isModal && styles["popover--modal"], className)} style={style} ref={dialogRef} open={isOpen}>
+      <div className={clsx(styles["popover__content"], className)} style={style} ref={dialogContentRef}>
+        {children}
+      </div>
+    </dialog>
   )
 }

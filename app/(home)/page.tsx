@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import type { SearchParamsType } from "../_types/types";
+import type { SearchParamsType } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
-import { Home } from "../_components/pages/Home";
+import { Home } from "@/app/_components/pages/Home";
 // -----------------------------------------------------------------------------
 import { getCityById } from "@/app/_db/city";
 import { getAllCategories } from "@/app/_db/category";

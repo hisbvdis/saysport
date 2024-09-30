@@ -1,20 +1,17 @@
-"use client";
 import clsx from "clsx";
-import styles from "./styles.module.css";
+import { useContext } from "react";
+// -----------------------------------------------------------------------------
+import { ControlContext, type ControlSectionProps } from "./";
+// -----------------------------------------------------------------------------
 
 
-export default function ControlSection(props:Props) {
+export default function ControlSection(props:ControlSectionProps) {
   const { children, className, style } = props;
+  const { styles } = useContext(ControlContext);
 
   return (
     <div className={clsx(styles["control__section"], className)} style={style}>
       {children}
     </div>
   )
-}
-
-interface Props {
-  children?: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
 }

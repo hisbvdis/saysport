@@ -2,10 +2,9 @@
 import { useRouter } from "next/navigation";
 import type { City } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
-import { Select } from "../../ui/Select";
+import { Select } from "@/app/_components/ui/Select";
 import { Card } from "@/app/_components/ui/Card"
 import { Control } from "@/app/_components/ui/Control"
-import { SelectOld } from "@/app/_components/ui/SelectOld"
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_db/city";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";

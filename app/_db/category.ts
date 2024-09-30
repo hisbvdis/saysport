@@ -2,7 +2,7 @@
 import { db } from "@/drizzle/client"
 import { category, category_on_section, type Category } from "@/drizzle/schema"
 import { categoryReadProcessing } from "./category.processing"
-import type { DBCategory, EditCategory, ProcessedCategory } from "../_types/types"
+import type { DBCategory, EditCategory, ProcessedCategory } from "@/app/_types/types"
 import { and, eq, inArray } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 

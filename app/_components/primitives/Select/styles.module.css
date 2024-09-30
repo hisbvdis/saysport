@@ -1,12 +1,12 @@
-.select {
+.selectRoot {
   position: relative;
 }
 
-.select__trigger {
+.selectTrigger {
   position: relative;
 }
 
-.select__input {
+.selectInput {
   display: block;
   inline-size: 100%;
   padding: var(--input-padding);
@@ -18,22 +18,22 @@
   cursor: default;
 }
 
-.select__input--isAutocomplete {
+.selectInput--isAutocomplete {
   cursor: text;
 }
 
-.select__input:disabled {
+.selectInput:disabled {
   color: var(--input-disabled-fontColor);
 
   background-color: var(--input-disabled-backgroundColor);
 }
 
-.select__input::placeholder {
+.selectInput::placeholder {
   color: var(--input-placeholder-fontColor);
 }
 
-.select__arrowIcon,
-.select__closeButton {
+.selectArrowIcon,
+.selectCloseButton {
   position: absolute;
   inset-inline-end: 0;
   inset-block-start: 50%;
@@ -51,17 +51,17 @@
   cursor: pointer;
 }
 
-.select__arrowIcon,
-.select--disabled .select__closeButton {
+.selectArrowIcon,
+.selectRoot--disabled .selectCloseButton {
   pointer-events: none;
 }
 
-.select__arrowIcon svg {
+.selectArrowIcon svg {
   width: 18px;
   height: 18px
 }
 
-.select--disabled .select__arrowIcon,
-.select--disabled .select__closeButton {
+.selectRoot--disabled .selectArrowIcon,
+.selectRoot--disabled .selectCloseButton {
   color: var(--input-disabled-fontColor);
 }

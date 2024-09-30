@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import type { DBObject, ProcObject, ProcObjectSchedule } from "../_types/types";
+import type { DBObject, ProcObject, ProcObjectSchedule } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
 import { sectionReadProcessing } from "./section.processing";
 // -----------------------------------------------------------------------------

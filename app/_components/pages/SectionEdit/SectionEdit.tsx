@@ -6,11 +6,11 @@ import { sectionTypeEnum } from "@/drizzle/schema";
 import type { EditSection, ProcSection, ProcSpec, ProcObjectUsage } from "@/app/_types/types";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
+import { Select } from "@/app/_components/ui/Select";
 import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
-import { SelectOld } from "@/app/_components/ui/SelectOld";
 import { Control } from "@/app/_components/ui/Control";
 import { InputAddon } from "@/app/_components/ui/InputAddon";
 import { Radio, RadioGroup } from "@/app/_components/ui/Choice";
@@ -19,7 +19,6 @@ import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 import { getSpecsByFilters } from "@/app/_db/spec";
 import { getUsagesByFilters } from "@/app/_db/usage";
 import { deleteSectionById, upsertSection } from "@/app/_db/section";
-import { Select } from "../../ui/Select";
 
 
 export default function SectionEdit(props:{init:EditSection}) {

@@ -1,17 +1,17 @@
 import clsx from "clsx";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
-import { CardContext, type CardHeadingProps } from ".";
+import { CardContext, type CardSectionProps } from ".";
 // -----------------------------------------------------------------------------
 
 
-export default function CardHeading(props:CardHeadingProps) {
+export default function CardSection(props: CardSectionProps) {
   const { className, children, style } = props;
   const { styles } = useContext(CardContext);
 
   return (
-    <div className={clsx(styles.card__heading, className)} style={style}>
+    <div className={clsx(styles.card__section, className)} style={style}>
       {children}
     </div>
-  )
+  );
 }

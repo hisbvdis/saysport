@@ -1,11 +1,12 @@
 import clsx from "clsx";
-import type { MenuValueProps } from ".";
+import { useContext } from "react";
 // -----------------------------------------------------------------------------
-import styles from "./styles.module.css";
+import { MenuContext, type MenuItemTextProps } from ".";
 
 
-export default function MenuValue(props:MenuValueProps) {
+export default function MenuItemText(props:MenuItemTextProps) {
   const { children, className, style } = props;
+  const { styles } = useContext(MenuContext);
 
   return (
     <span className={clsx(styles["menu__value"], className)} style={style}>

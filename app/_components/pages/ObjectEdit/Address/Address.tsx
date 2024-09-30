@@ -10,7 +10,7 @@ import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
-import { SelectOld } from "@/app/_components/ui/SelectOld";
+import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
 import { MapComponent, MapControl, MapCluster } from "@/app/_components/ui/MapComponent";
@@ -20,7 +20,6 @@ import { setInheritedData } from "./setInheritedData";
 import { objectReadProcessing } from "@/app/_db/object.processing";
 import { getObjectsByArea, getObjectsByFilters } from "@/app/_db/object";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_lib/nominatim";
-import { Select } from "@/app/_components/ui/Select";
 
 
 export default function Address() {

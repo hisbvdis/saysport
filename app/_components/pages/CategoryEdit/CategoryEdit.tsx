@@ -10,13 +10,12 @@ import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
-import { SelectOld } from "@/app/_components/ui/SelectOld";
 import { Control } from "@/app/_components/ui/Control";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { deleteCategoryById, upsertCategory } from "@/app/_db/category";
 import { getSectionsByFilters } from "@/app/_db/section";
-import { Select } from "../../ui/Select";
+import { Select } from "@/app/_components/ui/Select";
 
 
 export default function CategoryEdit(props:{init:EditCategory}) {

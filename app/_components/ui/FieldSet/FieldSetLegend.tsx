@@ -2,14 +2,13 @@ import clsx from "clsx";
 import type React from "react";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
-import { FieldSetContext } from "./FieldSet";
+import { FieldSetContext, type FieldSetLegendProps } from "./";
 // -----------------------------------------------------------------------------
-import styles from "./styles.module.css";
 
 
-export default function FieldSetLegend(props:Props) {
+export default function FieldSetLegend(props:FieldSetLegendProps) {
   const { children, className, style, srOnly } = props;
-  const { legendId } = useContext(FieldSetContext);
+  const { legendId, styles } = useContext(FieldSetContext);
 
   return (
     <div
@@ -20,11 +19,4 @@ export default function FieldSetLegend(props:Props) {
       {children}
     </div>
   )
-}
-
-interface Props {
-  children?: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-  srOnly?: boolean;
 }

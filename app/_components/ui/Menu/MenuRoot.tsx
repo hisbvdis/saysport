@@ -67,7 +67,7 @@ export default function MenuRoot(props:MenuRootProps) {
 
   if (!isOpen) return null;
   return (
-    <MenuContext.Provider value={{ focusedItemIndex, setFocusedItemIndex, items, selectFocusedItem }}>
+    <MenuContext.Provider value={{ focusedItemIndex, setFocusedItemIndex, items, selectFocusedItem, styles }}>
       <menu className={clsx(styles["menu"], className)} style={style} ref={menuRef}>
         {children}
       </menu>

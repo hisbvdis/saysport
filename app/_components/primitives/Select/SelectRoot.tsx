@@ -128,8 +128,8 @@ export default function SelectRoot(props:SelectRootProps) {
   })
 
   return (
-    <SelectContext.Provider value={{ isAutocomplete, disabled, value, suggestions, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect }}>
-      <div className={clsx(styles["select"], className, disabled && styles["select--disabled"])} style={style} ref={rootRef}>
+    <SelectContext.Provider value={{ isAutocomplete, disabled, value, suggestions, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles }}>
+      <div className={clsx(styles["selectRoot"], className, disabled && styles["selectRoot--disabled"])} style={style} ref={rootRef}>
         {children}
       </div>
     </SelectContext.Provider>

@@ -1,17 +1,18 @@
 import clsx from "clsx";
-import type { SelectValueProps } from ".";
+import { SelectContext, type SelectValueProps } from ".";
 // -----------------------------------------------------------------------------
-import { MenuItem } from "../Menu";
+import { MenuItemText } from "@/app/_components/ui/Menu";
+import { useContext } from "react";
 // -----------------------------------------------------------------------------
-import styles from "./styles.module.css";
 
 
 export default function SelectValue(props:SelectValueProps) {
   const { children, className, style } = props;
+  const { styles } = useContext(SelectContext);
 
   return (
-    <MenuItem.Value className={clsx(styles["select__value"], className)} style={style}>
+    <MenuItemText className={clsx(styles["select__value"], className)} style={style}>
       {children}
-    </MenuItem.Value>
+    </MenuItemText>
   )
 }

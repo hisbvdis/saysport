@@ -1,20 +1,19 @@
 import clsx from "clsx";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
-import { SelectContext } from "./SelectRoot";
+import { SelectContext } from "./";
 // -----------------------------------------------------------------------------
-import styles from "./styles.module.css";
 import type { SelectArrowIconProps } from "./types";
 
 
 export default function SelectArrowIcon(props:SelectArrowIconProps) {
   const { children, className, style } = props;
-  const { isAutocomplete } = useContext(SelectContext);
+  const { isAutocomplete, styles } = useContext(SelectContext);
 
   if (isAutocomplete) return null;
   return (
     <span
-      className={clsx(styles["select__arrowIcon"], className)}
+      className={clsx(styles["selectArrowIcon"], className)}
       style={style}
     >
       {children}

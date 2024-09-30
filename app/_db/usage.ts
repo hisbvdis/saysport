@@ -3,7 +3,7 @@ import { db } from "@/drizzle/client";
 import { revalidatePath } from "next/cache";
 import { and, eq, exists, ilike, inArray } from "drizzle-orm";
 import { objectTypeEnum, section_on_usage, usage, type Usage, type objectTypeUnion } from "@/drizzle/schema";
-import type { EditUsage } from "../_types/types";
+import type { EditUsage } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
 
 

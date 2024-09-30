@@ -9,15 +9,14 @@ import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, 
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
-import { SelectOld } from "@/app/_components/ui/SelectOld";
+import { Select } from "@/app/_components/ui/Select";
 import { Button } from "@/app/_components/ui/Button";
-import { Input, Textarea } from "@/app/_components/ui/Input";
 import { Control } from "@/app/_components/ui/Control";
 import { FieldSet } from "@/app/_components/ui/FieldSet";
+import { Input, Textarea } from "@/app/_components/ui/Input";
 import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { getUsagesByFilters } from "@/app/_db/usage";
-import { Select } from "@/app/_components/ui/Select";
 
 
 export default function Usages() {

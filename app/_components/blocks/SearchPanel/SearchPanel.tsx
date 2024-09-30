@@ -8,7 +8,7 @@ import { Button } from "@/app/_components/ui/Button";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 import { useRouter } from "next/navigation";
-import { CatalogContext } from "../../pages/Catalog/Catalog";
+import { CatalogContext } from "@/app/_components/pages/Catalog/Catalog";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 
 

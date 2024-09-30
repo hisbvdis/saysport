@@ -1,11 +1,12 @@
 "use client";
+import Link from "next/link";
 import React, { useContext } from "react";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
 import { Button } from "@/app/_components/ui/Button";
-import { SelectOld } from "@/app/_components/ui/SelectOld";
+import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { FieldSet } from "@/app/_components/ui/FieldSet";
 import { RequiredInput } from "@/app/_components/ui/RequiredInput";
@@ -14,8 +15,6 @@ import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@/app/_components/ui
 import { getSectionsByFilters } from "@/app/_db/section";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import Link from "next/link";
-import { Select } from "@/app/_components/ui/Select";
 
 
 export default function Sections() {

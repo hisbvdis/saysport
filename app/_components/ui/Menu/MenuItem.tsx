@@ -1,14 +1,13 @@
 import clsx from "clsx";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
-import { MenuContext, MenuValue, type MenuItemProps } from "./"
+import { MenuContext, type MenuItemProps } from "./"
 // -----------------------------------------------------------------------------
-import styles from "./styles.module.css";
 
 
 export default function MenuItem(props:MenuItemProps) {
   const { children, className, style, itemIndex } = props;
-  const { focusedItemIndex, setFocusedItemIndex, selectFocusedItem } = useContext(MenuContext);
+  const { focusedItemIndex, setFocusedItemIndex, selectFocusedItem, styles } = useContext(MenuContext);
 
   return (
     <li>
@@ -24,5 +23,3 @@ export default function MenuItem(props:MenuItemProps) {
     </li>
   )
 }
-
-MenuItem.Value = MenuValue;

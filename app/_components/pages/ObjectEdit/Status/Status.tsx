@@ -3,15 +3,13 @@ import { create } from "mutative";
 import { useContext } from "react";
 import { objectStatusEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
+import { ObjectEditContext } from "../ObjectEdit";
 import { Input } from "@/app/_components/ui/Input";
+import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
-import { SelectOld } from "@/app/_components/ui/SelectOld";
-import { ObjectEditContext } from "../ObjectEdit";
 // -----------------------------------------------------------------------------
 import { getObjectsByFilters } from "@/app/_db/object";
-import { Select } from "@/app/_components/ui/Select";
-// -----------------------------------------------------------------------------
 
 
 export default function Status(props:Props) {

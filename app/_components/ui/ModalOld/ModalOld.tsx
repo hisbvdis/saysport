@@ -3,13 +3,10 @@ import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { createContext, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
-import ModalClose from "./ModalClose";
-import ModalContent from "./ModalContent";
-// -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
-export default function Modal(props:Props) {
+export default function ModalOld(props:Props) {
   /* [V] */const { isOpen, className, children, close } = props;
   /* [V] */const modalRef = useRef<HTMLDialogElement>(null);
   /* [V] */const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
@@ -97,9 +94,6 @@ export default function Modal(props:Props) {
 }
 
 export const ModalContext = createContext<ModalContextType>({} as ModalContextType);
-
-Modal.Content = ModalContent;
-Modal.Close = ModalClose;
 
 interface Props {
   className?: string;

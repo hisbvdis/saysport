@@ -36,6 +36,7 @@ export interface SelectContextType extends Pick<SelectRootProps,
   "suggestions" |
   "onChange"
 > {
+  styles: { readonly [key: string]: string };
   inputRef: RefObject<HTMLInputElement>;
   inputValue: string;
   selectedItem?: SelectItemType;

@@ -1,4 +1,4 @@
-import type { DBCategory, ProcessedCategory } from "../_types/types"
+import type { DBCategory, ProcessedCategory } from "@/app/_types/types"
 
 export const categoryReadProcessing = (dbData:DBCategory):ProcessedCategory => {
   return {

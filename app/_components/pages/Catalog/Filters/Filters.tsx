@@ -3,16 +3,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ProcSpec } from "@/app/_types/types";
 import { type ChangeEvent, useContext, useState } from "react";
-import { objectStatusEnum, objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
+import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
-import { SelectOld } from "@/app/_components/ui/SelectOld";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
-import { Cross1Icon, Cross2Icon } from "@radix-ui/react-icons";
+import { Cross1Icon } from "@radix-ui/react-icons";
 import { Select } from "@/app/_components/ui/Select";
 
 

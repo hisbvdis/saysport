@@ -3,16 +3,15 @@ import { useContext } from "react"
 // -----------------------------------------------------------------------------
 import { SelectContext, type SelectInputProps } from ".";
 // -----------------------------------------------------------------------------
-import styles from "./styles.module.css";
 
 
 export default function SelectInput(props:SelectInputProps) {
-  const {className, style} = props;
-  const {isAutocomplete, disabled, inputRef, inputValue, placeholder, required, handleInputChange, name, handleInputClick, handleInputFocus, handleInputKeydown} = useContext(SelectContext);
+  const { className, style } = props;
+  const { isAutocomplete, disabled, inputRef, inputValue, placeholder, required, handleInputChange, name, handleInputClick, handleInputFocus, handleInputKeydown, styles } = useContext(SelectContext);
 
   return (
     <input
-      className={clsx(styles["select__input"], isAutocomplete && styles["select__input--isAutocomplete"], className)}
+      className={clsx(styles["selectInput"], isAutocomplete && styles["selectInput--isAutocomplete"], className)}
       style={style}
       type="text"
       disabled={disabled}

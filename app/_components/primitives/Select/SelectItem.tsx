@@ -1,17 +1,18 @@
 import clsx from "clsx";
-import type { SelectItemProps } from ".";
+import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { MenuItem } from "@/app/_components/ui/Menu/";
+import { SelectContext, type SelectItemProps } from ".";
 // -----------------------------------------------------------------------------
-import styles from "./styles.module.css";
 
 
 export default function SelectItem(props:SelectItemProps) {
   const { children, className, style, itemIndex } = props;
+  const { styles } = useContext(SelectContext);
 
   return (
     <MenuItem
-      className={clsx(styles["select__option"], className)}
+      className={clsx(styles["selectItem"], className)}
       style={style}
       itemIndex={itemIndex}
     >

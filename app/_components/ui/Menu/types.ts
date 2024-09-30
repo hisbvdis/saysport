@@ -1,4 +1,4 @@
-import type { Dispatch, MouseEventHandler, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 export interface MenuRootProps {
   onSelect: (itemId:string) => void;
@@ -15,6 +15,7 @@ export interface MenuContextType extends Pick<MenuRootProps, "items"> {
   focusedItemIndex: number;
   setFocusedItemIndex: Dispatch<SetStateAction<number>>;
   selectFocusedItem: () => void;
+  styles: { readonly [key: string]: string };
 }
 
 export interface MenuItemType {
@@ -22,7 +23,7 @@ export interface MenuItemType {
   label: string;
 }
 
-export interface MenuValueProps {
+export interface MenuItemTextProps {
   className?: string;
   children: React.ReactNode;
   style?: React.CSSProperties;

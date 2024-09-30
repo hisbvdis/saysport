@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 import { ChevronDownIcon, Cross1Icon } from "@radix-ui/react-icons";
-import { SelectArrowIcon, SelectCloseButton, SelectInput, type SelectItemType, SelectMenu, SelectItem, type SelectProps, SelectRoot, SelectTrigger, SelectValue } from "@/app/_components/primitives/Select/";
+// -----------------------------------------------------------------------------
+import { SelectArrowIcon, SelectCloseButton, SelectInput, type SelectItemType, SelectMenu, SelectItem, type SelectProps, SelectRoot, SelectTrigger, SelectValue } from ".";
+// -----------------------------------------------------------------------------
 
 
-export default function Select(props:SelectProps) {
+export default function SelectDemo(props:SelectProps) {
   const [ suggestions, setSuggestions ] = useState<SelectItemType[]>([]);
 
   return (

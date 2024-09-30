@@ -4,10 +4,12 @@ import { createContext, useEffect, useId, useRef, useState } from "react"
 // -----------------------------------------------------------------------------
 import ControlLabel from "./ControlLabel";
 import ControlSection from "./ControlSection";
+import type { ControlContextType, ControlProps } from ".";
 // -----------------------------------------------------------------------------
+import styles from "./styles.module.css";
 
 
-export default function Control(props:Props) {
+export default function Control(props:ControlProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const labelId = useId();
   const inputId = useId();
@@ -21,7 +23,7 @@ export default function Control(props:Props) {
   }, [])
 
   return (
-    <ControlContext.Provider value={{labelId, inputId, required}}>
+    <ControlContext.Provider value={{ labelId, inputId, required, styles }}>
       <div ref={containerRef} className={clsx("control", className)} style={style}>
         {children}
       </div>
@@ -32,17 +34,4 @@ export default function Control(props:Props) {
 Control.Label = ControlLabel;
 Control.Section = ControlSection;
 
-export const ControlContext = createContext<ControlContextType>({} as ControlContextType)
-
-interface Props {
-  className?: string;
-  style?: React.CSSProperties;
-  children?: React.ReactNode;
-  required?: boolean;
-}
-
-interface ControlContextType {
-  labelId: string;
-  inputId: string;
-  required: boolean;
-}
+export const ControlContext = createContext<ControlContextType>({} as ControlContextType);
