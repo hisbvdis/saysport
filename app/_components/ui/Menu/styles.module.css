@@ -1,4 +1,4 @@
-.menu {
+.menu__root {
   max-block-size: 250px;
   margin: 0;
   padding: 0;
@@ -10,18 +10,19 @@
   overflow: auto;
 }
 
-.menu__item {
+.menu__itemButton {
   display: block;
   inline-size: 100%;
-  padding: 5px;
+  padding: calc(1em / 2);
 
+  font-size: inherit;
   text-align: start;
 
   background: none;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
 }
 
-.menu__item--focus {
+.menu__itemButton--focus {
   background-color: var(--control-hovered-backgroundColor);
 }

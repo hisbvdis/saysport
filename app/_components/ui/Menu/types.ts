@@ -2,7 +2,6 @@ import type { Dispatch, SetStateAction } from "react";
 
 export interface MenuRootProps {
   onSelect: (itemId:string) => void;
-  isOpen: boolean;
   items: MenuItemType[];
   value: string;
   className?: string;

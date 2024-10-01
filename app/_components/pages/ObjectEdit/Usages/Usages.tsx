@@ -9,7 +9,7 @@ import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, 
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
-import { Select } from "@/app/_components/ui/Select";
+import { Select } from "@/app/_components/primitives/Select";
 import { Button } from "@/app/_components/ui/Button";
 import { Control } from "@/app/_components/ui/Control";
 import { FieldSet } from "@/app/_components/ui/FieldSet";

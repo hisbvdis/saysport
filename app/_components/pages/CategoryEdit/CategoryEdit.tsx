@@ -15,7 +15,7 @@ import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { deleteCategoryById, upsertCategory } from "@/app/_db/category";
 import { getSectionsByFilters } from "@/app/_db/section";
-import { Select } from "@/app/_components/ui/Select";
+import { Select } from "@/app/_components/primitives/Select";
 
 
 export default function CategoryEdit(props:{init:EditCategory}) {

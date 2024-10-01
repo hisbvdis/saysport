@@ -5,13 +5,12 @@ import { SelectContext } from "./";
 // -----------------------------------------------------------------------------
 
 
-
 export default function SelectTrigger(props:SelectTriggerProps) {
   const { children, className, style } = props;
   const { styles } = useContext(SelectContext);
 
   return (<>
-    <div className={clsx(styles["selectTrigger"], className)} style={style}>
+    <div className={clsx(styles["select__trigger"], className)} style={style}>
       {children}
     </div>
   </>)

@@ -6,7 +6,7 @@ import { sectionTypeEnum } from "@/drizzle/schema";
 import type { EditSection, ProcSection, ProcSpec, ProcObjectUsage } from "@/app/_types/types";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
-import { Select } from "@/app/_components/ui/Select";
+import { Select } from "@/app/_components/primitives/Select";
 import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";

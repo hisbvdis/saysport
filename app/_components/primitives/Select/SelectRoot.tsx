@@ -16,6 +16,7 @@ export default function SelectRoot(props:SelectRootProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [ localItems, setLocalItems ] = useState(props.items ?? []);
+  useEffect(() => {setSuggestions(localItems)}, []);
   const { isOpen:isMenuOpen, open:openMenu, close:closeMenu, toggle:toggleMenu } = useDisclosure(false);
   const emptySelectedItem = {id: value ?? "", label: label ?? ""};
   const [ selectedItem, setSelectedItem ] = useState<SelectItemType>(items.length ? (localItems.find((item) => item.id === value) ?? emptySelectedItem) : emptySelectedItem);
@@ -23,7 +24,6 @@ export default function SelectRoot(props:SelectRootProps) {
   useEffect(() => {items.length ? setSelectedItem(localItems.find((item) => item.id === value) ?? emptySelectedItem) : setSelectedItem(emptySelectedItem)}, [value]);
   useEffect(() => {items.length ? null : setInputValue(label ?? "")}, [label]);
   useEffect(() => {items.length ? setInputValue(selectedItem?.label ?? "") : null}, [selectedItem]);
-  useEffect(() => {setSuggestions(localItems)}, []);
 
   const handleInputClick = async () => {
     isAutocomplete ? openMenu() : toggleMenu();
@@ -129,7 +129,7 @@ export default function SelectRoot(props:SelectRootProps) {
 
   return (
     <SelectContext.Provider value={{ isAutocomplete, disabled, value, suggestions, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles }}>
-      <div className={clsx(styles["selectRoot"], className, disabled && styles["selectRoot--disabled"])} style={style} ref={rootRef}>
+      <div className={clsx(styles["select__root"], className, disabled && styles["select__root--disabled"])} style={style} ref={rootRef}>
         {children}
       </div>
     </SelectContext.Provider>

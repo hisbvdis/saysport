@@ -1,13 +1,14 @@
 "use client";
 import clsx from "clsx";
-import type { MenuContextType, MenuRootProps } from ".";
 import { createContext, useEffect, useRef, useState } from "react";
+// -----------------------------------------------------------------------------
+import type { MenuContextType, MenuRootProps } from ".";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
 export default function MenuRoot(props:MenuRootProps) {
-  const { children, className, style, items, value, isOpen, onSelect, close } = props;
+  const { children, className, style, items, value, onSelect, close } = props;
   const menuRef = useRef<HTMLDivElement>(null);
   const [ focusedItemIndex, setFocusedItemIndex ] = useState(0);
 
@@ -40,7 +41,7 @@ export default function MenuRoot(props:MenuRootProps) {
   }
 
   const focusItemByIndex = (index:number) => {
-    if (!isOpen || !menuRef.current) return;
+    if (!menuRef.current) return;
     const menuRect = menuRef.current.getBoundingClientRect();
     const itemElem = menuRef.current.children[index] as HTMLLIElement;
     if (!itemElem) return;
@@ -50,25 +51,24 @@ export default function MenuRoot(props:MenuRootProps) {
   }
 
   useEffect(() => {
-    if (!isOpen || !value || !items.length) return;
+    if (!value || !items.length) return;
     const selectedItemIndex = items?.findIndex((item) => item.id === value);
     setFocusedItemIndex(selectedItemIndex);
     focusItemByIndex(selectedItemIndex);
-  }, [isOpen])
+  }, [])
 
   useEffect(() => {
-    if (isOpen) document.addEventListener("keydown", handleDocumentKeydown);
+    document.addEventListener("keydown", handleDocumentKeydown);
     return () => document.removeEventListener("keydown", handleDocumentKeydown);
-  }, [isOpen, focusedItemIndex, items])
+  }, [focusedItemIndex, items])
 
   useEffect(() => {
     setFocusedItemIndex(items.length && items.some((item) => item.id === value) ? items.findIndex((item) => item.id === value) : 0);
   }, [items])
 
-  if (!isOpen) return null;
   return (
     <MenuContext.Provider value={{ focusedItemIndex, setFocusedItemIndex, items, selectFocusedItem, styles }}>
-      <menu className={clsx(styles["menu"], className)} style={style} ref={menuRef}>
+      <menu className={clsx(styles["menu__root"], className)} style={style} ref={menuRef}>
         {children}
       </menu>
     </MenuContext.Provider>

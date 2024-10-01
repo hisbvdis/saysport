@@ -1,5 +1,11 @@
 export default function MenuDemo() {
   return (
-    <h1>:)</h1>
+    <PopoverRoot className={clsx(styles["select__menu"], className)} style={style} isOpen={isMenuOpen} popover="manual">
+      <PopoverContent>
+        <MenuRoot items={suggestions} value={value ?? ""} onSelect={handleMenuSelect} close={closeMenu}>
+          {children}
+        </MenuRoot>
+      </PopoverContent>
+    </PopoverRoot>
   )
 }

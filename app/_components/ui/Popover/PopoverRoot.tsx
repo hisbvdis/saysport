@@ -15,7 +15,6 @@ export default function PopoverRoot(props:PopoverRootProps) {
   const openPopover = props.openPopover ?? disclosure.open;
   const closePopover = props.closePopover ?? disclosure.close;
   const togglePopover = props.togglePopover ?? disclosure.toggle;
-
   const dialogRef = useRef<HTMLDialogElement>(null);
   const dialogContentRef = useRef<HTMLDivElement>(null);
   const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
@@ -34,6 +33,7 @@ export default function PopoverRoot(props:PopoverRootProps) {
     if (isModal) {
       // Добавить в историю браузера новую запись
       history.pushState({fromSite: true}, "");
+      window.addEventListener("popstate", windowPopstateHandler);
 
       // У <body> отключить прокрутку, вычислить и задать отступ
       const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
@@ -41,8 +41,6 @@ export default function PopoverRoot(props:PopoverRootProps) {
       document.body.style.paddingInlineEnd = `${bodyPaddingRight + scrollBarWidth}px`;
       setBodyOverflowY(getComputedStyle(document.body).overflowY);
       document.body.style.overflowY = "hidden";
-
-      window.addEventListener("popstate", windowPopstateHandler);
     }
 
     if (popover === "auto") {
@@ -61,21 +59,17 @@ export default function PopoverRoot(props:PopoverRootProps) {
       // Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
       document.body.style.paddingInlineEnd = `${bodyPaddingRight}px`;
       document.body.style.overflowY = bodyOverflowY;
-
-      window.removeEventListener("popstate", windowPopstateHandler);
     }
 
-    if (popover === "auto") {
-      document.removeEventListener("keydown", documentKeydownEscapeHandler);
-      document.removeEventListener("pointerdown", notContentPointerDownHandler);
-      document.removeEventListener("click", notContentClickHandler);
-    }
+    document.removeEventListener("keydown", documentKeydownEscapeHandler);
+    document.removeEventListener("pointerdown", notContentPointerDownHandler);
+    document.removeEventListener("click", notContentClickHandler);
+    window.removeEventListener("popstate", windowPopstateHandler);
   }
 
   const documentKeydownEscapeHandler = (e:KeyboardEvent) => {
     if (e.code !== "Escape") return;
     close();
-    if (isModal) router.back();
   }
 
   // Нажали "Назад" в браузере =>  Закрыть модальное окно
@@ -97,7 +91,6 @@ export default function PopoverRoot(props:PopoverRootProps) {
     if (!isClickOnBackdrop.current) return;
     isClickOnBackdrop.current = false;
     close();
-    if (isModal) router.back();
   }
 
   useEffect(() => {
