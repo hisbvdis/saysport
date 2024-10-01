@@ -12,7 +12,7 @@ export default function SelectCloseButton(props:SelectCloseButtonProps) {
   if (!isAutocomplete || !selectedItem?.id) return null;
   return (
     <button
-      className={clsx(styles["selectCloseButton"], className)}
+      className={clsx(styles["select__closeButton"], className)}
       type="button"
       style={style}
       onClick={handleClearBtnClick}

@@ -19,11 +19,12 @@
   --card-borderColor: #E4E4E4;
   --card-padding: 15px;
 
-  --input-padding: 6px;
-  --input-fontSize: 0.8125rem;
   --input-borderColor: #B8C1C9;
-  --input-disabled-fontColor: #aaaaaa;
   --input-disabled-backgroundColor: #F8F8F8;
+  --input-disabled-fontColor: #aaaaaa;
+  --input-fontSize-mobile: 1rem;
+  --input-fontSize: 0.8125rem;
+  --input-padding: calc(var(--input-fontSize) / 2);
   --input-placeholder-fontColor: #BBBBBB;
 
   --control-hovered-backgroundColor: #F5F6F8;

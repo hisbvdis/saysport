@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { objectTypeEnum } from "@/drizzle/schema";
 import type { ProcessedCategory } from "@/app/_types/types";
 // -----------------------------------------------------------------------------
-import { Select } from "@/app/_components/ui/Select";
+import { Select } from "@/app/_components/primitives/Select";
 import { Card } from "@/app/_components/ui/Card";
 // -----------------------------------------------------------------------------
 import { getSectionsByFilters } from "@/app/_db/section";

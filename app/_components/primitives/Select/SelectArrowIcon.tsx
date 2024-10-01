@@ -13,7 +13,7 @@ export default function SelectArrowIcon(props:SelectArrowIconProps) {
   if (isAutocomplete) return null;
   return (
     <span
-      className={clsx(styles["selectArrowIcon"], className)}
+      className={clsx(styles["select__arrowIcon"], className)}
       style={style}
     >
       {children}

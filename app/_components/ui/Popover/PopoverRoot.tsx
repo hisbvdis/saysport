@@ -6,6 +6,7 @@ import { useDisclosure } from "@/app/_hooks/useDisclosure";
 import type { PopoverContextType, PopoverRootProps } from ".";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
+import useIsMobile from "@/app/_hooks/useIsMobile";
 
 
 export default function PopoverRoot(props:PopoverRootProps) {
@@ -15,13 +16,14 @@ export default function PopoverRoot(props:PopoverRootProps) {
   const openPopover = props.openPopover ?? disclosure.open;
   const closePopover = props.closePopover ?? disclosure.close;
   const togglePopover = props.togglePopover ?? disclosure.toggle;
-
   const dialogRef = useRef<HTMLDialogElement>(null);
   const dialogContentRef = useRef<HTMLDivElement>(null);
   const [ bodyPaddingRight, setBodyPaddingRight ] = useState<number>(0);
   const [ bodyOverflowY, setBodyOverflowY ] = useState<string>("");
+  const isPushedHistory = useRef(false);
   const isClickOnBackdrop = useRef(false);
   const router = useRouter();
+  const isMobile = useIsMobile();
 
   const open = () => {
     // Показать модальное окно
@@ -31,18 +33,20 @@ export default function PopoverRoot(props:PopoverRootProps) {
     // Прокрутить вверх (потому что "show()" может скроллить, если первый элемента находится за пределами "viewPort")
     // dialogRef.current?.scrollTo(0, 0);
 
-    if (isModal) {
-      // Добавить в историю браузера новую запись
+    // Добавить в историю браузера новую запись
+    if (isMobile || isModal) {
       history.pushState({fromSite: true}, "");
+      isPushedHistory.current = true;
+      window.addEventListener("popstate", windowPopstateHandler);
+    }
 
+    if (isModal) {
       // У <body> отключить прокрутку, вычислить и задать отступ
       const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
       setBodyPaddingRight(Number.parseFloat(getComputedStyle(document.body).paddingInlineEnd));
       document.body.style.paddingInlineEnd = `${bodyPaddingRight + scrollBarWidth}px`;
       setBodyOverflowY(getComputedStyle(document.body).overflowY);
       document.body.style.overflowY = "hidden";
-
-      window.addEventListener("popstate", windowPopstateHandler);
     }
 
     if (popover === "auto") {
@@ -57,12 +61,15 @@ export default function PopoverRoot(props:PopoverRootProps) {
     // dialogRef.current?.close(); // elem.close() doesn't work in Chrome
     closePopover();
 
+    if (isPushedHistory) {
+      router.back();
+      isPushedHistory.current = false;
+    }
+
     if (isModal) {
       // Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
       document.body.style.paddingInlineEnd = `${bodyPaddingRight}px`;
       document.body.style.overflowY = bodyOverflowY;
-
-      window.removeEventListener("popstate", windowPopstateHandler);
     }
 
     if (popover === "auto") {
@@ -70,12 +77,15 @@ export default function PopoverRoot(props:PopoverRootProps) {
       document.removeEventListener("pointerdown", notContentPointerDownHandler);
       document.removeEventListener("click", notContentClickHandler);
     }
+
+    if (isMobile || isModal) {
+      window.removeEventListener("popstate", windowPopstateHandler);
+    }
   }
 
   const documentKeydownEscapeHandler = (e:KeyboardEvent) => {
     if (e.code !== "Escape") return;
     close();
-    if (isModal) router.back();
   }
 
   // Нажали "Назад" в браузере =>  Закрыть модальное окно
@@ -97,7 +107,6 @@ export default function PopoverRoot(props:PopoverRootProps) {
     if (!isClickOnBackdrop.current) return;
     isClickOnBackdrop.current = false;
     close();
-    if (isModal) router.back();
   }
 
   useEffect(() => {

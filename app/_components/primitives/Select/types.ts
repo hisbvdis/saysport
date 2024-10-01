@@ -33,8 +33,8 @@ export interface SelectContextType extends Pick<SelectRootProps,
   "placeholder" |
   "required" |
   "name" |
-  "suggestions" |
-  "onChange"
+  "onChange" |
+  "suggestions"
 > {
   styles: { readonly [key: string]: string };
   inputRef: RefObject<HTMLInputElement>;
@@ -81,7 +81,7 @@ export interface SelectInputProps {
   style?: React.CSSProperties;
 }
 
-export interface SelectContentProps {
+export interface SelectMenuProps {
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;

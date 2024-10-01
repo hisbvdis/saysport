@@ -11,7 +11,7 @@ export default function SelectInput(props:SelectInputProps) {
 
   return (
     <input
-      className={clsx(styles["selectInput"], isAutocomplete && styles["selectInput--isAutocomplete"], className)}
+      className={clsx(styles["select__input"], isAutocomplete && styles["select__input--isAutocomplete"], className)}
       style={style}
       type="text"
       disabled={disabled}

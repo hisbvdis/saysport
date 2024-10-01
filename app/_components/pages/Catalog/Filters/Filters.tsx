@@ -12,7 +12,7 @@ import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import { Select } from "@/app/_components/ui/Select";
+import { Select } from "@/app/_components/primitives/Select";
 
 
 export default function Filters() {

@@ -1,39 +1,39 @@
-.selectRoot {
+.select__root {
   position: relative;
 }
 
-.selectTrigger {
+.select__trigger {
   position: relative;
 }
 
-.selectInput {
+.select__input {
   display: block;
   inline-size: 100%;
-  padding: var(--input-padding);
+  padding: calc(1em / 2);
 
-  font-size: var(--input-fontSize);
+  font-size: inherit;
 
   border: 1px solid var(--input-borderColor);
   appearance: none;
   cursor: default;
 }
 
-.selectInput--isAutocomplete {
+.select__input--isAutocomplete {
   cursor: text;
 }
 
-.selectInput:disabled {
+.select__input:disabled {
   color: var(--input-disabled-fontColor);
 
   background-color: var(--input-disabled-backgroundColor);
 }
 
-.selectInput::placeholder {
+.select__input::placeholder {
   color: var(--input-placeholder-fontColor);
 }
 
-.selectArrowIcon,
-.selectCloseButton {
+.select__arrowIcon,
+.select__closeButton {
   position: absolute;
   inset-inline-end: 0;
   inset-block-start: 50%;
@@ -51,17 +51,17 @@
   cursor: pointer;
 }
 
-.selectArrowIcon,
-.selectRoot--disabled .selectCloseButton {
+.select__arrowIcon,
+.select__root--disabled .select__closeButton {
   pointer-events: none;
 }
 
-.selectArrowIcon svg {
+.select__arrowIcon svg {
   width: 18px;
   height: 18px
 }
 
-.selectRoot--disabled .selectArrowIcon,
-.selectRoot--disabled .selectCloseButton {
+.select__root--disabled .select__arrowIcon,
+.select__root--disabled .select__closeButton {
   color: var(--input-disabled-fontColor);
 }

@@ -12,7 +12,7 @@ export default function SelectItem(props:SelectItemProps) {
 
   return (
     <MenuItem
-      className={clsx(styles["selectItem"], className)}
+      className={clsx(styles["select__item"], className)}
       style={style}
       itemIndex={itemIndex}
     >

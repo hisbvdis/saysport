@@ -10,10 +10,10 @@ export default function MenuItem(props:MenuItemProps) {
   const { focusedItemIndex, setFocusedItemIndex, selectFocusedItem, styles } = useContext(MenuContext);
 
   return (
-    <li>
+    <li className={styles["menu__item"]}>
       <button
         type="button"
-        className={clsx(styles["menu__item"], itemIndex === focusedItemIndex && styles["menu__item--focus"], className)}
+        className={clsx(styles["menu__itemButton"], itemIndex === focusedItemIndex && styles["menu__itemButton--focus"], className)}
         style={style}
         onPointerMove={() => setFocusedItemIndex(itemIndex)}
         onClick={() => selectFocusedItem()}
