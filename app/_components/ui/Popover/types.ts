@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
 
-export interface PopoverDemoProps {
+export interface PopoverProps {
   isOpen?: boolean;
   popover?: "auto" | "manual";
   closePopover?: () => void;
@@ -10,13 +10,14 @@ export interface PopoverDemoProps {
   children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  shouldPushHistoryState?: boolean;
 }
 
-export interface PopoverRootProps extends PopoverDemoProps {}
+export interface PopoverRootProps extends PopoverProps {}
 
 export interface PopoverContextType extends
-  Pick<PopoverDemoProps, "isModal" |"isOpen">,
-  Pick<Required<PopoverDemoProps>, "closePopover" | "openPopover" | "togglePopover"> {
+  Pick<PopoverProps, "isModal" |"isOpen">,
+  Pick<Required<PopoverProps>, "closePopover" | "openPopover" | "togglePopover"> {
   dialogRef: RefObject<HTMLDialogElement>;
   dialogContentRef: RefObject<HTMLDivElement>;
   styles: { readonly [key: string]: string };

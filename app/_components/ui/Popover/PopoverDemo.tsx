@@ -1,13 +1,13 @@
-import { PopoverContent, type PopoverDemoProps, PopoverRoot, PopoverTrigger } from ".";
+"use client";
+import { PopoverContent, type PopoverProps, PopoverRoot, PopoverTrigger } from ".";
 
-export default function PopoverDemo(props:PopoverDemoProps) {
-  const { children } = props;
 
+export default function PopoverDemo(props:PopoverProps) {
   return (
     <PopoverRoot {...props}>
       <PopoverTrigger>Open</PopoverTrigger>
       <PopoverContent>
-        {children}
+        {props.children}
       </PopoverContent>
     </PopoverRoot>
   )

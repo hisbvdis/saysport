@@ -5,7 +5,7 @@ import PopoverTrigger from "./PopoverTrigger";
 
 import { PopoverContext } from "./PopoverRoot";
 
-import type { PopoverDemoProps } from "./types";
+import type { PopoverProps } from "./types";
 import type { PopoverRootProps } from "./types";
 import type { PopoverContextType } from "./types";
 import type { PopoverContentProps } from "./types";
@@ -19,7 +19,7 @@ export {
 
   PopoverContext,
 
-  type PopoverDemoProps,
+  type PopoverProps,
   type PopoverRootProps,
   type PopoverContextType,
   type PopoverContentProps,
