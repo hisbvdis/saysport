@@ -5,10 +5,6 @@ export interface CardProps {
   heading?: string,
 }
 
-export interface CardContextType {
-  styles: { readonly [key: string]: string };
-}
-
 export interface CardHeadingProps {
   className?: string,
   children?: React.ReactNode,
@@ -20,4 +16,3 @@ export interface CardSectionProps {
   children?: React.ReactNode,
   style?: React.CSSProperties
 }
-

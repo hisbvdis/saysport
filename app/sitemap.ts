@@ -1,6 +1,9 @@
+import type { MetadataRoute } from "next";
+// -----------------------------------------------------------------------------
 import { db } from "@/drizzle/client";
 import { object } from "@/drizzle/schema";
-import type { MetadataRoute } from "next";
+// -----------------------------------------------------------------------------
+
 
 export async function generateSitemaps() {
   return [{id: "objects"}]

@@ -4,12 +4,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { objectTypeEnum } from "@/drizzle/schema";
-import type { ProcessedCategory } from "@/app/_types/types";
+import type { ProcessedDBCategory } from "@/app/_types/db";
 // -----------------------------------------------------------------------------
-import { Select } from "@/app/_components/primitives/Select";
 import { Card } from "@/app/_components/ui/Card";
+import { Select } from "@/app/_components/primitives/Select";
 // -----------------------------------------------------------------------------
-import { getSectionsByFilters } from "@/app/_db/section";
+import { getSectionsByFilters } from "@/app/_actions/db/section";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 // -----------------------------------------------------------------------------
 import styles from "./style.module.css";
@@ -88,5 +88,5 @@ export default function Categories(props:Props) {
 interface Props {
   style?: React.CSSProperties;
   className?: string;
-  categories: ProcessedCategory[];
+  categories: ProcessedDBCategory[];
 }

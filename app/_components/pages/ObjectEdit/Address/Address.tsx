@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { create } from "mutative";
 import type * as Leaflet from "leaflet";
-import type { DBObject } from "@/app/_types/types";
+import type { DBObject } from "@/app/_types/db";
 import { useContext, useEffect, useState } from "react";
 import { type Object_, objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
@@ -10,15 +10,15 @@ import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
-import { Select } from "@/app/_components/primitives/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
+import { Select } from "@/app/_components/primitives/Select";
 import { MapComponent, MapControl, MapCluster } from "@/app/_components/ui/MapComponent";
 // -----------------------------------------------------------------------------
-import { getCitiesByFilters } from "@/app/_db/city";
 import { setInheritedData } from "./setInheritedData";
-import { objectReadProcessing } from "@/app/_db/object.processing";
-import { getObjectsByArea, getObjectsByFilters } from "@/app/_db/object";
+import { getCitiesByFilters } from "@/app/_actions/db/city";
+import { objectReadProcessing } from "@/app/_actions/db/object.processing";
+import { getObjectsByArea, getObjectsByFilters } from "@/app/_actions/db/object";
 import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_lib/nominatim";
 
 

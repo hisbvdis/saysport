@@ -63,7 +63,7 @@ export interface SelectItemProps {
   style?: React.CSSProperties;
 }
 
-export interface SelectValueProps {
+export interface SelectItemTextProps {
   children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;

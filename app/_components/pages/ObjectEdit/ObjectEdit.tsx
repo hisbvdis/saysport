@@ -3,19 +3,18 @@ import { create } from "mutative";
 import type * as Leaflet from "leaflet";
 import { useRouter } from "next/navigation";
 import { objectTypeEnum } from "@/drizzle/schema";
-import type { EditObject, ProcObject, ProcOption, ProcSection, ProcSpec } from "@/app/_types/types";
+import type { UIObject, ProcessedDBObject, ProccessedDBOption, ProcessedDBSection, ProcessedDBSpec } from "@/app/_types/db";
 import { type ChangeEvent, type ChangeEventHandler, type Dispatch, type SetStateAction, type SyntheticEvent, createContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
-import { Form } from "@/app/_components/ui/Form";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 import { NameOrg, NamePlace, Address, Contacts, Sections, Description, Photos, Usages, NameClass } from "./"
 // -----------------------------------------------------------------------------
 import { syncPhotos } from "./Photos/syncPhotos";
 import { setInheritedData } from "./Address/setInheritedData";
-import { deleteObjectById, upsertObject } from "@/app/_db/object";
+import { deleteObjectById, upsertObject } from "@/app/_actions/db/object";
 
 
-export default function ObjectEdit(props:{init:EditObject, parent?:ProcObject|null, commonSections?: ProcSection[]}) {
+export default function ObjectEdit(props:{init:UIObject, parent?:ProcessedDBObject|null, commonSections?: ProcessedDBSection[]}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -31,14 +30,14 @@ export default function ObjectEdit(props:{init:EditObject, parent?:ProcObject|nu
   }
 
   const handleSections = {
-    add: (section:ProcSection) => {
+    add: (section:ProcessedDBSection) => {
       if (!section.section_id || state.sections?.some((stateSection) => stateSection.section_id === section.section_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.sections) draft.sections = [];
         draft.sections.push(section);
       }))
     },
-    delete: (section:ProcSection) => {
+    delete: (section:ProcessedDBSection) => {
       setState((prevState) => create(prevState, (draft) => {
         draft.sections = draft.sections?.filter((draftSection) => draftSection.section_id !== section.section_id);
         const optionsOfDeletedSection = section.specs?.flatMap((spec) => spec.options?.flatMap(({spec_id}) => spec_id));
@@ -48,7 +47,7 @@ export default function ObjectEdit(props:{init:EditObject, parent?:ProcObject|nu
   }
 
   const handleOptions = {
-    changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: ProcOption) => {
+    changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: ProccessedDBOption) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.options) draft.options = [];
         if (e.target.checked) {
@@ -58,7 +57,7 @@ export default function ObjectEdit(props:{init:EditObject, parent?:ProcObject|nu
         }
       }))
     },
-    changeRadio: (spec:ProcSpec, opt:ProcOption) => {
+    changeRadio: (spec:ProcessedDBSpec, opt:ProccessedDBOption) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.options) draft.options = [];
         draft.options = draft.options?.filter((stateOpt) => !spec.options?.map((opt) => opt.option_id).includes(stateOpt.option_id));
@@ -100,7 +99,7 @@ export default function ObjectEdit(props:{init:EditObject, parent?:ProcObject|nu
 
   return (
     <ObjectEditContext.Provider value={{ state, setState, handleStateChange, handleSections, handleOptions, mapInstance, setMapInstance }}>
-      <Form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleFormSubmit}>
         {state.type === objectTypeEnum.org ? <NameOrg/> : null}
         {state.type === objectTypeEnum.place ? <NamePlace/> : null}
         {state.type === objectTypeEnum.class ? <NameClass/> : null}
@@ -116,7 +115,7 @@ export default function ObjectEdit(props:{init:EditObject, parent?:ProcObject|nu
           exitRedirectPath="./"
           delRedirectPath="/"
         />
-      </Form>
+      </form>
     </ObjectEditContext.Provider>
   )
 }
@@ -124,19 +123,19 @@ export default function ObjectEdit(props:{init:EditObject, parent?:ProcObject|nu
 export const ObjectEditContext = createContext<ObjectEditContextType>({} as ObjectEditContextType);
 
 interface ObjectEditContextType {
-  state: EditObject;
-  setState: React.Dispatch<SetStateAction<EditObject>>;
+  state: UIObject;
+  setState: React.Dispatch<SetStateAction<UIObject>>;
   handleStateChange: {
     value: (data:{name:string, value:string}) => void,
     checked: ChangeEventHandler,
   },
   handleSections: {
-    add: (section:ProcSection) => void,
-    delete: (section:ProcSection) => void,
+    add: (section:ProcessedDBSection) => void,
+    delete: (section:ProcessedDBSection) => void,
   },
   handleOptions: {
-    changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: ProcOption) => void,
-    changeRadio: (spec:ProcSpec, opt:ProcOption) => void,
+    changeCheckbox: (e:ChangeEvent<HTMLInputElement>, opt: ProccessedDBOption) => void,
+    changeRadio: (spec:ProcessedDBSpec, opt:ProccessedDBOption) => void,
   },
   mapInstance?: Leaflet.Map;
   setMapInstance: Dispatch<SetStateAction<Leaflet.Map | undefined>>;

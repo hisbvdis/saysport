@@ -4,11 +4,12 @@ import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { FieldSetContext, type FieldSetLegendProps } from "./";
 // -----------------------------------------------------------------------------
+import styles from "./styles.module.css";
 
 
 export default function FieldSetLegend(props:FieldSetLegendProps) {
   const { children, className, style, srOnly } = props;
-  const { legendId, styles } = useContext(FieldSetContext);
+  const { legendId } = useContext(FieldSetContext);
 
   return (
     <div

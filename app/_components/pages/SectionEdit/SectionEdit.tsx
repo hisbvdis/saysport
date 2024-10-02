@@ -3,11 +3,10 @@ import Link from "next/link";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
 import { sectionTypeEnum } from "@/drizzle/schema";
-import type { EditSection, ProcSection, ProcSpec, ProcObjectUsage } from "@/app/_types/types";
+import type { UISection, ProcessedDBSpec, ProcessedObjectUsage } from "@/app/_types/db";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
 import { Select } from "@/app/_components/primitives/Select";
-import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
@@ -16,12 +15,12 @@ import { InputAddon } from "@/app/_components/ui/InputAddon";
 import { Radio, RadioGroup } from "@/app/_components/ui/Choice";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
-import { getSpecsByFilters } from "@/app/_db/spec";
-import { getUsagesByFilters } from "@/app/_db/usage";
-import { deleteSectionById, upsertSection } from "@/app/_db/section";
+import { getSpecsByFilters } from "@/app/_actions/db/spec";
+import { getUsagesByFilters } from "@/app/_actions/db/usage";
+import { deleteSectionById, upsertSection } from "@/app/_actions/db/section";
 
 
-export default function SectionEdit(props:{init:EditSection}) {
+export default function SectionEdit(props:{init:UISection}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -35,7 +34,7 @@ export default function SectionEdit(props:{init:EditSection}) {
   }
 
   const handleSpecs = {
-    add: (spec:ProcSpec) => {
+    add: (spec:ProcessedDBSpec) => {
       if (!spec.spec_id || state.specs?.some((stateSpec) => stateSpec.spec_id === spec.spec_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.specs) draft.specs = [];
@@ -47,7 +46,7 @@ export default function SectionEdit(props:{init:EditSection}) {
         draft.specs = draft.specs?.filter((spec) => spec.spec_id !== id);
       }))
     },
-    changeOrder: (e:ChangeEvent<HTMLInputElement>, spec:ProcSpec) => {
+    changeOrder: (e:ChangeEvent<HTMLInputElement>, spec:ProcessedDBSpec) => {
       setState((prevState) => create(prevState, (draft) => {
         const specItem = draft.specs?.find((draftSpec) => draftSpec.spec_id === spec?.spec_id);
         if (!specItem) return;
@@ -57,7 +56,7 @@ export default function SectionEdit(props:{init:EditSection}) {
   }
 
   const handleUsages = {
-    add: (usage:ProcObjectUsage) => {
+    add: (usage:ProcessedObjectUsage) => {
       if (!usage.usage_id || state.usages?.some((stateUsage) => stateUsage.usage_id === usage.usage_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
@@ -84,7 +83,7 @@ export default function SectionEdit(props:{init:EditSection}) {
   }
 
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <form onSubmit={handleFormSubmit}>
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading>Название и тип</Card.Heading>
         <Card.Section>
@@ -220,6 +219,6 @@ export default function SectionEdit(props:{init:EditSection}) {
         delRedirectPath="/admin/sections"
         exitRedirectPath="./"
       />
-    </Form>
+    </form>
   )
 }

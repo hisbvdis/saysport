@@ -6,7 +6,7 @@ import SelectArrowIcon from "./SelectArrowIcon";
 import SelectCloseButton from "./SelectCloseButton";
 import SelectInput from "./SelectInput";
 import SelectItem from "./SelectItem";
-import SelectValue from "./SelectValue";
+import SelectItemText from "./SelectItemText";
 
 import { SelectContext } from "./SelectRoot";
 
@@ -18,7 +18,7 @@ import type { SelectRootProps } from "./types";
 import type { SelectContextType } from "./types";
 import type { SelectItemType } from "./types";
 import type { SelectItemProps } from "./types";
-import type { SelectValueProps } from "./types";
+import type { SelectItemTextProps } from "./types";
 
 export {
   SelectDemo as Select,
@@ -29,7 +29,7 @@ export {
 	SelectMenu,
 	SelectInput,
   SelectItem,
-  SelectValue,
+  SelectItemText,
 
   SelectContext,
 
@@ -41,5 +41,5 @@ export {
   type SelectContextType,
   type SelectItemType,
   type SelectItemProps,
-  type SelectValueProps,
+  type SelectItemTextProps,
 };

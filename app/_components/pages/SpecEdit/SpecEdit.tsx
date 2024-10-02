@@ -1,10 +1,9 @@
 "use client";
-import { nanoid } from "nanoid";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
+import type { UISpec } from "@/app/_types/db";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
-import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
 import { Checkbox, Radio } from "@/app/_components/ui/Choice";
@@ -14,11 +13,10 @@ import { InputAddon } from "@/app/_components/ui/InputAddon";
 import { RadioGroup } from "@/app/_components/ui/Choice/ChoiceGroup";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
-import type { EditSpec } from "@/app/_types/types";
-import { deleteSpecById, upsertSpec } from "@/app/_db/spec";
+import { deleteSpecById, upsertSpec } from "@/app/_actions/db/spec";
 
 
-export default function SpecEdit(props:{init:EditSpec}) {
+export default function SpecEdit(props:{init:UISpec}) {
   const [state, setState] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -40,7 +38,7 @@ export default function SpecEdit(props:{init:EditSpec}) {
     add: () => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft?.options) draft.options = [];
-        draft.options.push({option_id: 0, spec_id: 0, name: "", order: draft.options.length, uiID: nanoid()});
+        draft.options.push({option_id: 0, spec_id: 0, name: "", order: draft.options.length, uiID: crypto.randomUUID()});
       }))
     },
     changeName: (e:ChangeEvent<HTMLInputElement>, uiID:string) => {
@@ -77,7 +75,7 @@ export default function SpecEdit(props:{init:EditSpec}) {
   }
 
   return (
-    <Form style={{marginBlockStart: "10px"}} onSubmit={handleFormSubmit}>
+    <form style={{marginBlockStart: "10px"}} onSubmit={handleFormSubmit}>
       <Card>
         <Card.Heading>Название и тип</Card.Heading>
         <Card.Section>
@@ -192,6 +190,6 @@ export default function SpecEdit(props:{init:EditSpec}) {
         delRedirectPath="/admin/specs"
         exitRedirectPath="./"
       />
-    </Form>
+    </form>
   )
 }

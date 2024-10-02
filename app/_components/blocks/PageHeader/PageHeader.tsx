@@ -1,20 +1,19 @@
-import clsx from "clsx";
 import Link from "next/link";
-import { auth, signOut } from "@/auth";
+import { cookies } from "next/headers";
 // -----------------------------------------------------------------------------
-import { Logo } from "@/app/_components/blocks/Logo/";
+import { Logo } from "@/app/_components/blocks/Logo";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
 export default async function PageHeader() {
-  const session = await auth();
+  // const isLogin = cookies().get("isLogin");
 
   return (
     <header className={styles["pageHeader"]}>
       <div className={styles["pageHeader__container"]}>
         <Logo/>
-        {session ? (
+        {/* {isLogin === "true" ? (
           <>
             <Link className={styles["pageHeader__link"]} href="/admin">Adm</Link>
             <Link className={styles["pageHeader__link"]} href="/object/add/org">Org</Link>
@@ -25,7 +24,7 @@ export default async function PageHeader() {
               await signOut();
             }}><button type="submit">Exit</button></form>
           </>
-        ) : null}
+        ) : null} */}
       </div>
     </header>
   )

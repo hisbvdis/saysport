@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
-import { MenuRoot } from "@/app/_components/ui/Menu";
 import { type SelectMenuProps, SelectContext } from ".";
-import { PopoverContent, PopoverRoot } from "@/app/_components/ui/Popover";
+import { MenuRoot } from "@/app/_components/primitives/Menu";
+import { PopoverContent, PopoverRoot } from "@/app/_components/primitives/Popover";
 // -----------------------------------------------------------------------------
 
 

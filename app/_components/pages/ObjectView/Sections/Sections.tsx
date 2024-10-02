@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useContext } from "react"
-// -----------------------------------------------------------------------------
-import { ObjectViewContext } from "../ObjectView"
-import { Card } from "@/app/_components/ui/Card";
 import { sectionTypeEnum } from "@/drizzle/schema";
+// -----------------------------------------------------------------------------
+import { Card } from "@/app/_components/ui/Card";
+import { ObjectViewContext } from "../ObjectView";
+// -----------------------------------------------------------------------------
 
 
 export default function Sections() {

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type { City } from "@/drizzle/schema";
-import type { ProcessedCategory } from "@/app/_types/types";
+import type { ProcessedDBCategory } from "@/app/_types/db";
 // -----------------------------------------------------------------------------
 import { Popular } from ".";
 import { Hero } from "@/app/_components/blocks/Hero";
@@ -27,5 +27,5 @@ export default function Home(props:Props) {
 
 interface Props {
   city?: City;
-  categories: ProcessedCategory[];
+  categories: ProcessedDBCategory[];
 }

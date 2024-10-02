@@ -4,21 +4,20 @@ import { create } from "mutative";
 import { useRouter } from "next/navigation";
 import { type SyntheticEvent, useEffect, useState } from "react";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
-import type { EditCategory, ProcSection } from "@/app/_types/types";
+import type { UICategory, ProcessedDBSection } from "@/app/_types/db";
 // -----------------------------------------------------------------------------
-import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
 import { Control } from "@/app/_components/ui/Control";
+import { Select } from "@/app/_components/primitives/Select";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
-import { deleteCategoryById, upsertCategory } from "@/app/_db/category";
-import { getSectionsByFilters } from "@/app/_db/section";
-import { Select } from "@/app/_components/primitives/Select";
+import { getSectionsByFilters } from "@/app//_actions/db/section";
+import { deleteCategoryById, upsertCategory } from "@/app/_actions/db/category";
 
 
-export default function CategoryEdit(props:{init:EditCategory}) {
+export default function CategoryEdit(props:{init:UICategory}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -32,7 +31,7 @@ export default function CategoryEdit(props:{init:EditCategory}) {
   }
 
   const handleSections = {
-    add: (section:ProcSection) => {
+    add: (section:ProcessedDBSection) => {
       if (!section.section_id || state.sections?.some((stateSection) => stateSection.section_id === section.section_id)) return;
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.sections) draft.sections = [];
@@ -59,7 +58,7 @@ export default function CategoryEdit(props:{init:EditCategory}) {
   }
 
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <form onSubmit={handleFormSubmit}>
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading>Название и тип</Card.Heading>
         <Card.Section>
@@ -145,6 +144,6 @@ export default function CategoryEdit(props:{init:EditCategory}) {
         delRedirectPath="/admin/sections"
         exitRedirectPath="./"
       />
-    </Form>
+    </form>
   )
 }

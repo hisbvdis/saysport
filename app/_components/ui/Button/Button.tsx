@@ -4,13 +4,12 @@ import styles from "./styles.module.css";
 
 
 export default function Button(props:Props) {
-  const { type = "button", onClick, tabIndex, disabled } = props;
-  const { className, style, children } = props;
+  const { type = "button", onClick, tabIndex, disabled, className, style, children } = props;
 
   return (
     <button
       {...props}
-      className={clsx(styles.button, className)}
+      className={clsx(styles["button"], className)}
       style={style}
       type={type}
       onClick={onClick}

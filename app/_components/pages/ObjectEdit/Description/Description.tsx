@@ -1,7 +1,10 @@
 import { useContext } from "react"
+// -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit"
 import { Card } from "@/app/_components/ui/Card";
 import { Textarea } from "@/app/_components/ui/Input";
+// -----------------------------------------------------------------------------
+
 
 export default function Description() {
   const { state, handleStateChange } = useContext(ObjectEditContext);

@@ -14,7 +14,7 @@ export default function FieldSet(props:FieldSetProps) {
   const legendId = useId();
 
   return (
-    <FieldSetContext.Provider value={{ legendId, styles }}>
+    <FieldSetContext.Provider value={{ legendId }}>
       <fieldset
         className={clsx(styles["fieldSet"], className)}
         style={style}

@@ -5,7 +5,6 @@ export interface FieldSetProps {
 }
 
 export interface FieldSetContextType {
-  styles: { readonly [key: string]: string };
   legendId: string;
 }
 

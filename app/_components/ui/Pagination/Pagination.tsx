@@ -1,8 +1,9 @@
-// -----------------------------------------------------------------------------
-import Link from "next/link";
-import styles from "./styles.module.css";
-import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 import clsx from "clsx";
+import Link from "next/link";
+// -----------------------------------------------------------------------------
+import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
+// -----------------------------------------------------------------------------
+import styles from "./styles.module.css";
 
 
 export default function Pagination(props:Props) {

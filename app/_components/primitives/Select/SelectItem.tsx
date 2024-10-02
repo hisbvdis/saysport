@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
-import { MenuItem } from "@/app/_components/ui/Menu/";
 import { SelectContext, type SelectItemProps } from ".";
+import { MenuItem } from "@/app/_components/primitives//Menu/";
 // -----------------------------------------------------------------------------
 
 

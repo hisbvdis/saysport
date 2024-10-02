@@ -1,6 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { type ChangeEvent, type ReactEventHandler, createContext, useContext, useId } from "react"
+// -----------------------------------------------------------------------------
 import { ControlContext } from "../Control";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
@@ -26,7 +27,6 @@ function ChoiceGroup(props:Props) {
         className={clsx(styles["choiceGroup"], className)}
         style={style}
         aria-labelledby={labelId}
-        role="group"
       >
         {children}
       </fieldset>

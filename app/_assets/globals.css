@@ -1,6 +1,5 @@
 @import "./variables.css";
 
-/* RESET */
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -35,26 +34,24 @@ img {
 }
 
 
-/* INITIAL STYLES */
 body {
   min-inline-size: 320px;
   margin: 0;
 
   font-family: sans-serif;
-  /* line-height: 1.15; */
-  font-weight: 400;
+  font-size: 1rem;
   color: var(--fontColor);
 
+  background-color: var(--body-background);
   overflow-y: scroll;
-  background-color: #EEEEEE;
 }
 
 
 /* GLOBAL CLASSES */
 .container {
   max-inline-size: var(--container-maxInlineSize);
-  padding-block-start: var(--container-paddingBlockStart);
   margin-inline: auto;
+  padding-block-start: var(--container-paddingBlockStart);
 
   @media (width > 905px) {
     padding-inline: var(--container-paddingInline);
@@ -72,14 +69,6 @@ body {
 
   clip-path: inset(50%);
   overflow: hidden;
-}
-
-.mt10 {
-  margin-block-start: 10px;
-}
-
-.mt15 {
-  margin-block-start: 15px;
 }
 
 a {

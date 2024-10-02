@@ -1,18 +1,18 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { ProcSpec } from "@/app/_types/types";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import type { ProcessedDBSpec } from "@/app/_types/db";
 import { type ChangeEvent, useContext, useState } from "react";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
+import { CatalogContext } from "../Catalog";
 import { Card } from "@/app/_components/ui/Card";
 import { Control } from "@/app/_components/ui/Control";
+import { Select } from "@/app/_components/primitives/Select";
 import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
-import { CatalogContext } from "../Catalog";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
-import { Cross1Icon } from "@radix-ui/react-icons";
-import { Select } from "@/app/_components/primitives/Select";
 
 
 export default function Filters() {
@@ -21,7 +21,7 @@ export default function Filters() {
   const [ andSpecs, setAndSpecs ] = useState<number[]>([]);
   const { searchParams, section, commonSections } = useContext(CatalogContext);
 
-  const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:ProcSpec) => {
+  const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:ProcessedDBSpec) => {
     if (e.target.checked) {
       setAndSpecs(andSpecs.concat(spec.spec_id))
       router.push(manageSearchParams.set("options", searchParams.options?.split(",").map((v) => v.startsWith(`${spec.spec_id}:`) ? `!${v}` : v).join(",") ?? ""))

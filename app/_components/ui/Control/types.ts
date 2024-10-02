@@ -6,7 +6,6 @@ export interface ControlProps {
 }
 
 export interface ControlContextType {
-  styles: { readonly [key: string]: string };
   labelId: string;
   inputId: string;
   required: boolean;

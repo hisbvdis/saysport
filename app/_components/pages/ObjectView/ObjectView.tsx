@@ -1,18 +1,17 @@
 "use client";
 import clsx from "clsx";
 import { createContext } from "react";
-import type { Session } from "next-auth";
 import { objectTypeEnum } from "@/drizzle/schema";
-import type { ProcObject } from "@/app/_types/types";
+import type { ProcessedDBObject } from "@/app/_types/db";
 // -----------------------------------------------------------------------------
 import { Children, Contacts, Description, Gallery, Header, Sections, Usages } from ".";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
-export default function ObjectView(props:{init:ProcObject, session:Session|null}) {
+export default function ObjectView(props:{init:ProcessedDBObject}) {
   return (
-    <ObjectViewContext.Provider value={{state: props.init, session: props.session}}>
+    <ObjectViewContext.Provider value={{state: props.init}}>
       <div className={clsx(styles["objectView"], "container", "page")}>
         <Header className={styles["objectView__header"]}/>
         <main className={styles["objectView__main"]}>
@@ -33,6 +32,5 @@ export default function ObjectView(props:{init:ProcObject, session:Session|null}
 export const ObjectViewContext = createContext<ObjectViewContextType>({} as ObjectViewContextType)
 
 interface ObjectViewContextType {
-  state: ProcObject;
-  session:Session|null;
+  state: ProcessedDBObject;
 }

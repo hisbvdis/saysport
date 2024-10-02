@@ -1,7 +1,7 @@
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { ObjectViewContext } from "../ObjectView";
-import { Carousel } from "@/app/_components/ui/Carousel/";
+import { Carousel } from "@/app/_components/ui/Carousel";
 // -----------------------------------------------------------------------------
 
 

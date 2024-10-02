@@ -1,6 +1,6 @@
-import { nanoid } from "nanoid";
 import { create } from "mutative";
 import { useContext } from "react";
+import { UIContactTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
@@ -8,7 +8,6 @@ import { Button } from "@/app/_components/ui/Button";
 import { FieldSet } from "@/app/_components/ui/FieldSet";
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit";
-import { UIContactTypeEnum } from "@/drizzle/schema";
 
 
 export default function Contacts() {
@@ -18,7 +17,7 @@ export default function Contacts() {
     add: (type:UIContactTypeEnum) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft[type]) draft[type] = [];
-        draft[type] = draft[type]?.concat({object_id: 0, value: "", order: draft[type]?.length ?? 0, uiID: nanoid(), comment: ""})
+        draft[type] = draft[type]?.concat({object_id: 0, value: "", order: draft[type]?.length ?? 0, uiID: crypto.randomUUID(), comment: ""})
       }))
     },
     delete: (type:UIContactTypeEnum, uiID:string) => {

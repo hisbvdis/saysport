@@ -1,7 +1,7 @@
-import type { EditObject, ProcObject } from "@/app/_types/types";
+import type { UIObject, ProcessedDBObject } from "@/app/_types/db";
 
 
-export const syncPhotos = async (objectId:ProcObject["object_id"], state:EditObject, init:EditObject) => {
+export const syncPhotos = async (objectId:ProcessedDBObject["object_id"], state:UIObject, init:UIObject) => {
   const photosToDelete = (init.photos && init.photos?.length > 0) ? init.photos.filter((initPhoto) => !state.photos?.some((statePhoto) => statePhoto.uiID === initPhoto.uiID)) : [];
   const photosToUpload = (state.photos && state.photos?.length > 0) ? state.photos.filter((statePhoto) => !init.photos?.some((initPhoto) => initPhoto.uiID === statePhoto.uiID) && statePhoto.file) : [];
 

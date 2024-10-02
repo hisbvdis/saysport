@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import type { ProcObjectUsage } from "@/app/_types/types";
+import type { ProcessedObjectUsage } from "@/app/_types/db";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
-export default function ClassSchedule(props:{usage:ProcObjectUsage}) {
+export default function ClassSchedule(props:{usage:ProcessedObjectUsage}) {
   const { usage } = props;
   const uniqueStartTimes = usage.schedules
     .filter((day) => day.time)

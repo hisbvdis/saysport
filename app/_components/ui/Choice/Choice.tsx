@@ -2,9 +2,8 @@
 import clsx from "clsx";
 import { type ChangeEventHandler, useContext, useId, useRef } from "react"
 // -----------------------------------------------------------------------------
-import { RequiredInput } from "../RequiredInput";
-// -----------------------------------------------------------------------------
 import { ChoiceGroupContext } from "./ChoiceGroup";
+import { RequiredInput } from "@/app/_components/ui/RequiredInput";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 

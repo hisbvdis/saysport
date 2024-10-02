@@ -1,15 +1,14 @@
 "use client";
-import { nanoid } from "nanoid";
 import { create } from "mutative";
 import Compressor from "compressorjs";
 import { type ChangeEvent, useContext, useRef } from "react"
 // -----------------------------------------------------------------------------
-import { ObjectEditContext } from "../ObjectEdit"
 import { Card } from "@/app/_components/ui/Card";
+import { ObjectEditContext } from "../ObjectEdit";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
-// -----------------------------------------------------------------------------
 import { Control } from "@/app/_components/ui/Control";
+// -----------------------------------------------------------------------------
 
 
 export default function Photos() {
@@ -24,7 +23,7 @@ export default function Photos() {
       const newIndexes = Array(10).fill(null).map((_, i) => i).filter((i) => !existingIndexes.includes(i)).toSorted((a, b) => a - b);
       const selectedPhotos = Array.from(e.target.files).slice(0, 10 - statePhotos.length)
       const compressedPhotos:File[] = await Promise.all(selectedPhotos.map((file) => new Promise((resolve:(value:File) =>void) => {new Compressor(file, {mimeType: "image/webp", quality: 0.7, maxWidth: 2560, resize: "contain", success: (result) => {resolve(new File([result], file.name, {type: "image/webp"}))}})})));
-      const enrichedPhotos = compressedPhotos.map((file, i) => ({name: `object_${state.object_id || "ID"}_${newIndexes.shift()}.webp`, uiID: nanoid(), blob: URL.createObjectURL(file), file, photo_id: null, object_id: null, uploaded: new Date(), order: i}));
+      const enrichedPhotos = compressedPhotos.map((file, i) => ({name: `object_${state.object_id || "ID"}_${newIndexes.shift()}.webp`, uiID: crypto.randomUUID(), blob: URL.createObjectURL(file), file, photo_id: null, object_id: null, uploaded: new Date(), order: i}));
       const allPhotos = statePhotos.concat(enrichedPhotos).map((photo, i) => ({...photo, order: i}));
       setState((prevState) => create(prevState, (draft) => {draft.photos = allPhotos}))
     },

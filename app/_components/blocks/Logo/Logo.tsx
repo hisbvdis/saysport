@@ -5,8 +5,8 @@ import styles from "./styles.module.css";
 
 export default function Logo() {
   return (
-    <div className={styles.logo}>
-      <Link className={styles.logo__link} href="/">SaySport</Link>
+    <div className={styles["logo"]}>
+      <Link className={styles["logo__link"]} href="/">SaySport</Link>
     </div>
   )
 }

@@ -1,22 +1,21 @@
 "use client";
 import type React from "react";
-import { nanoid } from "nanoid";
-import { create } from "mutative";
 import { format } from "date-fns";
+import { create } from "mutative";
+import type { UIObjectUsage } from "@/app/_types/db";
 import { type ChangeEvent, useContext } from "react";
-import type { EditObjectUsage } from "@/app/_types/types";
 import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, sectionTypeEnum, type Usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
-import { Select } from "@/app/_components/primitives/Select";
 import { Button } from "@/app/_components/ui/Button";
 import { Control } from "@/app/_components/ui/Control";
 import { FieldSet } from "@/app/_components/ui/FieldSet";
 import { Input, Textarea } from "@/app/_components/ui/Input";
+import { Select } from "@/app/_components/primitives/Select";
 import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
-import { getUsagesByFilters } from "@/app/_db/usage";
+import { getUsagesByFilters } from "@/app/_actions/db/usage";
 
 
 export default function Usages() {
@@ -26,36 +25,36 @@ export default function Usages() {
     add: (usage:Usage) => {
       setState((prevState) => create(prevState, (draft) => {
         if (!draft.usages) draft.usages = [];
-        draft.usages = draft.usages.concat({...usage, uiID: nanoid(), schedules: [], object_id: null, description: "", object_on_usage_id: null, order: draft.usages.length, cost: null, schedule_inherit: null, sexMale: null, sexFemale: null, ageFrom: null, ageTo: null}).map((usage, i) => ({...usage, order: i, }));
+        draft.usages = draft.usages.concat({...usage, uiID: crypto.randomUUID(), schedules: [], object_id: null, description: "", object_on_usage_id: null, order: draft.usages.length, cost: null, schedule_inherit: null, sexMale: null, sexFemale: null, ageFrom: null, ageTo: null}).map((usage, i) => ({...usage, order: i, }));
       }))
     },
-    delete: (usage:EditObjectUsage) => {
+    delete: (usage:UIObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         draft.usages = draft.usages?.filter((draftUsage) => draftUsage.uiID !== usage.uiID).map((usage, i) => ({...usage, order: i}));
       }));
     },
-    age: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
+    age: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
         usageItem[e.target.name as "ageFrom" | "ageTo"] = Number(e.target.value);
       }));
     },
-    cost: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
+    cost: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
         usageItem.cost = e.target.value as costTypeUnion;
       }));
     },
-    sex: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage, fieldName:string) => {
+    sex: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage, fieldName:string) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
         usageItem[fieldName as "sexMale" | "sexFemale"] = e.target.checked;
       }));
     },
-    ageRange: (usage:EditObjectUsage, ageFrom:number, ageTo:number) => {
+    ageRange: (usage:UIObjectUsage, ageFrom:number, ageTo:number) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
@@ -63,7 +62,7 @@ export default function Usages() {
         usageItem.ageTo = ageTo;
       }));
     },
-    description: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
+    description: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
@@ -73,7 +72,7 @@ export default function Usages() {
   }
 
   const handleSchedule = {
-    changeTime: (e:React.ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
+    changeTime: (e:React.ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
       const dayNum = Number(e.target.name);
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
@@ -83,12 +82,12 @@ export default function Usages() {
         if (scheduleItem) {
           scheduleItem.time = e.target.value;
         } else {
-          const newSchedule = {day_num: dayNum, time: e.target.value, uiID: nanoid(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0};
+          const newSchedule = {day_num: dayNum, time: e.target.value, uiID: crypto.randomUUID(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0};
           usageItem.schedules = usageItem.schedules.concat(newSchedule)
         }
       }))
     },
-    formatTime: (e:React.FocusEvent<HTMLInputElement>, usage:EditObjectUsage) => {
+    formatTime: (e:React.FocusEvent<HTMLInputElement>, usage:UIObjectUsage) => {
       const dayNum = Number(e.target.name);
       const times = e.target.value
         .trim()
@@ -109,14 +108,14 @@ export default function Usages() {
         scheduleItem.time = times;
       }));
     },
-    clearAll: (usage:EditObjectUsage) => {
+    clearAll: (usage:UIObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: "", uiID: nanoid(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
+        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: "", uiID: crypto.randomUUID(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
       }));
     },
-    changeInherit: (e:ChangeEvent<HTMLInputElement>, usage:EditObjectUsage) => {
+    changeInherit: (e:ChangeEvent<HTMLInputElement>, usage:UIObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem || !draft.parent) return;
@@ -124,11 +123,11 @@ export default function Usages() {
         usageItem.schedules = draft.parent.usages[0]?.schedules.map((schedule) => ({...schedule, object_id: null, object_on_usage_id: usage.object_on_usage_id}))
       }));
     },
-    copyToAll: (schedule:ObjectSchedule, usage:EditObjectUsage) => {
+    copyToAll: (schedule:ObjectSchedule, usage:UIObjectUsage) => {
       setState((prevState) => create(prevState, (draft) => {
         const usageItem = draft.usages.find((draftUsage) => draftUsage.uiID === usage.uiID);
         if (!usageItem) return;
-        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: schedule?.time ?? "", uiID: nanoid(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
+        usageItem.schedules = Array(7).fill(null).map((_, i) => ({day_num: i, time: schedule?.time ?? "", uiID: crypto.randomUUID(), object_on_usage_id: null, object_id: null, schedule_id: null, from: 0, to: 0}));
       }));
     },
   }
@@ -170,7 +169,7 @@ export default function Usages() {
             >Очистить</Button>
           </FieldSet>
           <div style={{display: "flex", gap: "20px", marginBlockStart: "10px"}}>
-            {state.type !== objectTypeEnum.org && (<>
+            {state.type !== objectTypeEnum.org && (
               <Control>
                 <Control.Label>Стоимость</Control.Label>
                 <Control.Section>
@@ -184,7 +183,7 @@ export default function Usages() {
                   </RadioGroup>
                 </Control.Section>
               </Control>
-            </>)}
+            )}
             {state.type === objectTypeEnum.class && (<>
               <Control>
                 <Control.Label>Пол</Control.Label>

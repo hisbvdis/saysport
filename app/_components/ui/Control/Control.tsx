@@ -23,8 +23,8 @@ export default function Control(props:ControlProps) {
   }, [])
 
   return (
-    <ControlContext.Provider value={{ labelId, inputId, required, styles }}>
-      <div ref={containerRef} className={clsx("control", className)} style={style}>
+    <ControlContext.Provider value={{ labelId, inputId, required }}>
+      <div ref={containerRef} className={clsx(styles["control"], className)} style={style}>
         {children}
       </div>
     </ControlContext.Provider>

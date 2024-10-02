@@ -2,12 +2,12 @@
 import { useRouter } from "next/navigation";
 // -----------------------------------------------------------------------------
 import { Button } from "@/app/_components/ui/Button/";
+// -----------------------------------------------------------------------------
 
 
 export default function DelBtn(props:Props) {
+  const { className, style, children="X", id, delFunc, redirectPath } = props;
   const router = useRouter();
-  const { id, delFunc, redirectPath } = props;
-  const { style, children="X" } = props;
 
   const handleClick = async () => {
     if (!confirm("Delete?")) return;
@@ -21,7 +21,7 @@ export default function DelBtn(props:Props) {
   }
 
   return (
-    <Button onClick={handleClick} style={style}>
+    <Button className={className} onClick={handleClick} style={style}>
       {children}
     </Button>
   )
@@ -33,4 +33,5 @@ interface Props {
   style?: React.CSSProperties;
   children?: React.ReactNode;
   redirectPath?: string;
+  className?: string;
 }

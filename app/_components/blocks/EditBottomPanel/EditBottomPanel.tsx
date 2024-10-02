@@ -2,9 +2,10 @@
 import Link from "next/link";
 // -----------------------------------------------------------------------------
 import { Button } from "@/app/_components/ui/Button";
+import { DelBtn } from "@/app/_components/ui/DelBtn";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
-import { DelBtn } from "@/app/_components/ui/DelBtn/";
+
 
 export default function EditBottomPanel(props:Props) {
   const { id, delFunc, exitRedirectPath, delRedirectPath } = props;

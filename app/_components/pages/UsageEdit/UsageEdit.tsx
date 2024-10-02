@@ -1,21 +1,19 @@
 "use client";
 import { create } from "mutative";
 import { useRouter } from "next/navigation";
-import type { Usage } from "@/drizzle/schema";
+import type { UIUsage } from "@/app/_types/db";
 import { type SyntheticEvent, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
-import { Form } from "@/app/_components/ui/Form";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
 import { Control } from "@/app/_components/ui/Control";
 import { Radio, RadioGroup } from "@/app/_components/ui/Choice";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
-import { deleteUsageById, upsertUsage } from "@/app/_db/usage";
-import type { EditUsage } from "@/app/_types/types";
+import { deleteUsageById, upsertUsage } from "@/app/_actions/db/usage";
 
 
-export default function UsageEdit(props:{init:EditUsage}) {
+export default function UsageEdit(props:{init:UIUsage}) {
   const [ state, setState ] = useState(props.init);
   useEffect(() => setState(props.init), [props.init]);
   const router = useRouter();
@@ -41,7 +39,7 @@ export default function UsageEdit(props:{init:EditUsage}) {
   }
 
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <form onSubmit={handleFormSubmit}>
       <Card style={{marginBlockStart: "10px"}}>
         <Card.Heading>Название и тип</Card.Heading>
         <Card.Section>
@@ -97,6 +95,6 @@ export default function UsageEdit(props:{init:EditUsage}) {
         delRedirectPath="/admin/sections"
         exitRedirectPath="./"
       />
-    </Form>
+    </form>
   )
 }
