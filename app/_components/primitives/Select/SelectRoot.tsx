@@ -113,15 +113,15 @@ export default function SelectRoot(props:SelectRootProps) {
     }
   }
 
-  const handleDocumentMousedown = (e:MouseEvent) => {
-    if (selectRootRef.current?.contains(e.target as Node)) return;
+  const onMenuCLose = () => {
+    console.log( "test" )
     closeMenu();
     setSuggestions(localItems ?? []);
     items.length ? setInputValue(selectedItem?.label ?? "") : setInputValue(label ?? "");
   }
 
   return (
-    <SelectContext.Provider value={{ isAutocomplete, disabled, value, suggestions, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles, selectRootRef }}>
+    <SelectContext.Provider value={{ isAutocomplete, disabled, value, suggestions, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles, selectRootRef, onMenuCLose }}>
       <div className={clsx(styles["select__root"], className, disabled && styles["select__root--disabled"])} style={style} ref={selectRootRef}>
         {children}
       </div>

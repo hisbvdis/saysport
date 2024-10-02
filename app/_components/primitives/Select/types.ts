@@ -49,6 +49,7 @@ export interface SelectContextType extends Pick<SelectRootProps,
   closeMenu: () => void;
   isMenuOpen: boolean;
   handleMenuSelect: (itemId:string) => void;
+  onMenuCLose: () => void;
 };
 
 export  interface SelectArrowIconProps {
