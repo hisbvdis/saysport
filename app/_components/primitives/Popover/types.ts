@@ -11,6 +11,8 @@ export interface PopoverProps {
   className?: string;
   style?: React.CSSProperties;
   shouldPushHistoryState?: boolean;
+  onClose?: () => void;
+  nonCloseParent?: HTMLElement | null;
 }
 
 export interface PopoverRootProps extends PopoverProps {}

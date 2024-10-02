@@ -38,6 +38,7 @@ export interface SelectContextType extends Pick<SelectRootProps,
 > {
   styles: { readonly [key: string]: string };
   inputRef: RefObject<HTMLInputElement>;
+  selectRootRef: RefObject<HTMLDivElement>;
   inputValue: string;
   selectedItem?: SelectItemType;
   handleInputChange: (e:ChangeEvent<HTMLInputElement>) => void;

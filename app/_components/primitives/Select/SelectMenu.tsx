@@ -9,11 +9,10 @@ import { PopoverContent, PopoverRoot } from "@/app/_components/primitives/Popove
 
 export default function SelectMenu(props:SelectMenuProps) {
   const { children, className, style } = props;
-  const { isMenuOpen, closeMenu, suggestions, value, handleMenuSelect, styles } = useContext(SelectContext);
+  const { isMenuOpen, closeMenu, suggestions, value, handleMenuSelect, styles, selectRootRef } = useContext(SelectContext);
 
-  if (!isMenuOpen || !suggestions.length) return null;
   return (
-    <PopoverRoot className={clsx(styles["select__menu"], className)} style={style} isOpen={isMenuOpen} popover="manual" closePopover={closeMenu}>
+    <PopoverRoot className={clsx(styles["select__menu"], className)} style={style} isOpen={isMenuOpen} closePopover={closeMenu} onClose={() => {closeMenu()}} shouldPushHistoryState nonCloseParent={selectRootRef.current}>
       <PopoverContent>
         <MenuRoot items={suggestions} value={value ?? ""} onSelect={handleMenuSelect}>
           {children}

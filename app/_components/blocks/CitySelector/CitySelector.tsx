@@ -8,6 +8,7 @@ import { Control } from "@/app/_components/ui/Control"
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_actions/db/city";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
+import { PopoverDemo } from "../../primitives/Popover";
 // -----------------------------------------------------------------------------
 
 
@@ -35,6 +36,9 @@ export default function CitySelector(props:{className?:string;city?:City}) {
           />
         </Control.Section>
       </Control>
+      <PopoverDemo shouldPushHistoryState>
+        <h1>Hello world</h1>
+      </PopoverDemo>
     </Card>
   )
 }

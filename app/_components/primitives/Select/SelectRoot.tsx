@@ -13,7 +13,7 @@ import styles from "./styles.module.css";
 export default function SelectRoot(props:SelectRootProps) {
   const { isAutocomplete, disabled, items=[], value, label, placeholder, children, className, style, required, onChange=(e=>e), onChangeData=(e=>e), name, requestItemsOnFirstTouch, requestItemsOnInputChange, requestMinInputLenght=3, suggestions, setSuggestions } = props;
   const debounce = useDebounce();
-  const rootRef = useRef<HTMLDivElement>(null);
+  const selectRootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [ localItems, setLocalItems ] = useState(props.items ?? []);
   useEffect(() => {setSuggestions(localItems)}, []);
@@ -114,22 +114,15 @@ export default function SelectRoot(props:SelectRootProps) {
   }
 
   const handleDocumentMousedown = (e:MouseEvent) => {
-    if (rootRef.current?.contains(e.target as Node)) return;
+    if (selectRootRef.current?.contains(e.target as Node)) return;
     closeMenu();
     setSuggestions(localItems ?? []);
     items.length ? setInputValue(selectedItem?.label ?? "") : setInputValue(label ?? "");
   }
 
-  useEffect(() => {
-    if (inputRef.current === document.activeElement) {
-      document.addEventListener("mousedown", handleDocumentMousedown);
-    }
-    return () => document.removeEventListener("mousedown", handleDocumentMousedown);
-  })
-
   return (
-    <SelectContext.Provider value={{ isAutocomplete, disabled, value, suggestions, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles }}>
-      <div className={clsx(styles["select__root"], className, disabled && styles["select__root--disabled"])} style={style} ref={rootRef}>
+    <SelectContext.Provider value={{ isAutocomplete, disabled, value, suggestions, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles, selectRootRef }}>
+      <div className={clsx(styles["select__root"], className, disabled && styles["select__root--disabled"])} style={style} ref={selectRootRef}>
         {children}
       </div>
     </SelectContext.Provider>

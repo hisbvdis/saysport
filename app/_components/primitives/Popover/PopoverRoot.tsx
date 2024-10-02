@@ -10,8 +10,7 @@ import styles from "./styles.module.css";
 
 
 export default function PopoverRoot(props:PopoverRootProps) {
-  const { children, isModal=false, popover="auto", shouldPushHistoryState=isModal } = props;
-  const isPushedHistoryState = useRef(false);
+  const { children, isModal=false, popover="auto", shouldPushHistoryState, onClose, nonCloseParent } = props;
   const disclosure = useDisclosure();
   const isOpen = props.isOpen ?? disclosure.isOpen;
   const openPopover = props.openPopover ?? disclosure.open;
@@ -23,23 +22,21 @@ export default function PopoverRoot(props:PopoverRootProps) {
   const [ bodyOverflowY, setBodyOverflowY ] = useState<string>("");
   const isClickOnBackdrop = useRef(false);
   const router = useRouter();
+  const prevIsOpen = useRef(false);
+  const isHistoryPushed = useRef(false);
 
-  const onOpen = () => {
-    // Показать модальное окно
-    // dialogRef.current?.showModal(); // elem.close() doesn't work in Chrome
-    // dialogRef.current?.showPopover();
+  const open = () => {
+    prevIsOpen.current = true;
 
-    // Прокрутить вверх (потому что "show()" может скроллить, если первый элемента находится за пределами "viewPort")
-    // dialogRef.current?.scrollTo(0, 0);
-
-    // Добавить в историю браузера новую запись
-    if (shouldPushHistoryState) {
+    if (shouldPushHistoryState && !isHistoryPushed.current) {
+      // Push history state
       history.pushState({fromSite: true}, "");
       window.addEventListener("popstate", windowPopstateHandler);
+      isHistoryPushed.current = true;
     }
 
     if (isModal) {
-      // У <body> отключить прокрутку, вычислить и задать отступ
+      // Disable <body> scroll, compute and set padding
       const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
       setBodyPaddingRight(Number.parseFloat(getComputedStyle(document.body).paddingInlineEnd));
       document.body.style.paddingInlineEnd = `${bodyPaddingRight + scrollBarWidth}px`;
@@ -54,56 +51,59 @@ export default function PopoverRoot(props:PopoverRootProps) {
     }
   }
 
-  const onClose = () => {
-    // Закрыть модальное окно
-    // dialogRef.current?.close(); // elem.close() doesn't work in Chrome
-
-    if (isPushedHistoryState.current) {
-      router.back();
-      isPushedHistoryState.current = false;
-    }
+  const close = () => {
+    prevIsOpen.current = false;
 
     if (isModal) {
-      // Для <body> вернуть отступы и прокрутку, которые были до открытия модального окна
+      // Restore <body> paddings and scroll
       document.body.style.paddingInlineEnd = `${bodyPaddingRight}px`;
       document.body.style.overflowY = bodyOverflowY;
     }
 
+    // Remove event handlers
     document.removeEventListener("keydown", handleDocumentKeydownEscape);
     document.removeEventListener("pointerdown", notContentPointerDownHandler);
     document.removeEventListener("click", notContentClickHandler);
     window.removeEventListener("popstate", windowPopstateHandler);
+
+    if (onClose) onClose();
   }
 
   const handleDocumentKeydownEscape = (e:KeyboardEvent) => {
     if (e.code !== "Escape") return;
     closePopover();
+    if (isHistoryPushed.current) {
+      isHistoryPushed.current = false;
+      router.back();
+    }
   }
 
-  // Нажали "Назад" в браузере =>  Закрыть модальное окно
   function windowPopstateHandler() {
-    if (!isOpen) return;
     closePopover();
   }
 
-  // Надавили указатель (ЛКМ) => Проверить и записать, является ли целевой элемент подложкой
   const notContentPointerDownHandler = (e:PointerEvent) => {
     if (e.pointerType === "mouse" && e.pointerId !== 1) return;
     if (dialogContentRef.current?.contains(e.target as Node)) return;
+    if (nonCloseParent?.contains(e.target as Node)) return;
     isClickOnBackdrop.current = true;
   }
 
-  // "Клик" в области модального окна =>  Если переменная "надавили указатель" === true, закрыть модальное окно
   const notContentClickHandler = (e:MouseEvent) => {
     if (dialogContentRef.current?.contains(e.target as Node)) return;
+    if (nonCloseParent?.contains(e.target as Node)) return;
     if (!isClickOnBackdrop.current) return;
     isClickOnBackdrop.current = false;
     closePopover();
+    if (isHistoryPushed.current) {
+      isHistoryPushed.current = false;
+      router.back();
+    }
   }
 
   useEffect(() => {
-    if (isOpen) onOpen();
-    return () => onClose();
+    if (isOpen) open();
+    else if (prevIsOpen.current) close();
   }, [isOpen])
 
   return (
