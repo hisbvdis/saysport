@@ -1,9 +1,9 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { createContext, useCallback, useEffect, useRef } from "react"
 // -----------------------------------------------------------------------------
 import { useDisclosure } from "@/app/_hooks/useDisclosure";
 import type { PopoverRootPropsType, PopoverContextType } from "."
-import { useRouter } from "next/navigation";
 // -----------------------------------------------------------------------------
 
 
@@ -11,12 +11,13 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
   const router = useRouter();
   const disclosure = useDisclosure();
   const { children, isOpen=disclosure.isOpen, open=disclosure.open, close=disclosure.close, isModal, shouldPushHistoryState=isModal, onClose, nonClosingParent } = props;
-
+  // -----------------------------------------------------------------------------
   const rootRef = useRef<HTMLDialogElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-
+  // -----------------------------------------------------------------------------
   const bodyPaddingRight = useRef(0);
   const bodyOverflowY = useRef("");
+  // -----------------------------------------------------------------------------
 
   const afterOpening = () => {
     // Push history state
