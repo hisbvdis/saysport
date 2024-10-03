@@ -5,9 +5,9 @@ import { objectStatusEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit";
 import { Input } from "@/app/_components/ui/Input";
+import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
-import { Select } from "@/app/_components/primitives/Select";
 // -----------------------------------------------------------------------------
 import { getObjectsByFilters } from "@/app/_actions/db/object";
 

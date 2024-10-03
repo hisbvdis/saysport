@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { createContext, useCallback, useEffect, useRef } from "react"
 // -----------------------------------------------------------------------------
@@ -10,7 +11,8 @@ import type { PopoverRootPropsType, PopoverContextType } from "."
 export default function PopoverRoot(props:PopoverRootPropsType) {
   const router = useRouter();
   const disclosure = useDisclosure();
-  const { children, isOpen=disclosure.isOpen, open=disclosure.open, close=disclosure.close, isModal, shouldPushHistoryState=isModal, onClose, nonClosingParent } = props;
+  const isMobile = dynamic(() => import("@/app/_hooks/useIsMobile"), {ssr: false});
+  const { children, isOpen=disclosure.isOpen, open=disclosure.open, close=disclosure.close, isModal, shouldPushHistoryState=isModal ? "always" : undefined, onClose, nonClosingParent } = props;
   // -----------------------------------------------------------------------------
   const rootRef = useRef<HTMLDialogElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -21,7 +23,7 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
 
   const afterOpening = () => {
     // Push history state
-    if (shouldPushHistoryState && !history.state.fromSite) {
+    if ((shouldPushHistoryState === "always" || isMobile && shouldPushHistoryState === "mobile") && !history.state.fromSite) {
       history.pushState({fromSite: true}, "");
       window.addEventListener("popstate", windowPopstateHandler, {once: true});
     }

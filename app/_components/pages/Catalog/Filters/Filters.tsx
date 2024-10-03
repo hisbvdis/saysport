@@ -8,8 +8,8 @@ import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
 import { Card } from "@/app/_components/ui/Card";
+import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
-import { Select } from "@/app/_components/primitives/Select";
 import { Checkbox, CheckboxGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";

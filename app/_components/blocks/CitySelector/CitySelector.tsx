@@ -36,9 +36,6 @@ export default function CitySelector(props:{className?:string;city?:City}) {
           />
         </Control.Section>
       </Control>
-      <PopoverDemo isModal>
-        <h1>Hello world</h1>
-      </PopoverDemo>
     </Card>
   )
 }

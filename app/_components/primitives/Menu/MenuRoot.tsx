@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 
 
 export default function MenuRoot(props:MenuRootProps) {
-  const { children, className, style, items, value, onSelect, close } = props;
+  const { isOpen, children, className, style, items, value, onSelect, close } = props;
   const menuRef = useRef<HTMLDivElement>(null);
   const [ focusedItemIndex, setFocusedItemIndex ] = useState(0);
 
@@ -36,7 +36,7 @@ export default function MenuRoot(props:MenuRootProps) {
   }
 
   const selectFocusedItem = () => {
-    onSelect(items[focusedItemIndex].id);
+    onSelect(items[focusedItemIndex]?.id);
     if (close) close();
   }
 
@@ -58,9 +58,9 @@ export default function MenuRoot(props:MenuRootProps) {
   }, [])
 
   useEffect(() => {
-    document.addEventListener("keydown", handleDocumentKeydown);
-    return () => document.removeEventListener("keydown", handleDocumentKeydown);
-  }, [focusedItemIndex, items])
+    if (isOpen) document.addEventListener("keydown", handleDocumentKeydown);
+    else document.removeEventListener("keydown", handleDocumentKeydown);
+  }, [isOpen, focusedItemIndex, items])
 
   useEffect(() => {
     setFocusedItemIndex(items.length && items.some((item) => item.id === value) ? items.findIndex((item) => item.id === value) : 0);

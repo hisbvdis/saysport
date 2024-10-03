@@ -65,13 +65,21 @@ export default function SelectRoot(props:SelectRootProps) {
     setSelectedItem({id: "", label: ""});
     onChange({name: name ?? "", value: ""});
     onChangeData({});
-    inputRef.current?.focus();
+    // inputRef.current?.focus();
   }
 
   const handleMenuSelect = (itemId:string) => {
     const item = suggestions.find((suggestion) => suggestion.id === itemId);
     onChange({name: name ?? "", value: itemId});
     onChangeData(item?.data);
+    setSuggestions(localItems ?? []);
+    closeMenu();
+  }
+
+  const onMenuCLose = () => {
+    closeMenu();
+    setSuggestions(localItems ?? []);
+    items.length ? setInputValue(selectedItem?.label ?? "") : setInputValue(label ?? "");
   }
 
   const handleInputKeydown = (e:React.KeyboardEvent) => {
@@ -111,12 +119,6 @@ export default function SelectRoot(props:SelectRootProps) {
         break;
       }
     }
-  }
-
-  const onMenuCLose = () => {
-    closeMenu();
-    setSuggestions(localItems ?? []);
-    items.length ? setInputValue(selectedItem?.label ?? "") : setInputValue(label ?? "");
   }
 
   return (

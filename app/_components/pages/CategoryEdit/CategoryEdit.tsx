@@ -9,8 +9,8 @@ import type { UICategory, ProcessedDBSection } from "@/app/_types/db";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
+import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
-import { Select } from "@/app/_components/primitives/Select";
 import { EditBottomPanel } from "@/app/_components/blocks/EditBottomPanel";
 // -----------------------------------------------------------------------------
 import { getSectionsByFilters } from "@/app//_actions/db/section";

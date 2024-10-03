@@ -6,10 +6,10 @@ import { sectionTypeEnum } from "@/drizzle/schema";
 import type { UISection, ProcessedDBSpec, ProcessedObjectUsage } from "@/app/_types/db";
 import { type ChangeEvent, type SyntheticEvent, useEffect, useState } from "react"
 // -----------------------------------------------------------------------------
-import { Select } from "@/app/_components/primitives/Select";
 import { Card } from "@/app/_components/ui/Card";
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
+import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { InputAddon } from "@/app/_components/ui/InputAddon";
 import { Radio, RadioGroup } from "@/app/_components/ui/Choice";

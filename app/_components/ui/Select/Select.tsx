@@ -1,4 +1,5 @@
 "use client";
+import cx from "classix";
 import { useState } from "react";
 import { ChevronDownIcon, Cross1Icon } from "@radix-ui/react-icons";
 // -----------------------------------------------------------------------------
@@ -11,7 +12,7 @@ export default function Select(props:SelectProps) {
   const [ suggestions, setSuggestions ] = useState<SelectItemType[]>([]);
 
   return (
-    <SelectRoot {...props} className={styles["select"]} setSuggestions={setSuggestions} suggestions={suggestions}>
+    <SelectRoot {...props} className={cx(props.className, styles["select__root"])} setSuggestions={setSuggestions} suggestions={suggestions}>
 
       <SelectTrigger>
         <SelectInput/>

@@ -8,6 +8,7 @@ export interface MenuRootProps {
   children?: React.ReactNode;
   style?: React.CSSProperties;
   close?: () => void;
+  isOpen: boolean;
 }
 
 export interface MenuContextType extends Pick<MenuRootProps, "items"> {

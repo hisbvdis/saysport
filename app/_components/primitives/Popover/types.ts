@@ -6,7 +6,7 @@ export interface PopoverPropsType {
   open?: () => void;
   close?: () => void;
   isModal?: boolean;
-  shouldPushHistoryState?: boolean;
+  shouldPushHistoryState?: "always" | "mobile";
   className?: string;
   style?: React.CSSProperties;
   onClose?: () => void;

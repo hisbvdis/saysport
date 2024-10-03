@@ -9,9 +9,9 @@ import { Children, Contacts, Description, Gallery, Header, Sections, Usages } fr
 import styles from "./styles.module.css";
 
 
-export default function ObjectView(props:{init:ProcessedDBObject}) {
+export default function ObjectView(props:{init:ProcessedDBObject; isLogin:boolean}) {
   return (
-    <ObjectViewContext.Provider value={{state: props.init}}>
+    <ObjectViewContext.Provider value={{state: props.init, isLogin: props.isLogin}}>
       <div className={cx(styles["objectView"], "container", "page")}>
         <Header className={styles["objectView__header"]}/>
         <main className={styles["objectView__main"]}>
@@ -33,4 +33,5 @@ export const ObjectViewContext = createContext<ObjectViewContextType>({} as Obje
 
 interface ObjectViewContextType {
   state: ProcessedDBObject;
+  isLogin: boolean;
 }

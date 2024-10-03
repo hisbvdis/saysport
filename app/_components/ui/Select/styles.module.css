@@ -1,4 +1,4 @@
-.select {
+.select__root {
   font-size: var(--input-fontSize-mobile);
 
   @media (width >= 905px) {

@@ -9,10 +9,10 @@ import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, 
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
 import { Button } from "@/app/_components/ui/Button";
+import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control";
 import { FieldSet } from "@/app/_components/ui/FieldSet";
 import { Input, Textarea } from "@/app/_components/ui/Input";
-import { Select } from "@/app/_components/primitives/Select";
 import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@/app/_components/ui/Choice";
 // -----------------------------------------------------------------------------
 import { getUsagesByFilters } from "@/app/_actions/db/usage";

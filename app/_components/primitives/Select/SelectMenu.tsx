@@ -12,9 +12,9 @@ export default function SelectMenu(props:SelectMenuProps) {
   const { isMenuOpen, suggestions, value, handleMenuSelect, styles, selectRootRef, onMenuCLose } = useContext(SelectContext);
 
   return (
-    <PopoverRoot className={cx(styles["select__menu"], className)} style={style} isOpen={isMenuOpen} onClose={() => {onMenuCLose()}} shouldPushHistoryState nonClosingParent={selectRootRef.current}>
+    <PopoverRoot className={cx(styles["select__menu"], className)} style={style} isOpen={isMenuOpen} onClose={() => {onMenuCLose()}} shouldPushHistoryState="mobile" nonClosingParent={selectRootRef.current}>
       <PopoverContent>
-        <MenuRoot items={suggestions} value={value ?? ""} onSelect={handleMenuSelect}>
+        <MenuRoot items={suggestions} value={value ?? ""} onSelect={handleMenuSelect} isOpen={isMenuOpen}>
           {children}
         </MenuRoot>
       </PopoverContent>

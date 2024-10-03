@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+// -----------------------------------------------------------------------------
 import { ObjectView } from "@/app/_components/pages/ObjectView";
 // -----------------------------------------------------------------------------
 import { getObjectById } from "@/app/_actions/db/object"
@@ -7,9 +9,10 @@ import { getObjectById } from "@/app/_actions/db/object"
 
 export default async function ObjectViewPage({params}:Props) {
   const object = await getObjectById(Number(params.id));
+  const isLogin = Boolean(cookies().get("isLogin")?.value);
 
   return (
-    <ObjectView init={object}/>
+    <ObjectView init={object} isLogin={isLogin}/>
   )
 }
 

@@ -12,8 +12,8 @@ import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
 import { Control } from "@/app/_components/ui/Control";
 import { Checkbox } from "@/app/_components/ui/Choice";
-import { Select } from "@/app/_components/primitives/Select";
-import { MapComponent, MapControl, MapCluster } from "@/app/_components/ui/MapComponent";
+import { Select } from "@/app/_components/ui/Select";
+import { MapComponent, MapControl } from "@/app/_components/ui/MapComponent";
 // -----------------------------------------------------------------------------
 import { setInheritedData } from "./setInheritedData";
 import { getCitiesByFilters } from "@/app/_actions/db/city";
@@ -214,7 +214,7 @@ export default function Address() {
               }));
             }}
           >
-            <MapCluster markersData={nearestObjects?.map((object) => ({coord: [object.coord_lat, object.coord_lon] as Leaflet.LatLngTuple, popup: `<a href="/object/${object.object_id}">${object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</a>`, iconUrl: "/map/marker-icon-secondary.png", draggable: false, onDragEnd: handleMap.markerDragEnd})).concat({coord: [state.coord_lat, state.coord_lon] as Leaflet.LatLngTuple, popup: "Текущий объект", iconUrl: "", draggable: Boolean(!state.coord_inherit), onDragEnd: handleMap.markerDragEnd}) ?? []}/>
+            {/* <MapCluster markersData={nearestObjects?.map((object) => ({coord: [object.coord_lat, object.coord_lon] as Leaflet.LatLngTuple, popup: `<a href="/object/${object.object_id}">${object.name_type.concat(object.name_title ? ` «${object.name_title}»` : "").concat(object.name_where ? ` ${object.name_where}` : "")}</a>`, iconUrl: "/map/marker-icon-secondary.png", draggable: false, onDragEnd: handleMap.markerDragEnd})).concat({coord: [state.coord_lat, state.coord_lon] as Leaflet.LatLngTuple, popup: "Текущий объект", iconUrl: "", draggable: Boolean(!state.coord_inherit), onDragEnd: handleMap.markerDragEnd}) ?? []}/> */}
             <MapControl html={`<a href='https://www.google.com/maps/search/${liveMap.lat},${liveMap.lon}/@${liveMap.lat},${liveMap.lon},${liveMap.zoom}z' target='blank'>Google<a/>`}/>
             <MapControl html={`<a href='https://yandex.ru/maps/?ll=${liveMap.lon}%2C${liveMap.lat}&z=${liveMap.zoom}' target='blank'>Яндекс<a/>`}/>
             <MapControl html={`<a href='https://2gis.ru/?m=${liveMap.lon}%2C${liveMap.lat}/${liveMap.zoom}' target='blank'>2Гис<a/>`}/>

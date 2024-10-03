@@ -15,7 +15,7 @@ import styles from "./styles.module.css";
 
 export default function Header(props:Props) {
   const { className, style } = props;
-  const { state } = useContext(ObjectViewContext);
+  const { state, isLogin } = useContext(ObjectViewContext);
 
   return (
     <header className={className} style={style}>
@@ -42,14 +42,14 @@ export default function Header(props:Props) {
             : null
           } */}
 
-          {/* {session ? (
+          {isLogin ? (
             <div style={{marginInlineStart: "auto", display: "flex", gap: "10px"}}>
               {state.type === objectTypeEnum.org ? <Link href={`/object/add/place?parent=${state.object_id}`}>М</Link> : null}
               {state.type === objectTypeEnum.org ? <Link href={`/object/add/class?parent=${state.object_id}`}>С</Link> : null}
               <Link href={`/object/${state.object_id}/edit`}>Ред</Link>
               <DelBtn id={state.object_id ? state.object_id : -1} delFunc={deleteObjectById} redirectPath="/">X</DelBtn>
             </div>
-          ) : null} */}
+          ) : null}
         </div>
         {<h1 style={{fontSize: "19px", fontWeight: "bold"}}>{state.name_type.concat(state.name_title ? ` «${state.name_title}»` : "").concat(state.name_where ? ` ${state.name_where}` : "")}</h1>}
         {state.parent_id ? <Link className={styles["header__backLink"]} href={`/object/${state.parent_id}`}>&lt; {state.parent?.name_type.concat(state.parent?.name_title ? ` «${state.parent?.name_title}»` : "").concat(state.parent?.name_where ? ` ${state.parent?.name_where}` : "")}</Link> : null}

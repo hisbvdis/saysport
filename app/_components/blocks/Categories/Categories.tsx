@@ -7,7 +7,7 @@ import { objectTypeEnum } from "@/drizzle/schema";
 import type { ProcessedDBCategory } from "@/app/_types/db";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
-import { Select } from "@/app/_components/primitives/Select";
+import { Select } from "@/app/_components/ui/Select";
 // -----------------------------------------------------------------------------
 import { getSectionsByFilters } from "@/app/_actions/db/section";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
@@ -26,7 +26,6 @@ export default function Categories(props:Props) {
       <Card.Heading className={styles["categories__heading"]}>Категории</Card.Heading>
       <Card.Section style={{padding: 0}}>
         <Select
-          className={styles["catetories__select"]}
           isAutocomplete
           onChange={(data) => {
             const paramsWithoutPageParam = manageSearchParams.delete(["page"]);
