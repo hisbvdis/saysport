@@ -1,22 +1,18 @@
-import clsx from "clsx";
-import { use } from "react";
+import { Children, cloneElement, use, type ReactElement } from "react";
 // -----------------------------------------------------------------------------
-import { PopoverContext, type PopoverTriggerProps } from ".";
+import { PopoverContext, type PopoverTriggerPropsType } from ".";
 // -----------------------------------------------------------------------------
 
 
-export default function PopoverTrigger(props:PopoverTriggerProps) {
-  const { className, children, style } = props;
-  const { openPopover, styles } = use(PopoverContext);
+export default function PopoverTrigger(props:PopoverTriggerPropsType) {
+  const { children } = props;
+  const { open } = use(PopoverContext);
+  const element = Children.only(children);
 
-  return (
-    <button
-      type="button"
-      className={clsx(styles["popover__trigger"], className)}
-      style={style}
-      onClick={openPopover}
-    >
-      {children}
-    </button>
+  return cloneElement(
+    element as ReactElement,
+    {
+      onClick: () => open(),
+    }
   )
 }

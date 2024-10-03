@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import Link from "next/link";
 // -----------------------------------------------------------------------------
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
@@ -16,13 +16,13 @@ export default function Pagination(props:Props) {
   if (pageCount === 1) return null;
 
   return (
-    <nav className={clsx(styles["pagination"], className)} style={style}>
+    <nav className={cx(styles["pagination"], className)} style={style}>
       <ul className={styles["pagination__list"]}>
         {pageNumbers.map((pageNumber) => (
-          <li key={pageNumber} className={clsx(styles["pagination__item"] )}>
+          <li key={pageNumber} className={cx(styles["pagination__item"] )}>
             {pageNumber === currentPage
-              ? <span className={clsx(styles["pagination__link"], pageNumber === currentPage && styles["pagination__link--active"])}>{pageNumber}</span>
-              : <Link className={clsx(styles["pagination__link"], pageNumber === currentPage && styles["pagination__link--active"])} href={pageNumber === 1 ? manageSearchParams.delete(["page"]) : manageSearchParams.set("page", String(pageNumber))}>{pageNumber}</Link>
+              ? <span className={cx(styles["pagination__link"], pageNumber === currentPage && styles["pagination__link--active"])}>{pageNumber}</span>
+              : <Link className={cx(styles["pagination__link"], pageNumber === currentPage && styles["pagination__link--active"])} href={pageNumber === 1 ? manageSearchParams.delete(["page"]) : manageSearchParams.set("page", String(pageNumber))}>{pageNumber}</Link>
             }
           </li>
         ))}

@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 // -----------------------------------------------------------------------------
 import CardHeading from "./CardHeading";
 import type { CardProps } from ".";
@@ -12,7 +12,7 @@ export default function Card(props:CardProps) {
   const { className, children, style } = props;
 
   return (
-    <div className={clsx(styles["card"], className)} style={style}>
+    <div className={cx(styles["card"], className)} style={style}>
       {children}
     </div>
   )

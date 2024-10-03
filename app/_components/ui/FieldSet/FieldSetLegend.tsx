@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import type React from "react";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
@@ -14,7 +14,7 @@ export default function FieldSetLegend(props:FieldSetLegendProps) {
   return (
     <div
       id={legendId}
-      className={clsx(styles["fieldSet__legend"], className, srOnly && "srOnly")}
+      className={cx(styles["fieldSet__legend"], className, srOnly && "srOnly")}
       style={style}
     >
       {children}

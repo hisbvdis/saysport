@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 // -----------------------------------------------------------------------------
 import type { FieldSetSectionProps } from ".";
 // -----------------------------------------------------------------------------
@@ -9,7 +9,7 @@ export default function FieldSetSection(props:FieldSetSectionProps) {
   const { children, className, style } = props;
 
   return (
-    <div className={clsx(styles["fieldset__section"], className)} style={style}>
+    <div className={cx(styles["fieldset__section"], className)} style={style}>
       {children}
     </div>
   )

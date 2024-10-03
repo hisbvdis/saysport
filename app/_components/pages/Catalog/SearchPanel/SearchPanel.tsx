@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { type SyntheticEvent, useContext, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Input } from "@/app/_components/ui/Input";
@@ -31,7 +31,7 @@ export default function SearchPanel() {
   useEffect(() => {setSearchText(searchParams.query)}, [searchParams.query])
 
   return (
-    <form className={clsx(styles["searchPanel"])} onSubmit={handleFormSubmit}>
+    <form className={cx(styles["searchPanel"])} onSubmit={handleFormSubmit}>
       <Input value={searchText} onChangeValue={setSearchText} placeholder="Введите название"/>
       {searchText && <Button onClick={handleClearButtonClick}>X</Button>}
       <Button type="submit">Поиск</Button>

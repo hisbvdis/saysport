@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 // -----------------------------------------------------------------------------
 import type { ControlSectionProps } from "./";
 // -----------------------------------------------------------------------------
@@ -9,7 +9,7 @@ export default function ControlSection(props:ControlSectionProps) {
   const { children, className, style } = props;
 
   return (
-    <div className={clsx(styles["control__section"], className)} style={style}>
+    <div className={cx(styles["control__section"], className)} style={style}>
       {children}
     </div>
   )

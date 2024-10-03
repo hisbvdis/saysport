@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { createContext, useEffect, useId, useRef, useState } from "react"
 // -----------------------------------------------------------------------------
 import ControlLabel from "./ControlLabel";
@@ -24,7 +24,7 @@ export default function Control(props:ControlProps) {
 
   return (
     <ControlContext.Provider value={{ labelId, inputId, required }}>
-      <div ref={containerRef} className={clsx(styles["control"], className)} style={style}>
+      <div ref={containerRef} className={cx(styles["control"], className)} style={style}>
         {children}
       </div>
     </ControlContext.Provider>

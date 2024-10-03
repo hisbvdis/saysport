@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { type SelectMenuProps, SelectContext } from ".";
@@ -9,10 +9,10 @@ import { PopoverContent, PopoverRoot } from "@/app/_components/primitives/Popove
 
 export default function SelectMenu(props:SelectMenuProps) {
   const { children, className, style } = props;
-  const { isMenuOpen, closeMenu, suggestions, value, handleMenuSelect, styles, selectRootRef, onMenuCLose } = useContext(SelectContext);
+  const { isMenuOpen, suggestions, value, handleMenuSelect, styles, selectRootRef, onMenuCLose } = useContext(SelectContext);
 
   return (
-    <PopoverRoot className={clsx(styles["select__menu"], className)} style={style} isOpen={isMenuOpen} closePopover={closeMenu} onClose={() => {onMenuCLose()}} shouldPushHistoryState nonCloseParent={selectRootRef.current}>
+    <PopoverRoot className={cx(styles["select__menu"], className)} style={style} isOpen={isMenuOpen} onClose={() => {onMenuCLose()}} shouldPushHistoryState nonClosingParent={selectRootRef.current}>
       <PopoverContent>
         <MenuRoot items={suggestions} value={value ?? ""} onSelect={handleMenuSelect}>
           {children}

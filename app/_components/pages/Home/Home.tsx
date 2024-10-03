@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import type { City } from "@/drizzle/schema";
 import type { ProcessedDBCategory } from "@/app/_types/db";
 // -----------------------------------------------------------------------------
@@ -14,7 +14,7 @@ export default function Home(props:Props) {
   const { city, categories } = props;
 
   return (
-    <div className={clsx(styles["home"], "container")}>
+    <div className={cx(styles["home"], "container")}>
       <Hero className={styles["home__hero"]} city={city}/>
       <aside className={styles["home__aside"]}>
         <CitySelector className={styles["home__city"]} city={city}/>

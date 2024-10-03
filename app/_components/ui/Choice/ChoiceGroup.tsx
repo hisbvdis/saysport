@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { type ChangeEvent, type ReactEventHandler, createContext, useContext, useId } from "react"
 // -----------------------------------------------------------------------------
 import { ControlContext } from "../Control";
@@ -24,7 +24,7 @@ function ChoiceGroup(props:Props) {
   return (
     <ChoiceGroupContext.Provider value={{groupName, onChange, valueToCompareWith, arrayToCompareWith, requiredGroup, disabledGroup}}>
       <fieldset
-        className={clsx(styles["choiceGroup"], className)}
+        className={cx(styles["choiceGroup"], className)}
         style={style}
         aria-labelledby={labelId}
       >

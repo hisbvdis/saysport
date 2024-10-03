@@ -1,18 +1,18 @@
-import clsx from "clsx";
+import cx from "classix";
 import { use } from "react";
 // -----------------------------------------------------------------------------
-import { type PopoverContentProps, PopoverContext } from ".";
+import { PopoverContext, type PopoverContentPropsType } from ".";
 // -----------------------------------------------------------------------------
+import styles from "./styles.module.css";
 
 
-export default function PopoverContent(props:PopoverContentProps) {
-  const { className, children, style } = props;
-  const { dialogContentRef, isModal, isOpen, dialogRef, styles } = use(PopoverContext);
+export default function PopoverContent(props:PopoverContentPropsType) {
+  const { children } = props;
+  const { contentRef, isOpen, rootRef, isModal } = use(PopoverContext);
 
-  if (!isOpen) return null;
   return (
-    <dialog className={clsx(styles["popover"], isModal && styles["popover--modal"], className)} style={style} ref={dialogRef} open={isOpen}>
-      <div className={clsx(styles["popover__content"], className)} style={style} ref={dialogContentRef}>
+    <dialog className={cx(styles["popover"], isModal && styles["popover--modal"])} open={isOpen} ref={rootRef}>
+      <div className={styles["popover__content"]} ref={contentRef}>
         {children}
       </div>
     </dialog>

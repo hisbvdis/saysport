@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import type { ProcessedObjectUsage } from "@/app/_types/db";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
@@ -25,7 +25,7 @@ export default function ClassSchedule(props:{usage:ProcessedObjectUsage}) {
         {uniqueStartTimes.map((_, timeRowIndex) => (
           <tr key={timeRowIndex}>
             {Array(7).fill(null).map((_, dayIndex) => usage.schedules[dayIndex].time.split("\n").includes(uniqueStartTimes[timeRowIndex]) ? uniqueStartTimes[timeRowIndex] : "").map((time, i) => (
-              <td key={i} className={clsx(styles["table__td"], time.split(" - ")[0] && styles["table__td--filled"])}>{time.split(" - ")[0]}</td>
+              <td key={i} className={cx(styles["table__td"], time.split(" - ")[0] && styles["table__td--filled"])}>{time.split(" - ")[0]}</td>
             ))}
           </tr>
         ))}

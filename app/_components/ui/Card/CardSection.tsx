@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 // -----------------------------------------------------------------------------
 import type { CardSectionProps } from ".";
 // -----------------------------------------------------------------------------
@@ -9,7 +9,7 @@ export default function CardSection(props: CardSectionProps) {
   const { className, children, style } = props;
 
   return (
-    <div className={clsx(styles["card__section"], className)} style={style}>
+    <div className={cx(styles["card__section"], className)} style={style}>
       {children}
     </div>
   );

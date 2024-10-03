@@ -1,38 +1,33 @@
 import type { RefObject } from "react";
 
-export interface PopoverProps {
+export interface PopoverPropsType {
+  children: React.ReactNode;
   isOpen?: boolean;
-  popover?: "auto" | "manual";
-  closePopover?: () => void;
-  openPopover?: () => void;
-  togglePopover?: () => void;
+  open?: () => void;
+  close?: () => void;
   isModal?: boolean;
-  children?: React.ReactNode;
+  shouldPushHistoryState?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  shouldPushHistoryState?: boolean;
   onClose?: () => void;
-  nonCloseParent?: HTMLElement | null;
+  nonClosingParent?: HTMLElement | null;
 }
 
-export interface PopoverRootProps extends PopoverProps {}
+export interface PopoverRootPropsType extends PopoverPropsType {
+
+}
 
 export interface PopoverContextType extends
-  Pick<PopoverProps, "isModal" |"isOpen">,
-  Pick<Required<PopoverProps>, "closePopover" | "openPopover" | "togglePopover"> {
-  dialogRef: RefObject<HTMLDialogElement>;
-  dialogContentRef: RefObject<HTMLDivElement>;
-  styles: { readonly [key: string]: string };
+  Pick<PopoverPropsType, "isOpen" | "isModal">,
+  Pick<Required<PopoverPropsType>, "open" | "close"> {
+    rootRef: RefObject<HTMLDialogElement>;
+    contentRef: RefObject<HTMLDivElement>;
+  }
+
+export interface PopoverTriggerPropsType {
+  children: React.ReactNode;
 }
 
-export interface PopoverContentProps {
-  className?: string;
-  children?: React.ReactNode;
-  style?: React.CSSProperties;
-}
-
-export interface PopoverTriggerProps {
-  className?: string;
-  children?: React.ReactNode;
-  style?: React.CSSProperties;
+export interface PopoverContentPropsType {
+  children: React.ReactNode;
 }

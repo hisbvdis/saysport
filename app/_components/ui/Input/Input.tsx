@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { type ChangeEventHandler, type FocusEventHandler, type KeyboardEventHandler, type MouseEventHandler, createElement, forwardRef, useContext, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
 import { ControlContext } from "../Control";
@@ -27,7 +27,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, i
     type === "textarea" ? "textarea" : "input",
     {
       "aria-labelledby": labelId,
-      className: clsx(styles["input"], type === "textarea" && styles["input--textarea"], className),
+      className: cx(styles["input"], type === "textarea" && styles["input--textarea"], className),
       disabled: disabled,
       id: id,
       maxLength: maxLength,

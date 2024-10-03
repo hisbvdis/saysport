@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
@@ -9,7 +9,7 @@ export default function Button(props:Props) {
   return (
     <button
       {...props}
-      className={clsx(styles["button"], className)}
+      className={cx(styles["button"], className)}
       style={style}
       type={type}
       onClick={onClick}

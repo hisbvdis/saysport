@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import { create } from "mutative";
 import { useContext } from "react";
 import { objectStatusEnum } from "@/drizzle/schema";
@@ -17,7 +17,7 @@ export default function Status(props:Props) {
   const { className, style } = props;
 
   return (
-    <div className={clsx(className)} style={{...style, display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px"}}>
+    <div className={cx(className)} style={{...style, display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px"}}>
       <Control>
         <Control.Label>
           <span>Статус</span>

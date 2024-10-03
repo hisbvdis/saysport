@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { SelectContext, type SelectCloseButtonProps } from ".";
@@ -12,7 +12,7 @@ export default function SelectCloseButton(props:SelectCloseButtonProps) {
   if (!isAutocomplete || !selectedItem?.id) return null;
   return (
     <button
-      className={clsx(styles["select__closeButton"], className)}
+      className={cx(styles["select__closeButton"], className)}
       type="button"
       style={style}
       onClick={handleClearBtnClick}

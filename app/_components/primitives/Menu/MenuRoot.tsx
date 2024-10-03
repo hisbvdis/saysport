@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { createContext, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
 import type { MenuContextType, MenuRootProps } from ".";
@@ -68,7 +68,7 @@ export default function MenuRoot(props:MenuRootProps) {
 
   return (
     <MenuContext.Provider value={{ focusedItemIndex, setFocusedItemIndex, items, selectFocusedItem, styles }}>
-      <menu className={clsx(styles["menu__root"], className)} style={style} ref={menuRef}>
+      <menu className={cx(styles["menu__root"], className)} style={style} ref={menuRef}>
         {children}
       </menu>
     </MenuContext.Provider>

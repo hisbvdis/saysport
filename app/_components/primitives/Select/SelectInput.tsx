@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import { useContext } from "react"
 // -----------------------------------------------------------------------------
 import { SelectContext, type SelectInputProps } from ".";
@@ -11,7 +11,7 @@ export default function SelectInput(props:SelectInputProps) {
 
   return (
     <input
-      className={clsx(styles["select__input"], isAutocomplete && styles["select__input--isAutocomplete"], className)}
+      className={cx(styles["select__input"], isAutocomplete && styles["select__input--isAutocomplete"], className)}
       style={style}
       type="text"
       disabled={disabled}

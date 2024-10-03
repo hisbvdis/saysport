@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { createContext } from "react";
 import type { City } from "@/drizzle/schema";
 import type { SearchParamsType } from "@/app/_types/searchParams";
@@ -19,7 +19,7 @@ export default function Catalog(props:Props) {
 
   return (
     <CatalogContext.Provider value={{searchParams, results, section, city, commonSections}}>
-      <div className={clsx(styles["catalog"], "container")}>
+      <div className={cx(styles["catalog"], "container")}>
         <aside className={styles["catalog__aside"]}>
           <CitySelector className={styles["home__city"]} city={city}/>
           {searchParams.section ? <Filters/> : <Categories categories={categories}/>}

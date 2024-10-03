@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 // -----------------------------------------------------------------------------
 import type { CardHeadingProps } from ".";
 // -----------------------------------------------------------------------------
@@ -9,7 +9,7 @@ export default function CardHeading(props:CardHeadingProps) {
   const { className, children, style } = props;
 
   return (
-    <div className={clsx(styles["card__heading"], className)} style={style}>
+    <div className={cx(styles["card__heading"], className)} style={style}>
       {children}
     </div>
   )

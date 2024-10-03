@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { SelectContext, type SelectItemProps } from ".";
@@ -12,7 +12,7 @@ export default function SelectItem(props:SelectItemProps) {
 
   return (
     <MenuItem
-      className={clsx(styles["select__item"], className)}
+      className={cx(styles["select__item"], className)}
       style={style}
       itemIndex={itemIndex}
     >

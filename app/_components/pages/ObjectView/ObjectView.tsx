@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { createContext } from "react";
 import { objectTypeEnum } from "@/drizzle/schema";
 import type { ProcessedDBObject } from "@/app/_types/db";
@@ -12,7 +12,7 @@ import styles from "./styles.module.css";
 export default function ObjectView(props:{init:ProcessedDBObject}) {
   return (
     <ObjectViewContext.Provider value={{state: props.init}}>
-      <div className={clsx(styles["objectView"], "container", "page")}>
+      <div className={cx(styles["objectView"], "container", "page")}>
         <Header className={styles["objectView__header"]}/>
         <main className={styles["objectView__main"]}>
           <Gallery/>

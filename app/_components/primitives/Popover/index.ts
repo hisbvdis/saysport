@@ -1,27 +1,29 @@
 import PopoverDemo from "./PopoverDemo";
 import PopoverRoot from "./PopoverRoot";
-import PopoverContent from "./PopoverContent";
 import PopoverTrigger from "./PopoverTrigger";
+import PopoverContent from "./PopoverContent";
 
 import { PopoverContext } from "./PopoverRoot";
 
-import type { PopoverProps } from "./types";
-import type { PopoverRootProps } from "./types";
-import type { PopoverContextType } from "./types";
-import type { PopoverContentProps } from "./types";
-import type { PopoverTriggerProps } from "./types";
+import type {
+  PopoverPropsType,
+  PopoverContextType,
+  PopoverRootPropsType,
+  PopoverTriggerPropsType,
+  PopoverContentPropsType,
+} from "./types";
 
 export {
-  PopoverDemo,
   PopoverRoot,
-  PopoverContent,
   PopoverTrigger,
+  PopoverDemo,
+  PopoverContent,
 
   PopoverContext,
 
-  type PopoverProps,
-  type PopoverRootProps,
+  type PopoverPropsType,
   type PopoverContextType,
-  type PopoverContentProps,
-  type PopoverTriggerProps,
- }
+  type PopoverRootPropsType,
+  type PopoverTriggerPropsType,
+  type PopoverContentPropsType,
+}

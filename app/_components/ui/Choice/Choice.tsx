@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { type ChangeEventHandler, useContext, useId, useRef } from "react"
 // -----------------------------------------------------------------------------
 import { ChoiceGroupContext } from "./ChoiceGroup";
@@ -29,7 +29,7 @@ function Choice(props:Props) {
   const onChange = props.onChange ?? choiceGroupContext?.onChange ?? (e=>e);
 
   return (
-    <label className={clsx(styles["choice"], className)} style={style}>
+    <label className={cx(styles["choice"], className)} style={style}>
       <input
         className={styles["choice__input"]}
         id={inputId}

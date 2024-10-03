@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import { useContext } from "react"
 // -----------------------------------------------------------------------------
 import { ControlContext, type ControlLabelProps } from ".";
@@ -12,7 +12,7 @@ export default function ControlLabel(props:ControlLabelProps) {
 
   return (
     <label
-      className={clsx(styles["control__label"], className, srOnly && "srOnly")}
+      className={cx(styles["control__label"], className, srOnly && "srOnly")}
       id={labelId}
       htmlFor={inputId}
       style={style}

@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { MenuContext, type MenuItemTextProps } from ".";
@@ -9,7 +9,7 @@ export default function MenuItemText(props:MenuItemTextProps) {
   const { styles } = useContext(MenuContext);
 
   return (
-    <span className={clsx(styles["menu__value"], className)} style={style}>
+    <span className={cx(styles["menu__value"], className)} style={style}>
       {children}
     </span>
   )

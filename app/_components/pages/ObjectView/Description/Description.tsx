@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { useContext, useEffect, useRef, useState } from "react"
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
@@ -24,7 +24,7 @@ export default function Description() {
 
   return (
     <Card className={styles["description"]}>
-      <p className={clsx(styles["description__content"], !shouldShowFullText && isTrimmedText ? styles["description__content--short"] : "")} ref={textRef}>
+      <p className={cx(styles["description__content"], !shouldShowFullText && isTrimmedText ? styles["description__content--short"] : "")} ref={textRef}>
         {state.description}
       </p>
       {isTrimmedText

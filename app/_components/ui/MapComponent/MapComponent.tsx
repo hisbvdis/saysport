@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import type * as Leaflet from "leaflet";
 import { type RefObject, createContext, useEffect, useRef, useState } from "react"
 // -----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ export default function MapComponent(props:Props) {
   return (
     <MapContext.Provider value={{ L, map, center, zoom, mapContainerRef }}>
       <TileLayer/>
-      <div className={clsx(styles.map, className)} ref={mapContainerRef} style={style}/>
+      <div className={cx(styles.map, className)} ref={mapContainerRef} style={style}/>
       {children}
     </MapContext.Provider>
   )

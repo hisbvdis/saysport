@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import { useContext } from "react";
 import { SelectContext, type SelectItemTextProps } from ".";
 // -----------------------------------------------------------------------------
@@ -11,7 +11,7 @@ export default function SelectItemText(props:SelectItemTextProps) {
   const { styles } = useContext(SelectContext);
 
   return (
-    <MenuItemText className={clsx(styles["select__value"], className)} style={style}>
+    <MenuItemText className={cx(styles["select__value"], className)} style={style}>
       {children}
     </MenuItemText>
   )

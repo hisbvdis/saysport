@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -22,7 +22,7 @@ export default function Categories(props:Props) {
   const [isOpenedCategory, setIsOpenedCategory] = useState<number|null>(null);
 
   return (
-    <Card className={clsx(styles["categories"], className)}>
+    <Card className={cx(styles["categories"], className)}>
       <Card.Heading className={styles["categories__heading"]}>Категории</Card.Heading>
       <Card.Section style={{padding: 0}}>
         <Select
@@ -39,11 +39,11 @@ export default function Categories(props:Props) {
           }
         />
         <ul className={styles["categories__list"]}>
-          <li className={clsx(styles["categories__item"])}>
+          <li className={cx(styles["categories__item"])}>
             <Link className={styles["categories__itemButton"]} href={`/catalog/${manageSearchParams.set("section", "all")}`}>Все объекты</Link>
           </li>
           {categories.filter((category) => category.sections.length).map((category, i) => (
-            <li key={category.category_id} className={clsx(styles["categories__item"], i === isOpenedCategory && styles["categories__item--isOpened"])}>
+            <li key={category.category_id} className={cx(styles["categories__item"], i === isOpenedCategory && styles["categories__item--isOpened"])}>
               <button className={styles["categories__itemButton"]} type="button" onClick={() => setIsOpenedCategory(i === isOpenedCategory ? null : i)}>{category.name}</button>
               <section className={styles["categories__popup"]}>
                 <div className={styles["categories__popupColumn"]}>

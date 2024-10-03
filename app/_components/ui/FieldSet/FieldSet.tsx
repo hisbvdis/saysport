@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { createContext, useId } from "react"
 // -----------------------------------------------------------------------------
 import FieldSetLegend from "./FieldSetLegend";
@@ -16,7 +16,7 @@ export default function FieldSet(props:FieldSetProps) {
   return (
     <FieldSetContext.Provider value={{ legendId }}>
       <fieldset
-        className={clsx(styles["fieldSet"], className)}
+        className={cx(styles["fieldSet"], className)}
         style={style}
         aria-labelledby={legendId}
       >

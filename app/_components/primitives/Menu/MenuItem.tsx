@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from "classix";
 import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { MenuContext, type MenuItemProps } from "."
@@ -13,7 +13,7 @@ export default function MenuItem(props:MenuItemProps) {
     <li className={styles["menu__item"]}>
       <button
         type="button"
-        className={clsx(styles["menu__itemButton"], itemIndex === focusedItemIndex && styles["menu__itemButton--focus"], className)}
+        className={cx(styles["menu__itemButton"], itemIndex === focusedItemIndex && styles["menu__itemButton--focus"], className)}
         style={style}
         onPointerMove={() => setFocusedItemIndex(itemIndex)}
         onClick={() => selectFocusedItem()}

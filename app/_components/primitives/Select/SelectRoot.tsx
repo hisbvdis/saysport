@@ -1,5 +1,5 @@
 "use client";
-import clsx from "clsx";
+import cx from "classix";
 import { type ChangeEvent, createContext, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
 import type { SelectContextType, SelectItemType, SelectRootProps } from ".";
@@ -114,7 +114,6 @@ export default function SelectRoot(props:SelectRootProps) {
   }
 
   const onMenuCLose = () => {
-    console.log( "test" )
     closeMenu();
     setSuggestions(localItems ?? []);
     items.length ? setInputValue(selectedItem?.label ?? "") : setInputValue(label ?? "");
@@ -122,7 +121,7 @@ export default function SelectRoot(props:SelectRootProps) {
 
   return (
     <SelectContext.Provider value={{ isAutocomplete, disabled, value, suggestions, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles, selectRootRef, onMenuCLose }}>
-      <div className={clsx(styles["select__root"], className, disabled && styles["select__root--disabled"])} style={style} ref={selectRootRef}>
+      <div className={cx(styles["select__root"], className, disabled && styles["select__root--disabled"])} style={style} ref={selectRootRef}>
         {children}
       </div>
     </SelectContext.Provider>
