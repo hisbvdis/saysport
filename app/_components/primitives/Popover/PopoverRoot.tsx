@@ -45,6 +45,7 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
   }
 
   const afterClosing = () => {
+    if (!previouslyWasOpened.current) return;
     previouslyWasOpened.current = false;
 
     // Restore <body> paddings and scroll
@@ -80,7 +81,7 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
 
   useEffect(() => {
     if (isOpen) afterOpening();
-    else if (previouslyWasOpened.current) afterClosing();
+    else afterClosing();
   }, [isOpen])
 
   return (
