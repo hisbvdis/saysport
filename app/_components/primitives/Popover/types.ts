@@ -5,11 +5,12 @@ export interface PopoverPropsType {
   isOpen?: boolean;
   open?: () => void;
   close?: () => void;
+  toggle?: () => void;
   isModal?: boolean;
   shouldPushHistoryState?: "always" | "mobile";
   className?: string;
   style?: React.CSSProperties;
-  onClose?: () => void;
+  afterClose?: () => void;
   nonClosingParent?: HTMLElement | null;
 }
 
@@ -19,9 +20,10 @@ export interface PopoverRootPropsType extends PopoverPropsType {
 
 export interface PopoverContextType extends
   Pick<PopoverPropsType, "isOpen" | "isModal">,
-  Pick<Required<PopoverPropsType>, "open" | "close"> {
+  Pick<Required<PopoverPropsType>, "open" | "close" | "toggle"> {
     rootRef: RefObject<HTMLDialogElement>;
     contentRef: RefObject<HTMLDivElement>;
+    triggerRef: RefObject<HTMLElement>;
   }
 
 export interface PopoverTriggerPropsType {

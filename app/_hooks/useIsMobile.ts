@@ -1,5 +1,6 @@
-// const isMobile = dynamic(() => import("@/app/_hooks/useIsMobile"), {ssr: false});
+// const isMobile = useIsMobile();
+// if (isMobile()) {}
 
-export default function useIsMobile() {
-  return window.matchMedia("(width <= 1024px) and (pointer: coarse)").matches;
+export function useIsMobile() {
+  return () => window.matchMedia("(width <= 1024px) and (pointer: coarse)").matches;
 }

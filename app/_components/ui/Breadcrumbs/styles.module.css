@@ -15,7 +15,7 @@
   inline-size: 15px;
   block-size: 100%;
 
-  background: linear-gradient(to right, rgb(255 255 255 / 0), rgb(255 255 255 / 1));;
+  background: linear-gradient(to right, rgb(255 255 255 / 0), rgb(255 255 255 / 1));
   pointer-events: none;
 }
 

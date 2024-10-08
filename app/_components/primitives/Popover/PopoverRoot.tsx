@@ -1,8 +1,8 @@
 "use client";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { createContext, useCallback, useEffect, useRef } from "react"
+import { createContext, useEffect, useRef } from "react"
 // -----------------------------------------------------------------------------
+import { useIsMobile } from "@/app/_hooks/useIsMobile";
 import { useDisclosure } from "@/app/_hooks/useDisclosure";
 import type { PopoverRootPropsType, PopoverContextType } from "."
 // -----------------------------------------------------------------------------
@@ -10,29 +10,31 @@ import type { PopoverRootPropsType, PopoverContextType } from "."
 
 export default function PopoverRoot(props:PopoverRootPropsType) {
   const router = useRouter();
+  const isMobile = useIsMobile();
   const disclosure = useDisclosure();
-  const isMobile = dynamic(() => import("@/app/_hooks/useIsMobile"), {ssr: false});
-  const { children, isOpen=disclosure.isOpen, open=disclosure.open, close=disclosure.close, isModal, shouldPushHistoryState=isModal ? "always" : undefined, onClose, nonClosingParent } = props;
+  // -----------------------------------------------------------------------------
+  const { children, isOpen=disclosure.isOpen, open=disclosure.open, close=disclosure.close, toggle=disclosure.toggle, isModal, shouldPushHistoryState=isModal ? "always" : undefined, afterClose: onClose, nonClosingParent } = props;
   // -----------------------------------------------------------------------------
   const rootRef = useRef<HTMLDialogElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement>(null);
   // -----------------------------------------------------------------------------
-  const bodyPaddingRight = useRef(0);
   const bodyOverflowY = useRef("");
+  const bodyPaddingRight = useRef(0);
+  const previouslyWasOpened = useRef(false);
   // -----------------------------------------------------------------------------
-  const previouslyWasOpened = useRef(false);;
 
-  const afterOpening = () => {
+  const handleOpen = () => {
     previouslyWasOpened.current = true;
 
     // Push history state
-    if ((shouldPushHistoryState === "always" || isMobile && shouldPushHistoryState === "mobile") && !history.state.fromSite) {
-      history.pushState({fromSite: true}, "");
+    if ((shouldPushHistoryState === "always" || isMobile() && shouldPushHistoryState === "mobile") && !history.state.fromSite) {
+      history.pushState({isPopover: true}, "");
       window.addEventListener("popstate", windowPopstateHandler, {once: true});
     }
 
-    // Disable <body> scroll, compute and set padding
     if (isModal) {
+      // Disable <body> scroll, compute and set padding
       const scrollBarWidth = Number(window.innerWidth - document.documentElement.clientWidth);
       bodyPaddingRight.current = Number.parseFloat(getComputedStyle(document.body).paddingInlineEnd);
       document.body.style.paddingInlineEnd = `${bodyPaddingRight.current + scrollBarWidth}px`;
@@ -44,35 +46,40 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
     document.addEventListener("keydown", handleDocumentKeydownEscape);
   }
 
-  const afterClosing = () => {
+  const handleClose = () => {
     if (!previouslyWasOpened.current) return;
     previouslyWasOpened.current = false;
 
-    // Restore <body> paddings and scroll
     if (isModal) {
+      // Restore <body> paddings and scroll
       document.body.style.paddingInlineEnd = `${bodyPaddingRight.current}px`;
       document.body.style.overflowY = bodyOverflowY.current;
     }
 
+    removeEventListeners();
+  }
+
+  const removeEventListeners = () => {
     document.removeEventListener("mousedown", handleNonContentMouseDown);
     document.removeEventListener("keydown", handleDocumentKeydownEscape);
   }
 
-  const handleNonContentMouseDown = useCallback((e:MouseEvent) => {
+  const handleNonContentMouseDown = (e:MouseEvent) => {
     if (e.button !== 0) return;
     if (contentRef.current?.contains(e.target as Node)) return;
     if (nonClosingParent?.contains(e.target as Node)) return;
-    if (history.state.fromSite) router.back();
+    if (e.target === triggerRef.current) return;
+    if (history.state.isPopover) router.back();
     close();
     if (onClose) onClose();
-  }, [nonClosingParent])
+  }
 
-  const handleDocumentKeydownEscape = useCallback((e:KeyboardEvent) => {
+  const handleDocumentKeydownEscape = (e:KeyboardEvent) => {
     if (e.code !== "Escape") return;
-    if (history.state.fromSite) router.back();
+    if (history.state.isPopover) router.back();
     close();
     if (onClose) onClose();
-  }, [])
+  }
 
   const windowPopstateHandler = () => {
     close();
@@ -80,12 +87,13 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
   }
 
   useEffect(() => {
-    if (isOpen) afterOpening();
-    else afterClosing();
+    if (isOpen) handleOpen();
+    else if (previouslyWasOpened.current) handleClose();
+    return () => removeEventListeners();
   }, [isOpen])
 
   return (
-    <PopoverContext.Provider value={{ isOpen, open, close, rootRef, contentRef, isModal }}>
+    <PopoverContext.Provider value={{ isOpen, open, close, toggle, rootRef, contentRef, triggerRef, isModal }}>
       {children}
     </PopoverContext.Provider>
   )

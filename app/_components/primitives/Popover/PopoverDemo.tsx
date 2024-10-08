@@ -3,7 +3,7 @@ import { PopoverContent, PopoverRoot, PopoverTrigger, type PopoverPropsType } fr
 
 export default function PopoverDemo(props:PopoverPropsType) {
   return (
-    <PopoverRoot {...props} isModal>
+    <PopoverRoot {...props}>
       <PopoverTrigger>
         <button type="button">Open</button>
       </PopoverTrigger>

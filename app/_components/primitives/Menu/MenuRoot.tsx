@@ -59,7 +59,8 @@ export default function MenuRoot(props:MenuRootProps) {
 
   useEffect(() => {
     if (isOpen) document.addEventListener("keydown", handleDocumentKeydown);
-    else document.removeEventListener("keydown", handleDocumentKeydown);
+    // else document.removeEventListener("keydown", handleDocumentKeydown);
+    return () => document.removeEventListener("keydown", handleDocumentKeydown);
   }, [isOpen, focusedItemIndex, items])
 
   useEffect(() => {

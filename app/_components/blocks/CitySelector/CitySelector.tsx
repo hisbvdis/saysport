@@ -5,7 +5,6 @@ import type { City } from "@/drizzle/schema";
 import { Card } from "@/app/_components/ui/Card"
 import { Select } from "@/app/_components/ui/Select";
 import { Control } from "@/app/_components/ui/Control"
-import { PopoverDemo } from "../../primitives/Popover";
 // -----------------------------------------------------------------------------
 import { getCitiesByFilters } from "@/app/_actions/db/city";
 import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
