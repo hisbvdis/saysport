@@ -20,8 +20,11 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
   const bodyPaddingRight = useRef(0);
   const bodyOverflowY = useRef("");
   // -----------------------------------------------------------------------------
+  const previouslyWasOpened = useRef(false);;
 
   const afterOpening = () => {
+    previouslyWasOpened.current = true;
+
     // Push history state
     if ((shouldPushHistoryState === "always" || isMobile && shouldPushHistoryState === "mobile") && !history.state.fromSite) {
       history.pushState({fromSite: true}, "");
@@ -42,6 +45,8 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
   }
 
   const afterClosing = () => {
+    previouslyWasOpened.current = false;
+
     // Restore <body> paddings and scroll
     if (isModal) {
       document.body.style.paddingInlineEnd = `${bodyPaddingRight.current}px`;
@@ -75,7 +80,7 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
 
   useEffect(() => {
     if (isOpen) afterOpening();
-    else afterClosing();
+    else if (previouslyWasOpened.current) afterClosing();
   }, [isOpen])
 
   return (
