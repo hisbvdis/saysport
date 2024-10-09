@@ -1,6 +1,6 @@
 "use client";
 import type * as Leaflet from "leaflet";
-import { useContext, useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { MapContext } from "./MapComponent";
 
@@ -8,7 +8,7 @@ import { MapContext } from "./MapComponent";
 export default function MapMarker(props:MapMarkerProps) {
   const { draggable, onDragEnd=(e=>e), onClick=(e=>e), popup, iconUrl, zIndexOffset=0 } = props;
   const coord = (props.coord?.[0] && props.coord?.[1] ? props.coord : [0, 0]) as [number, number];
-  const mapContext = useContext(MapContext);
+  const mapContext = use(MapContext);
   const { L, map } = mapContext;
   const [ marker, setMarker ] = useState<Leaflet.Marker>();
 

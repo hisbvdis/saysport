@@ -22,10 +22,10 @@ export default function Select(props:SelectProps) {
 
       <SelectMenu>
         {suggestions?.map((item, i) => (
-            <SelectItem key={item.id} itemIndex={i}>
-              <SelectItemText>{item.label}</SelectItemText>
-            </SelectItem>
-          ))}
+          <SelectItem key={item.id} itemIndex={i}>
+            <SelectItemText>{item.label}</SelectItemText>
+          </SelectItem>
+        ))}
       </SelectMenu>
 
     </SelectRoot>

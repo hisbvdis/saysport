@@ -1,5 +1,5 @@
 import { create } from "mutative";
-import { useContext } from "react";
+import { use } from "react";
 import { UIContactTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
@@ -11,7 +11,7 @@ import { ObjectEditContext } from "../ObjectEdit";
 
 
 export default function Contacts() {
-  const { state, setState } = useContext(ObjectEditContext);
+  const { state, setState } = use(ObjectEditContext);
 
   const handleContacts = {
     add: (type:UIContactTypeEnum) => {

@@ -1,6 +1,6 @@
 "use client";
 import cx from "classix";
-import { type ChangeEvent, type ReactEventHandler, createContext, useContext, useId } from "react"
+import { type ChangeEvent, type ReactEventHandler, createContext, use, useId } from "react"
 // -----------------------------------------------------------------------------
 import { ControlContext } from "../Control";
 // -----------------------------------------------------------------------------
@@ -11,7 +11,7 @@ export const CheckboxGroup = (props:Props) => <ChoiceGroup {...props}/>
 export const RadioGroup = (props:Props) => <ChoiceGroup {...props}/>
 
 function ChoiceGroup(props:Props) {
-  const controlContext = useContext(ControlContext);
+  const controlContext = use(ControlContext);
   const { valueToCompareWith, arrayToCompareWith } = props;
   const innerGroupName = useId();
   const groupName = props.name ?? innerGroupName;

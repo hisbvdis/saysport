@@ -1,6 +1,6 @@
 "use client";
 import cx from "classix";
-import { type SyntheticEvent, useContext, useEffect, useState } from "react";
+import { type SyntheticEvent, use, useEffect, useState } from "react";
 // -----------------------------------------------------------------------------
 import { Input } from "@/app/_components/ui/Input";
 import { Button } from "@/app/_components/ui/Button";
@@ -14,7 +14,7 @@ import { useManageSearchParams } from "@/app/_hooks/useManageSearchParams";
 export default function SearchPanel() {
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
-  const { searchParams } = useContext(CatalogContext);
+  const { searchParams } = use(CatalogContext);
   const [ searchText, setSearchText ] = useState<string>(searchParams.query);
 
   const handleClearButtonClick = () => {

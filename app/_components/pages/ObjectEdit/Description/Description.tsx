@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { use } from "react"
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit"
 import { Card } from "@/app/_components/ui/Card";
@@ -7,7 +7,7 @@ import { Textarea } from "@/app/_components/ui/Input";
 
 
 export default function Description() {
-  const { state, handleStateChange } = useContext(ObjectEditContext);
+  const { state, handleStateChange } = use(ObjectEditContext);
 
   return (
     <Card style={{marginBlockStart: "10px"}}>

@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect } from "react";
+import { use, useEffect } from "react";
 // -----------------------------------------------------------------------------
 import { MapContext } from "./MapComponent";
 // -----------------------------------------------------------------------------
@@ -9,7 +9,7 @@ import type { MapMarkerProps } from "./MapMarker";
 
 
 export default function MapCluster(props:{markersData:MapMarkerProps[]}) {
-  const mapContext = useContext(MapContext);
+  const mapContext = use(MapContext);
   const { L, map } = mapContext;
 
   useEffect(() => {

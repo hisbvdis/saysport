@@ -1,11 +1,11 @@
 "use client";
-import { useContext, useEffect } from "react";
+import { use, useEffect } from "react";
 // -----------------------------------------------------------------------------
 import { MapContext } from "./MapComponent";
 
 
 export default function MapControl(props:Props) {
-  const mapContext = useContext(MapContext);
+  const mapContext = use(MapContext);
   const { L, map } = mapContext;
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 import cx from "classix";
-import { useContext, useEffect, useRef, useState } from "react"
+import { use, useEffect, useRef, useState } from "react"
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectViewContext } from "../ObjectView";
@@ -10,7 +10,7 @@ import styles from "./styles.module.css";
 
 
 export default function Description() {
-  const { state } = useContext(ObjectViewContext);
+  const { state } = use(ObjectViewContext);
   const textRef = useRef<HTMLParagraphElement>(null);
   const [ shouldShowFullText, setShouldShowFullText ] = useState(false);
   const [ isTrimmedText, setIsTrimmedText ] = useState(true);

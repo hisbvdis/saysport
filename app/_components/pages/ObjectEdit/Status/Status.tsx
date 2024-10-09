@@ -1,6 +1,6 @@
 import cx from "classix";
 import { create } from "mutative";
-import { useContext } from "react";
+import { use } from "react";
 import { objectStatusEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { ObjectEditContext } from "../ObjectEdit";
@@ -13,7 +13,7 @@ import { getObjectsByFilters } from "@/app/_actions/db/object";
 
 
 export default function Status(props:Props) {
-  const { state, setState, handleStateChange } = useContext(ObjectEditContext);
+  const { state, setState, handleStateChange } = use(ObjectEditContext);
   const { className, style } = props;
 
   return (

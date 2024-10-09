@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { use } from "react"
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectViewContext } from "../ObjectView"
@@ -7,7 +7,7 @@ import { MapComponent, MapMarker } from "@/app/_components/ui/MapComponent";
 
 
 export default function Contacts() {
-  const { state } = useContext(ObjectViewContext);
+  const { state } = use(ObjectViewContext);
 
   return (
     <Card>

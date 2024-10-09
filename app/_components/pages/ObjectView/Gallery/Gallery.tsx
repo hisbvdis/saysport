@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { use } from "react";
 // -----------------------------------------------------------------------------
 import { ObjectViewContext } from "../ObjectView";
 import { Carousel } from "@/app/_components/ui/Carousel";
@@ -6,7 +6,7 @@ import { Carousel } from "@/app/_components/ui/Carousel";
 
 
 export default function Gallery() {
-  const { state } = useContext(ObjectViewContext);
+  const { state } = use(ObjectViewContext);
 
   return (
     <Carousel

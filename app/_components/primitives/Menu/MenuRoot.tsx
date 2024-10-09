@@ -2,13 +2,13 @@
 import cx from "classix";
 import { createContext, useEffect, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
-import type { MenuContextType, MenuRootProps } from ".";
+import type { MenuContextType, MenuRootPropsType } from ".";
 // -----------------------------------------------------------------------------
 import styles from "./styles.module.css";
 
 
-export default function MenuRoot(props:MenuRootProps) {
-  const { children, className, style, items=[], value, onSelect, close } = props;
+export default function MenuRoot(props:MenuRootPropsType) {
+  const { children, className, style, items, value, onSelect, onClose } = props;
   const menuRef = useRef<HTMLDivElement>(null);
   const [ focusedItemIndex, setFocusedItemIndex ] = useState(0);
 
@@ -37,7 +37,7 @@ export default function MenuRoot(props:MenuRootProps) {
 
   const selectFocusedItem = () => {
     onSelect(items[focusedItemIndex]?.id);
-    if (close) close();
+    if (onClose) onClose();
   }
 
   const focusItemByIndex = (index:number) => {

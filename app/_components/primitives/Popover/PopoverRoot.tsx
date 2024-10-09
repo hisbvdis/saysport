@@ -27,7 +27,8 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
     previouslyWasOpened.current = true;
 
     // Push history state
-    if ((shouldPushHistoryState === "always" || isMobile() && shouldPushHistoryState === "mobile") && !history.state.fromSite) {
+    if (!history.state.isPopover && (shouldPushHistoryState === "always" || isMobile() && shouldPushHistoryState === "mobile")) {
+      history.scrollRestoration = "manual";
       history.pushState({isPopover: true}, "");
       window.addEventListener("popstate", windowPopstateHandler, {once: true});
     }
@@ -63,20 +64,20 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
     if (contentRef.current?.contains(e.target as Node)) return;
     if (nonClosingElem?.contains(e.target as Node)) return;
     if (history.state.isPopover) router.back();
-    close();
+    history.scrollRestoration = "auto";
     if (onClose) onClose();
   }
 
   const handleDocumentKeydownEscape = (e:KeyboardEvent) => {
     if (e.code !== "Escape") return;
     if (history.state.isPopover) router.back();
-    close();
+    history.scrollRestoration = "auto";
     if (onClose) onClose();
   }
 
   const windowPopstateHandler = () => {
-    close();
     if (onClose) onClose();
+    history.scrollRestoration = "auto";
   }
 
   useEffect(() => {

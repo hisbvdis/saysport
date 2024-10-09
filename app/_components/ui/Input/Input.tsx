@@ -1,6 +1,6 @@
 "use client";
 import cx from "classix";
-import { type ChangeEventHandler, type FocusEventHandler, type KeyboardEventHandler, type MouseEventHandler, createElement, forwardRef, useContext, useRef, useState } from "react";
+import { type ChangeEventHandler, type FocusEventHandler, type KeyboardEventHandler, type MouseEventHandler, createElement, forwardRef, use, useRef, useState } from "react";
 // -----------------------------------------------------------------------------
 import { ControlContext } from "../Control";
 // -----------------------------------------------------------------------------
@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 
 
 export const Input = forwardRef<HTMLInputElement, Props>(function Input(props, inputRefForwarded) {
-  const controlContext = useContext(ControlContext);
+  const controlContext = use(ControlContext);
   const [ changed, setChanged ] = useState(false);
   const name = props.name ?? "";
   const value = (typeof props.value === "number" || typeof props.value === "string") ? String(props.value) : "";

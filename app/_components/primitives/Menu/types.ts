@@ -1,17 +1,19 @@
 import type { Dispatch, SetStateAction } from "react";
 
-export interface MenuRootProps {
-  onSelect: (itemId:string) => void;
-  items?: MenuItemType[];
+export interface MenuPropsType {
   value: string;
+  items: MenuItemType[];
+  onSelect: (itemId:string) => void;
+  // -----------------------------------------------------------------------------
   className?: string;
   children?: React.ReactNode;
   style?: React.CSSProperties;
-  close?: () => void;
-  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export interface MenuContextType extends Pick<MenuRootProps, "items"> {
+export interface MenuRootPropsType extends MenuPropsType {}
+
+export interface MenuContextType extends Pick<MenuPropsType, "items"> {
   focusedItemIndex: number;
   setFocusedItemIndex: Dispatch<SetStateAction<number>>;
   selectFocusedItem: () => void;

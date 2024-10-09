@@ -1,11 +1,11 @@
 "use client";
 import { MapContext } from "./MapComponent";
-import { useContext, useEffect } from "react";
+import { use, useEffect } from "react";
 // -----------------------------------------------------------------------------
 
 
 export default function TileLayer(props:Props) {
-  const mapContext = useContext(MapContext);
+  const mapContext = use(MapContext);
   const { L, map } = mapContext;
   const url = props?.url ?? "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
   const attribution = props.attribution ?? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';

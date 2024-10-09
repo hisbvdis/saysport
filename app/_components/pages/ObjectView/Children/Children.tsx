@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useContext } from "react"
+import { use } from "react"
 import { objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
@@ -8,7 +8,7 @@ import { ObjectViewContext } from "../ObjectView"
 
 
 export default function Children() {
-  const { state } = useContext(ObjectViewContext);
+  const { state } = use(ObjectViewContext);
 
   return (<>
     {state.children?.filter((child) => child.type === objectTypeEnum.place).length ? (

@@ -1,7 +1,7 @@
 "use client";
 import { create } from "mutative";
 import Compressor from "compressorjs";
-import { type ChangeEvent, useContext, useRef } from "react"
+import { type ChangeEvent, use, useRef } from "react"
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
 import { ObjectEditContext } from "../ObjectEdit";
@@ -12,7 +12,7 @@ import { Control } from "@/app/_components/ui/Control";
 
 
 export default function Photos() {
-  const { state, setState } = useContext(ObjectEditContext);
+  const { state, setState } = use(ObjectEditContext);
   const inputFileRef = useRef<HTMLInputElement>(null);
 
   const handlePhotos = {

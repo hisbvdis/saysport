@@ -1,5 +1,5 @@
 import cx from "classix";
-import { useContext } from "react";
+import { use } from "react";
 // -----------------------------------------------------------------------------
 import { SelectContext, type SelectCloseButtonProps } from ".";
 // -----------------------------------------------------------------------------
@@ -7,7 +7,7 @@ import { SelectContext, type SelectCloseButtonProps } from ".";
 
 export default function SelectCloseButton(props:SelectCloseButtonProps) {
   const { children, className, style } = props;
-  const { isAutocomplete, selectedItem, handleClearBtnClick, disabled, styles } = useContext(SelectContext);
+  const { isAutocomplete, selectedItem, handleClearBtnClick, disabled, styles } = use(SelectContext);
 
   if (!isAutocomplete || !selectedItem?.id) return null;
   return (

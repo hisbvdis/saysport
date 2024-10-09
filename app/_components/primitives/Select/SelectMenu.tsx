@@ -9,12 +9,12 @@ import { MenuRoot } from "@/app/_components/primitives/Menu";
 
 export default function SelectMenu(props:SelectMenuProps) {
   const { className, style, children } = props;
-  const { isMenuOpen, value, handleMenuSelect, styles, selectRootRef, onMenuCLose } = use(SelectContext);
+  const { isMenuOpen, value, handleMenuSelect, styles, selectRootRef, onMenuCLose, suggestions } = use(SelectContext);
 
   return (<>
-    {isMenuOpen && (
+    {isMenuOpen && suggestions.length > 0 && (
       <Popover className={cx(styles["select__menu"], className)} style={style} onClose={() => {onMenuCLose()}} shouldPushHistoryState="mobile" nonClosingElem={selectRootRef.current}>
-        <MenuRoot value={value ?? ""} onSelect={handleMenuSelect}>
+        <MenuRoot items={suggestions} value={value ?? ""} onSelect={handleMenuSelect}>
           {children}
         </MenuRoot>
       </Popover>

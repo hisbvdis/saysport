@@ -3,7 +3,7 @@ import type React from "react";
 import { format } from "date-fns";
 import { create } from "mutative";
 import type { UIObjectUsage } from "@/app/_types/db";
-import { type ChangeEvent, useContext } from "react";
+import { type ChangeEvent, use } from "react";
 import { costTypeEnum, type costTypeUnion, type ObjectSchedule, objectTypeEnum, sectionTypeEnum, type Usage } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
@@ -19,7 +19,7 @@ import { getUsagesByFilters } from "@/app/_actions/db/usage";
 
 
 export default function Usages() {
-  const { state, setState } = useContext(ObjectEditContext);
+  const { state, setState } = use(ObjectEditContext);
 
   const handleUsages = {
     add: (usage:Usage) => {

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { create } from "mutative";
 import type * as Leaflet from "leaflet";
 import type { DBObject } from "@/app/_types/db";
-import { useContext, useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { type Object_, objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
@@ -23,7 +23,7 @@ import { queryAddressForCoord, queryCoodFromAddress } from "@/app/_lib/nominatim
 
 
 export default function Address() {
-  const { state, setState, handleStateChange, mapInstance, setMapInstance } = useContext(ObjectEditContext);
+  const { state, setState, handleStateChange, mapInstance, setMapInstance } = use(ObjectEditContext);
   const [ liveMap, setLiveMap ] = useState<{lat: number, lon: number, zoom: number, bounds: Leaflet.LatLngBounds|undefined}>({lat: state.coord_lat, lon: state.coord_lon, zoom: 17, bounds: mapInstance?.getBounds()});
   const [ nearestObjects, setNearestObjects ] = useState<Object_[]>();
 

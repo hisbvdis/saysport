@@ -33,7 +33,8 @@ export interface SelectContextType extends Pick<SelectRootProps,
   "placeholder" |
   "required" |
   "name" |
-  "onChange"
+  "onChange" |
+  "suggestions"
 > {
   styles: { readonly [key: string]: string };
   inputRef: RefObject<HTMLInputElement>;

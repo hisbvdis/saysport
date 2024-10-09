@@ -1,5 +1,5 @@
 import cx from "classix";
-import { useContext } from "react";
+import { use } from "react";
 // -----------------------------------------------------------------------------
 import { SelectContext } from "./";
 // -----------------------------------------------------------------------------
@@ -8,7 +8,7 @@ import type { SelectArrowIconProps } from "./types";
 
 export default function SelectArrowIcon(props:SelectArrowIconProps) {
   const { children, className, style } = props;
-  const { isAutocomplete, styles } = useContext(SelectContext);
+  const { isAutocomplete, styles } = use(SelectContext);
 
   if (isAutocomplete) return null;
   return (

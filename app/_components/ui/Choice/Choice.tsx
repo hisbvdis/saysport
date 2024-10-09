@@ -1,6 +1,6 @@
 "use client";
 import cx from "classix";
-import { type ChangeEventHandler, useContext, useId, useRef } from "react"
+import { type ChangeEventHandler, use, useId, useRef } from "react"
 // -----------------------------------------------------------------------------
 import { ChoiceGroupContext } from "./ChoiceGroup";
 import { RequiredInput } from "@/app/_components/ui/RequiredInput";
@@ -12,7 +12,7 @@ export const Radio = (props:Props) => <Choice {...props} type="radio"/>
 export const Checkbox = (props:Props) => <Choice {...props} type="checkbox"/>
 
 function Choice(props:Props) {
-  const choiceGroupContext = useContext(ChoiceGroupContext);
+  const choiceGroupContext = use(ChoiceGroupContext);
   const inputRef = useRef(null);
   const inputId = useId();
   const type = props.type;

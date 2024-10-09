@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import type { ProcessedDBSpec } from "@/app/_types/db";
-import { type ChangeEvent, useContext, useState } from "react";
+import { type ChangeEvent, use, useState } from "react";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
@@ -19,7 +19,7 @@ export default function Filters() {
   const router = useRouter();
   const manageSearchParams = useManageSearchParams();
   const [ andSpecs, setAndSpecs ] = useState<number[]>([]);
-  const { searchParams, section, commonSections } = useContext(CatalogContext);
+  const { searchParams, section, commonSections } = use(CatalogContext);
 
   const handleAndSpecChange = (e:ChangeEvent<HTMLInputElement>, spec:ProcessedDBSpec) => {
     if (e.target.checked) {

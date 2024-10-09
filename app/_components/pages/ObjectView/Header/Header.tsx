@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useContext } from "react"
+import { use } from "react"
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
@@ -15,7 +15,7 @@ import styles from "./styles.module.css";
 
 export default function Header(props:Props) {
   const { className, style } = props;
-  const { state, isLogin } = useContext(ObjectViewContext);
+  const { state, isLogin } = use(ObjectViewContext);
 
   return (
     <header className={className} style={style}>

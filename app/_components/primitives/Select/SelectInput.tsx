@@ -1,5 +1,5 @@
 import cx from "classix";
-import { useContext } from "react"
+import { use } from "react"
 // -----------------------------------------------------------------------------
 import { SelectContext, type SelectInputProps } from ".";
 // -----------------------------------------------------------------------------
@@ -7,7 +7,7 @@ import { SelectContext, type SelectInputProps } from ".";
 
 export default function SelectInput(props:SelectInputProps) {
   const { className, style } = props;
-  const { isAutocomplete, disabled, inputRef, inputValue, placeholder, required, handleInputChange, name, handleInputClick, handleInputFocus, handleInputKeydown, styles } = useContext(SelectContext);
+  const { isAutocomplete, disabled, inputRef, inputValue, placeholder, required, handleInputChange, name, handleInputClick, handleInputFocus, handleInputKeydown, styles } = use(SelectContext);
 
   return (
     <input

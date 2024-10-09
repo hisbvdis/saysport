@@ -1,5 +1,5 @@
 import cx from "classix";
-import { useContext } from "react";
+import { use } from "react";
 // -----------------------------------------------------------------------------
 import { SelectContext } from "./";
 // -----------------------------------------------------------------------------
@@ -7,7 +7,7 @@ import { SelectContext } from "./";
 
 export default function SelectTrigger(props:SelectTriggerProps) {
   const { children, className, style } = props;
-  const { styles } = useContext(SelectContext);
+  const { styles } = use(SelectContext);
 
   return (<>
     <div className={cx(styles["select__trigger"], className)} style={style}>

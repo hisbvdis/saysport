@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { use } from "react";
 // -----------------------------------------------------------------------------
 import { Status } from "../";
 import { Card } from "@/app/_components/ui/Card";
@@ -9,7 +9,7 @@ import { ObjectEditContext } from "../ObjectEdit";
 
 
 export default function NamePlace() {
-  const { state, handleStateChange } = useContext(ObjectEditContext);
+  const { state, handleStateChange } = use(ObjectEditContext);
 
   return (
     <Card style={{marginBlockStart: "10px"}}>

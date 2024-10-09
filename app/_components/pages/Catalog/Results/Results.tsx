@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useContext } from "react";
+import { use } from "react";
 import { objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { CatalogContext } from "../Catalog";
@@ -11,7 +11,7 @@ import styles from "./styles.module.css";
 
 
 export default function Results() {
-  const { searchParams, city, section, results } = useContext(CatalogContext);
+  const { searchParams, city, section, results } = use(CatalogContext);
 
   return (<>
     <Card className={styles["results"]}>

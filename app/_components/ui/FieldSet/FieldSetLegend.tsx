@@ -1,6 +1,6 @@
 import cx from "classix";
 import type React from "react";
-import { useContext } from "react";
+import { use } from "react";
 // -----------------------------------------------------------------------------
 import { FieldSetContext, type FieldSetLegendProps } from "./";
 // -----------------------------------------------------------------------------
@@ -9,7 +9,7 @@ import styles from "./styles.module.css";
 
 export default function FieldSetLegend(props:FieldSetLegendProps) {
   const { children, className, style, srOnly } = props;
-  const { legendId } = useContext(FieldSetContext);
+  const { legendId } = use(FieldSetContext);
 
   return (
     <div

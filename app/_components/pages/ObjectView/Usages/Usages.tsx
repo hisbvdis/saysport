@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { useContext } from "react";
+import { use } from "react";
 import { objectTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
@@ -9,7 +9,7 @@ import { PlaceSchedule, ClassSchedule } from "../";
 
 
 export default function Usages() {
-  const { state } = useContext(ObjectViewContext);
+  const { state } = use(ObjectViewContext);
 
   return (
     <Card>

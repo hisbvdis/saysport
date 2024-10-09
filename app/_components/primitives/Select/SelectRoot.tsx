@@ -52,11 +52,11 @@ export default function SelectRoot(props:SelectRootProps) {
     if (requestItemsOnInputChange) {
       if (e.target.value.length < requestMinInputLenght) return;
       debounce(async () => {
-        setSuggestions(await requestItemsOnInputChange(e.target.value));
+        setSuggestions(await requestItemsOnInputChange(e.target.value.trim()));
       }, 300);
       openMenu();
     } else {
-      setSuggestions(localItems.filter((item) => item.label?.toLowerCase().includes(e.target.value?.toLowerCase())));
+      setSuggestions(localItems.filter((item) => item.label?.trim().toLowerCase().includes(e.target.value?.trim().toLowerCase())));
       openMenu();
     }
   }
@@ -122,7 +122,7 @@ export default function SelectRoot(props:SelectRootProps) {
   }
 
   return (
-    <SelectContext.Provider value={{ isAutocomplete, disabled, value, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles, selectRootRef, onMenuCLose }}>
+    <SelectContext.Provider value={{ isAutocomplete, disabled, value, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles, selectRootRef, onMenuCLose, suggestions }}>
       <div className={cx(styles["select__root"], className, disabled && styles["select__root--disabled"])} style={style} ref={selectRootRef}>
         {children}
       </div>

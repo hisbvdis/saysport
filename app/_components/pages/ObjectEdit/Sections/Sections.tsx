@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React, { use } from "react";
 import { objectTypeEnum, sectionTypeEnum } from "@/drizzle/schema";
 // -----------------------------------------------------------------------------
 import { Card } from "@/app/_components/ui/Card";
@@ -18,7 +18,7 @@ import styles from "./styles.module.css";
 
 
 export default function Sections() {
-  const { state, handleSections, handleOptions } = useContext(ObjectEditContext);
+  const { state, handleSections, handleOptions } = use(ObjectEditContext);
 
   return (
     <Card style={{marginBlockStart: "10px"}}>
