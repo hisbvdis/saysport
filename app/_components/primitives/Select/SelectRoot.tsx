@@ -11,16 +11,16 @@ import styles from "./styles.module.css";
 
 
 export default function SelectRoot(props:SelectRootProps) {
-  const { isAutocomplete, disabled, items=[], value, label, placeholder, children, className, style, required, onChange=(e=>e), onChangeData=(e=>e), name, requestItemsOnFirstTouch, requestItemsOnInputChange, requestMinInputLenght=3 } = props;
+  const { isAutocomplete, disabled, items=[], value, label, placeholder, children, className, style, required, onChange=(e=>e), onChangeData=(e=>e), name, requestItemsOnFirstTouch, requestItemsOnInputChange, requestMinInputLenght=3, suggestions, setSuggestions } = props;
   const debounce = useDebounce();
   const selectRootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [ localItems, setLocalItems ] = useState(props.items ?? []);
-  const [ suggestions, setSuggestions ] = useState<SelectItemType[]>(localItems);
   const { isOpen:isMenuOpen, open:openMenu, close:closeMenu, toggle:toggleMenu } = useDisclosure(false);
   const emptySelectedItem = {id: value ?? "", label: label ?? ""};
   const [ selectedItem, setSelectedItem ] = useState<SelectItemType>(items.length ? (localItems.find((item) => item.id === value) ?? emptySelectedItem) : emptySelectedItem);
   const [ inputValue, setInputValue ] = useState<string>(selectedItem?.label ?? "");
+  useEffect(() => {setSuggestions(localItems)}, []);
   useEffect(() => {items.length ? setSelectedItem(localItems.find((item) => item.id === value) ?? emptySelectedItem) : setSelectedItem(emptySelectedItem)}, [value]);
   useEffect(() => {items.length ? null : setInputValue(label ?? "")}, [label]);
   useEffect(() => {items.length ? setInputValue(selectedItem?.label ?? "") : null}, [selectedItem]);
@@ -122,7 +122,7 @@ export default function SelectRoot(props:SelectRootProps) {
   }
 
   return (
-    <SelectContext.Provider value={{ isAutocomplete, disabled, value, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles, selectRootRef, onMenuCLose, suggestions, setSuggestions }}>
+    <SelectContext.Provider value={{ isAutocomplete, disabled, value, inputRef, inputValue, placeholder, selectedItem, handleInputChange, handleClearBtnClick, required, name, handleInputClick, handleInputFocus, handleInputKeydown, isMenuOpen, closeMenu, onChange, handleMenuSelect, styles, selectRootRef, onMenuCLose }}>
       <div className={cx(styles["select__root"], className, disabled && styles["select__root--disabled"])} style={style} ref={selectRootRef}>
         {children}
       </div>

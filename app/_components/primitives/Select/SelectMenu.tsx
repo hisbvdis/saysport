@@ -1,27 +1,23 @@
 import cx from "classix";
-import { useContext } from "react";
+import { use } from "react";
 // -----------------------------------------------------------------------------
+import { Popover } from "@/app/_components/ui/Popover";
+import { type SelectMenuProps, SelectContext } from ".";
 import { MenuRoot } from "@/app/_components/primitives/Menu";
-import { PopoverContent, PopoverRoot } from "@/app/_components/primitives/Popover";
-import { type SelectMenuProps, SelectContext, SelectItem, SelectItemText } from ".";
 // -----------------------------------------------------------------------------
 
 
 export default function SelectMenu(props:SelectMenuProps) {
-  const { className, style } = props;
-  const { isMenuOpen, suggestions, value, handleMenuSelect, styles, selectRootRef, onMenuCLose } = useContext(SelectContext);
+  const { className, style, children } = props;
+  const { isMenuOpen, value, handleMenuSelect, styles, selectRootRef, onMenuCLose } = use(SelectContext);
 
-  return (
-    <PopoverRoot className={cx(styles["select__menu"], className)} style={style} isOpen={isMenuOpen} afterClose={() => {onMenuCLose()}} shouldPushHistoryState="mobile" nonClosingParent={selectRootRef.current}>
-      <PopoverContent>
-        <MenuRoot items={suggestions} value={value ?? ""} onSelect={handleMenuSelect} isOpen={isMenuOpen}>
-          {suggestions?.map((item, i) => (
-            <SelectItem key={item.id} itemIndex={i}>
-              <SelectItemText>{item.label}</SelectItemText>
-            </SelectItem>
-          ))}
+  return (<>
+    {isMenuOpen && (
+      <Popover className={cx(styles["select__menu"], className)} style={style} onClose={() => {onMenuCLose()}} shouldPushHistoryState="mobile" nonClosingElem={selectRootRef.current}>
+        <MenuRoot value={value ?? ""} onSelect={handleMenuSelect}>
+          {children}
         </MenuRoot>
-      </PopoverContent>
-    </PopoverRoot>
-  )
+      </Popover>
+    )}
+  </>)
 }

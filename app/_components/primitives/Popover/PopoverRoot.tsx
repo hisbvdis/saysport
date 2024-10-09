@@ -1,30 +1,29 @@
 "use client";
+import cx from "classix";
 import { useRouter } from "next/navigation";
 import { createContext, useEffect, useRef } from "react"
 // -----------------------------------------------------------------------------
 import { useIsMobile } from "@/app/_hooks/useIsMobile";
-import { useDisclosure } from "@/app/_hooks/useDisclosure";
 import type { PopoverRootPropsType, PopoverContextType } from "."
 // -----------------------------------------------------------------------------
+import styles from "./styles.module.css";
 
 
 export default function PopoverRoot(props:PopoverRootPropsType) {
   const router = useRouter();
   const isMobile = useIsMobile();
-  const disclosure = useDisclosure();
   // -----------------------------------------------------------------------------
-  const { children, isOpen=disclosure.isOpen, open=disclosure.open, close=disclosure.close, toggle=disclosure.toggle, isModal, shouldPushHistoryState=isModal ? "always" : undefined, afterClose: onClose, nonClosingParent } = props;
+  const { children, isModal, shouldPushHistoryState=isModal ? "always" : undefined, onClose, nonClosingElem } = props;
   // -----------------------------------------------------------------------------
   const rootRef = useRef<HTMLDialogElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLElement>(null);
   // -----------------------------------------------------------------------------
   const bodyOverflowY = useRef("");
   const bodyPaddingRight = useRef(0);
   const previouslyWasOpened = useRef(false);
   // -----------------------------------------------------------------------------
 
-  const handleOpen = () => {
+  const handleMount = () => {
     previouslyWasOpened.current = true;
 
     // Push history state
@@ -46,7 +45,7 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
     document.addEventListener("keydown", handleDocumentKeydownEscape);
   }
 
-  const handleClose = () => {
+  const handleUnmount = () => {
     previouslyWasOpened.current = false;
 
     if (isModal) {
@@ -62,8 +61,7 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
   const handleNonContentMouseDown = (e:MouseEvent) => {
     if (e.button !== 0) return;
     if (contentRef.current?.contains(e.target as Node)) return;
-    if (nonClosingParent?.contains(e.target as Node)) return;
-    if (e.target === triggerRef.current) return;
+    if (nonClosingElem?.contains(e.target as Node)) return;
     if (history.state.isPopover) router.back();
     close();
     if (onClose) onClose();
@@ -82,14 +80,15 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
   }
 
   useEffect(() => {
-    if (isOpen) handleOpen();
-    else if (previouslyWasOpened.current) handleClose();
-    return () => handleClose();
-  }, [isOpen])
+    handleMount();
+    return () => handleUnmount();
+  }, [])
 
   return (
-    <PopoverContext.Provider value={{ isOpen, open, close, toggle, rootRef, contentRef, triggerRef, isModal }}>
-      {children}
+    <PopoverContext.Provider value={{ onClose, rootRef, contentRef, isModal }}>
+      <dialog className={cx(styles["popover"], isModal && styles["popover--modal"])} open={true} ref={rootRef}>
+        {children}
+      </dialog>
     </PopoverContext.Provider>
   )
 }

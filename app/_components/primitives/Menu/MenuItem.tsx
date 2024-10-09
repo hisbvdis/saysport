@@ -3,11 +3,12 @@ import { useContext } from "react";
 // -----------------------------------------------------------------------------
 import { MenuContext, type MenuItemProps } from "."
 // -----------------------------------------------------------------------------
+import styles from "./styles.module.css";
 
 
 export default function MenuItem(props:MenuItemProps) {
   const { children, className, style, itemIndex } = props;
-  const { focusedItemIndex, setFocusedItemIndex, selectFocusedItem, styles } = useContext(MenuContext);
+  const { focusedItemIndex, setFocusedItemIndex, selectFocusedItem } = useContext(MenuContext);
 
   return (
     <li className={styles["menu__item"]}>

@@ -20,7 +20,10 @@ export interface SelectProps {
   requestMinInputLenght?: number;
 }
 
-export interface SelectRootProps extends SelectProps {}
+export interface SelectRootProps extends SelectProps {
+  setSuggestions: Dispatch<SetStateAction<SelectItemType[]>>;
+  suggestions: SelectItemType[];
+}
 
 export interface SelectContextType extends Pick<SelectRootProps,
   "isAutocomplete" |
@@ -46,8 +49,6 @@ export interface SelectContextType extends Pick<SelectRootProps,
   isMenuOpen: boolean;
   handleMenuSelect: (itemId:string) => void;
   onMenuCLose: () => void;
-  setSuggestions: Dispatch<SetStateAction<SelectItemType[]>>;
-  suggestions: SelectItemType[];
 };
 
 export  interface SelectArrowIconProps {
@@ -82,6 +83,7 @@ export interface SelectInputProps {
 }
 
 export interface SelectMenuProps {
+  children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
 }

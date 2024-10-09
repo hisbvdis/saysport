@@ -1,4 +1,3 @@
-import SelectDemo from "./SelectDemo";
 import SelectMenu from "./SelectMenu";
 import SelectRoot from "./SelectRoot";
 import SelectTrigger from "./SelectTrigger";
@@ -21,8 +20,7 @@ import type { SelectItemProps } from "./types";
 import type { SelectItemTextProps } from "./types";
 
 export {
-  SelectDemo as Select,
-	SelectRoot,
+  SelectRoot,
   SelectTrigger,
 	SelectArrowIcon,
 	SelectCloseButton,

@@ -36,7 +36,7 @@ img {
 
 body {
   min-inline-size: 320px;
-  min-block-size: 400vh;
+  /* min-block-size: 400vh; */
   margin: 0;
 
   font-family: sans-serif;

@@ -1,7 +1,7 @@
 import { PopoverRoot, PopoverContent, type PopoverPropsType } from "@/app/_components/primitives/Popover/";
 
 
-/* export default */ function PopoverDemo(props:PopoverPropsType) {
+export default function Popover(props:PopoverPropsType) {
   return (
     <PopoverRoot {...props}>
       <PopoverContent>
