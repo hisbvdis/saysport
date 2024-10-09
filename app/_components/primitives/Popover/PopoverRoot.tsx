@@ -47,7 +47,6 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
   }
 
   const handleClose = () => {
-    if (!previouslyWasOpened.current) return;
     previouslyWasOpened.current = false;
 
     if (isModal) {
@@ -56,10 +55,6 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
       document.body.style.overflowY = bodyOverflowY.current;
     }
 
-    removeEventListeners();
-  }
-
-  const removeEventListeners = () => {
     document.removeEventListener("mousedown", handleNonContentMouseDown);
     document.removeEventListener("keydown", handleDocumentKeydownEscape);
   }
@@ -89,7 +84,7 @@ export default function PopoverRoot(props:PopoverRootPropsType) {
   useEffect(() => {
     if (isOpen) handleOpen();
     else if (previouslyWasOpened.current) handleClose();
-    return () => removeEventListeners();
+    return () => handleClose();
   }, [isOpen])
 
   return (
